@@ -1,0 +1,77 @@
+<div id="manufactureList">
+  <div class="listOptions">
+    <span>Filter by activity:
+      <select onchange="window.location='{$site_url}/?module=manufacture{if $corp}&corp=1{/if}&complete={$complete}&activity='+this.value">
+        <option value="0">All</option>
+        {foreach from=$activities key=a item=aName}
+          <option value="{$a}" {if $activity == $a}selected="true"{/if}>{$aName}</option>
+        {/foreach}
+      </select>
+    </span>
+    &nbsp;
+    <span>
+      <label><input type="checkbox" {if $complete}checked="checked"{/if} onclick="window.location='{$site_url}/?module=manufacture{if $corp}&corp=1{/if}&activity={$activity}&complete='+(this.checked?'1':'0')" /> Show completed</label>
+    </span>
+  </div>
+
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+      <button onclick="window.location='{$site_url}/?module=manufacture{if $corp}&corp=1{/if}&p={$prevPage}&activity={$activity}&complete={$complete}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+      <button onclick="window.location='{$site_url}/?module=manufacture{if $corp}&corp=1{/if}&p={$nextPage}&activity={$activity}&complete={$complete}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}
+
+  {if !$jobs}
+    <h3>No active industry jobs!</h3>
+  {else}
+    <table width="100%" border="0">
+      <tr>
+        {if $corp}<th>Installed By</th>{/if}
+        <th>Type</th>
+        <th>Item</th>
+        <th>Output Location</th>
+        <th>Runs</th>
+        <th>Out Qty</th>
+        <th>Completion</th>
+        <th>Status</th>
+      </tr>
+      {foreach from=$jobs item=j}
+        {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
+        <tr class="{$rowClass}">
+          {if $corp}
+            <td align="center"><img src="http://img.eve.is/serv.asp?s=64&c={$j.installerID}" align="absmiddle" width="32" height="32" alt="{$j.installerName}" title="{$j.installerName}" /></td>
+          {/if}
+          <td>
+            {if $j.activity.iconno}
+              <img src="{$site_url}/eveimages/icons/32/icon{$j.activity.iconno}.png" alt="{$j.activity.activityname}" align="absmiddle" />
+            {/if}
+            {$j.activity.activityname}
+          </td>
+          <td>
+            <a href="#" onclick="showInfo({$j.outItem.typeid});return false;">
+              {if $j.outItem.typeGraphic}
+                <img src="{$site_url}/eveimages/types/32/{$j.outItem.typeid}.png" alt="{$j.outItem.typename}" align="absmiddle" />
+              {else}
+                <img src="{$site_url}/eveimages/icons/32/icon{$j.outItem.icon}.png" alt="{$j.outItem.typename}" align="absmiddle" />
+              {/if}
+            </a>
+            {$j.outItem.typename}
+          </td>
+          <td>{$j.outLocation.stationname}</td>
+          <td align="right">{$j.runs|eveNumInt}</td>
+          <td align="right">{$j.outQty|eveNumInt}</td>
+          <td align="center">{$j.endTime|date_format:"%d/%m/%Y %H:%M"} {if $j.remainingTime > 0}<br />eta {$j.remainingTime|formatTime}{/if}</td>
+          <td align="center" class="{if (($j.completed == 0) && ($j.completedStatusID == 0))}maybe{elseif $j.completedStatusID == 0}bad{else}good{/if}">
+            {$j.completedStatus}<br />{$j.percentComplete|eveNum}%
+          </td>
+        </tr>
+      {/foreach}
+    </table>
+  {/if}
+
+</div>

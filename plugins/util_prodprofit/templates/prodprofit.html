@@ -1,0 +1,139 @@
+<form method="get" action="{$site_url}/">
+  <table width="500" border="0">
+
+    {if $hasCorp}
+      <tr>
+        <td align="right">
+          <b>Blueprint Source:</b>
+        </td>
+        <td width="330">
+          <select name="corp" style="width: 280px">
+            <option value="0">My Blueprints</option>
+            <option value="1" {if $corp}selected="selected"{/if}>My Corporation's Blueprints</option>
+          </select>
+        </td>
+      </tr>
+    {/if}
+
+    <tr>
+      <td align="right">
+        <b>Blueprint Type:</b>
+      </td>
+      <td width="330">
+        <select name="group" style="width: 280px">
+          <option value="0">All</option>
+          {foreach from=$groups key=gid item=groupname}
+            <option value="{$gid}" {if $gid == $group}selected="selected"{/if}>{$groupname}</option>
+          {/foreach}
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Material Level:</b>
+      </td>
+      <td width="330">
+        <select name="meLevel" style="width: 280px">
+          <option value="0" {if $meLevel == 0}selected="selected"{/if}>ME0</option>
+          <option value="5" {if $meLevel == 5}selected="selected"{/if}>ME5</option>
+          <option value="10" {if $meLevel == 10}selected="selected"{/if}>ME10</option>
+          <option value="20" {if $meLevel == 20}selected="selected"{/if}>ME20</option>
+          <option value="30" {if $meLevel == 30}selected="selected"{/if}>ME30</option>
+          <option value="40" {if $meLevel == 40}selected="selected"{/if}>ME40</option>
+          <option value="50" {if $meLevel == 50}selected="selected"{/if}>ME50</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Region:</b>
+      </td>
+      <td width="330">
+        <select name="region" style="width: 280px">
+          <option value="0">All</option>
+          {section name=r loop=$regions}
+            <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="selected"{/if}>{$regions[r].regionname}</option>
+          {/section}
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        &nbsp;
+      </td>
+      <td width="330">
+        <label><input type="checkbox" name="customprice" value="1" {if $customprice}checked="checked"{/if}> Use custom mineral pricing *</label>
+      </td>
+    </tr>
+
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <input type="hidden" name="p" value="{$pageNum}" />
+        <input type="hidden" name="module" value="util_prodprofit" />
+        <input type="submit" value="Get Prices" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+      <button onclick="window.location='{$site_url}/?module=util_prodprofit&p={$prevPage}&meLevel={$meLevel}&region={$region}&customprice={$customprice}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+      <button onclick="window.location='{$site_url}/?module=util_prodprofit&p={$nextPage}&meLevel={$meLevel}&region={$region}&customprice={$customprice}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}
+
+<table width="100%" border="0" style="font-size: 0.9em">
+  <tr>
+    <th>Item</th>
+    <th>Run Qty</th>
+    <th>Material Unit Cost</th>
+    <th>Highest Buy</th>
+    <th>Avg Buy</th>
+    <th>Qty Buy</th>
+    <th>Lowest Sell</th>
+    <th>Avg Sell</th>
+    <th>Qty Sell</th>
+  </tr>
+  {if $items}
+    {foreach from=$items item=i}
+      <tr class="{cycle values='row,rowAlt'}">
+        <td>
+          <a href="#" onclick="showInfo({$i.item.typeid});return false;">
+            {if $i.item.typeGraphic}
+              <img src="{$site_url}/eveimages/types/32/{$i.item.typeid}.png" alt="{$i.item.typename}" align="absmiddle" />
+            {else}
+              <img src="{$site_url}/eveimages/icons/32/icon{$i.item.icon}.png" alt="{$i.item.typename}" align="absmiddle" />
+            {/if}
+          </a>
+          {$i.item.typename}
+        </td>
+        <td align="right">{$i.item.portionsize|eveNumInt}</td>
+        <td align="right">{$i.production.you/$i.item.portionsize|eveNum}</td>
+        <td align="right" {if $i.item.pricing.maxBuy > $i.production.you/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.maxBuy|eveNum}</td>
+        <td align="right">{$i.item.pricing.avgBuy|eveNum}</td>
+        <td align="right">{$i.item.pricing.qtyBuy|eveNum}</td>
+        <td align="right" {if $i.item.pricing.minSell > $i.production.you/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.minSell|eveNum}</td>
+        <td align="right">{$i.item.pricing.avgSell|eveNum}</td>
+        <td align="right">{$i.item.pricing.qtySell|eveNum}</td>
+      </tr>
+    {/foreach}
+  {/if}
+</table>
+
+  {if !$items}
+    <h3>You do not own any blueprints!</h3>
+  {/if}
+
+
+<div class="note">Note: Items shown are those which you currently own the blueprint for. "Material Unit Cost" is based on regional average selling price, and factors in your current "Production Efficiency" skill level.<br /><br />
+* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>

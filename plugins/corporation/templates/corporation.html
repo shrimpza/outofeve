@@ -1,0 +1,171 @@
+<table width="90%" border="0" align="center">
+  <tr>
+    <td width="50%" valign="top">
+
+      <table width="100%" border="0">
+        <tr>
+          <th colspan="2">{$corp.corporationName} [{$corp.ticker}]</th>
+        </tr>
+        <tr>
+          <td colspan="2" align="center"><img src="{$site_url}/includes/eve/corpLogo.php?s={$corp.logo.layers[0].shape},{$corp.logo.layers[1].shape},{$corp.logo.layers[2].shape}&c={$corp.logo.layers[0].color},{$corp.logo.layers[1].color},{$corp.logo.layers[2].color}" alt="{$corp.corporationName}" /></td>
+        </tr>
+        <tr>
+          <td width="30%" align="right"><b>Alliance:</b></td>
+          <td>{if $corp.allianceID > 0}{$corp.allianceName}{else}None{/if}</td>
+        </tr>
+        <tr>
+          <td align="right"><b>CEO:</b></td>
+          <td><img src="http://img.eve.is/serv.asp?s=64&c={$corp.ceoID}" align="absmiddle" width="32" height="32" alt="{$corp.ceoName}" /> {$corp.ceoName}</td>
+        </tr>
+        <tr>
+          <td align="right"><b>Headquarters:</b></td>
+          <td><img src="{$site_url}/eveimages/types/32/{$corp.station.stationtypeid}.png" alt="{$corp.station.stationname}" align="absmiddle" /> {$corp.station.stationname}</td>
+        </tr>
+        <tr>
+          <td align="right"><b>Members:</b></td>
+          <td>{$corp.memberCount|eveNumInt}{if $corp.memberLimit > 0} <span style="font-size: 0.9em">(of {$corp.memberLimit|eveNumInt} max)</span>{/if}</td>
+        </tr>
+        <tr>
+          <td align="right"><b>Tax rate:</b></td>
+          <td>{$corp.taxRate|eveNum}%</td>
+        </tr>
+        <tr>
+          <td align="right"><b>Shares:</b></td>
+          <td>{$corp.shares|eveNumInt}</td>
+        </tr>
+        {if $corp.description}
+        <tr>
+          <td align="right" valign="top"><b>Description:</b></td>
+          <td>{$corp.description|nl2br}</td>
+        </tr>
+        {/if}
+        {if (($corp.url) && ($corp.url != 'None')) }
+        <tr>
+          <td align="right"><b>Website:</b></td>
+          <td><a href="{$corp.url}">{$corp.ticker} website</a></td>
+        </tr>
+        {/if}
+
+        {if $corp.loadedBalances}
+          <tr>
+            <th colspan="2">Wallet Balances</th>
+          </tr>
+          {foreach from=$corp.walletDivisions item=wallet}
+          <tr class="{cycle values='row,rowAlt'}">
+            <td align="right"><b>{$wallet.description}:</b></td>
+            <td align="right">{$wallet.balance|eveNum}&nbsp;&nbsp;</td>
+          </tr>
+          {/foreach}
+        {/if}
+      </table>
+
+    </td>
+
+
+    <td width="50%" valign="top">
+
+      {if $corp.loadedMembers}
+      <table width="100%" border="0">
+        <tr>
+          <th>Members</th>
+        </tr>
+
+        <tr>
+          <td>
+            <form action="{$site_url}/?module=corporation" method="post">
+            <table width="100%" border="0">
+              <tr>
+                <td class="sub" colspan="2">Filter Members</td>
+              </tr>
+              <tr>
+                <td align="right"><b>Title:</b></td>
+                <td>
+                  <select name="title" style="width: 200px">
+                    <option value="">All</option>
+                    {foreach from=$titles item=cnt key=title}
+                      <option value="{$title}" {if $title == $selTitle}selected="selected"{/if}>{$title} ({$cnt|eveNumInt})</option>
+                    {/foreach}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td align="right"><b>In System:</b></td>
+                <td>
+                  <select name="system" style="width: 200px">
+                    <option value="">All</option>
+                    {foreach from=$systems item=system key=id}
+                      <option value="{$id}" {if $id == $selSystem}selected="selected"{/if}>{$system.name} ({$system.count|eveNumInt})</option>
+                    {/foreach}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td align="right"><b>Last Active:</b></td>
+                <td>
+                  <select name="active" style="width: 200px">
+                    <option value="4">All</option>
+                    {foreach from=$active item=act key=actNum}
+                      <option value="{$actNum}" {if $actNum == $selActive}selected="selected"{/if}>{$act.name} ({$act.count|eveNumInt})</option>
+                    {/foreach}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td align="right">&nbsp;</td>
+                <td><input type="submit" value="Filter" /></td>
+              </tr>
+            </table>
+            </form>
+          </td>
+        </tr>
+
+        {foreach from=$members item=member}
+        {cycle values='row,rowAlt' assign=rowclass}
+        <tr class="{$rowclass}" onclick="toggleMember('member{$member.characterID}')" style="cursor:pointer">
+          <td><img src="http://img.eve.is/serv.asp?s=64&c={$member.characterID}" align="absmiddle" width="32" height="32" alt="{$member.name}" /> {$member.name}</td>
+        </tr>
+        <tr id="member{$member.characterID}" class="{$rowclass}" style="display:none">
+          <td>
+            <table width="100%" border="0">
+              {if $member.title}
+                <tr><td align="right"><b>Title:</b></td><td>{$member.title}</td></tr>
+              {/if}
+              {if $member.startDateTime}
+                <tr><td align="right"><b>Join Date:</b></td><td>{$member.startDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
+              {/if}
+              {if $member.logoffDateTime > 20000}
+                <tr><td align="right"><b>Last Active:</b></td><td>{$member.logoffDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
+              {/if}
+              {if $member.baseID}
+                <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/eveimages/types/32/{$member.base.stationtypeid}.png" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
+              {/if}
+              {if $member.locationID}
+                <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/eveimages/types/32/{$member.location.stationtypeid}.png" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
+              {/if}
+              {if $member.shipTypeID}
+                <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/eveimages/types/32/{$member.ship.typeid}.png" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
+              {/if}
+            </table>
+          </td>
+        </tr>
+        {/foreach}
+
+      </table>
+      {/if}
+
+    </td>
+  </tr>
+</table>
+
+{literal}
+<script>
+  function toggleMember(mId) {
+    var m = document.getElementById(mId);
+    if (m.style.display == '') {
+      m.style.display = 'none';
+    } else {
+      m.style.display = '';
+    }
+  }
+</script>
+{/literal}

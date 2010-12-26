@@ -1,0 +1,37 @@
+<div id="assetList">
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}">All assets, by location</a></span>
+    <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships">Ships</a></span>
+    <span>Search: 
+      <input type="text" id="assetFind" value="{$search}" /> 
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=find&item='+document.getElementById('assetFind').value">Go</button>
+    </span>
+  </div>
+
+  <table width="90%" border="0">
+    <tr>
+      <th width="45%">Item</th>
+      <th width="45%">Station</th>
+      <th width="10%">Quantity</th>
+    </tr>
+    {foreach from=$assets item=asset}
+    <tr class="{cycle values='row,rowAlt'}">
+      <td width="45%" align="left">
+        <a href="#" onclick="showInfo({$asset.item.typeid});return false;">
+          {if $asset.item.typeGraphic}
+            <img src="{$site_url}/eveimages/types/32/{$asset.item.typeid}.png" alt="{$asset.item.typename}" align="absmiddle" />
+          {else}
+            <img src="{$site_url}/eveimages/icons/32/icon{$asset.item.icon}.png" alt="{$asset.item.typename}" align="absmiddle" />
+          {/if}
+        </a>
+        {$asset.item.typename}</td>
+      <td width="45%">{$asset.location.stationname}</td>
+      <td width="10%" align="right">{$asset.qty|eveNumInt}</td>
+    </tr>
+    {/foreach}
+  </table>
+
+  {if !$assets}
+    <h3>No matching assets found.</h3>
+  {/if}
+</div>

@@ -1,0 +1,182 @@
+<form method="post" action="{$site_url}/?module=util_production">
+  <table width="500" border="0">
+    <tr>
+      <td align="right">
+        <b>Item to manufacture:</b>
+      </td>
+      <td width="330">
+        <input type="text" name="item" value="{$item}" style="width: 280px" />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Material Level:</b>
+      </td>
+      <td width="330">
+        <select name="meLevel" style="width: 280px">
+          <option value="0" {if $meLevel == 0}selected="selected"{/if}>ME0</option>
+          <option value="5" {if $meLevel == 5}selected="selected"{/if}>ME5</option>
+          <option value="10" {if $meLevel == 10}selected="selected"{/if}>ME10</option>
+          <option value="20" {if $meLevel == 20}selected="selected"{/if}>ME20</option>
+          <option value="30" {if $meLevel == 30}selected="selected"{/if}>ME30</option>
+          <option value="40" {if $meLevel == 40}selected="selected"{/if}>ME40</option>
+          <option value="50" {if $meLevel == 50}selected="selected"{/if}>ME50</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Region:</b>
+      </td>
+      <td width="330">
+        <select name="region" style="width: 280px">
+          <option value="0">All</option>
+          {section name=r loop=$regions}
+            <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
+          {/section}
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        &nbsp;
+      </td>
+      <td width="330">
+        <label><input type="checkbox" name="customprice" value="1" {if $customprice}checked="checked"{/if}> Use custom mineral pricing *</label>
+      </td>
+    </tr>
+
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <input type="submit" value="Get Prices" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+<table width="100%" border="0">
+  <tr>
+    <th rowspan="2">Material</th>
+    <th colspan="2">Perfect</th>
+    <th colspan="2">You</th>
+  </tr>
+  <tr>
+    <th>Qty</th>
+    <th>Cost</th>
+    <th>Qty</th>
+    <th>Cost</th>
+  </tr>
+  {if $proditem}
+    {foreach from=$proditem.blueprint.materials item=m}
+      <tr class="{cycle values='row,rowAlt'}">
+        <td>
+          <a href="#" onclick="showInfo({$m.item.typeid});return false;">
+            {if $m.item.typeGraphic}
+              <img src="{$site_url}/eveimages/types/32/{$m.item.typeid}.png" alt="{$m.item.typename}" align="absmiddle" />
+            {else}
+              <img src="{$site_url}/eveimages/icons/32/icon{$m.item.icon}.png" alt="{$m.item.typename}" align="absmiddle" />
+            {/if}
+          </a>
+          {$m.item.typename}
+        </td>
+        <td align="right">{$m.qty_perfect|eveNumInt}</td>
+        <td align="right">{$m.price_perfect|eveNum}</td>
+        <td align="right">{$m.qty_you|eveNumInt}</td>
+        <td align="right">{$m.price_you|eveNum}</td>
+      </tr>
+    {/foreach}
+  {/if}
+  <tr>
+    <th>{if $proditem.portionsize > 1}<div align="right">1 run, {$proditem.portionsize} units:{/if}</div></th>
+    <th></th>
+    <th><div align="right">{$totals.perfect|eveNum}</div></th>
+    <th></th>
+    <th><div align="right">{$totals.you|eveNum}</div></th>
+  </tr>
+  {if $proditem.portionsize > 1}
+  <tr>
+    <th><div align="right">Unit cost:</div></th>
+    <th></th>
+    <th><div align="right">{$totals.perfect/$proditem.portionsize|eveNum}</div></th>
+    <th></th>
+    <th><div align="right">{$totals.you/$proditem.portionsize|eveNum}</div></th>
+  </tr>
+  {/if}
+  {if $proditem}
+    <tr>
+      <th><div align="right">Runs: <input type="text" id="runsInput" onchange="calcRuns(this.value)" onkeypress="calcRuns(this.value)" onkeyup="calcRuns(this.value)" value="1" style="width:40px;"/>:</div></th>
+      <th></th>
+      <th><div align="right" id="runsPerfect">{$totals.perfect|eveNum}</div></th>
+      <th></th>
+      <th><div align="right" id="runsYou">{$totals.you|eveNum}</div></th>
+    </tr>
+  {/if}
+</table>
+
+{if $proditem}
+  <h2>
+    Current Market Details for {$proditem.typename}:
+  </h2>
+  <table width="100%" border="0">
+    <tr>
+      <th rowspan="3" width="128>
+        <a href="#" onclick="showInfo({$proditem.typeid});return false;">
+          {if $proditem.typeGraphic}
+            <img src="{$site_url}/eveimages/types/64/{$proditem.typeid}.png" alt="{$proditem.typename}" align="absmiddle" />
+          {else}
+            <img src="{$site_url}/eveimages/icons/64/icon{$proditem.icon}.png" alt="{$proditem.typename}" align="absmiddle" />
+          {/if}
+        </a>
+      </th>
+      <th colspan="4">Buying</th>
+      <th colspan="4">Selling</th>
+    </tr>
+    <tr>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Avg</th>
+      <th>Qty</th>
+      <th>Min</th>
+      <th>Max</th>
+      <th>Avg</th>
+      <th>Qty</th>
+    </tr>
+    <tr>
+      <td align="right">{$proditem.pricing.minBuy|eveNum}</td>
+      <td align="right">{$proditem.pricing.maxBuy|eveNum}</td>
+      <td align="right">{$proditem.pricing.avgBuy|eveNum}</td>
+      <td align="right">{$proditem.pricing.qtyBuy|eveNumInt}</td>
+      <td align="right">{$proditem.pricing.minSell|eveNum}</td>
+      <td align="right">{$proditem.pricing.maxSell|eveNum}</td>
+      <td align="right">{$proditem.pricing.avgSell|eveNum}</td>
+      <td align="right">{$proditem.pricing.qtySell|eveNumInt}</td>
+    </tr>
+  </table>
+{/if}
+
+<div class="note">Note: "Perfect" column factors in a Production Efficiency skill level of 5, "You" uses your current Production Efficiency skill level.<br /><br />
+* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
+
+{if $proditem}
+<script type="text/javascript">
+  
+  var runPerfect = {$totals.perfect};
+  var runYou     = {$totals.you};
+
+  {literal}
+
+  function calcRuns(runCount)
+  {
+    var p = runPerfect * runCount;
+    var y = runYou * runCount;
+    document.getElementById('runsPerfect').innerHTML  = p.numberFormat('0,0.00');
+    document.getElementById('runsYou').innerHTML      = y.numberFormat('0,0.00');
+  }
+
+  {/literal}
+</script>
+{/if}

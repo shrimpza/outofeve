@@ -1,0 +1,66 @@
+<div id="assetList">
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}">All assets, by location</a></span>
+    <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships">Ships</a></span>
+    <span>Search: 
+      <input type="text" id="assetFind" value="{$search}" /> 
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=find&item='+document.getElementById('assetFind').value">Go</button>
+    </span>
+  </div>
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}
+
+<table width="100%" border="0">
+  <tr>
+    <th width="60%">Item</th>
+    <th width="30%">Location</th>
+    <th width="10%">Quantity</th>
+  </tr>
+  {foreach from=$assets item=lol key=locid}
+    <tr class="groupHead">
+      <td colspan="3" onclick="toggleAssets({$locid})">
+      {if $lol.location.stationid}
+        <img src="{$site_url}/eveimages/types/32/{$lol.location.stationtypeid}.png" alt="{$lol.location.stationname}" align="absmiddle" />
+      {/if}
+      {$lol.locationName}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <div style="display:none" id="{$locid}">
+          {foreach from=$lol.assets item=ass name='foo'}
+            {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
+          {/foreach}
+        </div>
+      </td>
+    </tr>
+  {/foreach}
+</table>
+
+  {if !$assets}
+    <h3>{if $corp}Your corporation has{else}You have{/if} no assets!</h3>
+  {/if}
+
+</div>
+
+{literal}
+<script>
+  function toggleAssets(id)
+  {
+    var ass = document.getElementById(id);
+    if (ass.style.display == '')
+      ass.style.display = 'none';
+    else
+      ass.style.display = '';
+  }
+</script>
+{/literal}

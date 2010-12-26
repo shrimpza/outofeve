@@ -1,0 +1,187 @@
+<table width="90%" border="0" align="center">
+  <tr>
+    <td align="center" valign="top" rowspan="999" width="200">
+      <img src="http://img.eve.is/serv.asp?s=256&c={$character.characterID}" /><br />
+      {if $character.raceInfo}
+        <img src="{$site_url}/eveimages/icons/128/icon{$character.raceInfo.ricon}.png" alt="{$character.raceInfo.racename}" title="{$character.raceInfo.racename}" />
+        <img src="{$site_url}/eveimages/icons/128/icon{$character.raceInfo.bicon}.png" alt="{$character.raceInfo.bloodlinename}" title="{$character.raceInfo.bloodlinename}" />
+      {/if}
+    </td>
+    <th colspan="2">
+      <img src="{$site_url}/eveimages/icons/32/icon25_15.png" align="absmiddle" />
+      <span style="font-size: 1.25em">{$character.name} - {$character.gender} {$character.race} {$character.bloodLine}</span>
+    </th>
+  </tr>
+  <tr>
+    <td align="right"><b>Corporation:</b></td>
+    <td>{$character.corporationName}</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Current Balance:</b></td>
+    <td>{$character.balance|eveNum}</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Skill Points:</b></td>
+    <td>{$character.skillPoints|eveNumInt}</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Currently Training:</b></td>
+    {if $character.training.inTraining}
+      <td>{$character.training.skillItem.typename} to level {$character.training.toLevel|eveRoman}, 
+        {if $character.training.remainingTime > 0}
+          <span style="font-size: 0.9em">eta {$character.training.remainingTime|formatTime}</span>
+        {else}
+          <span class="good">Complete!</span>
+        {/if}
+      </td>
+    {else}
+      <td><i><span class="bad">Nothing!</span></i></td>
+    {/if}
+  </tr>
+  
+  <tr><td colspan="2">&nbsp;</td></tr>
+
+  <tr>
+    <th colspan="2">
+      <img src="{$site_url}/eveimages/icons/32/icon34_15.png" align="absmiddle" />
+      <span style="font-size: 1.25em">Attributes</span>
+    </th>
+  </tr>
+  <tr>
+    {foreach from=$character.attributes item=attr}
+      <tr>
+        <td align="right">
+          <b>{$attr.name|ucfirst}:</b>
+        </td>
+        <td>
+          {$attr.value|eveNum}<span style="font-size: 0.9em">
+          {if $attr.bonus}
+            &nbsp; (using {$attr.implant}: +{$attr.bonus})
+          {else}
+            &nbsp; (No implant)
+          {/if}
+          </span>
+        </td>
+      </tr>
+    {/foreach}
+  </tr>
+
+{if $character.faction}
+    <tr><td colspan="2">&nbsp;</td></tr>
+    <tr>
+      <th colspan="2">
+        <img src="{$site_url}/eveimages/icons/32/icon61_03.png" align="absmiddle" />
+        <span style="font-size: 1.25em">Factional Warfare</span>
+      </th>
+    </tr>
+    <tr>
+      <td align="right"><b>Faction:</b></td>
+      <td>{$character.faction.factionName}</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Enlisted:</b></td>
+      <td>{$character.faction.enlisted|date_format:"%d/%m/%Y"}</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Current Rank:</b></td>
+      <td>{$character.faction.currentRank+1}/10</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Total Kills:</b></td>
+      <td>{$character.faction.killsTotal|eveNumInt}</td>
+    </tr>
+    <tr>
+      <td align="right"><b>Total Victory Points</b></td>
+      <td>{$character.faction.killsTotal|eveNumInt}</td>
+    </tr>
+{/if}
+
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <th colspan="2" style="cursor:pointer" onclick="toggleSkills()">
+      <img src="{$site_url}/eveimages/icons/32/icon36_15.png" align="absmiddle" />
+      <span style="font-size: 1.25em">Known Skills</span>
+    </th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table width="100%" border="0" style="display:none;" id="knownSkillList">
+      {foreach from=$skills item=grp}
+        <tr>
+          {math equation="(s / t) * 100" s=$grp.skillpoints t=$character.skillPoints assign=grpPercent}
+          <td class="sub" colspan="2">{$grp.name} <span style="font-size: 0.85em">- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
+        </tr>
+        {section name=sk loop=$grp.skills}
+          <tr class="{cycle values='row,rowAlt'}">
+            <td width="75%" align="left">
+              <a href="#" onclick="showInfo({$grp.skills[sk].typeID});return false;"><img src="{$site_url}/eveimages/icons/32/icon50_11.png" align="absmiddle" /></a> {$grp.skills[sk].name}
+            </td>
+            <td width="25%" align="right">
+            {if $grp.skills[sk].training}
+              <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$grp.skills[sk].toLevel}.png" alt="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" title="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" />
+            {else}
+              <img src="{$site_url}/templates/{$theme}/images/skills/level{$grp.skills[sk].level}.png" alt="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" title="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" />
+            {/if}
+            </td>
+          </tr>
+        {/section}
+      {/foreach}
+      </table>
+    </td>
+  </tr>
+
+  {if $certificates}
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <th colspan="2" style="cursor:pointer" onclick="toggleCerts()">
+      <img src="{$site_url}/eveimages/icons/32/icon79_01.png" align="absmiddle" />
+      <span style="font-size: 1.25em">Certificates</span>
+    </th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table width="100%" border="0" style="display:none;" id="certificatesList">
+      {foreach from=$certificates item=cat}
+        <tr>
+          <td class="sub" colspan="2">{$cat.name}</td>
+        </tr>
+        {foreach from=$cat.classes item=cls}
+          <tr class="{cycle values='row,rowAlt'}">
+            <td width="75%" align="left">
+              <img src="{$site_url}/eveimages/icons/32/icon79_01.png" align="absmiddle" />
+              {$cls.name}
+            </td>
+            <td width="25%" align="right">
+              <img src="{$site_url}/templates/{$theme}/images/skills/level{$cls.grade}.png" alt="{$cls.name} - Grade {$cls.grade|eveRoman}" title="{$cls.name} - Grade {$cls.grade|eveRoman}" />
+            </td>
+          </tr>
+        {/foreach}
+      {/foreach}
+      </table>
+    </td>
+  </tr>
+  {/if}
+
+</table>
+
+{literal}
+<script>
+  function toggleSkills() {
+    var st = document.getElementById('knownSkillList');
+    if (st.style.display == 'none') {
+      st.style.display = '';
+    } else {
+     st.style.display = 'none';
+   }
+  }
+
+  function toggleCerts() {
+    var ct = document.getElementById('certificatesList');
+    if (ct.style.display == 'none') {
+      ct.style.display = '';
+    } else {
+     ct.style.display = 'none';
+   }
+  }
+</script>
+{/literal}

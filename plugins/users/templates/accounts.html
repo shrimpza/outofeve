@@ -1,0 +1,27 @@
+{if $error}
+  <div class="error">{$error}</div>
+{/if}
+
+<div id="accountsList">
+<table width="60%" border="0">
+  <tr>
+    <th>Account Name</th>
+  </tr>
+  {foreach from=$accounts item=a}
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>
+        <a href="{$site_url}/?module=users&mode=accounts&delete={$a.row.id}" title="Delete"><img src="{$site_url}/templates/{$theme}/images/edit-delete-big.png" align="absmiddle"></a>
+        <a href="{$site_url}/?module=users&mode=accounts&edit={$a.row.id}" title="Edit"><img src="{$site_url}/templates/{$theme}/images/edit-edit-big.png" align="absmiddle"></a>
+        <a href="{$site_url}/?module=users&mode=accounts&setacc={$a.row.id}" title="Set Active"><img src="{$site_url}/templates/{$theme}/images/home-big.png" align="absmiddle"></a>
+        {$a.row.name}
+      </td>
+    </tr>
+  {/foreach}
+  <tr class="{cycle values='row,rowAlt'}">
+    <th>
+      <a href="{$site_url}/?module=users&mode=accounts&edit=0"><img src="{$site_url}/templates/{$theme}/images/edit-new-big.png" align="absmiddle">
+      Add Account</a>
+    </th>
+  </tr>
+</table>
+</div>

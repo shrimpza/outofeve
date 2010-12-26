@@ -1,0 +1,224 @@
+<form method="post" action="{$site_url}/?module=util_mining">
+  <table width="500" border="0">
+    <tr>
+      <td align="right">
+        <b>Mining equipment:</b> 
+        <a href="#" onclick="showInfo(document.getElementById('miner').value);return false;">
+          <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" />
+        </a>
+      </td>
+      <td width="330">
+        <select name="miner" style="width: 280px" id="miner">
+          {section name=m loop=$miners}
+            <option value="{$miners[m].typeid}" {if $miners[m].typeid == $miner}selected="selected"{/if}>{$miners[m].typename}</option>
+          {/section}
+        </select>
+        <b>x</b>
+        <input type="text" name="qty" value="{$qty}" style="width: 20px;">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Mining upgrades:</b>
+        <a href="#" onclick="showInfo(document.getElementById('upgrade').value);return false;">
+          <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" />
+        </a>
+      </td>
+      <td width="330">
+        <select name="upgrade" style="width: 280px" id="upgrade">
+          {section name=u loop=$upgrades}
+            <option value="{$upgrades[u].typeid}" {if $upgrades[u].typeid == $upgrade}selected="selected"{/if}>{$upgrades[u].typename}</option>
+          {/section}
+        </select>
+        <b>x</b>
+        <input type="text" name="upgradeqty" value="{$upgradeqty|eveNumInt}" style="width: 20px;">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Mining drones:</b>
+        <a href="#" onclick="showInfo(document.getElementById('drone').value);return false;">
+          <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" />
+        </a>
+       </td>
+       <td>
+        <select name="drone" style="width: 280px" id="drone">
+          {section name=d loop=$drones}
+            <option value="{$drones[d].typeid}" {if $drones[d].typeid == $drone}selected="selected"{/if}>{$drones[d].typename}</option>
+          {/section}
+        </select>
+        <b>x</b>
+        <input type="text" name="droneqty" value="{$droneqty|eveNumInt}" style="width: 20px;">
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Ore type:</b>
+        <a href="#" onclick="showInfo(document.getElementById('roid').value);return false;">
+          <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" />
+        </a>
+      </td>
+      <td>
+        <select name="roid" style="width: 280px" id="roid">
+          {section name=r loop=$roids}
+            <option value="{$roids[r].typeid}" {if $roids[r].typeid == $roid}selected="selected"{/if}>{$roids[r].typename}</option>
+          {/section}
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Mining time:</b>
+      </td>
+      <td>
+        <select name="minetime" style="width: 280px">
+          <option value="300" {if $minetime==300}selected="selected"{/if}>5m</option>
+          <option value="600" {if $minetime==600}selected="selected"{/if}>10m</option>
+          <option value="900" {if $minetime==900}selected="selected"{/if}>15m</option>
+          <option value="1800" {if $minetime==1800}selected="selected"{/if}>30m</option>
+          <option value="3600" {if $minetime==3600}selected="selected"{/if}>1h</option>
+          <option value="4500" {if $minetime==4500}selected="selected"{/if}>1h30m</option>
+          <option value="7200" {if $minetime==7200}selected="selected"{/if}>2h</option>
+          <option value="9000" {if $minetime==9000}selected="selected"{/if}>2h30m</option>
+          <option value="10800" {if $minetime==10800}selected="selected"{/if}>3h</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Station yield:</b>
+      </td>
+      <td>
+        <select name="station" style="width: 280px">
+          <option value="50" {if $station==50}selected="selected"{/if}>50%</option>
+          <option value="45" {if $station==45}selected="selected"{/if}>45%</option>
+          <option value="40" {if $station==40}selected="selected"{/if}>40%</option>
+          <option value="35" {if $station==35}selected="selected"{/if}>35%</option>
+          <option value="30" {if $station==30}selected="selected"{/if}>30%</option>
+        </select>
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Ship yield bonus %:</b>
+      </td>
+      <td>
+        <input type="text" name="shipbonus" value="{$shipbonus|eveNumInt}" style="width: 30px" />
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right">
+        <b>Region pricing:</b>
+      </td>
+      <td>
+        <select name="region" style="width: 280px">
+          <option value="-1" {if $region == -1}selected="selected"{/if}>Use custom mineral pricing *</option>
+          <option value="0" {if $region == 0}selected="selected"{/if}>All</option>
+          {section name=r loop=$regions}
+            <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="selected"{/if}>{$regions[r].regionname}</option>
+          {/section}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <input type="submit" value="Calculate" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+{if $asteroid}
+  <h2>
+    <img src="{$site_url}/eveimages/icons/64/icon18_02.png" align="absmiddle" />
+    Refining:
+  </h2>
+  <table width="100%" border="0">
+    <tr>
+      <th>Mineral</th>
+      <th>Qty</th>
+      <th>Buy Value</th>
+      <th>Sell Value</th>
+    </tr>
+    {foreach from=$minerals item=m}
+      <tr class="{cycle values='row,rowAlt'}">
+        <td>
+          <a href="#" onclick="showInfo({$m.item.typeid});return false;">
+            {if $m.item.typeGraphic}
+              <img src="{$site_url}/eveimages/types/32/{$m.item.typeid}.png" alt="{$m.item.typename}" align="absmiddle" />
+            {else}
+              <img src="{$site_url}/eveimages/icons/32/icon{$m.item.icon}.png" alt="{$m.item.typename}" align="absmiddle" />
+            {/if}
+          </a>
+          {$m.item.typename}
+        </td>
+        <td align="right">{$m.qty|eveNumInt}</td>
+        <td align="right">{$m.buyvalue|eveNum}</td>
+        <td align="right">{$m.sellvalue|eveNum}</td>
+      </tr>
+    {/foreach}
+    <tr>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th><div align="right">{$valuetotals.totalBuyValue|eveNum}</div></th>
+      <th><div align="right">{$valuetotals.totalSellValue|eveNum}</div></th>
+    </tr>
+  </table>
+
+  <h2>
+    <a href="#" onclick="showInfo({$asteroid.typeid});return false;">
+      {if $asteroid.typeGraphic}
+        <img src="{$site_url}/eveimages/types/64/{$asteroid.typeid}.png" alt="{$asteroid.typename}" align="absmiddle" />
+      {else}
+        <img src="{$site_url}/eveimages/icons/64/icon{$asteroid.icon}.png" alt="{$asteroid.typename}" align="absmiddle" />
+      {/if}
+    </a>
+    {$asteroid.typename} Additional Details:
+  </h2>
+  <table width="500" border="0">
+    <tr>
+      <th width="40%"><div style="text-align:right">Total quantity mined:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.totalAmount|eveNumInt}</td>
+    </tr>
+    <tr>
+      <th width="40%"><div style="text-align:right">Drone quantity mined:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.droneTotalAmount|eveNumInt}</td>
+    </tr>
+    <tr>
+      <th  width="40%"><div style="text-align:right">Cargo space required:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.volume*$minetotals.totalAmount|eveNumInt}</td>
+    </tr>
+    <tr>
+      <th width="40%"><div style="text-align:right">Batch size:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$batchsize}</td>
+    </tr>
+    <tr>
+      <th width="40%"><div style="text-align:right">Reprocessing batches:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.totalBatches|eveNumInt}</td>
+    </tr>
+    <tr>
+      <th width="40%"><div style="text-align:right">Refining yield:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$wastefactor|eveNum}%</td>
+    </tr>
+    <tr>
+      <th width="40%"><div style="text-align:right">Ore buying value:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.pricing.avgBuy*$minetotals.totalAmount|eveNum}</td>
+    </tr>
+    <tr>
+      <th width="40%"><div style="text-align:right">Ore selling value:</div></th>
+      <td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.pricing.avgSell*$minetotals.totalAmount|eveNum}</td>
+    </tr>
+  </table>
+{/if}
+
+
+<div class="note">Note: Factors in current character's Mining, Astrogeology, Mining Drone Operation, Refining and Refinery Efficiency skill levels. <br />Assumes 30 second (15 seconds in each direction) flight time for each mining drone cycle.<br /><br />
+* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>

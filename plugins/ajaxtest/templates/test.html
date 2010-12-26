@@ -1,0 +1,118 @@
+<!--
+    VERY basic dynamic content demo, using JSON for data interchange.
+    See the small javascript at the end of this page to see how it works.
+
+    the following two scripts are always required on pages with AJAX content.
+-->
+<script src="{$site_url}/includes/javascript/json2.js"></script>
+<script src="{$site_url}/includes/javascript/json-ajax.js"></script>
+
+<div>
+  <h3>AJAX/JSON Demo</h3>
+  <div class="listOptions">
+    <span>Item lookup: 
+      <input type="text" id="itemName" /> &nbsp;
+      Qty: <input type="text" id="itemQty" value="1" style="width: 30px" /> 
+      <button onclick="getItem()">Go</button>
+    </span>
+  </div>
+
+  <table id="itemStuff" style="display:none" width="450">
+    <tr>
+      <td colspan="2" class="sub" id="itemFullName"></td>
+    </tr>
+    <tr>
+      <td colspan="2" id="itemDescription"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Avg Selling Price:</b></td>
+      <td id="itemUnitPrice"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Total Price:</b></td>
+      <td id="itemTotalPrice"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Total Volume:</b></td>
+      <td id="itemTotalVolume"></td>
+    </tr>
+  </table>
+
+  <div id="itemError" class="sub bad" style="display:none; font-size: 1.3em; width: 500px;">
+    
+  </div>
+
+</div>
+
+<script>
+// "literal" template tag, so the template engine ignores our javascript (Smarty limitation)
+{literal}
+
+  function getItem() {
+    var itemName = document.getElementById('itemName').value;
+
+    /*
+      How this works:
+        the jsonRequest function sends off a request to the server, to the URL
+        specified in the first parameter ('index.php'). The second parameter
+        includes a bunch of standard URL query arguments - note that the 'module'
+        argument MUST be present, as this is the plugin which will process your
+        AJAX request. 'GET' just tells it to do a GET request.
+        The final parameter, 'gotItem' in this case, is the name of a callback
+        function which will receive the server's response once the request is
+        complete.
+    */
+    jsonRequest('index.php', 'module=ajaxtest&item=' + itemName, 'GET', gotItem);
+  }
+
+  function gotItem(item) {
+    var stuff = document.getElementById('itemStuff');
+    var err = document.getElementById('itemError');
+
+    if (item.error) {
+      // received an error. hide the item info table and show the error
+      stuff.style.display = 'none';
+      err.style.display = '';
+
+      err.innerHTML = item.error;
+    } else {
+      stuff.style.display = '';
+      err.style.display = 'none';
+
+      // just set the name element
+      document.getElementById('itemFullName').innerHTML = item.typename;
+
+      // clear out the existing description content
+      document.getElementById('itemDescription').innerHTML = '';
+
+      // set up the item's icon graphic
+      var img = document.createElement('img');
+      img.align = 'left';
+      img.style.marginRight = '10px';
+      if (item.icon) {
+        img.src = 'eveimages/icons/64/icon'+item.icon+'.png';
+      } else {
+        img.src = 'eveimages/types/64/'+item.typeid+'.png';
+      }
+      
+      // set up the description
+      var desc = document.createElement('span');
+      desc.innerHTML = item.description;
+
+      // add the image and description elements to the description field
+      document.getElementById('itemDescription').appendChild(img);
+      document.getElementById('itemDescription').appendChild(desc);
+
+      // add unit selling price
+      document.getElementById('itemUnitPrice').innerHTML = item.pricing.avgSell.numberFormat('0,0.00');
+
+      // add total selling price
+      document.getElementById('itemTotalPrice').innerHTML = (item.pricing.avgSell * document.getElementById('itemQty').value).numberFormat('0,0.00');
+
+      // add total volume
+      document.getElementById('itemTotalVolume').innerHTML = (item.volume * document.getElementById('itemQty').value).numberFormat('0,0.00');
+    }
+  }
+
+{/literal}
+</script>

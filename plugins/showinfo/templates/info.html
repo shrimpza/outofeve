@@ -1,0 +1,73 @@
+<div id="showInfo">
+  <table width="90%" border="0" align="center">
+    <tr>
+      <th colspan="2">
+        <h4>{$item.group.groupname}</h4>
+        <h3>{$item.typename}</h3>
+      </th>
+    </tr>
+    <tr>
+      <td colspan="2" class="description">
+        <div class="icon">
+          {if $item.typeGraphic}
+            <img src="{$site_url}/eveimages/types/64/{$item.typeid}.png" alt="{$item.typename}" />
+          {else}
+            <img src="{$site_url}/eveimages/icons/64/icon{$item.icon}.png" alt="{$item.typename}" />
+          {/if}
+        </div>
+        <div class="desc">
+          {$item._description|nl2br}
+        </div>
+        <div style="clear:both"></div>
+      </td>
+    </tr>
+    <tr>
+      <th width="60%">Attribute</th>
+      <th width="40%">Value</th>
+    </tr>
+    {foreach from=$attributes item=a}
+      <tr class="{cycle values='row,rowAlt'}">
+        <td>
+        {if $a.icon}
+          <img src="{$site_url}/eveimages/icons/16/icon{$a.icon}.png" alt="{$a.displayname}" align="absmiddle" />
+        {/if}
+        {$a.displayname}</td>
+        <td align="right">
+          {if $a.valuestring}
+            {$a.valuestring}
+          {elseif $a.valuefloat}
+            {$a.valuefloat|eveNum}
+          {else}
+            {$a.valueint|eveNumInt}
+          {/if}
+          {$a.unitname}
+        </td>
+      </tr>
+    {/foreach}
+
+
+    <tr>
+      <th colspan="2">
+        <h4><img src="{$site_url}/eveimages/icons/32/icon18_01.png" align="absmiddle"/> Market information</h4>
+      </th>
+    </tr>
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>Average selling:</td>
+      <td align="right">{$item.pricing.avgSell|eveNum}</td>
+    </tr>
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>Median selling:</td>
+      <td align="right">{$item.pricing.medSell|eveNum}</td>
+    </tr>
+
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>Average buying:</td>
+      <td align="right">{$item.pricing.avgBuy|eveNum}</td>
+    </tr>
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>Median buying:</td>
+      <td align="right">{$item.pricing.medBuy|eveNum}</td>
+    </tr>
+
+  </table>
+</div>

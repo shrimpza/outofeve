@@ -1,0 +1,144 @@
+<div id="killList">
+
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+      <button onclick="window.location='{$site_url}/?module=starbases&p={$prevPage}&activity={$activity}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+      <button onclick="window.location='{$site_url}/?module=starbases&p={$nextPage}&activity={$activity}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}
+
+  {if !$starbases}
+    <h3>Your corporation does not own any starbases!</h3>
+  {/if}
+
+  <table width="100%" border="0">
+    {foreach from=$starbases item=s}
+    <tr class="killHead">
+      <td colspan="2" onclick="toggleStarbase({$s.itemID})">
+        <img src="{$site_url}/eveimages/types/64/{$s.tower.typeid}.png" alt="{$s.tower.typename}" align="left" style="margin-right: 20px" />
+        <h3>{$s.tower.typename}<br />
+        {if $s.moonID > 0}{$s.moon.itemname}{else}{$s.solarSystem.solarsystemname}{/if}, {$s.solarSystem.region.regionname} ({$s.solarSystem.security|eveNum:1})</h3>
+        {if $s.state == 0}<h4 class="bad">Unanchored</h4>
+        {elseif $s.state == 1}<h4 class="bad">Offline</h4>
+        {elseif $s.state == 2}<h4 class="maybe">Coming online, eta {$s.onlineTimestamp|date_format:"%d/%m/%Y %H:%M"} ({$s.remainingTime|formatTime})</h4>
+        {elseif $s.state == 3}<h4 class="maybe">Reinforced until {$s.stateTimestamp|date_format:"%d/%m/%Y %H:%M"} ({$s.remainingTime|formatTime})</h4>
+        {elseif $s.state == 4}<h4 class="good">Online since {$s.onlineTimestamp|date_format:"%d/%m/%Y %H:%M"} ({$s.remainingTime|formatTime})</h4>{/if}
+      </td>
+    </tr>
+    <tr id="{$s.itemID}" style="display: none">
+      <td width="25%" valign="top">
+        <table width="100%" border="0">
+          <tr>
+            <th colspan="2">General Configuration</th>
+          </tr>
+          <tr>
+            <td align="right" width="80%"><b>Allow corporation members:</b></td>
+            <td>{$s.generalSettings.allowCorporationMembers|yesNo}</td>
+          </tr>
+          <tr>
+            <td align="right"><b>Allow alliance members:</b></td>
+            <td>{$s.generalSettings.allowAllianceMembers|yesNo}</td>
+          </tr>
+          <tr>
+            <td align="right"><b>Claim sovereignty:</b></td>
+            <td>{$s.generalSettings.claimSovereignty|yesNo}</td>
+          </tr>
+
+          <tr>
+            <th colspan="2">Combat Configuration</th>
+          </tr>
+          <tr>
+            <td align="right"><b>Attack on standing drop:</b></td>
+            <td>{$s.combatSettings.onStandingDrop.enabled|yesNo}</td>
+          </tr>
+          <tr>
+            <td align="right"><b>Attack on status drop:</b></td>
+            <td>{$s.combatSettings.onStatusDrop.enabled|yesNo}</td>
+          </tr>
+          <tr>
+            <td align="right"><b>Attack on aggression:</b></td>
+            <td>{$s.combatSettings.onAggression|yesNo}</td>
+          </tr>
+          <tr>
+            <td align="right"><b>Attack when at war:</b></td>
+            <td>{$s.combatSettings.onCorporationWar|yesNo}</td>
+          </tr>
+        </table>
+      </td>
+      <td valign="top">
+        <table width="100%" border="0">
+          <tr>
+            <th colspan="5">Fuel</th>
+          </tr>
+          <tr>
+            <th>Resource</th>
+            <th align="right">Req/Hour</th>
+            <th align="right">Current</th>
+            <th align="right">7 Days</th>
+            <th align="right">30 Days</th>
+          </tr>
+          {foreach from=$s.fuelGroups item=fg key=grpName}
+            <tr class="sub">
+              <th colspan="5"><b>{$grpName}</b></th>
+            </tr>
+            {foreach from=$fg.fuels item=f}
+            <tr class="{cycle values='row,rowAlt'}">
+              <td>
+                <a href="#" onclick="showInfo({$f.resource.typeid});return false;">
+                  {if $f.resource.typeGraphic}
+                    <img src="{$site_url}/eveimages/types/32/{$f.resource.typeid}.png" alt="{$f.resource.typename}" align="absmiddle" />
+                  {else}
+                    <img src="{$site_url}/eveimages/icons/32/icon{$f.resource.icon}.png" alt="{$f.resource.typename}" align="absmiddle" />
+                  {/if}
+                </a>
+                {$f.resource.typename}
+              </td>
+              <td align="right">{$f.quantity|eveNumInt}</td>
+              <td align="right">{$f.current.quantity|eveNumInt}{if $f.current.remaining > 0}<br /><span style="font-size: 0.9em">({$f.current.remaining|formatTime})</span>{/if}</td>
+              <td align="right">{$f.7days.quantity|eveNumInt}</td>
+              <td align="right">{$f.30days.quantity|eveNumInt}</td>
+            </tr>
+            {/foreach}
+            <tr class="sub">
+              <td align="right"><b>Total volume:</b></td>
+              <td align="right">{$fg.volumeHour|eveNum}</td>
+              <td align="right">{$fg.volumeCurrent|eveNum}</td>
+              <td align="right">{$fg.volume7Days|eveNum}</td>
+              <td align="right">{$fg.volume30Days|eveNum}</td>
+            </tr>
+            <tr class="sub">
+              <td align="right"><b>Total value:</b></td>
+              <td align="right">{$fg.valueHour|eveNum}</td>
+              <td align="right">{$fg.valueCurrent|eveNum}</td>
+              <td align="right">{$fg.value7Days|eveNum}</td>
+              <td align="right">{$fg.value30Days|eveNum}</td>
+            </tr>
+            <tr>
+              <td colspan="5">&nbsp;</td>
+            </tr>
+          {/foreach}
+        </table>
+      </td>
+    </tr>
+    {/foreach}
+  </table>
+
+</div>
+
+
+{literal}
+<script>
+  function toggleStarbase(id) {
+    var sb = document.getElementById(id);
+    if (sb.style.display == '')
+      sb.style.display = 'none';
+    else
+      sb.style.display = '';
+  }
+</script>
+{/literal}

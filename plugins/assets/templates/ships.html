@@ -1,0 +1,115 @@
+<div id="assetList">
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}">All assets, by location</a></span>
+    <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships">Ships</a></span>
+    <span>Search: 
+      <input type="text" id="assetFind" value="{$search}" /> 
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=find&item='+document.getElementById('assetFind').value">Go</button>
+    </span>
+  </div>
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+      <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}
+
+  {if !$ships}
+    <h3>{if $corp}Your corporation has{else}You have{/if} no ships!</h3>
+  {/if}
+
+<table width="100%" border="0">
+  {foreach from=$ships item=ship}
+    <tr class="groupHead">
+      <td colspan="3" onclick="toggleAssets({$ship.itemID})">
+        <a href="#" onclick="showInfo({$ship.item.typeid});return false;">
+          <img src="{$site_url}/eveimages/types/64/{$ship.item.typeid}.png" alt="{$ship.item.typename}" align="left" style="margin-right: 10px" />
+        </a>
+        {$ship.item.typename}<br />{$ship.item.group.groupname}<br /><small>{$ship.locationName}</small></td>
+    </tr>
+    {if $ship.contents}
+      <tr>
+        <td colspan="3">
+          <div style="display:none" id="{$ship.itemID}">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="450" valign="top">
+                  <div class="fitting">
+                    <div class="slots">
+                      {foreach from=$ship.contents item=ass name='moo'}
+                        {if (($ass.flag >= 11) && ($ass.flag <= 34))}
+                          <div class="slot{$ass.flag}">
+                            <a href="#" onclick="showInfo({$ass.item.typeid});return false;" title="{$ass.item.typename}">
+                              {if $ass.item.typeGraphic}
+                                <img src="{$site_url}/eveimages/types/64/{$ass.item.typeid}.png" alt="{$ass.item.typename}" align="absmiddle" />
+                              {else}
+                                <img src="{$site_url}/eveimages/icons/64/icon{$ass.item.icon}.png" alt="{$ass.item.typename}" align="absmiddle" />
+                              {/if}
+                            </a>
+                          </div>
+                        {/if}
+                      {/foreach}
+                    </div>
+                    <div class="rigSlots">
+                      {foreach from=$ship.contents item=ass name='poo'}
+                        {if (($ass.flag >= 92) && ($ass.flag <= 99))}
+                          <a href="#" onclick="showInfo({$ass.item.typeid});return false;" title="{$ass.item.typename}">
+                            {if $ass.item.typeGraphic}
+                              <img src="{$site_url}/eveimages/types/32/{$ass.item.typeid}.png" alt="{$ass.item.typename}" align="absmiddle" class="rig" />
+                            {else}
+                              <img src="{$site_url}/eveimages/icons/32/icon{$ass.item.icon}.png" alt="{$ass.item.typename}" align="absmiddle" class="rig" />
+                            {/if}
+                          </a>
+                        {/if}
+                      {/foreach}
+                    </div>
+                  </div>
+                </td>
+                <td valign="top">
+                  <table width="100%" border="0">
+                    <tr>
+                      <th width="60%">Item</th>
+                      <th width="30%">Location</th>
+                      <th width="10%">Quantity</th>
+                    </tr>
+                  </table>
+                  {foreach from=$ship.contents item=ass name='foo'}
+                    {if (!(($ass.flag >= 11) && ($ass.flag <= 34)) && !(($ass.flag >= 92) && ($ass.flag <= 99)))}
+                      {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
+                    {/if}
+                  {/foreach}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    {else}
+      <tr>
+        <td colspan="3">
+          <div style="display:none; padding-left: 20px" id="{$ship.itemID}">
+            <h3>This ship has no cargo and no fittings!</h3>
+          </div>
+        </td>
+      </tr>
+    {/if}
+  {/foreach}
+</table>
+</div>
+
+{literal}
+<script>
+  function toggleAssets(id) {
+    var ass = document.getElementById(id);
+    if (ass.style.display == '')
+      ass.style.display = 'none';
+    else
+      ass.style.display = '';
+  }
+</script>
+{/literal}
