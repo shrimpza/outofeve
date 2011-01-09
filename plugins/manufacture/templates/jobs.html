@@ -44,7 +44,7 @@
         {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
         <tr class="{$rowClass}">
           {if $corp}
-            <td align="center"><img src="http://img.eve.is/serv.asp?s=64&c={$j.installerID}" align="absmiddle" width="32" height="32" alt="{$j.installerName}" title="{$j.installerName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$j.installerID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$j.installerName}" title="{$j.installerName}" /></td>
           {/if}
           <td>
             {if $j.activity.iconno}

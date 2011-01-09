@@ -7,7 +7,7 @@
           <th colspan="2">{$corp.corporationName} [{$corp.ticker}]</th>
         </tr>
         <tr>
-          <td colspan="2" align="center"><img src="{$site_url}/includes/eve/corpLogo.php?s={$corp.logo.layers[0].shape},{$corp.logo.layers[1].shape},{$corp.logo.layers[2].shape}&c={$corp.logo.layers[0].color},{$corp.logo.layers[1].color},{$corp.logo.layers[2].color}" alt="{$corp.corporationName}" /></td>
+          <td colspan="2" align="center"><img src="http://image.eveonline.com/Corporation/{$corp.corporationID}_128.png" alt="{$corp.corporationName}" /></td>
         </tr>
         <tr>
           <td width="30%" align="right"><b>Alliance:</b></td>
@@ -15,7 +15,7 @@
         </tr>
         <tr>
           <td align="right"><b>CEO:</b></td>
-          <td><img src="http://img.eve.is/serv.asp?s=64&c={$corp.ceoID}" align="absmiddle" width="32" height="32" alt="{$corp.ceoName}" /> {$corp.ceoName}</td>
+          <td><img src="http://image.eveonline.com/Character/{$corp.ceoID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$corp.ceoName}" /> {$corp.ceoName}</td>
         </tr>
         <tr>
           <td align="right"><b>Headquarters:</b></td>
@@ -122,7 +122,7 @@
         {foreach from=$members item=member}
         {cycle values='row,rowAlt' assign=rowclass}
         <tr class="{$rowclass}" onclick="toggleMember('member{$member.characterID}')" style="cursor:pointer">
-          <td><img src="http://img.eve.is/serv.asp?s=64&c={$member.characterID}" align="absmiddle" width="32" height="32" alt="{$member.name}" /> {$member.name}</td>
+          <td><img src="http://image.eveonline.com/Character/{$member.characterID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$member.name}" /> {$member.name}</td>
         </tr>
         <tr id="member{$member.characterID}" class="{$rowclass}" style="display:none">
           <td>

@@ -25,7 +25,7 @@
 
   {foreach from=$kills item=kill}
   <div class="killHead" onclick="toggleKill({$kill.killID})">
-    <img src="http://img.eve.is/serv.asp?s=64&c={$kill.victim.characterID}" alt="{$kill.victim.characterName}" align="left" style="padding-right: 5px; margin-right: 0px;" />
+    <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_64.jpg" alt="{$kill.victim.characterName}" align="left" style="padding-right: 5px; margin-right: 0px;" />
     <img src="{$site_url}/eveimages/types/64/{$kill.victim.ship.typeid}.png" alt="{$kill.victim.ship.typename}" align="left" />
       <h3>{$kill.victim.characterName}, {$kill.victim.corporationName}</h3>
       <h4>{$kill.solarSystem.solarsystemname}, {$kill.solarSystem.region.regionname} ({$kill.solarSystem.security|eveNum:1})</h4>
@@ -40,7 +40,7 @@
           <table border="0" width="100%">
             <tr>
               <td width="60%">
-                <img src="http://img.eve.is/serv.asp?s=64&c={$kill.victim.characterID}" alt="{$kill.victim.characterName}" align="left" />
+                <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_64.jpg" alt="{$kill.victim.characterName}" align="left" />
                 <a href="#" onclick="showInfo({$kill.victim.ship.typeid});return false;">
                   <img src="{$site_url}/eveimages/types/64/{$kill.victim.ship.typeid}.png" alt="{$kill.victim.ship.typename}" align="left" />
                 </a>
@@ -62,7 +62,7 @@
               <tr>
                 <td width="60%">
                   {if $attacker.characterID > 0}
-                    <img src="http://img.eve.is/serv.asp?s=64&c={$attacker.characterID}" alt="{$attacker.characterName}" align="left" />
+                    <img src="http://image.eveonline.com/Character/{$attacker.characterID}_64.jpg" alt="{$attacker.characterName}" align="left" />
                   {/if}
                   {if $attacker.ship.typeGraphic}
                     <a href="#" onclick="showInfo({$attacker.ship.typeid});return false;">

@@ -45,7 +45,7 @@
       {foreach from=$selling item=o}
         <tr class="{cycle values='row,rowAlt'}">
           {if $corp}
-            <td align="center"><img src="http://img.eve.is/serv.asp?s=64&c={$o.charID}" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
           {/if}
           <td>{$o.station.stationname}</td>
           <td>
@@ -114,7 +114,7 @@
       {foreach from=$buying item=o}
         <tr class="{cycle values='row,rowAlt'}">
           {if $corp}
-            <td align="center"><img src="http://img.eve.is/serv.asp?s=64&c={$o.charID}" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
           {/if}
           <td>{$o.station.stationname}</td>
           <td>
