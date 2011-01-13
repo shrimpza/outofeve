@@ -190,7 +190,7 @@
         }
 
         function regionList() {
-            return $this->db->QueryA('select regionID, regionName from mapRegions order by regionName', array());
+            return $this->db->QueryA("select regionID, regionName from mapRegions where RegionName <> 'Unknown' order by regionName", array());
         }
 
         function eveStation($stationId) {
@@ -508,6 +508,8 @@
         var $wastefactor = 0;
 
         var $materials = array();
+        var $extraMaterials = array();
+        var $skills = array();
 
         var $blueprintItem = null;
 
@@ -523,12 +525,64 @@
 
                 $this->blueprintItem = $this->evedb->eveItem($this->blueprinttypeid);
 
-                $this->materials = $this->evedb->db->QueryA('select requiredTypeID, quantity 
-                                                             from typeActivityMaterials
-                                                             where activityID = 1 and typeID = ?', array($this->blueprinttypeid));
-                for ($i = 0; $i < count($this->materials); $i++)
-                    $this->materials[$i]['item'] = $this->evedb->eveItem($this->materials[$i]['requiredtypeid']);
+                /*
+                 * As of Dominion, this became hectic.
+                 * First, get raw materials required
+                 */
+                $this->materials = $this->evedb->db->QueryA('select materialTypeID, quantity
+                                                             from invTypeMaterials
+                                                             where typeID = ?', array($this->producttypeid));
+                for ($i = 0; $i < count($this->materials); $i++) {
+                    $this->materials[$i]['item'] = $this->evedb->eveItem($this->materials[$i]['materialtypeid']);
+                }
+
+                /*
+                 * Load additional parts (RAM bits, T1 base types, etc) and skills
+                 */
+                $tmp = $this->evedb->db->QueryA('select t.typeID, t.typeName, r.quantity, r.damagePerJob, g.categoryID, 
+                                                   coalesce(b.blueprintTypeID, 0) as invBlueprintTypeID
+                                                 from ramTypeRequirements r
+                                                   inner join invTypes t on r.requiredTypeID = t.typeID
+                                                   inner join invGroups g on t.groupID = g.groupID
+                                                   left join invBlueprintTypes b on b.productTypeID = t.typeID
+                                                 where r.activityID = 1
+                                                   and r.typeID = ?', array($this->blueprinttypeid));
+                for ($i = 0; $i < count($tmp); $i++) {
+                    $tmp[$i]['item'] = $this->evedb->eveItem($tmp[$i]['typeid']);
+                    if ($tmp[$i]['categoryid'] == 16) {
+                        /*
+                         * Skillz go into their own list for better orginisation
+                         */
+                        $this->skills[] = $tmp[$i];
+                    } else {
+                        $this->extraMaterials[] = $tmp[$i];
+                        /*
+                         * If this component has it's own BP, we need to reduce
+                         * this BP's raw material requirements by the materials
+                         * required for the componont's construction. *boggle*
+                         */
+                        if ($tmp[$i]['invblueprinttypeid'] > 0) {
+                            $this->reduceMaterials($evedb, $tmp[$i]['typeid']);
+                        }
+                    }
+                }
             }
+        }
+
+        function reduceMaterials($evedb, $typeId) {
+            $bp = $evedb->eveItemBlueprint($typeId);
+            $newMaterials = array();
+            for ($i = 0; $i < count($this->materials); $i++) {
+                for ($j = 0; $j < count($bp->materials); $j++) {
+                    if ($this->materials[$i]['materialtypeid'] == $bp->materials[$j]['materialtypeid']) {
+                        $this->materials[$i]['quantity'] -= $bp->materials[$i]['quantity'];
+                    }
+                }
+                if ($this->materials[$i]['quantity'] > 0) {
+                    $newMaterials[] = $this->materials[$i];
+                }
+            }
+            $this->materials = $newMaterials;
         }
     }
 

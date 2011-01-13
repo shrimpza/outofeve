@@ -19,8 +19,9 @@
             $http->setOption('CURLOPT_USERAGENT', 'Out of Eve (shrimp@shrimpworks.za.net)');
             $http->setOption('CURLOPT_TIMEOUT', 15);
 
-            if (!$cached)
+            if (!$cached) {
                 $this->response = $http->get('http://eve-central.com/api/marketstat?'.$params);
+            }
 
             try {
                 $this->data = @new SimpleXMLElement($this->response);
@@ -33,8 +34,9 @@
                 }
             }
 
-            if (!$cached)
+            if (!$cached) {
                 $this->saveCache($params, time() + (3600*6));
+            }
         }
 
         function checkCache($params) {

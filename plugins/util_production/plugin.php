@@ -72,13 +72,22 @@
                             $tPerfect += $item->blueprint->materials[$i]['price_perfect'];
                             $tYou += $item->blueprint->materials[$i]['price_you'];
                         }
+
+                        for ($i = 0; $i < count($item->blueprint->extraMaterials); $i++) {
+                            $item->blueprint->extraMaterials[$i]['item']->getPricing($region);
+
+                            $qtyScale = $item->blueprint->extraMaterials[$i]['quantity'] * $item->blueprint->extraMaterials[$i]['damageperjob'];
+                            $item->blueprint->extraMaterials[$i]['qtyscale'] = $qtyScale;
+
+                            $tPerfect += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
+                            $tYou += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
+                        }
                     }
                     $item = objectToArray($item, array('DBManager', 'eveDB'));
                 }
             }
             else
                 $item = false;
-
 
             $regions = $db->regionList();
 
