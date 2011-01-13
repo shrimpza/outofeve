@@ -78,7 +78,7 @@
                     $nextPage = min($pageNum + 1, $pageCount);
                     $prevPage = max($pageNum - 1, 0);
 
-                    $kills = $deaths[$pageNum];
+                    $kills = $kills[$pageNum];
                 } else {
                     $pageCount = 0;
                     $pageNum = 0;

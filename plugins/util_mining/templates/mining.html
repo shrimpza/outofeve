@@ -85,6 +85,10 @@
           <option value="7200" {if $minetime==7200}selected="selected"{/if}>2h</option>
           <option value="9000" {if $minetime==9000}selected="selected"{/if}>2h30m</option>
           <option value="10800" {if $minetime==10800}selected="selected"{/if}>3h</option>
+          <option value="12600" {if $minetime==12600}selected="selected"{/if}>3h30m</option>
+          <option value="14400" {if $minetime==14400}selected="selected"{/if}>4h</option>
+          <option value="18000" {if $minetime==18000}selected="selected"{/if}>5h</option>
+          <option value="21600" {if $minetime==21600}selected="selected"{/if}>6h</option>
         </select>
       </td>
     </tr>
@@ -95,6 +99,7 @@
       </td>
       <td>
         <select name="station" style="width: 280px">
+          <option value="100" {if $station==100}selected="selected"{/if}>100%</option>
           <option value="50" {if $station==50}selected="selected"{/if}>50%</option>
           <option value="45" {if $station==45}selected="selected"{/if}>45%</option>
           <option value="40" {if $station==40}selected="selected"{/if}>40%</option>

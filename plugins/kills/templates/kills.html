@@ -10,11 +10,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
     {/if}
   </div>
   {/if}
@@ -180,7 +180,6 @@
 
     <div style="clear: both;"></div>
   </div>
-  <div style="clear: both;"></div>
   {/foreach}
 </div>
 

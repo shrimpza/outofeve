@@ -156,7 +156,7 @@
                         $totalAmount =  ($singleAmount * $_POST['qty']) + $droneTotalAmount;
                         $totalBatches = floor(($totalAmount / $roid->portionsize));
 
-                        $mins = $db->db->QueryA('select mineralTypeID, amountPerBatch from invOreReprocessing where oreTypeID = ?', array($roid->typeid));
+                        $mins = $db->db->QueryA('select materialTypeID, quantity from invTypeMaterials where typeID = ?', array($roid->typeid));
                         $minerals = array();
 
                         if (isset($this->site->character->skills['3385']))
@@ -175,7 +175,7 @@
                             $customPrices = $this->site->user->get_mineralprice_list();
 
                         for ($i = 0; $i < count($mins); $i++) {
-                            $newMin = $db->eveItem($mins[$i]['mineraltypeid']);
+                            $newMin = $db->eveItem($mins[$i]['materialtypeid']);
 
                             $prcAvgBuy = 0;
                             $prcAvgSell = 0;
@@ -194,11 +194,11 @@
 
 
                             $minerals[] = array('item' => objectToArray($newMin, array('DBManager', 'eveDB')), 
-                                                'qty' => $mins[$i]['amountperbatch'] * $wasteFactor * $totalBatches,
-                                                'buyvalue' => ($mins[$i]['amountperbatch'] * $wasteFactor * $totalBatches) * $prcAvgBuy,
-                                                'sellvalue' => ($mins[$i]['amountperbatch'] * $wasteFactor * $totalBatches) * $prcAvgSell);
-                            $totalBuyValue += ($mins[$i]['amountperbatch'] * $wasteFactor * $totalBatches) * $prcAvgBuy;
-                            $totalSellValue += ($mins[$i]['amountperbatch'] * $wasteFactor * $totalBatches) * $prcAvgSell;
+                                                'qty' => $mins[$i]['quantity'] * $wasteFactor * $totalBatches,
+                                                'buyvalue' => ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgBuy,
+                                                'sellvalue' => ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgSell);
+                            $totalBuyValue += ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgBuy;
+                            $totalSellValue += ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgSell;
                         }
 
                         $asteroid = objectToArray($roid, array('DBManager', 'eveDB'));
@@ -210,7 +210,12 @@
             $miners = $db->db->QueryA('select typeID, typeName from invTypes where marketGroupId in (1038, 1039, 1040) and published > 0 order by typeName', array());
             $upgrades = $db->db->QueryA('select typeID, typeName from invTypes where groupID = 546 and published > 0 order by typeName', array());
             $drones = $db->db->QueryA('select typeID, typeName from invTypes where groupID in (101) and published > 0 order by typeName', array());
-            $roids = $db->db->QueryA('SELECT distinct(i.typeId), i.typeName FROM invOreReprocessing r INNER JOIN invTypes i ON i.typeId = r.oreTypeId', array());
+            $roids = $db->db->QueryA("select i.typeId, i.typeName
+                                      from invTypes i
+                                        inner join invGroups g on g.groupId = i.groupId
+                                        inner join invCategories c on c.categoryId = g.categoryId
+                                      where i.published > 0 and c.categoryId = 25 and i.typeName not like 'Compressed%'
+                                      order by i.groupId, i.typeId", array());
 
             return $this->render('mining', 
                                     array(  'miner' => $_POST['miner'], 
