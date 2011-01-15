@@ -1,5 +1,7 @@
 *******************************************************************************
-Out of Eve 1.6 AP Installation Notes
+Out of Eve 1.7 INC Installation Notes
+ - http://www.outofeve.com/
+ - http://code.google.com/p/ooe/
  - http://shrimpworks.za.net/
  - shrimp@shrimpworks.za.net
 *******************************************************************************
@@ -10,8 +12,8 @@ Requirements:
 
 Prerequesits:
   MySQL Eve static data dump
-  (Apocrypha MySQL dump: http://eve.no-ip.de/apo120/)
-  Eve icons (outofeve-eveimages-x.x.tar.bz2)
+  (Incursion MySQL dump: http://eve.no-ip.de/inc101/)
+  Eve icons (outofeve-eveimages-x.x.zip)
 
 *******************************************************************************
 
@@ -22,8 +24,7 @@ Extract and upload the contents of outofeve-eveimages-x.x to the same location.
 
 When you have the MySQL database dump imported, you will need to run the 
 included "sql/additional-tables.sql" SQL script, which will create tables for
-the missing Manufacturing completion status descriptions, and ore reprocessing
-values.
+the missing Manufacturing completion status descriptions and corporation roles.
 
 In addition to importing CCP's database dump, you will need to create an 
 additional database for Out of Eve's users and Eve account details. Once you 
