@@ -8,7 +8,7 @@
     require_once('apiCorp.php');
     require_once('apidb.php');
     require_once('apimarket.php');
-    require_once('attributeMods.php');
+    require_once('apiConstants.php');
 
     $cacheDelays = array(
         101, 103, 115, 116, 117, 119
@@ -255,6 +255,20 @@
             if ($balanceTest->data->error)
                 $this->error = array('code' => (int)$balanceTest->data->error['code'], 'message' => (string)$balanceTest->data->error);
         }
+    }
+
+    function characterName($id) {
+            $charData = new apiRequest('eve/CharacterName.xml.aspx', array(), array('ids' => $id));
+            if (!$charData->data) {
+                return 'Lookup Error';
+            }
+
+            if ($charData->data->error) {
+                apiError('eve/CharacterName.xml.aspx', $charData->data->error);
+                return 'Lookup Error';
+            } else {
+                return (string)$charData->data->result->rowset->row['name'];
+            }
     }
 
 ?>

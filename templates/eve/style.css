@@ -390,6 +390,10 @@ img {
 	border: 1px solid #302d32;
 }
 
+.listOptions a {
+    text-decoration: none;
+}
+
 /* =================================== */
 
 
@@ -591,4 +595,34 @@ img {
 	margin-right: auto;
 	height: 100px;
 	overflow: auto;
+}
+
+/* =================================== */
+
+#mail {
+
+}
+
+.messageList {
+    height: 300px;
+    overflow: auto;
+    margin-bottom: 5px;
+    border: 1px solid #666666;
+}
+
+.messageList .message {
+    cursor: pointer;
+}
+
+#mail .messageHeader {
+    border: 1px solid #666666;
+    background: #4d4d57;
+}
+
+#mail .messageBody {
+    border: 1px solid #666666;
+}
+
+#mail .messageContent {
+    padding: 10px;
 }

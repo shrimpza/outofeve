@@ -31,6 +31,9 @@
         var $journalItems = array();
         var $industryJobs = array();
 
+        var $mail = array();
+        var $notifications = array();
+
         var $deaths = array();
         var $kills = array();
 
@@ -224,6 +227,130 @@
             }
         }
 
+        function loadMail() {
+            if (count($this->mail) == 0) {
+                $mailData = new apiRequest('char/MailMessages.xml.aspx', array($this->account->userId,
+                                                                               $this->account->apiKey,
+                                                                               $this->characterID),
+                                                                         array('version' => 2));
+                if ($mailData->data) {
+                    if (!$mailData->data->error) {
+                        foreach ($mailData->data->result->rowset->row as $mail) {
+                            $this->mail[] = new eveMailMessage($this->account, $mail);
+                        }
+                    } else {
+                        apiError('char/MailMessages.xml.aspx', $mailData->data->error);
+                    }
+                }
+            }
+
+            // get list of characer and corp names for messages
+            if (count($this->mail) > 0) {
+                usort($this->mail, 'mailSort');
+
+                $ids = array();
+                foreach ($this->mail as $mail) {
+                    if (!empty($mail->senderID) && $mail->senderID > 0) {
+                        $ids[] = $mail->senderID;
+                    }
+                    if (!empty($mail->toCorpID) && $mail->toCorpID > 0) {
+                        $ids[] = $mail->toCorpID;
+                    }
+                    $ids = array_merge($ids, $mail->toCharacterIDs);
+                }
+                $ids = array_unique($ids);
+                $names = new apiRequest('eve/CharacterName.xml.aspx', null, array('ids' => implode(',', $ids)));
+                if ($names->data) {
+                    if (!$names->data->error) {
+                        foreach ($names->data->result->rowset->row as $name) {
+                            for ($i = 0; $i < count($this->mail); $i++) {
+                                if ($this->mail[$i]->senderID == (int)$name['characterID']) {
+                                    $this->mail[$i]->senderName = (string)$name['name'];
+                                }
+                                if ($this->mail[$i]->toCorpID == (int)$name['characterID']) {
+                                    $this->mail[$i]->toCorpName = (string)$name['name'];
+                                }
+                                for ($j = 0; $j < count($this->mail[$i]->toCharacterIDs); $j++) {
+                                    if ($this->mail[$i]->toCharacterIDs[$j] == (int)$name['characterID']) {
+                                        $this->mail[$i]->toCharacterNames[$j] = (string)$name['name'];
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        apiError('eve/CharacterName.xml.aspx', $names->data->error);
+                    }
+                }
+            }
+        }
+
+        function getMailMessage($message) {
+            $result = false;
+            $mailData = new apiRequest('char/MailBodies.xml.aspx', array($this->account->userId,
+                                                                         $this->account->apiKey,
+                                                                         $this->characterID),
+                                                                   array('version' => 2,
+                                                                         'ids' => $message->messageID));
+            if ($mailData->data) {
+                if (!$mailData->data->error) {
+                    foreach ($mailData->data->result->rowset->row as $mail) {
+                        if ((int)$mail['messageID'] == $message->messageID) {
+                            $result = new eveMailMessageBody($this->account, $mail);
+                            $result->headers = $message;
+                        }
+                    }
+                } else {
+                    apiError('char/MailBodies.xml.aspx', $mailData->data->error);
+                }
+            }
+
+            return $result;
+        }
+
+        function loadNotifications() {
+            if (count($this->notifications) == 0) {
+                $notificationData = new apiRequest('char/Notifications.xml.aspx', array($this->account->userId,
+                                                                                        $this->account->apiKey,
+                                                                                        $this->characterID),
+                                                                                  array('version' => 2));
+                if ($notificationData->data) {
+                    if (!$notificationData->data->error) {
+                        foreach ($notificationData->data->result->rowset->row as $notification) {
+                            $this->notifications[] = new eveNotification($this->account, $notification);
+                        }
+                    } else {
+                        apiError('char/Notifications.xml.aspx', $notificationData->data->error);
+                    }
+                }
+            }
+
+            usort($this->notifications, 'mailSort');
+        }
+
+        function getNotificationText($notification) {
+            $result = false;
+            $notificationData = new apiRequest('char/NotificationTexts.xml.aspx', array($this->account->userId,
+                                                                                    $this->account->apiKey,
+                                                                                    $this->characterID),
+                                                                                  array('version' => 2,
+                                                                                    'ids' => $notification->notificationID));
+            if ($notificationData->data) {
+                if (!$notificationData->data->error) {
+                    foreach ($notificationData->data->result->rowset->row as $text) {
+                        if ((int)$text['notificationID'] == $notification->notificationID) {
+                            $result = new eveNotificationText($this->account, $text);
+                            $result->headers = $notification;
+                        }
+                    }
+                } else {
+                    apiError('char/NotificationTexts.xml.aspx', $notificationData->data->error);
+                }
+            }
+
+            return $result;
+        }
+
+
         function loadSkillTree() {
             if ($this->skillTree == null) {
                 $skillData = new apiRequest('eve/SkillTree.xml.aspx');
@@ -318,6 +445,10 @@
             return $result;
         }
 
+    }
+
+    function mailSort($a, $b) {
+        return ($a->sentDate > $b->sentDate) ? -1 : 1;
     }
 
 ?>

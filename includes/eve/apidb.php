@@ -16,6 +16,7 @@
         var $industryCompleteTextCache = array();
         var $certificateCache = array();
         var $towerFuelCache = array();
+        var $eveNameCache = array();
 
         var $refTypes = array();
 
@@ -187,6 +188,15 @@
                 $this->certificateCache[$certificateId] = new eveCertificate($this, $certificateId);
 
             return $this->certificateCache[$certificateId];
+        }
+
+        function eveName($itemId) {
+            $itemId = (string)$itemId;
+
+            if (!isset($this->eveNameCache[$itemId]))
+                $this->eveNameCache[$itemId] = new eveName($this, $itemId);
+
+            return $this->eveNameCache[$itemId];
         }
 
         function regionList() {
@@ -613,6 +623,23 @@
                                        from crtCertificates c
                                          left outer join eveIcons i on i.iconId = c.iconId
                                        where c.certificateid = ?', array($certificateId));
+            if ($res)
+                foreach ($res[0] as $var => $val)
+                    $this->$var = $val;
+        }
+    }
+
+    class eveName {
+        var $itemid = 0;
+        var $itemname = '';
+        var $categoryid = 0;
+        var $groupid = 0;
+        var $typeid = 0;
+
+        function eveName($evedb, $itemId) {
+            $res = $evedb->db->QueryA('select itemid, itemname, categoryid, groupid, typeid
+                                       from eveNames
+                                       where itemId = ?', array($itemId));
             if ($res)
                 foreach ($res[0] as $var => $val)
                     $this->$var = $val;

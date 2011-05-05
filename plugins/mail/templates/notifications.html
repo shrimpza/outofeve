@@ -1,0 +1,76 @@
+<div id="mail">
+    <div class="listOptions">
+        <span><a href="{$site_url}/?module=mail"><img src="{$site_url}/eveimages/icons/32/icon94_08.png" alt="All" align="absmiddle"/> All</a></span>
+        <span><a href="{$site_url}/?module=mail&personal=1"><img src="{$site_url}/eveimages/icons/32/icon08_12.png" alt="Personal" align="absmiddle" /> Personal</a></span>
+        <span><a href="{$site_url}/?module=mail&corp=1"><img src="{$site_url}/eveimages/icons/32/icon07_06.png" alt="Corporation" align="absmiddle" />Corporation</a></span>
+        <span><a href="{$site_url}/?module=mail&lists=1"><img src="{$site_url}/eveimages/icons/32/icon09_02.png" alt="Lists" align="absmiddle" />Mailing Lists</a></span>
+        <span><a href="{$site_url}/?module=mail&notifications=1"><img src="{$site_url}/eveimages/icons/32/icon09_11.png" alt="Notifications" align="absmiddle" />Notifications</a></span>
+    </div>
+
+    {if !$mail}
+    <h3>No notifications!</h3>
+    {else}
+    <div class="messageList" style="width: 270px; height: 600px; float: left; overflow: auto;">
+        <table width="100%" border="0">
+            {foreach from=$mail item=m}
+            {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
+            <tr class="{$rowClass} message {if !$m.read}unread{/if}" onclick="getMessage('{$m.notificationID}')">
+                <td align="left">
+                    <span class="sender">{$m.sender.itemname}</span><br />
+                    <span class="date">{$m.sentDate|date_format:"%d/%m/%Y %H:%M"}</span><br />
+                    <span class="title">{$m.title}</span>
+                </td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+    {/if}
+
+    <div class="messageBody" id="messageBody" style="display: none; margin-left: 280px;">
+        <table width="100%" border="0">
+            <tr>
+                <td class="messageHeader" align="right" width="150"><b>Subject</b></td>
+                <td class="messageHeader" id="msg_title"></td>
+            </tr>
+            <tr>
+                <td class="messageHeader" align="right"><b>Date</b></td>
+                <td class="messageHeader" id="msg_date"></td>
+            </tr>
+            <tr>
+                <td class="messageHeader" align="right"><b>Sender</b></td>
+                <td class="messageHeader" id="msg_sender">
+
+                </td>
+            </tr>
+        </table>
+        <div class="messageContent" id="msg_message"></div>
+    </div>
+
+</div>
+
+<script src="{$site_url}/includes/javascript/json2.js"></script>
+<script src="{$site_url}/includes/javascript/json-ajax.js"></script>
+
+<script>
+    {literal}
+
+    function getMessage(msgId) {
+        jsonRequest('index.php', 'module=mail&notificationID=' + msgId, 'GET', gotMessage);
+    }
+
+    function gotMessage(message) {
+        if (message) {
+            document.getElementById('msg_title').innerHTML = message.headers.title;
+            document.getElementById('msg_date').innerHTML = message.headers.sentDate;
+            var fromImg = '';
+            //fromImg = '<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
+            ///    + message.headers.senderName;
+            document.getElementById('msg_sender').innerHTML = fromImg + message.headers.sender.itemname;
+
+            document.getElementById('msg_message').innerHTML = message.text;
+            document.getElementById('messageBody').style.display = '';
+        }
+    }
+
+    {/literal}
+</script>
