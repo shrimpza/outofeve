@@ -11,9 +11,9 @@
 
 #assetList .contents {
     /*border-left: 15px solid #fff; */
-    margin:0px;
-    padding:0px;
-    padding-left: 15px;
+    margin: 2px;
+    padding: 0px;
+    padding-left: 16px;
 }
 
 #assetList .row td {

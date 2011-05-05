@@ -1,25 +1,23 @@
-<table class="contents" width="100%" cellpadding="0" cellspacing="0" border="0">
-  <tr class="row">
-    <td width="65%" align="left">
-      <img src="{$site_url}/templates/{$theme}/images/tree_{if $last}end{else}branch{/if}.png" align="absmiddle"/>
-      <a href="#" onclick="showInfo({$asset.item.typeid});return false;" title="{$ass.item.typename}">
-        {if $asset.item.typeGraphic}
-          <img src="{$site_url}/eveimages/types/32/{$asset.item.typeid}.png" alt="{$asset.item.typename}" align="absmiddle" />
-        {else}
-          <img src="{$site_url}/eveimages/icons/32/icon{$asset.item.icon}.png" alt="{$asset.item.typename}" align="absmiddle" />
-        {/if}
-      </a>
-      {$asset.item.typename}</td>
+<table class="contents {if $asset.contents}shadeLight borderLight{/if}" width="100%" cellpadding="0" cellspacing="0" border="0"
+       {if $asset.contents}onclick="toggleAssets('{$asset._ooe_id}')" style="cursor:pointer"{/if}>
+       <td width="65%" align="left">
+        <!--img src="{$site_url}/templates/{$theme}/images/tree_{if $last}end{else}branch{/if}.png" align="absmiddle"/-->
+        <a href="#" onclick="showInfo('{$asset.item.typeid}');return false;" title="{$ass.item.typename}">
+            {if $asset.item.typeGraphic}
+            <img src="{$site_url}/eveimages/types/32/{$asset.item.typeid}.png" alt="{$asset.item.typename}" align="absmiddle" />
+            {else}
+            <img src="{$site_url}/eveimages/icons/32/icon{$asset.item.icon}.png" alt="{$asset.item.typename}" align="absmiddle" />
+            {/if}
+        </a>
+        {$asset.item.typename}</td>
     <td width="25%">{$asset.flagText}</td>
     <td width="10%" align="right">{$asset.qty|eveNumInt}</td>
-  </tr>
-  {if $asset.contents}
-    {foreach from=$asset.contents item=ass name='sub'}
-    <tr>
-      <td colspan="3">
-        {include file="assetlist.html" asset=$ass last=$smarty.foreach.sub.last}
-      </td>
-    </tr>
-    {/foreach}
-  {/if}
+</tr>
 </table>
+{if $asset.contents}
+<div style="display:none" id="{$asset._ooe_id}" class="contents">
+    {foreach from=$asset.contents item=ass name='sub'}
+    {include file="assetlist.html" asset=$ass last=$smarty.foreach.sub.last}
+    {/foreach}
+</div>
+{/if}
