@@ -1,0 +1,211 @@
+#assetList {
+}
+
+#assetList .groupHead td {
+    /*background: #f3f3f3;
+    color: #555;*/
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+#assetList .contents {
+    /*border-left: 15px solid #fff; */
+    margin:0px;
+    padding:0px;
+    padding-left: 15px;
+}
+
+#assetList .row td {
+    /*border-bottom: 1px solid #f3f3f3;*/
+}
+
+/* ************************************************************************* */
+
+.fitting {
+    position: relative;
+    width: 450px;
+    height: 435px;
+    background: url('images/fitting_grid.png');
+}
+
+.fitting .slots {
+    position: relative;
+    width: 100%;
+    height: 435px;
+}
+
+.fitting .slots * {
+    border: 0px;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+}
+
+/*
+*	Low slots
+*/
+.slot11 {
+    position: absolute;
+    left: 120px;
+    top: 245px;
+}
+
+.slot12 {
+    position: absolute;
+    left: 106px;
+    top: 188px;
+}
+
+.slot13 {
+    position: absolute;
+    left: 120px;
+    top: 133px;
+}
+
+.slot14 {
+    position: absolute;
+    left: 165px;
+    top: 105px;
+}
+
+.slot15 {
+    position: absolute;
+    left: 220px;
+    top: 105px;
+}
+
+.slot16 {
+    position: absolute;
+    left: 265px;
+    top: 133px;
+}
+
+.slot17 {
+    position: absolute;
+    left: 280px;
+    top: 188px;
+}
+
+.slot18 {
+    position: absolute;
+    left: 266px;
+    top: 245px;
+}
+
+/*
+*	Mid slots
+*/
+
+.slot19 {
+    position: absolute;
+    left: 77px;
+    top: 277px;
+}
+
+.slot20{
+    position: absolute;
+    left: 53px;
+    top: 188px;
+}
+
+.slot21 {
+    position: absolute;
+    left: 77px;
+    top: 102px;
+}
+
+.slot22 {
+    position: absolute;
+    left: 150px;
+    top: 55px;
+}
+
+.slot23 {
+    position: absolute;
+    left: 235px;
+    top: 55px;
+}
+
+.slot24 {
+    position: absolute;
+    left: 309px;
+    top: 102px;
+}
+
+.slot25 {
+    position: absolute;
+    left: 333px;
+    top: 188px;
+}
+
+.slot26 {
+    position: absolute;
+    left: 308px;
+    top: 277px;
+}
+
+/*
+*	High slots
+*/
+
+.slot27 {
+    position: absolute;
+    left: 33px;
+    top: 307px;
+}
+
+.slot28 {
+    position: absolute;
+    left: 0px;
+    top: 188px;
+}
+
+.slot29 {
+    position: absolute;
+    left: 35px;
+    top: 70px;
+}
+
+.slot30 {
+    position: absolute;
+    left: 129px;
+    top: 4px;
+}
+
+.slot31 {
+    position: absolute;
+    left: 257px;
+    top: 4px;
+}
+
+.slot32 {
+    position: absolute;
+    left: 350px;
+    top: 70px;
+}
+
+.slot33 {
+    position: absolute;
+    left: 386px;
+    top: 188px;
+}
+
+.slot34 {
+    position: absolute;
+    left: 352px;
+    top: 307px;
+}
+
+
+.fitting .rigSlots {
+    position: absolute;
+    left: 11px;
+    top: 385px;
+    width: 428px;
+    height: 36px;
+}
+
+.rigSlots .rig {
+    padding: 2px;
+}

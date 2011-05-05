@@ -50,7 +50,7 @@
       {if $filter == 0}<th>Balance</th>{/if}
     </tr>
     {foreach from=$days item=d}
-      <tr class="sub">
+      <tr class="sub shadeLight textLight">
         <td {if $filter >= 0}colspan="4"{/if}>{$d.date|date_format:"%A %d %B %Y"}</td>
         <td><div class="moneyOut" style="text-align: right">{$d.dr|eveNum}</div></td>
         <td><div class="moneyIn" style="text-align: right">{$d.cr|eveNum}</div></td>

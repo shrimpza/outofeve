@@ -15,12 +15,12 @@
             {foreach from=$mail item=m}
             {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
             <tr class="{$rowClass} message {if !$m.read}unread{/if}" onclick="getMessage('{$m.messageID}')">
-                <td align="left">
+                <td>
+                    <img src="http://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />
                     {if $m.toListID > 0}<img src="{$site_url}/eveimages/icons/32/icon09_02.png" title="Mailing List" align="left"/>{/if}
                     {if $m.toCorpID > 0}
                     <img src="http://image.eveonline.com/Corporation/{$m.toCorpID}_32.png" alt="{$m.toCorpName}" align="left" />
                     {/if}
-                    <img src="http://image.eveonline.com/Character/{$m.senderID}_32.jpg" alt="{$m.senderName}" align="left" />
                     <span class="sender">{$m.senderName}</span><br />
                     <span class="date">{$m.sentDate|date_format:"%d/%m/%Y %H:%M"}</span><br />
                     <span class="title">{$m.title}</span>

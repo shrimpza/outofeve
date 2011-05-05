@@ -25,7 +25,7 @@
 
 <table width="100%" border="0">
   {foreach from=$ships item=ship}
-    <tr class="groupHead">
+    <tr class="groupHead shadeDark borderDark textLight">
       <td colspan="3" onclick="toggleAssets({$ship.itemID})">
         <a href="#" onclick="showInfo({$ship.item.typeid});return false;">
           <img src="{$site_url}/eveimages/types/64/{$ship.item.typeid}.png" alt="{$ship.item.typename}" align="left" style="margin-right: 10px" />
@@ -70,12 +70,12 @@
                     </div>
                   </div>
                 </td>
-                <td valign="top">
+                <td valign="top" style="font-size: 0.95em">
                   <table width="100%" border="0">
                     <tr>
-                      <th width="60%">Item</th>
-                      <th width="30%">Location</th>
-                      <th width="10%">Quantity</th>
+                      <th width="65%">Item</th>
+                      <th width="25%">Location</th>
+                      <th width="10%">Qty</th>
                     </tr>
                   </table>
                   {foreach from=$ship.contents item=ass name='foo'}

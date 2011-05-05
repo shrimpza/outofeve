@@ -1,0 +1,63 @@
+#killList {
+}
+
+#killList .killHead {
+    margin: 3px;
+    padding: 3px;
+    cursor: hand;
+    cursor: pointer;
+}
+
+#killList .killHead img {
+    margin-right: 20px;
+}
+
+#killList .killHead h3 {
+    margin: 3px;
+}
+
+#killList .killHead h4 {
+    margin: 3px;
+}
+
+#killList .killDetail {
+    padding: 3px;
+    padding-top: 0px;
+    margin-bottom: 15px;
+}
+
+#killList .title {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+#killList .subTitle {
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: bold;
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+#killList .killInvolvedParties {
+    width: 50%;
+    float: left;
+}
+
+#killList .killInvolvedParties td {
+    font-size: 0.95em;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#killList .killInvolvedParties img {
+    padding-right: 5px;
+}
+
+#killList .killDroppedItems {
+    width: 49%;
+    float: right;
+}

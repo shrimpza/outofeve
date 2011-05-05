@@ -1,0 +1,11 @@
+#journalList td {
+    font-size: 0.9em;
+}
+
+#journalList .sub, #journalList .sub td {
+    /*background: #f3f3f3;
+    color: #555;*/
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.1em;
+}

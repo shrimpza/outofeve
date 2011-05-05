@@ -1,8 +1,8 @@
 <div id="rssFeeds">
 
   {if $about}
-  <div class="feed" style="width: 93%">
-    <h1>About Out of Eve</h1>
+  <div class="feed borderMid textLight" style="width: 93%">
+    <h1 class="shadeMid">About Out of Eve</h1>
 
     <div class="item">
       <a href="{$site_url}/about/" title="About Out of Eve"><img src="{$site_url}/eveimages/icons/128/icon33_02.png" align="left" /></a>
@@ -14,10 +14,10 @@
   {/if}
 
   {foreach from=$feeds item=f}
-    <div class="feed">
-      <h1>{$f.channel.title}</h1>
+    <div class="feed borderMid textLight">
+      <h1 class="shadeMid">{$f.channel.title}</h1>
       {section loop=$f.items name=i max=6}
-        <h2><a href="{$f.items[i].link}">{$f.items[i].title}</a></h2>
+        <h2 class="shadeLight borderMid" style="border-left: none; border-right: none;"><a href="{$f.items[i].link}">{$f.items[i].title}</a></h2>
         {if $f.items[i].description}<div class="item">{$f.items[i].description|strip_tags|truncate:300:" ..."|nl2br}</div>{/if}
       {/section}
     </div>

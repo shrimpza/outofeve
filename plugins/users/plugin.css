@@ -1,0 +1,80 @@
+.inputForm {
+}
+
+.inputForm textarea {
+    width: 100%;
+    font-family: "Trebuchet MS", Verdana;
+    font-size: 1.0em;
+    height: 100px;
+}
+
+.inputForm label, .inputForm input, .inputForm select, .inputForm .inputDiv {
+    display: block;
+    width: 200px;
+    float: left;
+    margin-bottom: 10px;
+}
+
+.inputForm .inputDiv {
+    height: 100px;
+    overflow:auto;
+    width: 350px;
+    border: 1px solid #ddd;
+}
+
+.inputForm label {
+    text-align: right;
+    width: 150px;
+    padding-right: 10px;
+}
+
+.inputForm br {
+    clear: left;
+}
+
+.inputForm .inputDiv label, .inputForm .inputDiv input, .inputForm .inputDiv select {
+    display: inline;
+    float: none;
+    margin-bottom: 0px;
+    width: auto;
+}
+
+.inputForm .regular label, .inputForm .regular input, .inputForm .regular select {
+    display: inline;
+    float: none;
+    margin-bottom: 0px;
+    width: auto;
+}
+
+
+#rssFeeds {
+}
+
+#rssFeeds .feed {
+    float: left;
+    width: 47%;
+    margin: 5px;
+}
+
+#rssFeeds .feed h1 {
+    text-align: center;
+    font-size: 1.25em;
+    font-weight: bold;
+    padding: 3px;
+    margin: 0px;
+    margin-bottom: 3px;
+}
+
+#rssFeeds .feed h2 {
+    text-align: center;
+    font-size: 1.15em;
+    font-weight: bold;
+    padding: 3px;
+    margin: 0px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+#rssFeeds .item {
+    padding: 15px;
+}

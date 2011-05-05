@@ -37,7 +37,12 @@
             $pluginTitle = '';
             $content = '';
             $sideBlocks = array();
+            $pluginCSS = false;
 
+            if (file_exists($GLOBALS['config']['plugins']['directory'].$this->activePlugin.'/plugin.css')) {
+                $pluginCSS = $this->activePlugin . '/plugin.css';
+            }
+            
             foreach ($this->plugins as $name => $plugin) {
                 if ($name == $this->activePlugin) {
                     if (($this->user->id > 0) && ($plugin->level <= $this->user->level) || ($plugin->level <= 0)) {
@@ -64,6 +69,7 @@
             $tpl->assign('pluginTitle', $pluginTitle);
             $tpl->assign('content', $content);
             $tpl->assign('sideBlocks', $sideBlocks);
+            $tpl->assign('pluginCSS', $pluginCSS);
 
             $this->tplVars['title'] = $GLOBALS['config']['site']['title'];
             $this->tplVars['site_url'] = $GLOBALS['config']['site']['url'];

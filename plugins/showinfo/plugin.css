@@ -1,0 +1,26 @@
+#showInfo {
+}
+
+#showInfo h3 {
+    margin: 3px;
+}
+
+#showInfo h4 {
+    margin: 2px;
+}
+
+#showInfo td {
+    font-size: 0.9em;
+}
+
+#showInfo .description .icon {
+    width: 64px;
+    float: left;
+}
+
+#showInfo .description .desc {
+    margin-left: 70px;
+    margin-right: auto;
+    height: 100px;
+    overflow: auto;
+}
