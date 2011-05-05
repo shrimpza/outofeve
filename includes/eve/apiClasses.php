@@ -43,10 +43,10 @@
                 }
             }
 
-            // apply learning skill bonus
-            if ($char->skills[3374]) {
-                $this->value *= 1 + ($char->skills[3374]->level * 0.02);
-            }
+            // apply learning skill bonus - deprecated
+            //if ($char->skills[3374]) {
+            //    $this->value *= 1 + ($char->skills[3374]->level * 0.02);
+            //}
         }
     }
     
