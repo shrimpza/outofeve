@@ -65,6 +65,7 @@
                                         'showinfo',
                                         'character',
                                         'corporation',
+                                        'mail',
                                         'assets',
                                         'transactions',
                                         'journal',
