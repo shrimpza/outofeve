@@ -58,6 +58,7 @@
         var $title = '';
 
         var $sender = false;
+        var $senderName = '';
 
         function eveNotification($acc, $notification) {
             global $notificationTitles;

@@ -244,7 +244,7 @@
                 }
             }
 
-            // get list of characer and corp names for messages
+            // get list of character and corp names for messages
             if (count($this->mail) > 0) {
                 usort($this->mail, 'mailSort');
 
@@ -320,6 +320,32 @@
                         }
                     } else {
                         apiError('char/Notifications.xml.aspx', $notificationData->data->error);
+                    }
+                }
+            }
+
+            // get list of character and corp names for messages
+            if (count($this->notifications) > 0) {
+                $ids = array();
+                foreach ($this->notifications as $note) {
+                    if ((!empty($note->senderID) && $note->senderID > 0)
+                            && ($note->item->itemid == 0)) {
+                        $ids[] = $note->senderID;
+                    }
+                }
+                $ids = array_unique($ids);
+                $names = new apiRequest('eve/CharacterName.xml.aspx', null, array('ids' => implode(',', $ids)));
+                if ($names->data) {
+                    if (!$names->data->error) {
+                        foreach ($names->data->result->rowset->row as $name) {
+                            for ($i = 0; $i < count($this->notifications); $i++) {
+                                if ($this->notifications[$i]->senderID == (int)$name['characterID']) {
+                                    $this->notifications[$i]->senderName = (string)$name['name'];
+                                }
+                            }
+                        }
+                    } else {
+                        apiError('eve/CharacterName.xml.aspx', $names->data->error);
                     }
                 }
             }

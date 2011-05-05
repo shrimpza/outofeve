@@ -5,10 +5,11 @@
 }
 
 .messageList {
-    height: 300px;
-    overflow: auto;
     margin-bottom: 5px;
-    border: 1px solid #E5E8E6;
+    width: 270px; 
+    height: 600px; 
+    float: left; 
+    overflow: auto;
 }
 
 .messageList .message {
@@ -31,12 +32,10 @@
 }
 
 #mail .messageHeader {
-    border: 1px solid #E5E8E6;
-    background: #EFEFEF;
 }
 
 #mail .messageBody {
-    border: 1px solid #E5E8E6;
+    margin-left: 280px;
 }
 
 #mail .messageContent {

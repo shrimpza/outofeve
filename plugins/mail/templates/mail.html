@@ -10,7 +10,7 @@
     {if !$mail}
     <h3>No mail!</h3>
     {else}
-    <div class="messageList" style="width: 270px; height: 600px; float: left; overflow: auto;">
+    <div class="messageList borderMid">
         <table width="100%" border="0">
             {foreach from=$mail item=m}
             {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
@@ -31,23 +31,23 @@
     </div>
     {/if}
 
-    <div class="messageBody" id="messageBody" style="display: none; margin-left: 280px;">
+    <div class="messageBody borderMid" id="messageBody" style="display: none;">
         <table width="100%" border="0">
             <tr>
-                <td class="messageHeader" align="right" width="150"><b>Subject</b></td>
-                <td class="messageHeader" id="msg_title"></td>
+                <td class="messageHeader shadeMid borderMid" align="right" width="150"><b>Subject</b></td>
+                <td class="messageHeader shadeMid borderMid" id="msg_title"></td>
             </tr>
             <tr>
-                <td class="messageHeader" align="right"><b>Date</b></td>
-                <td class="messageHeader" id="msg_date"></td>
+                <td class="messageHeader shadeMid borderMid" align="right"><b>Date</b></td>
+                <td class="messageHeader shadeMid borderMid" id="msg_date"></td>
             </tr>
             <tr>
-                <td class="messageHeader" align="right"><b>Sender</b></td>
-                <td class="messageHeader" id="msg_sender"></td>
+                <td class="messageHeader shadeMid borderMid" align="right"><b>Sender</b></td>
+                <td class="messageHeader shadeMid borderMid" id="msg_sender"></td>
             </tr>
             <tr>
-                <td class="messageHeader" align="right"><b>Recipients</b></td>
-                <td class="messageHeader" id="msg_to"></td>
+                <td class="messageHeader shadeMid borderMid" align="right"><b>Recipients</b></td>
+                <td class="messageHeader shadeMid borderMid" id="msg_to"></td>
             </tr>
         </table>
         <div class="messageContent" id="msg_message"></div>
