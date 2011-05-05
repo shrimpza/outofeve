@@ -220,9 +220,13 @@
                 $res = $this->site->eveAccount->db->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
                 for ($i = 0; $i < count($res); $i++) {
                     $newMin = $this->site->eveAccount->db->eveItem($res[$i]['typeid']);
-                    for ($j = 0; $j < count($myMins); $j++)
-                        if ($myMins[$j]->typeid == $newMin->typeid)
-                            $newMin->customPrice = $myMins[$j]->price;
+                    if ($myMins) {
+                        for ($j = 0; $j < count($myMins); $j++) {
+                            if ($myMins[$j]->typeid == $newMin->typeid) {
+                                $newMin->customPrice = $myMins[$j]->price;
+                            }
+                        }
+                    }
                     $mins[] = objectToArray($newMin, array('DBManager', 'eveDB'));
                 }
             }
