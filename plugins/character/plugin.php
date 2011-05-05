@@ -36,12 +36,19 @@
                 $char['attributes'] = objectToArray($this->site->character->attributes, array('DBManager', 'eveDB'));
                 $char['raceInfo'] = $this->site->character->db->bloodlineInfo($this->site->character->bloodLine);
 
+                $this->site->character->loadSkillQueue();
                 $this->site->character->loadSkillTree();
                 $this->site->character->loadCertificateTree();
+                
+                if ($this->site->character->skillQueue != null) {
+                    $queue = objectToArray($this->site->character->skillQueue->queuedSkill, array('DBManager', 'eveDB'));
+                } else {
+                    $queue = false;
+                }
                 $skills = $this->site->character->knownSkills();
                 $certificates = $this->site->character->knownCertificates();
 
-                return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates));
+                return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates, 'queue' => $queue));
             } else
                 return '<h1>No character!</h1>';
         }

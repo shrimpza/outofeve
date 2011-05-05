@@ -43,6 +43,44 @@
 
   <tr>
     <th colspan="2">
+      <img src="{$images_url}{$icoimgdir}{$size32}/icon36_15.png" align="absmiddle" />
+      <span style="font-size: 1.25em">Skill queue</span>
+    </th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table width="100%" border="0" style="" id="skillQueueList">
+        {if $queue}
+        {section name=qs loop=$queue}
+          <tr class="{cycle values='row,rowAlt'}">
+            <td width="75%" align="left">
+              <a href="#" onclick="showInfo('{$queue[qs].typeID}');return false;"><img src="{$site_url}/eveimages/icons/32/icon50_11.png" align="absmiddle" /></a> {$queue[qs].skillItem.typename}
+              <span style="font-size: 0.9em">
+                {if $queue[qs].position > 0}
+                  (start: {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"})
+                {else}
+                  (training)
+                {/if}
+                <!--- finished {$queue[qs].remainingTime|formatTime} -->
+              </span>
+            </td>
+            <td width="25%" align="right">
+              {if $queue[qs].position > 0}
+                <img src="{$site_url}/templates/{$theme}/images/skills/queuelevel{$queue[qs].toLevel}.png" alt="{$queue[qs].skillItem.typename} - Queued Level {$queue[qs].toLevel|eveRoman}" title="{$queue[qs].skillItem.typename} - Queued Level {$queue[qs].toLevel|eveRoman}" />
+              {else}
+                <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$queue[qs].toLevel}.png" alt="{$queue[qs].skillItem.typename} - Training to level {$queue[qs].toLevel|eveRoman}" title="{$queue[qs].skillItem.typename} - Training to level {$queue[qs].toLevel|eveRoman}" />
+              {/if}
+            </td>
+          </tr>
+        {/section}
+        {/if}
+      </table>
+    </td>
+  </tr>
+  <tr><td colspan="2">&nbsp;</td></tr>
+
+  <tr>
+    <th colspan="2">
       <img src="{$site_url}/eveimages/icons/32/icon34_15.png" align="absmiddle" />
       <span style="font-size: 1.25em">Attributes</span>
     </th>

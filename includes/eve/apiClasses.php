@@ -69,6 +69,39 @@
         }
     }
 
+    class eveSkillQueue {
+        var $queuedSkill = array();
+
+        function eveSkillQueue($acc, $db, $queue) {
+            foreach ($queue->rowset->row as $skill) {
+                $this->queuedSkill[] = new eveQueuedSkill($acc, $db, $skill);
+            }
+        }
+    }
+    
+    class eveQueuedSkill {
+        var $typeID = 0;
+        var $toLevel = 0;
+        var $position = 0;
+        var $startTime = 0;
+        var $endTime = 0;
+        var $remainingTime = 0;
+
+        var $skillItem = null;
+
+        function eveQueuedSkill($acc, $db, $qskill) {
+            $this->typeID = (int)$qskill['typeID'];
+            $this->toLevel = (int)$qskill['level'];
+            $this->position = (int)$qskill['queuePosition'];
+            $this->startTime = (string)$qskill['startTime'];
+            $this->endTime = strtotime((string)$qskill['endTime']) + $acc->timeOffset;
+
+            $this->remainingTime = ($this->endTime - $acc->timeOffset) - $GLOBALS['eveTime'];
+
+            $this->skillItem = $db->eveItem($this->typeID);
+        }
+    }
+    
     class eveTrainingSkill {
         var $typeID = 0;
         var $toLevel = 0;

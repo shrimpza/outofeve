@@ -14,6 +14,7 @@
         var $attributes = array();
         var $skills = array();
         var $trainingSkill = null;
+        var $skillQueue = null;
 
         var $skillTree = null;
 
@@ -390,6 +391,22 @@
             }
         }
 
+        function loadSkillQueue() {
+            if ($this->skillQueue == null) {
+                $skillQueueData = new apiRequest('char/SkillQueue.xml.aspx', array($this->account->userId,
+                                                                             $this->account->apiKey,
+                                                                             $this->characterID),
+                                                                             array('version' => 2));
+              if ($skillQueueData->data) {
+                    if (!$skillQueueData->data->error) {
+                        $this->skillQueue = new eveSkillQueue($this->account, $this->db, $skillQueueData->data->result);
+                    } else {
+                        apiError('char/SkillQueue.xml.aspx', $skillQueueData->data->error);
+                    }
+                }
+            }
+        }
+        
         function loadCertificateTree() {
             if ($this->certificateTree == null) {
                 $certData = new apiRequest('eve/CertificateTree.xml.aspx');
