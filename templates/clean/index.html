@@ -101,9 +101,9 @@
         {if $errors}
         <div id="errorPopup" style="display: block;">
             <h3><img src="{$site_url}/templates/{$theme}/images/error.png" border="0" align="absmiddle" /> Encountered the following error(s):</h3>
-		{foreach item=error from=$errors}
-                <div class="apierror">{$error}</div>
-                {/foreach}
+            {foreach item=error from=$errors}
+            <div class="apierror">{$error}</div>
+            {/foreach}
             <div align="right"><a href="#" onclick="toggleErrors(); return false;">[ Close ]</a></div>
         </div>
         {/if}

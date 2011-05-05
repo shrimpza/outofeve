@@ -1,19 +1,52 @@
+/* =================================== */
+/* basic colours for everything        */
+/* =================================== */
+.shadeLight {
+    background: #252531;
+}
+
+.shadeMid {
+    background: #2c2c38;
+}
+
+.shadeDark {
+    background: #302d32;
+}
+
+.borderLight {
+    border: 1px solid #2c2c38;
+}
+
+.borderMid {
+    border: 1px solid #302d32;
+}
+
+.borderDark {
+    border: 1px solid #666;
+}
+
+.textLight {
+    color: #bbb;
+}
+
+/* =================================== */
+/* page layout/conatainers             */
+/* =================================== */
+
 #header {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	height: 84px;
-	background: #4d4d57;
-	background-image: url('images/header.jpg');
-	background-repeat: repeat-x;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 85px;
+    margin-bottom: 10px;
+    font-size: large;
+    padding: 0px;
 }
 
 #container {
-	position: absolute;
-	top: 95px;
-	left: 10px;
-	right: 10px;
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #containerPopup {
@@ -29,8 +62,8 @@
 }
 
 #navigation {
-	float: left;
-	width: 190px;
+    width: 190px;
+    float: left;
 }
 
 #footer-wrapper {
@@ -38,6 +71,8 @@
 	margin-top: 50px;
 }
 
+/* =================================== */
+/* base type things                   */
 /* =================================== */
 
 body {
@@ -47,6 +82,8 @@ body {
 	font-family: "Trebuchet MS", Verdana;
 	font-size: small;
 	color: #fff;
+    background-image: url('images/header.jpg');
+    background-repeat: repeat-x;
 }
 
 a {
@@ -65,12 +102,13 @@ a:visited {
 	border-bottom: 1px dotted #fff;
 }
 
-#footer {
-	font-size: 1.3em;
-	padding: 3px;
-	background: #4d4d57;
-	padding-right: 15px;
+img {
+    border: 0px;
 }
+
+/* =================================== */
+/* page header                         */
+/* =================================== */
 
 #header {
 	font-size: large;
@@ -108,6 +146,20 @@ a:visited {
 	padding: 4px;
 }
 
+
+/* =================================== */
+/* footer...                           */
+/* =================================== */
+
+#footer {
+    font-size: 1.3em;
+    padding: 3px;
+    background: #4d4d57;
+    padding-right: 15px;
+}
+
+/* =================================== */
+/* table bits                          */
 /* =================================== */
 
 th {
@@ -124,8 +176,6 @@ th {
 	color: #bbb;
 }
 
-/* =================================== */
-
 .row {
 }
 
@@ -133,18 +183,16 @@ th {
 	background: #121215;
 }
 
+/* =================================== */
+/* various colours and things          */
+/* =================================== */
+
 .moneyOut {
 	color: #b00;
 }
 
 .moneyIn {
 	color: #090;
-}
-
-.pageNav {
-	border: 1px solid #b5b8b6;
-	text-align: center;
-	background: #e1e1e1;
 }
 
 .bad {
@@ -160,61 +208,8 @@ th {
 }
 
 
-
 /* =================================== */
-
-img {
-	border: 0px;
-}
-
-.adminForm {
-}
-
-.adminForm textarea {
-	width: 100%;
-	font-family: "Trebuchet MS", Verdana;
-	font-size: 1.0em;
-	height: 100px;
-}
-
-.adminForm label, .adminForm input, .adminForm select, .adminForm .inputDiv {
-	display: block;
-	width: 200px;
-	float: left;
-	margin-bottom: 10px;
-}
-
-.adminForm .inputDiv {
-    height: 100px;
-	overflow:auto;
-	width: 350px;
-	border: 1px solid #ddd;
-}
-
-.adminForm label {
-	text-align: right;
-	width: 150px;
-	padding-right: 10px;
-}
-
-.adminForm br {
-	clear: left;
-}
-
-.adminForm .inputDiv label, .adminForm .inputDiv input, .adminForm .inputDiv select {
-	display: inline;
-	float: none;
-	margin-bottom: 0px;
-	width: auto;
-}
-
-.adminForm .regular label, .adminForm .regular input, .adminForm .regular select {
-	display: inline;
-	float: none;
-	margin-bottom: 0px;
-	width: auto;
-}
-
+/* menus                               */
 /* =================================== */
 
 #navigation .header {
@@ -233,14 +228,6 @@ img {
 	background: #121212;
 }
 
-.menugroup {
-	border-bottom: 10px solid #353336;
-}
-
-.menugroup .head {
-	font-weight: bold;
-}
-
 .menu {
 	width: 181px;
 }
@@ -252,10 +239,7 @@ img {
 }
 
 .menu li {
-	cursor: pointer;
-	/*background-image: url('images/menu_item.png');
-	background-repeat: repeat-x;
-	height: 20px;*/
+    cursor: pointer;
 }
 
 .menu a {
@@ -282,25 +266,17 @@ img {
 	border: 1px double #ff7e28;
     -moz-border-radius: 10px;
     border-radius: 10px;
-	padding: 10px;
-	width: 160px;
-	margin-top: 20px;
-	margin-bottom: 20px;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: left;
-	/*background-image: url('images/note.png');
-	background-repeat: no-repeat;
-	background-position: -5px top;
-	padding-left: 55px;*/
+    padding: 10px;
+    width: 160px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
 }
 
-#navigation .menuNote .icon {
-	/*position: relative;
-	left: -10px;
-	top: -5px;*/
-}
-
+/* =================================== */
+/* error messages and displays         */
 /* =================================== */
 
 #errorPopup {
@@ -376,6 +352,9 @@ img {
 
 
 /* =================================== */
+/* style for filters and things on     */
+/* the tops of pages with data lists   */
+/* =================================== */
 
 .listOptions {
 	margin: 10px;
@@ -395,234 +374,11 @@ img {
 }
 
 /* =================================== */
-
-
-#assetList {
-}
-
-#assetList .groupHead td {
-	background: #302d32;	
-	font-weight: bold; 
-	color: #bbb;
-	cursor: hand;
-	cursor: pointer;
-	font-size: 1.1em;
-}
-
-#assetList .contents {
-	border-left: 15px solid transparent; 
-	margin:0px; 
-	padding:0px;
-}
-
-#assetList .row td {
-	border-bottom: 1px solid #302d32;
-}
-
+/* pagination buttons...               */
 /* =================================== */
 
-#transactionList td {
-	font-size: 0.9em;
-}
-
-/* =================================== */
-
-#journalList td {
-	font-size: 0.9em;
-}
-
-#journalList .sub, #journalList .sub td {
-	text-align: left;
-	background: #2c2c38;
-	font-weight: bold;
-	color: #bbb;
-	font-size: 1.1em;
-}
-
-/* =================================== */
-
-#manufactureList td {
-	font-size: 0.9em;
-}
-
-/* =================================== */
-
-#orderList {
-	font-size: 0.9em;
-}
-
-/* =================================== */
-
-#killList {
-}
-
-#killList .killHead {
-	background: #302d32;
-	border: 1px solid #302d32;
-	margin: 3px;
-	padding: 3px;
-	cursor: hand;
-	cursor: pointer;
-}
-
-#killList .killHead img {
-	margin-right: 20px;
-}
-
-#killList .killHead h3 {
-	margin: 3px;
-}
-
-#killList .killHead h4 {
-	margin: 3px;
-}
-
-#killList .killDetail {
-	padding: 3px;
-	padding-top: 0px;
-	margin-bottom: 15px;
-}
-
-#killList .title {
-	background: #2c2c38;
-	border: 1px solid #666666;
-	text-align: center;
-	color: #bbb;
-	font-size: 1.3em;
-	font-weight: bold; 
-	padding: 3px;
-	margin-bottom: 3px;
-}
-
-#killList .subTitle {
-	background: #2c2c38;
-	border: 1px solid #666666;
-	text-align: center;
-	color: #bbb;
-	font-size: 1.15em;
-	font-weight: bold; 
-	padding: 3px;
-	margin-bottom: 3px;
-}
-
-#killList .killInvolvedParties {
-	width: 50%;
-	float: left;
-}
-
-#killList .killInvolvedParties td {
-	font-size: 0.95em;
-	text-align: left;
-	vertical-align: middle;
-}
-
-#killList .killInvolvedParties img {
-	padding-right: 5px;
-}
-
-#killList .killDroppedItems {
-	width: 50%;
-	float: right;
-}
-
-/* =================================== */
-
-#rssFeeds {
-}
-
-#rssFeeds .feed {
-	float: left; 
-	border: 1px solid #666666; 
-	width: 46%;
-	margin: 5px;
-}
-
-#rssFeeds .feed h1 {
-	background: #2c2c38;
-	border-bottom: 1px solid #666666;
-	text-align: center;
-	color: #bbb;
-	font-size: 1.25em;
-	font-weight: bold; 
-	padding: 3px;
-	margin: 0px;
-	margin-bottom: 3px;
-}
-
-#rssFeeds .feed h2 {
-	background: #2c2c38;
-	border-top: 1px solid #666666;
-	border-bottom: 1px solid #666666;
-	text-align: center;
-	color: #bbb;
-	font-size: 1.15em;
-	font-weight: bold; 
-	padding: 3px;
-	margin: 0px;
-	margin-top: 3px;
-	margin-bottom: 3px;
-}
-
-#rssFeeds .item {
-	padding: 15px;
-}
-
-
-/* =================================== */
-
-#showInfo {
-}
-
-#showInfo h3 {
-	margin: 3px;
-}
-
-#showInfo h4 {
-	margin: 2px;
-}
-
-#showInfo td {
-	font-size: 0.9em;
-}
-
-#showInfo .description .icon {
-	width: 64px;
-	float: left;
-}
-
-#showInfo .description .desc {
-	margin-left: 70px;
-	margin-right: auto;
-	height: 100px;
-	overflow: auto;
-}
-
-/* =================================== */
-
-#mail {
-
-}
-
-.messageList {
-    height: 300px;
-    overflow: auto;
-    margin-bottom: 5px;
-    border: 1px solid #666666;
-}
-
-.messageList .message {
-    cursor: pointer;
-}
-
-#mail .messageHeader {
-    border: 1px solid #666666;
-    background: #4d4d57;
-}
-
-#mail .messageBody {
-    border: 1px solid #666666;
-}
-
-#mail .messageContent {
-    padding: 10px;
+.pageNav {
+    border: 1px solid #b5b8b6;
+    text-align: center;
+    background: #e1e1e1;
 }
