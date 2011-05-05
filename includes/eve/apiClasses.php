@@ -233,6 +233,9 @@
 
         var $contents = false;
 
+        // internal use id. seems the api duplicates the same ID multiple items within a /single/ result set.
+        var $_ooe_id = 0;
+
         function eveAsset($acc, $db, $asset, $char, $parentLocation = null) {
             $this->typeID = (int)$asset['typeID'];
             $this->itemID = (int)$asset['itemID'];
@@ -262,6 +265,8 @@
                 foreach ($asset->rowset->row as $subAsset)
                     $this->contents[] = new eveAsset($acc, $db, $subAsset, $char, $this->location);
             }
+            
+            $this->_ooe_id = $this->itemID . '_' . $this->typeID . '_' . mt_rand();
         }
     }
 

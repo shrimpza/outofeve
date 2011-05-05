@@ -26,8 +26,8 @@
 <table width="100%" border="0">
   {foreach from=$ships item=ship}
     <tr class="groupHead shadeDark borderDark textLight">
-      <td colspan="3" onclick="toggleAssets({$ship.itemID})">
-        <a href="#" onclick="showInfo({$ship.item.typeid});return false;">
+      <td colspan="3" onclick="toggleAssets('{$ship._ooe_id}')">
+        <a href="#" onclick="showInfo('{$ship.item.typeid}');return false;">
           <img src="{$site_url}/eveimages/types/64/{$ship.item.typeid}.png" alt="{$ship.item.typename}" align="left" style="margin-right: 10px" />
         </a>
         {$ship.item.typename}<br />{$ship.item.group.groupname}<br /><small>{$ship.locationName}</small></td>
@@ -35,7 +35,7 @@
     {if $ship.contents}
       <tr>
         <td colspan="3">
-          <div style="display:none" id="{$ship.itemID}">
+          <div style="display:none" id="{$ship._ooe_id}">
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
               <tr>
                 <td width="450" valign="top">
@@ -44,7 +44,7 @@
                       {foreach from=$ship.contents item=ass name='moo'}
                         {if (($ass.flag >= 11) && ($ass.flag <= 34))}
                           <div class="slot{$ass.flag}">
-                            <a href="#" onclick="showInfo({$ass.item.typeid});return false;" title="{$ass.item.typename}">
+                            <a href="#" onclick="showInfo('{$ass.item.typeid}');return false;" title="{$ass.item.typename}">
                               {if $ass.item.typeGraphic}
                                 <img src="{$site_url}/eveimages/types/64/{$ass.item.typeid}.png" alt="{$ass.item.typename}" align="absmiddle" />
                               {else}
@@ -58,7 +58,7 @@
                     <div class="rigSlots">
                       {foreach from=$ship.contents item=ass name='poo'}
                         {if (($ass.flag >= 92) && ($ass.flag <= 99))}
-                          <a href="#" onclick="showInfo({$ass.item.typeid});return false;" title="{$ass.item.typename}">
+                          <a href="#" onclick="showInfo('{$ass.item.typeid}');return false;" title="{$ass.item.typename}">
                             {if $ass.item.typeGraphic}
                               <img src="{$site_url}/eveimages/types/32/{$ass.item.typeid}.png" alt="{$ass.item.typename}" align="absmiddle" class="rig" />
                             {else}
@@ -92,7 +92,7 @@
     {else}
       <tr>
         <td colspan="3">
-          <div style="display:none; padding-left: 20px" id="{$ship.itemID}">
+          <div style="display:none; padding-left: 20px" id="{$ship._ooe_id}">
             <h3>This ship has no cargo and no fittings!</h3>
           </div>
         </td>
