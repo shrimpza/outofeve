@@ -331,6 +331,15 @@
             $accounts = $this->site->user->get_account_list('name');
             $accounts = objectToArray($accounts, array('DBManager'));
 
+            $wasErrors = $GLOBALS['EVEAPI_NO_ERRORS'];
+            $GLOBALS['EVEAPI_NO_ERRORS'] = true;
+            for ($i = 0; $i < count($accounts); $i++) {
+                $eveAcc = new eveAccount(trim($accounts[$i]['row']['apiuser']), trim(decryptKey($accounts[$i]['row']['apikey'])), 0, false);
+                $eveAcc->getAccountStatus();
+                $accounts[$i]['account'] = objectToArray($eveAcc, array('DBManager'));
+            }
+            $GLOBALS['EVEAPI_NO_ERRORS'] = $wasErrors;
+
             return $this->render('accounts', array('accounts' => $accounts, 'error' => $error));
         }
 

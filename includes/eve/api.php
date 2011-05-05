@@ -2,6 +2,7 @@
 
     require_once('curl.class.php');
     require_once('apiClasses.php');
+    require_once('apiMailClasses.php');
     require_once('apiCorpClasses.php');
     require_once('apiChar.php');
     require_once('apiCorp.php');
@@ -200,6 +201,7 @@
         var $userId = '';
         var $apiKey = '';
         var $characters = array();
+        var $accountStatus = null;
         var $error = false;
         var $timeOffset = 0;
 
@@ -212,8 +214,9 @@
 
             $this->db = new eveDB();
 
-            if ($autoLoad)
+            if ($autoLoad) {
                 $this->getCharacters();
+            }
         }
 
         function getCharacters() {
@@ -228,6 +231,22 @@
 
                 if (!$this->error && count($this->characters) == 0)
                     $this->error = array('code' => 1, 'message' => 'No characters (WTF?)!');
+            }
+        }
+
+        function getAccountStatus() {
+            $accData = new apiRequest('account/AccountStatus.xml.aspx', array($this->userId,
+                                                                               $this->apiKey));
+
+            if (!$accData->data) {
+                return;
+            }
+
+            if ($accData->data->error) {
+                apiError('account/AccountStatus.xml.aspx', $accData->data->error);
+                $this->error = (string)$accData->data->error;
+            } else {
+                $this->accountStatus = new eveAccountStatus($this, $accData->data->result);
             }
         }
 

@@ -1,5 +1,21 @@
 <?php
 
+    class eveAccountStatus {
+        var $userID = 0;
+        var $paidUntil = 0;
+        var $createDate = 0;
+        var $logonCount = 0;
+        var $logonMinutes = 0;
+
+        function eveAccountStatus($acc, $accStatus) {
+            $this->userID = (int)$accStatus->userID;
+            $this->paidUntil = strtotime((string)$accStatus->paidUntil) + $acc->timeOffset;
+            $this->createDate = strtotime((string)$accStatus->createDate) + $acc->timeOffset;
+            $this->logonCount = (int)$accStatus->logonCount;
+            $this->logonMinutes = (int)$accStatus->logonMinutes;
+        }
+    }
+
     class eveAttribute {
         var $name = '';
         var $value = 0;

@@ -6,6 +6,7 @@
 <table width="60%" border="0">
   <tr>
     <th>Account Name</th>
+    <th>Status</th>
   </tr>
   {foreach from=$accounts item=a}
     <tr class="{cycle values='row,rowAlt'}">
@@ -15,10 +16,17 @@
         <a href="{$site_url}/?module=users&mode=accounts&setacc={$a.row.id}" title="Set Active"><img src="{$site_url}/templates/{$theme}/images/home-big.png" align="absmiddle"></a>
         {$a.row.name}
       </td>
+      <td>
+          {if $a.account.error}
+            {$a.account.error}
+          {else}
+            Account created {$a.account.accountStatus.createDate|date_format:"%e %B %Y"}, expires <b>{$a.account.accountStatus.paidUntil|date_format:"%e %B %Y"}</b>.
+          {/if}
+      </td>
     </tr>
   {/foreach}
   <tr class="{cycle values='row,rowAlt'}">
-    <th>
+    <th colspan="2">
       <a href="{$site_url}/?module=users&mode=accounts&edit=0"><img src="{$site_url}/templates/{$theme}/images/edit-new-big.png" align="absmiddle">
       Add Account</a>
     </th>
