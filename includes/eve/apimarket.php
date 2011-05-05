@@ -41,7 +41,12 @@
 
         function checkCache($params) {
             $cacheSum = md5($params);
-            $cacheFile = $GLOBALS['config']['eve']['cache_dir'] . 'market/' . $cacheSum;
+            $cacheDir = $cacheFile = $GLOBALS['config']['eve']['cache_dir'] . 'market/';
+            $cacheFile = $cacheDir . $cacheSum;
+            
+            if (!is_dir($cacheDir)) {
+                mkdir($cacheDir);
+            }
 
             if (file_exists($cacheFile)) {
                 $this->cachedResponse = file_get_contents($cacheFile);
@@ -56,7 +61,12 @@
 
         function saveCache($params, $cachedUntil) {
             $cacheSum = md5($params);
-            $cacheFile = $GLOBALS['config']['eve']['cache_dir'] . 'market/' . $cacheSum;
+            $cacheDir = $cacheFile = $GLOBALS['config']['eve']['cache_dir'] . 'market/';
+            $cacheFile = $cacheDir . $cacheSum;
+            
+            if (!is_dir($cacheDir)) {
+                mkdir($cacheDir);
+            }
 
             file_put_contents($cacheFile, $this->response);
             touch($cacheFile, $cachedUntil);
