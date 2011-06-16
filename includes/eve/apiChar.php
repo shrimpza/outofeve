@@ -34,6 +34,7 @@
 
         var $mail = array();
         var $notifications = array();
+        var $contactNotifications = array();
 
         var $deaths = array();
         var $kills = array();
@@ -321,6 +322,20 @@
                         }
                     } else {
                         apiError('char/Notifications.xml.aspx', $notificationData->data->error);
+                    }
+                }
+
+                $notificationData = new apiRequest('char/ContactNotifications.xml.aspx', array($this->account->userId,
+                                                                                        $this->account->apiKey,
+                                                                                        $this->characterID),
+                                                                                  array('version' => 2));
+                if ($notificationData->data) {
+                    if (!$notificationData->data->error) {
+                        foreach ($notificationData->data->result->rowset->row as $notification) {
+                            $this->contactNotifications[] = new eveNotificationContact($this->account, $notification);
+                        }
+                    } else {
+                        apiError('char/ContactNotifications.xml.aspx', $notificationData->data->error);
                     }
                 }
             }

@@ -84,9 +84,25 @@
         var $notificationID = 0;
         var $text = '';
 
-        function eveNotificationText($acc, $mail) {
-            $this->notificationID = (int)$mail['notificationID'];
-            $this->text = (string)$mail;
+        function eveNotificationText($acc, $notification) {
+            $this->notificationID = (int)$notification['notificationID'];
+            $this->text = (string)$notification;
+        }
+    }
+    
+    class eveNotificationContact {
+        var $notificationID = 0;
+        var $senderID = 0;
+        var $senderName = '';
+        var $sentDate = 0;
+        var $messageData = '';
+
+        function eveNotificationContact($acc, $notification) {
+            $this->notificationID = (int)$notification['notificationID'];
+            $this->senderID = (int)$notification['senderID'];
+            $this->senderName = (string)$notification['senderName'];
+            $this->sentDate = strtotime((string)$notification['sentDate']) + $acc->timeOffset;
+            $this->messageData = (string)$notification['messageData'];
         }
     }
 
