@@ -54,14 +54,15 @@
         {section name=qs loop=$queue}
           <tr class="{cycle values='row,rowAlt'}">
             <td width="75%" align="left">
-              <a href="#" onclick="showInfo('{$queue[qs].typeID}');return false;"><img src="{$site_url}/eveimages/icons/32/icon50_11.png" align="absmiddle" /></a> {$queue[qs].skillItem.typename}
-              <span style="font-size: 0.9em">
+              <a href="#" onclick="showInfo('{$queue[qs].typeID}');return false;"><img src="{$site_url}/eveimages/icons/32/icon50_11.png" align="left" /></a>
+              {$queue[qs].skillItem.typename}
+              <span style="font-size: 0.9em"> <br />
                 {if $queue[qs].position > 0}
-                  (start: {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"})
+                  <b>Start:</b> {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"} - 
                 {else}
-                  (training)
+                  <b>Training</b> - 
                 {/if}
-                <!--- finished {$queue[qs].remainingTime|formatTime} -->
+                  <b>ETA:</b> {$queue[qs].remainingTime|formatTime}
               </span>
             </td>
             <td width="25%" align="right">
