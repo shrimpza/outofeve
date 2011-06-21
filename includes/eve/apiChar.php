@@ -157,15 +157,33 @@
             }
         }
 
-        function loadTransactions() {
-            if (count($this->transactions) == 0) {
+        function loadTransactions($fromID = 0) {
+            $params = array();
+            $params['rowCount'] = $GLOBALS['config']['eve']['transaction_records'];
+            if ($fromID > 0) {
+                $params['fromID'] = $fromID;
+            }
+
+            if ((count($this->transactions) == 0) || ($fromID > 0)) {
                 $transData = new apiRequest('char/WalletTransactions.xml.aspx', array($this->account->userId,
                                                                                       $this->account->apiKey, 
-                                                                                      $this->characterID));
+                                                                                      $this->characterID),
+                                                                                $params);
                 if ($transData->data) {
                     if (!$transData->data->error) {
+                        $gotRows = 0;
                         foreach ($transData->data->result->rowset->row as $transaction) {
                             $this->transactions[] = new eveTransaction($this->account, $this->db, $transaction, $this);
+                            $gotRows ++;
+                        }
+
+                        // keep looping requests until we receive no more results
+                        $lowest = lowestTransactionRef($this->transactions);
+                        if (($lowest != $fromID) && ($gotRows == $params['rowCount'])) {
+                            $this->loadTransactions($lowest);
+                        } else {
+                            // if this is the last run, sort all the items we have
+                            usort($this->transactions, 'transactionsSort');
                         }
                     } else {
                         apiError('char/WalletTransactions.xml.aspx', $transData->data->error);
@@ -174,15 +192,34 @@
             }
         }
 
-        function loadJournal() {
-            if (count($this->journalItems) == 0) {
+        function loadJournal($fromID = 0) {
+            $params = array();
+            $params['rowCount'] = $GLOBALS['config']['eve']['journal_records'];
+            if ($fromID > 0) {
+                $params['fromID'] = $fromID;
+            }
+
+            if ((count($this->journalItems) == 0) || ($fromID > 0)) {
                 $journalData = new apiRequest('char/WalletJournal.xml.aspx', array($this->account->userId,
                                                                                    $this->account->apiKey, 
-                                                                                   $this->characterID));
+                                                                                   $this->characterID),
+                                                                             $params);
+
                 if ($journalData->data) {
                     if (!$journalData->data->error) {
+                        $gotRows = 0;
                         foreach ($journalData->data->result->rowset->row as $journalItem) {
                             $this->journalItems[] = new eveJournalItem($this->account, $this->db, $journalItem);
+                            $gotRows ++;
+                        }
+
+                        // keep looping journal requests until we receive no more results
+                        $lowest = lowestJournalRef($this->journalItems);
+                        if (($lowest != $fromID) && ($gotRows == $params['rowCount'])) {
+                            $this->loadJournal($lowest);
+                        } else {
+                            // if this is the last run, sort all the items we have
+                            usort($this->journalItems, 'journalSort');
                         }
                     } else {
                         apiError('char/WalletJournal.xml.aspx', $journalData->data->error);
@@ -504,9 +541,4 @@
         }
 
     }
-
-    function mailSort($a, $b) {
-        return ($a->sentDate > $b->sentDate) ? -1 : 1;
-    }
-
 ?>

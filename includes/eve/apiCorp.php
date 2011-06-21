@@ -199,16 +199,33 @@
             }
         }
 
-        function loadJournal($accountKey = 1000) {
-            if (count($this->journalItems) == 0) {
+        function loadJournal($accountKey = 1000, $fromID = 0) {
+            $params = array('accountKey' => $accountKey);
+            $params['rowCount'] = $GLOBALS['config']['eve']['journal_records'];
+            if ($fromID > 0) {
+                $params['fromID'] = $fromID;
+            }
+
+            if ((count($this->journalItems) == 0) || ($fromID > 0)) {
                 $journalData = new apiRequest('corp/WalletJournal.xml.aspx', array($this->account->userId,
                                                                                    $this->account->apiKey, 
                                                                                    $this->character->characterID),
-                                                                             array('accountKey' => $accountKey));
+                                                                             $params);
                 if ($journalData->data) {
                     if (!$journalData->data->error) {
+                        $gotRows = 0;
                         foreach ($journalData->data->result->rowset->row as $journalItem) {
                             $this->journalItems[] = new eveJournalItem($this->account, $this->db, $journalItem);
+                            $gotRows ++;
+                        }
+
+                        // keep looping journal requests until we receive no more results
+                        $lowest = lowestJournalRef($this->journalItems);
+                        if (($lowest != $fromID) && ($gotRows == $params['rowCount'])) {
+                            $this->loadJournal($accountKey, $lowest);
+                        } else {
+                            // if this is the last run, sort all the items we have
+                            usort($this->journalItems, 'journalSort');
                         }
                     } else {
                         apiError('corp/WalletJournal.xml.aspx', $journalData->data->error);
@@ -217,16 +234,32 @@
             }
         }
 
-        function loadTransactions($accountKey = 1000) {
-            if (count($this->transactions) == 0) {
+        function loadTransactions($accountKey = 1000, $fromID = 0) {
+            $params = array('accountKey' => $accountKey);
+            $params['rowCount'] = $GLOBALS['config']['eve']['transaction_records'];
+            if ($fromID > 0) {
+                $params['fromID'] = $fromID;
+            }
+
+            if ((count($this->transactions) == 0) || ($fromID > 0)) {
                 $transData = new apiRequest('corp/WalletTransactions.xml.aspx', array($this->account->userId,
                                                                                       $this->account->apiKey, 
                                                                                       $this->character->characterID),
-                                                                                array('accountKey' => $accountKey));
+                                                                                $params);
                 if ($transData->data) {
                     if (!$transData->data->error) {
                         foreach ($transData->data->result->rowset->row as $transaction) {
                             $this->transactions[] = new eveTransaction($this->account, $this->db, $transaction, $this->character);
+                            $gotRows ++;
+                        }
+
+                        // keep looping requests until we receive no more results
+                        $lowest = lowestTransactionRef($this->transactions);
+                        if (($lowest != $fromID) && ($gotRows == $params['rowCount'])) {
+                            $this->loadTransactions($accountKey, $lowest);
+                        } else {
+                            // if this is the last run, sort all the items we have
+                            usort($this->transactions, 'transactionsSort');
                         }
                     } else {
                         apiError('corp/WalletTransactions.xml.aspx', $transData->data->error);

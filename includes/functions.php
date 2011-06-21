@@ -172,6 +172,39 @@
         }
     }
 
-    //echo enc_encrypt("test9TEST123", "l0lkey");
+    
+    /*
+     * Utility sorting functions for API data.
+     */
+    function mailSort($a, $b) {
+        return ($a->sentDate > $b->sentDate) ? -1 : 1;
+    }
 
+    function journalSort($a, $b) {
+        return ($a->date > $b->date) ? -1 : 1;
+    }
+
+    function transactionsSort($a, $b) {
+        return ($a->transactionTime > $b->transactionTime) ? -1 : 1;
+    }
+
+    function lowestJournalRef($journalItems) {
+        $res = 0;
+        for ($i = 0; $i < count($journalItems); $i++) {
+            if (($res == 0) || ($journalItems[$i]->journalID < $ref)) {
+                $res = $journalItems[$i]->journalID;
+            }
+        }
+        return $res;
+    }
+
+    function lowestTransactionRef($transItems) {
+        $res = 0;
+        for ($i = 0; $i < count($transItems); $i++) {
+            if (($res == 0) || ($transItems[$i]->transactionID < $ref)) {
+                $res = $transItems[$i]->transactionID;
+            }
+        }
+        return $res;
+    }
 ?>

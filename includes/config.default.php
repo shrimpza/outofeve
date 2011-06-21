@@ -51,6 +51,8 @@
     $config['eve']['cache_dir'] = dirname(__FILE__).'/../cache/';
     $config['eve']['api_url'] = 'http://api.eve-online.com';
     $config['eve']['method'] = 'POST';
+    $config['eve']['journal_records'] = 2560;
+    $config['eve']['transaction_records'] = 2560;
 
     $config['templates']['compile_dir'] = dirname(__FILE__).'/../templates/compiled';
     $config['templates']['theme_dir'] = dirname(__FILE__).'/../templates';
