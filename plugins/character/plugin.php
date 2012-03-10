@@ -22,31 +22,35 @@
 
         function getContent() {
             if ($this->site->character) {
-                $char = array();
-                $char['name'] = $this->site->character->name;
-                $char['characterID'] = $this->site->character->characterID;
-                $char['race'] = $this->site->character->race;
-                $char['bloodLine'] = $this->site->character->bloodLine;
-                $char['gender'] = $this->site->character->gender;
-                $char['corporationName'] = $this->site->character->corporationName;
-                $char['balance'] = $this->site->character->balance;
-                $char['skillPoints'] = $this->site->character->skillPoints;
-                $char['training'] = objectToArray($this->site->character->trainingSkill, array('DBManager', 'eveDB'));
-                $char['faction'] = objectToArray($this->site->character->faction, array('DBManager', 'eveDB'));
-                $char['attributes'] = objectToArray($this->site->character->attributes, array('DBManager', 'eveDB'));
-                $char['raceInfo'] = $this->site->character->db->bloodlineInfo($this->site->character->bloodLine);
-
-                $this->site->character->loadSkillQueue();
-                $this->site->character->loadSkillTree();
-                $this->site->character->loadCertificateTree();
+                $this->site->character->detail->load();
+                $details = $this->site->character->detail;
                 
-                if ($this->site->character->skillQueue != null) {
-                    $queue = objectToArray($this->site->character->skillQueue->queuedSkill, array('DBManager', 'eveDB'));
+                $char = array();
+                $char['name'] = $details->name;
+                $char['characterID'] = $details->characterID;
+                $char['race'] = $details->race;
+                $char['bloodLine'] = $details->bloodLine;
+                $char['gender'] = $details->gender;
+                $char['corporationName'] = $details->corporationName;
+                $char['balance'] = $details->balance;
+                $char['skillPoints'] = $details->skills->skillPoints;
+                $char['training'] = objectToArray($details->trainingSkill, array('DBManager', 'eveDB'));
+                $char['faction'] = objectToArray($details->faction, array('DBManager', 'eveDB'));
+                $char['attributes'] = objectToArray($details->attributes->attributes, array('DBManager', 'eveDB'));
+                $char['raceInfo'] = $details->db->bloodlineInfo($details->bloodLine);
+
+                //$details->loadSkillQueue();
+                $details->loadSkillTree();
+                $details->loadCertificateTree();
+                
+                if ($details->skillQueue != null) {
+                    $queue = objectToArray($details->skillQueue->queue, array('DBManager', 'eveDB'));
                 } else {
                     $queue = false;
                 }
-                $skills = $this->site->character->knownSkills();
-                $certificates = $this->site->character->knownCertificates();
+
+                $skills = $details->knownSkills();
+                $certificates = $details->knownCertificates();
 
                 return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates, 'queue' => $queue));
             } else

@@ -30,8 +30,9 @@
                 $this->site->character->corporation->loadTransactions($_GET['accountKey']);
                 $transItems = $this->site->character->corporation->transactions;
             } else {
-                $this->site->character->loadTransactions();
-                $transItems = $this->site->character->transactions;
+                $tl = new eveTransactionList();
+                $tl->load($this->site->eveAccount, $this->site->character);
+                $transItems = $tl->transactions;
             }
 
             $trans = objectToArray($transItems, array('DBManager', 'eveDB'));

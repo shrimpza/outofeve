@@ -9,7 +9,7 @@
 
     class Site {
         var $plugins = array();
-		var $activePlugin = '';
+        var $activePlugin = '';
         var $tplVars = array();
 
         function Site() {
@@ -17,8 +17,9 @@
 
             $this->db = new DBManager($GLOBALS['config']['database']);
 
-            if (!isset($_GET['module']))
+            if (!isset($_GET['module'])) {
                 $_GET['module'] = $GLOBALS['config']['plugins']['default'];
+            }
 
             $this->activePlugin = $_GET['module'];
 
@@ -46,18 +47,20 @@
             foreach ($this->plugins as $name => $plugin) {
                 if ($name == $this->activePlugin) {
                     if (($this->user->id > 0) && ($plugin->level <= $this->user->level) || ($plugin->level <= 0)) {
-                        if (method_exists($plugin, 'getContent'))
+                        if (method_exists($plugin, 'getContent')) {
                             $content = $plugin->getContent();
-                    } else
+                        }
+                    } else {
                         $content = '<h1>DENIED!</h1>';
+                    }
                     $pluginTitle = $plugin->name;
                 }
 
                 if (($this->user->id > 0) && ($plugin->level <= $this->user->level) || ($plugin->level <= 0)) {
                     if (method_exists($plugin, 'getSideBox')) {
-                        $newBlock = array('title' => $plugin->name, 
-                                          'content' => $plugin->getSideBox());
-			    		$sideBlocks[] = $newBlock;
+                        $newBlock = array(  'title' => $plugin->name, 
+                                            'content' => $plugin->getSideBox());
+                                            $sideBlocks[] = $newBlock;
                     }
                 }
             }
@@ -78,13 +81,15 @@
                 $this->tplVars['errors'] = $GLOBALS['EVEAPI_ERRORS'];
             }
 
-            foreach ($this->tplVars as $var => $val)
+            foreach ($this->tplVars as $var => $val) {
                 $tpl->assign($var, $val);
+            }
 
-            if (isset($_GET['popup']))
+            if (isset($_GET['popup'])) {
                 $tpl->display('popup.html');
-            else
+            } else {
                 $tpl->display('index.html');
+            }
         }
 
         function outputJson() {
@@ -93,10 +98,12 @@
             foreach ($this->plugins as $name => $plugin) {
                 if ($name == $this->activePlugin) {
                     if (($this->user->id > 0) && ($plugin->level <= $this->user->level) || ($plugin->level <= 0)) {
-                        if (method_exists($plugin, 'getContentJson'))
+                        if (method_exists($plugin, 'getContentJson')) {
                             $content = $plugin->getContentJson();
-                    } else
+                        }
+                    } else {
                         $content = '{}';
+                    }
                 }
             }
 

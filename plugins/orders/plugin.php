@@ -29,8 +29,9 @@
                 $this->site->character->corporation->loadOrders($_GET['accountKey']);
                 $orderList = $this->site->character->corporation->orders;
             } else {
-                $this->site->character->loadOrders();
-                $orderList = $this->site->character->orders;
+                $ml = new eveMarketOrderList();
+                $ml->load($this->site->eveAccount, $this->site->character);
+                $orderList = $ml->orders;
             }
 
             $buying = array();

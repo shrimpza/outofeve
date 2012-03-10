@@ -25,10 +25,20 @@
         var $corpRoleList = array();
 
         var $db = null;
+        
+        static $instance = null;
 
         function eveDB() {
-            if (!isset($this->db))
+            if (!isset($this->db)) {
                 $this->db = new DBManager($GLOBALS['config']['evedatabase']);
+            }
+        }
+        
+        static function getInstance() {
+            if (self::$instance == null) {
+                self::$instance = new eveDB();
+            }
+            return self::$instance;
         }
 
         function bloodlineInfo($bloodlineName) {

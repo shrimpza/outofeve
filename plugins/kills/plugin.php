@@ -29,9 +29,10 @@
                 $killList = $this->site->character->corporation->kills;
                 $deathList = $this->site->character->corporation->deaths;
             } else {
-                $this->site->character->loadKills();
-                $killList = $this->site->character->kills;
-                $deathList = $this->site->character->deaths;
+                $kl = new eveKillsList();
+                $kl->load($this->site->eveAccount, $this->site->character);
+                $killList = $kl->kills;
+                $deathList = $kl->deaths;
             }
 
             if (isset($_GET['deaths'])) {

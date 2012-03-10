@@ -23,8 +23,9 @@
                 $this->site->character->corporation->loadAssets();
                 $fullAssetList = $this->site->character->corporation->assets;
             } else {
-                $this->site->character->loadAssets();
-                $fullAssetList = $this->site->character->assets;
+                $al = new eveAssetList();
+                $al->load($this->site->eveAccount, $this->site->character);
+                $fullAssetList = $al->assets;
             }
 
             if (isset($_GET['type']) && ($_GET['type'] == 'find')) {

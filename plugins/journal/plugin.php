@@ -29,8 +29,9 @@
                 $this->site->character->corporation->loadJournal($_GET['accountKey']);
                 $journalItems = $this->site->character->corporation->journalItems;
             } else {
-                $this->site->character->loadJournal();
-                $journalItems = $this->site->character->journalItems;
+                $j = new eveJournal();
+                $j->load($this->site->eveAccount, $this->site->character);
+                $journalItems = $j->journal;
             }
 
             $journal = objectToArray($journalItems, array('DBManager', 'eveDB'));
@@ -155,6 +156,5 @@
             return 0;
         return ($a['date'] < $b['date']) ? -1 : 1;
     }
-
 
 ?>

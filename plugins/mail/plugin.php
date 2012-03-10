@@ -19,9 +19,10 @@
         }
 
         function getMail() {
-            $this->site->character->loadMail();
+            $ml = new eveMailList();
+            $ml->load($this->site->eveAccount, $this->site->character);
             $mail = array();
-            foreach ($this->site->character->mail as $m) {
+            foreach ($ml->mail as $m) {
                 if (isset($_GET['personal'])) {
                     if ($m->toCorpID == 0 && $m->toListID == 0) {
                         $mail[] = objectToArray($m, array('DBManager', 'eveDB'));
@@ -43,37 +44,32 @@
         }
 
         function getNotifications() {
-            $this->site->character->loadNotifications();
-            $notifications = objectToArray($this->site->character->notifications, array('DBManager', 'eveDB'));
+            $nl = new eveNotificationsList();
+            $nl->load($this->site->eveAccount, $this->site->character);
+            $notifications = objectToArray($nl->notifications, array('DBManager', 'eveDB'));
             return $this->render('notifications', array('mail' => $notifications));
         }
 
         function getContentJson() {
             $message = false;
             if (isset($_GET['messageID'])) {
-                $this->site->character->loadMail();
-                foreach ($this->site->character->mail as $m) {
-                    if ($m->messageID == $_GET['messageID']) {
-                        $message = objectToArray($this->site->character->getMailMessage($m), array('DBManager', 'eveDB'));
-                        $message['headers']['sentDate'] = date('d M Y H:i', $message['headers']['sentDate']);
-                    }
-                }
+                $ml = new eveMailList();
+                $ml->load($this->site->eveAccount, $this->site->character);
+                $message = objectToArray($ml->getMessage($_GET['messageID']), array('DBManager', 'eveDB'));
+                $message['headers']['sentDate'] = date('d M Y H:i', $message['headers']['sentDate']);
             } else if (isset($_GET['notificationID'])) {
-                $this->site->character->loadNotifications();
-                foreach ($this->site->character->notifications as $m) {
-                    if ($m->notificationID == $_GET['notificationID']) {
-                        $message = objectToArray($this->site->character->getNotificationText($m), array('DBManager', 'eveDB'));
-                        $message['text'] =$this->spiffyNotificationText($message['text']);
-                        $message['headers']['sentDate'] = date('d M Y H:i', $message['headers']['sentDate']);
-                    }
-                }
+                $nl = new eveNotificationsList();
+                $nl->load($this->site->eveAccount, $this->site->character);
+                $message = objectToArray($nl->getNotification($m), array('DBManager', 'eveDB'));
+                $message['text'] =$this->spiffyNotificationText($message['text']);
+                $message['headers']['sentDate'] = date('d M Y H:i', $message['headers']['sentDate']);
             }
             return json_encode($message);
         }
 
         function spiffyNotificationText($text) {
             $lines = explode("\n", $text);
-            $db = $this->site->eveAccount->db;
+            $db = eveDB::getInstance();
 
             $newLines = array();
             

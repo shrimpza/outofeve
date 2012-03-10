@@ -28,8 +28,9 @@
                 $this->site->character->corporation->loadIndustryJobs();
                 $industryList = $this->site->character->corporation->industryJobs;
             } else {
-                $this->site->character->loadIndustryJobs();
-                $industryList = $this->site->character->industryJobs;
+                $il = new eveIndustryJobList();
+                $il->load($this->site->eveAccount, $this->site->character);
+                $industryList = $il->jobs;
             }
 
             $jobs = array();
