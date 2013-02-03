@@ -115,22 +115,6 @@
             $this->skillTree = new eveSkillTree();
             $this->skillTree->load();
         }
-
-//        function loadSkillQueue() {
-//            if ($this->skillQueue == null) {
-//                $skillQueueData = new apiRequest('char/SkillQueue.xml.aspx', array($this->account->userId,
-//                                                                             $this->account->apiKey,
-//                                                                             $this->characterID),
-//                                                                             array('version' => 2));
-//              if ($skillQueueData->data) {
-//                    if (!$skillQueueData->data->error) {
-//                        $this->skillQueue = new eveSkillQueue($this->account, $this->db, $skillQueueData->data->result);
-//                    } else {
-//                        apiError('char/SkillQueue.xml.aspx', $skillQueueData->data->error);
-//                    }
-//                }
-//            }
-//        }
         
         function loadCertificateTree() {
             $this->certificateTree = new eveCertificateTree($this->db);
@@ -138,10 +122,6 @@
         }
 
         function getSkill($typeID) {
-            //$result = isset($this->skills[$typeID]) ? $this->skills[$typeID] : false;
-            //if (!$result)
-            ////    if ($this->trainingSkill->typeID == $typeID)
-            //        $result = $this->trainingSkill;
             $result = $this->skills->getSkill($typeID);
             return $result;
         }
