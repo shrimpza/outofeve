@@ -48,10 +48,11 @@
                                         inner join eveIcons ib on ib.iconId = b.iconId
                                         inner join eveIcons ir on ir.iconId = r.iconId
                                         where b.bloodlineName = ?", array($bloodlineName));
-            if ($res)
+            if ($res) {
                 return $res[0];
-            else
+            } else {
                 return false;
+            }
         }
 
         function typeName($typeId) {
@@ -59,8 +60,9 @@
 
             if (!isset($this->typeNameCache[$typeId])) {
                 $res = $this->db->QueryA('select typeName from invTypes where typeID = ?', array($typeId));
-                if ($res)
+                if ($res) {
                     $this->typeNameCache[$typeId] = $res[0]['typename'];
+                }
             }
 
             return $this->typeNameCache[$typeId];
@@ -71,8 +73,9 @@
 
             if (!isset($this->flagTextCache[$flagId])) {
                 $res = $this->db->QueryA('select flagText from invFlags where flagID = ?', array($flagId));
-                if ($res)
+                if ($res) {
                     $this->flagTextCache[$flagId] = $res[0]['flagtext'];
+                }
             }
 
             return $this->flagTextCache[$flagId];
@@ -83,8 +86,9 @@
 
             if (!isset($this->industryCompleteTextCache[$completedStatus])) {
                 $res = $this->db->QueryA('select completedStatusText from ramCompletedStatuses where completedStatus = ?', array($completedStatus));
-                if ($res)
+                if ($res) {
                     $this->industryCompleteTextCache[$completedStatus] = $res[0]['completedstatustext'];
+                }
             }
 
             return $this->industryCompleteTextCache[$completedStatus];
@@ -93,8 +97,9 @@
         function getTypeId($typeName) {
             $typeId = 0;
             $res = $this->db->QueryA('select typeID from invTypes where UCASE(typeName) = UCASE(?)', array($typeName));
-            if ($res)
+            if ($res) {
                 $typeId = $res[0]['typeid'];
+            }
 
             return $typeId;
         }
@@ -102,8 +107,9 @@
         function getRegionId($regionName) {
             $regionId = 0;
             $res = $this->db->QueryA('select regionID from mapRegions where UCASE(regionName) = UCASE(?)', array($regionName));
-            if ($res)
+            if ($res) {
                 $regionId = $res[0]['regionid'];
+            }
 
             return $regionId;
         }
@@ -113,8 +119,9 @@
 
             if (!isset($this->refTypes[$refTypeId])) {
                 $eveRefTypes = new apiRequest('eve/RefTypes.xml.aspx');
-                foreach ($eveRefTypes->data->result->rowset->row as $refType)
+                foreach ($eveRefTypes->data->result->rowset->row as $refType) {
                     $this->refTypes[(string)$refType['refTypeID']] = (string)$refType['refTypeName'];
+                }
             }
 
             return $this->refTypes[$refTypeId];
@@ -123,15 +130,17 @@
         function eveItem($typeId, $byName = false) {
             $typeId = (string)$typeId;
 
-            if ($byName)
+            if ($byName) {
                 $typeId = $this->getTypeId($typeId);
+            }
 
             if ($typeId != '0') {
-                if (!isset($this->itemCache[$typeId]))
+                if (!isset($this->itemCache[$typeId])) {
                     $this->itemCache[$typeId] = new eveItem($this, $typeId);
-            }
-            else
+                }
+            } else {
                 return false;
+            }
 
             return $this->itemCache[$typeId];
         }
@@ -139,8 +148,9 @@
         function eveItemFlag($flagId) {
             $flagId = (string)$flagId;
 
-            if (!isset($this->itemFlagCache[$flagId]))
+            if (!isset($this->itemFlagCache[$flagId])) {
                 $this->itemFlagCache[$flagId] = new eveItemFlag($this, $flagId);
+            }
 
             return $this->itemFlagCache[$flagId];
         }
@@ -148,8 +158,9 @@
         function eveItemGroup($groupId) {
             $groupId = (string)$groupId;
 
-            if (!isset($this->itemGroupCache[$groupId]))
+            if (!isset($this->itemGroupCache[$groupId])) {
                 $this->itemGroupCache[$groupId] = new eveItemGroup($this, $groupId);
+            }
 
             return $this->itemGroupCache[$groupId];
         }
@@ -157,8 +168,9 @@
         function eveItemCategory($categoryId) {
             $categoryId = (string)$categoryId;
 
-            if (!isset($this->itemCategoryCache[$categoryId]))
+            if (!isset($this->itemCategoryCache[$categoryId])) {
                 $this->itemCategoryCache[$categoryId] = new eveItemCategory($this, $categoryId);
+            }
 
             return $this->itemCategoryCache[$categoryId];
         }
@@ -166,8 +178,9 @@
         function eveItemBlueprint($typeId) {
             $typeId = (string)$typeId;
 
-            if (!isset($this->blueprintCache[$typeId]))
+            if (!isset($this->blueprintCache[$typeId])) {
                 $this->blueprintCache[$typeId] = new eveItemBlueprint($this, $typeId);
+            }
 
             return $this->blueprintCache[$typeId];
         }
@@ -175,8 +188,9 @@
         function eveIndustryActivity($activityId) {
             $activityId = (string)$activityId;
 
-            if (!isset($this->activityCache[$activityId]))
+            if (!isset($this->activityCache[$activityId])) {
                 $this->activityCache[$activityId] = new eveIndustryActivity($this, $activityId);
+            }
 
             return $this->activityCache[$activityId];
         }
@@ -185,17 +199,19 @@
         // from invTypes, NOT invBlueprintTypes.
         function eveItemFromBlueprintType($typeId) {
             $res = $this->db->QueryA('select producttypeid from invBlueprintTypes where blueprinttypeid = ?', array($typeId));
-            if ($res)
+            if ($res) {
                 return $this->eveItem($res[0]['producttypeid']);
-            else
+            } else {
                 return null;
+            }
         }
 
         function eveCertificate($certificateId) {
             $certificateId = (string)$certificateId;
 
-            if (!isset($this->certificateCache[$certificateId]))
+            if (!isset($this->certificateCache[$certificateId])) {
                 $this->certificateCache[$certificateId] = new eveCertificate($this, $certificateId);
+            }
 
             return $this->certificateCache[$certificateId];
         }
@@ -203,8 +219,9 @@
         function eveName($itemId) {
             $itemId = (string)$itemId;
 
-            if (!isset($this->eveNameCache[$itemId]))
+            if (!isset($this->eveNameCache[$itemId])) {
                 $this->eveNameCache[$itemId] = new eveName($this, $itemId);
+            }
 
             return $this->eveNameCache[$itemId];
         }
@@ -223,14 +240,16 @@
 
             $stationId = (string)$stationId;
 
-            if (!isset($this->stationCache[$stationId]))
+            if (!isset($this->stationCache[$stationId])) {
                 $this->stationCache[$stationId] = new eveStation($this, $stationId);
+            }
 
             $theStation = $this->stationCache[$stationId];
 
             if ($theStation->stationid == 0) {
-                if ($this->outpostList == null)
+                if ($this->outpostList == null) {
                     $this->loadOutpostList();
+                }
 
                 $outpost = $this->outpostList->getOutpost($stationId);
                 if ($outpost) {
@@ -246,14 +265,16 @@
 
         function eveSolarSystem($solarSystemId) {
             if (is_array($solarSystemId)) {
-                if (!isset($this->solarSystemCache[$solarSystemId['solarsystemid']]))
+                if (!isset($this->solarSystemCache[$solarSystemId['solarsystemid']])) {
                     $this->solarSystemCache[$solarSystemId['solarsystemid']] = new eveSolarSystem($this, $solarSystemId);
+                }
                 $solarSystemId = $solarSystemId['solarsystemid'];
             } else {
                 $solarSystemId = (string)$solarSystemId;
 
-                if (!isset($this->solarSystemCache[$solarSystemId]))
+                if (!isset($this->solarSystemCache[$solarSystemId])) {
                     $this->solarSystemCache[$solarSystemId] = new eveSolarSystem($this, $solarSystemId);
+                }
             }
 
             return $this->solarSystemCache[$solarSystemId];
@@ -262,8 +283,9 @@
         function eveRegion($regionId) {
             $regionId = (string)$regionId;
 
-            if (!isset($this->regionCache[$regionId]))
+            if (!isset($this->regionCache[$regionId])) {
                 $this->regionCache[$regionId] = new eveRegion($this, $regionId);
+            }
 
             return $this->regionCache[$regionId];
         }
@@ -271,8 +293,9 @@
         function eveCelestial($itemId) {
             $itemId = (string)$itemId;
 
-            if (!isset($this->celestialCache[$itemId]))
+            if (!isset($this->celestialCache[$itemId])) {
                 $this->celestialCache[$itemId] = new eveCelestial($this, $itemId);
+            }
 
             return $this->celestialCache[$itemId];
         }
@@ -281,8 +304,9 @@
             $res = array();
 
             $regionLimit = '';
-            if ($regionID > 0)
+            if ($regionID > 0) {
                 $regionLimit = ' where regionID = ' . $regionID;
+            }
 
             $sysList = $this->db->QueryA('select solarsystemid, regionid, solarsystemname, security, x, z, factionid 
                                           from mapSolarSystems ' . $regionLimit . '
@@ -292,8 +316,9 @@
                 $res[] = $sys;
             }
 
-            for ($i = 0; $i < count($res); $i++)
+            for ($i = 0; $i < count($res); $i++) {
                 $res[$i]->getJumps();
+            }
 
             return $res;
         }
@@ -332,8 +357,9 @@
                         }
 
                         $path = array_reverse($path);
-                        foreach($path as $backsys)
+                        foreach($path as $backsys) {
                             $result['systems'][] = $this->eveSolarSystem($backsys);
+                        }
 
                         unset($open); 
                         break;
@@ -429,49 +455,57 @@
                                                left outer join eveIcons i on i.iconId = t.iconId
                                                left outer join invMetaTypes m on m.typeid = t.typeid
                                              where t.typeID = ?', array($typeId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
 
             $this->typeGraphic = file_exists(dirname(__FILE__).'/../../eveimages/types/32/' . $this->typeid . '.png');
-            if (!$this->typeGraphic && empty($this->icon))
+            if (!$this->typeGraphic && empty($this->icon)) {
                 $this->icon = '74_14';
+            }
         }
 
         function __get($name) {
-            if ($name == 'description')
+            if ($name == 'description') {
                 return $this->getDescription();
+            }
         }
 
         function getDescription() {
             if ($this->_description == false) {
                 $res = $this->evedb->db->QueryA('select description from invTypes where typeID = ?', array($this->typeid));
-                if ($res)
+                if ($res) {
                     $this->_description = $res[0]['description'];
+                }
             }
 
             return $this->_description;
         }
 
         function getBlueprint() {
-            if ($this->blueprint == null)
+            if ($this->blueprint == null) {
                 $this->blueprint = $this->evedb->eveItemBlueprint($this->typeid);
+            }
 
             return $this->blueprint;
         }
 
         function getGroup() {
-            if (($this->groupid) && ($this->group == null))
+            if (($this->groupid) && ($this->group == null)) {
                 $this->group = $this->evedb->eveItemGroup($this->groupid);
+            }
 
             return $this->group;
         }
 
         function getPricing($regionId = 0) {
-            if (($this->pricing == null) && ($this->marketgroupid > 0))
+            if (($this->pricing == null) && ($this->marketgroupid > 0)) {
                 $this->pricing = new ItemPricing($this->typeid, $regionId);
-            else if (!$this->marketgroupid)
+            } else if (!$this->marketgroupid) {
                 $this->pricing = new ItemPricing(0, $regionId);
+            }
         }
     }
 
@@ -482,9 +516,11 @@
 
         function eveItemFlag($evedb, $flagId) {
             $res = $evedb->db->QueryA('select flagid, flagname, flagtext from invFlags where flagid = ?', array($flagId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
         }
     }
 
@@ -501,9 +537,11 @@
                                        from invGroups t
                                          left outer join eveIcons i on i.iconId = t.iconId
                                        where t.groupid = ?', array($groupId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
 
             $this->category = $evedb->eveItemCategory($this->categoryid);
         }
@@ -515,9 +553,11 @@
 
         function eveItemCategory($evedb, $categoryId) {
             $res = $evedb->db->QueryA('select categoryid, categoryname from invCategories where categoryid = ?', array($categoryId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
         }
     }
 
@@ -540,8 +580,9 @@
                                              from invBlueprintTypes
                                              where producttypeid = ?', array($typeId));
             if ($res) {
-                foreach ($res[0] as $var => $val)
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
 
                 $this->blueprintItem = $this->evedb->eveItem($this->blueprinttypeid);
 
@@ -613,9 +654,11 @@
 
         function eveIndustryActivity($evedb, $activityId) {
             $res = $evedb->db->QueryA('select activityid, activityname, iconno from ramActivities where activityid = ?', array($activityId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
         }
     }
 
@@ -633,9 +676,11 @@
                                        from crtCertificates c
                                          left outer join eveIcons i on i.iconId = c.iconId
                                        where c.certificateid = ?', array($certificateId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
         }
     }
 
@@ -650,9 +695,11 @@
             $res = $evedb->db->QueryA('select itemid, itemname, categoryid, groupid, typeid
                                        from eveNames
                                        where itemId = ?', array($itemId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
         }
     }
 
@@ -670,12 +717,15 @@
             $res = $evedb->db->QueryA('select stationid, solarsystemid, regionid, stationname, stationtypeid 
                                        from staStations
                                        where stationID = ?', array($stationId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
 
-            if ($this->solarsystemid)
+            if ($this->solarsystemid) {
                 $this->solarSystem = $evedb->eveSolarSystem($this->solarsystemid);
+            }
         }
     }
 
@@ -695,31 +745,37 @@
         function eveSolarSystem($evedb, $systemId) {
             $this->evedb = $evedb;
             
-            if (is_array($systemId))
+            if (is_array($systemId)) {
                 $res = array($systemId);
-            else
+            } else {
                 $res = $this->evedb->db->QueryA('select s.solarsystemid, s.regionid, s.solarsystemname, s.security, s.x, s.z,
                                                  coalesce(s.factionid, r.factionid) as factionid
                                                  from mapSolarSystems s, mapRegions r
                                                  where solarSystemID = ? and r.regionID = s.regionID', array($systemId));
+            }
 
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
 
             $this->security = round(max(0, $this->security), 1);
 
-            if ($this->regionid)
+            if ($this->regionid) {
                 $this->region = $evedb->eveRegion($this->regionid);
+            }
         }
 
         function getJumps() {
             if (!$this->jumps) {
                 $this->jumps = array();
                 $jumps = $this->evedb->db->QueryA('select toSolarSystemID from mapSolarSystemJumps where fromSolarSystemID = ?', array($this->solarsystemid));
-                if ($jumps)
-                    for ($i = 0; $i < count($jumps); $i++)
+                if ($jumps) {
+                    for ($i = 0; $i < count($jumps); $i++) {
                         $this->jumps[] = $this->evedb->eveSolarSystem($jumps[$i]['tosolarsystemid']);
+                    }
+                }
             }
         }
     }
@@ -730,9 +786,11 @@
 
         function eveRegion($evedb, $regionId) {
             $res = $evedb->db->QueryA('select regionid, regionname from mapRegions where regionID = ?', array($regionId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
         }
     }
 
@@ -753,17 +811,21 @@
             $res = $evedb->db->QueryA('select itemid, typeid, solarsystemid, regionid, x, z, itemname, security 
                                        from mapDenormalize
                                        where itemID = ?', array($itemId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
+            if ($res) {
+                foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
+                }
+            }
 
             $this->security = round(max(0, $this->security), 1);
 
-            if ($this->solarsystemid)
+            if ($this->solarsystemid) {
                 $this->solarSystem = $evedb->eveSolarSystem($this->solarsystemid);
+            }
 
-            if ($this->regionid)
+            if ($this->regionid) {
                 $this->region = $evedb->eveRegion($this->regionid);
+            }
         }
     }
 
@@ -775,8 +837,9 @@
 
         function eveOutpostList($evedb, $outposts) {
             $this->db = $evedb;
-            foreach ($outposts->rowset->row as $outpost)
+            foreach ($outposts->rowset->row as $outpost) {
                 $this->outposts[] = new eveOutpost($this->db, $outpost);
+            }
         }
 
         function getOutpost($stationId) {

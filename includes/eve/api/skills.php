@@ -119,12 +119,7 @@
 
     class eveSkillTree {
         var $groups = array();
-        
-//        function eveSkillTree() {
-//            foreach ($tree->rowset->row as $group)
-//                $this->groups[] = new eveSkillGroup($acc, $group);
-//        }
-        
+
         function load() {
             if (count($this->groups) == 0) {
                 $data = new apiRequest('eve/SkillTree.xml.aspx');

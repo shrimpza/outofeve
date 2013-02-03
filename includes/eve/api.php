@@ -12,10 +12,8 @@
     require_once('api/certificates.php');
     require_once('api/mail.php');
     require_once('api/character.php');
-    require_once('apiClasses.php');
     require_once('apiMailClasses.php');
     require_once('apiCorpClasses.php');
-    require_once('apiChar.php');
     require_once('apiCorp.php');
     require_once('apidb.php');
     require_once('apimarket.php');
