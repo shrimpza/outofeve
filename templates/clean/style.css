@@ -34,7 +34,7 @@
 /* =================================== */
 
 #header {
-    width: 1000px;
+    width: 1200px;
     margin-left: auto;
     margin-right: auto;
     height: 85px;
@@ -45,7 +45,7 @@
 }
 
 #container {
-    width: 1000px;
+    width: 1200px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -80,7 +80,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background: #ffffff;
-	font-family: "Trebuchet MS", Verdana;
+	font-family: "Trebuchet MS", Verdana, Helvetica;
 	font-size: small;
 }
 

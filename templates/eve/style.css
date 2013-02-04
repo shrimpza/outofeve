@@ -34,7 +34,7 @@
 /* =================================== */
 
 #header {
-    width: 1000px;
+    width: 1200px;
     margin-left: auto;
     margin-right: auto;
     height: 85px;
@@ -44,7 +44,7 @@
 }
 
 #container {
-    width: 1000px;
+    width: 1200px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -79,11 +79,11 @@ body {
 	margin: 0;
 	padding: 0;
 	background: #080809;
-	font-family: "Trebuchet MS", Verdana;
+	font-family: "Trebuchet MS", Verdana, Helvetica;
 	font-size: small;
 	color: #fff;
-    background-image: url('images/header.jpg');
-    background-repeat: repeat-x;
+	background-image: url('images/header.jpg');
+	background-repeat: repeat-x;
 }
 
 a {
