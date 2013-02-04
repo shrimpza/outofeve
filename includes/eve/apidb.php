@@ -1,5 +1,93 @@
 <?php
 
+    class itemGraphic {
+        var $icon16;
+        var $icon32;
+        var $icon64;
+        var $icon128;
+        
+        private static $iconCache = null;
+        
+        static function getItemGraphic($typeId, $icon) {
+             if (self::$iconCache == null) {
+                self::$iconCache = array();
+            }
+
+            if (in_array($typeId, array_keys(self::$iconCache))) {
+                return self::$iconCache[$typeId . '.' . $icon];
+            } else {
+                self::$iconCache[$typeId . '.' . $icon] = new itemGraphic($typeId, $icon);
+                return self::$iconCache[$typeId . '.' . $icon];
+            }
+        }
+        
+        function itemGraphic($typeId, $icon) {
+            $basePath = dirname(__FILE__).'/../../';
+            $iconParts = false;
+            if (isset($icon) && !empty($icon)) {
+                $iconParts = explode('_', $icon);
+            }
+
+            if (isset($typeId) && $typeId) {
+                $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 16);
+                if (file_exists($basePath . $name)) {
+                    $this->icon16 = $name;
+                    $this->icon32 = $name;
+                    $this->icon64 = $name;
+                    $this->icon128 = $name;
+                }
+
+                $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 32);
+                if (file_exists($basePath . $name)) {
+                    $this->icon32 = $name;
+                    $this->icon64 = $name;
+                    $this->icon128 = $name;
+                }
+
+                $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 64);
+                if (file_exists($basePath . $name)) {
+                    $this->icon64 = $name;
+                    $this->icon128 = $name;
+                }
+
+                $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 128);
+                if (file_exists($basePath . $name)) {
+                    $this->icon128 = $name;
+                }
+            }
+
+            if ($iconParts) {
+                if (!isset($this->icon16)) {
+                    $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 16);
+                    if (file_exists($basePath . $name)) {
+                        $this->icon16 = $name;
+                    }
+                }
+
+                if (!isset($this->icon32)) {
+                    $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 32);
+                    if (file_exists($basePath . $name)) {
+                        $this->icon32 = $name;
+                    }
+                }
+
+                if (!isset($this->icon64)) {
+                    $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 64);
+                    if (file_exists($basePath . $name)) {
+                        $this->icon64 = $name;
+                    }
+                }
+
+                if (!isset($this->icon128)) {
+                    $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 128);
+                    if (file_exists($basePath . $name)) {
+                        $this->icon128 = $name;
+                    }
+                }
+            }
+        }
+    }
+
     class eveDB {
         var $typeNameCache = array();
         var $itemCache = array();
@@ -49,7 +137,10 @@
                                         inner join eveIcons ir on ir.iconId = r.iconId
                                         where b.bloodlineName = ?", array($bloodlineName));
             if ($res) {
-                return $res[0];
+                $res = $res[0];
+                $res['ricon'] = itemGraphic::getItemGraphic(0, $res['ricon']);
+                $res['bicon'] = itemGraphic::getItemGraphic(0, $res['bicon']);
+                return $res;
             } else {
                 return false;
             }
@@ -435,8 +526,7 @@
         var $capacity = 0;
         var $portionsize = 0;
         var $baseprice = 0;
-        var $icon = '74_14';
-        var $typeGraphic = false;
+        var $icon = null;
         var $_description = false;
         var $metagroupid = 0;
 
@@ -450,9 +540,9 @@
             $this->evedb = $evedb;
 
             $res = $this->evedb->db->QueryA('select t.groupid, t.typeid, t.typename, t.marketgroupid, t.volume, 
-                                               t.capacity, t.portionsize, t.baseprice, i.iconFile as icon, m.metagroupid
+                                               t.capacity, t.portionsize, t.baseprice, m.metagroupid, 
+                                               \'\' as icon
                                              from invTypes t
-                                               left outer join eveIcons i on i.iconId = t.iconId
                                                left outer join invMetaTypes m on m.typeid = t.typeid
                                              where t.typeID = ?', array($typeId));
             if ($res) {
@@ -460,11 +550,13 @@
                     $this->$var = $val;
                 }
             }
+            
+            $this->icon = itemGraphic::getItemGraphic($this->typeid, $this->icon);
 
-            $this->typeGraphic = file_exists(dirname(__FILE__).'/../../eveimages/types/32/' . $this->typeid . '.png');
-            if (!$this->typeGraphic && empty($this->icon)) {
-                $this->icon = '74_14';
-            }
+            //$this->typeGraphic = file_exists(dirname(__FILE__).'/../../eveimages/Types/' . $this->typeid . '_32.png');
+            //if (!$this->typeGraphic && empty($this->icon)) {
+            //    $this->icon = itemGraphic::getItemGraphic(0, '74_14');
+            //}
         }
 
         function __get($name) {
@@ -542,6 +634,17 @@
                     $this->$var = $val;
                 }
             }
+            
+            $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
+            
+//            if (!empty($this->icon)) {
+//                $iconParts = explode('_', $this->icon);
+//                if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_64_' . $iconParts[1] . '.png')) {
+//                    $this->icon = $iconParts[0] . '_64_' . $iconParts[1];
+//                } else if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_32_' . $iconParts[1] . '.png')) {
+//                    $this->icon = $iconParts[0] . '_32_' . $iconParts[1];
+//                }
+//            }
 
             $this->category = $evedb->eveItemCategory($this->categoryid);
         }
@@ -681,6 +784,19 @@
                     $this->$var = $val;
                 }
             }
+            
+            $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
+
+            
+//            if (!empty($this->icon)) {
+//                $iconParts = explode('_', $this->icon);
+//                if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_64_' . $iconParts[1] . '.png')) {
+//                    $this->icon = $iconParts[0] . '_64_' . $iconParts[1];
+//                } else if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_32_' . $iconParts[1] . '.png')) {
+//                    $this->icon = $iconParts[0] . '_32_' . $iconParts[1];
+//                }
+//            }
+
         }
     }
 
@@ -709,6 +825,7 @@
         var $regionid = 0;
         var $stationname = '';
         var $stationtypeid = 0;
+        var $icon;
 
         var $solarSystem = null;
         var $region = null;
@@ -721,6 +838,8 @@
                 foreach ($res[0] as $var => $val) {
                     $this->$var = $val;
                 }
+                
+                $this->icon = itemGraphic::getItemGraphic($this->stationtypeid, '');
             }
 
             if ($this->solarsystemid) {

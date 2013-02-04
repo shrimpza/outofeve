@@ -29,7 +29,7 @@
     <tr class="groupHead shadeDark borderDark textLight">
       <td colspan="3" onclick="toggleAssets('{$locid}')">
       {if $lol.location.stationid}
-        <img src="{$site_url}/eveimages/types/32/{$lol.location.stationtypeid}.png" alt="{$lol.location.stationname}" align="absmiddle" />
+        <img src="{$site_url}/{$lol.location.icon.icon32}" alt="{$lol.location.stationname}" align="absmiddle" />
       {/if}
       {$lol.locationName}
       </td>

@@ -9,11 +9,7 @@
     <tr>
       <td colspan="2" class="description">
         <div class="icon">
-          {if $item.typeGraphic}
-            <img src="{$site_url}/eveimages/types/64/{$item.typeid}.png" alt="{$item.typename}" />
-          {else}
-            <img src="{$site_url}/eveimages/icons/64/icon{$item.icon}.png" alt="{$item.typename}" />
-          {/if}
+            <img src="{$site_url}/{$item.icon.icon64}" alt="{$item.typename}" />
         </div>
         <div class="desc">
           {$item._description|nl2br}
@@ -29,7 +25,7 @@
       <tr class="{cycle values='row,rowAlt'}">
         <td>
         {if $a.icon}
-          <img src="{$site_url}/eveimages/icons/16/icon{$a.icon}.png" alt="{$a.displayname}" align="absmiddle" />
+          <img src="{$site_url}/{$a.icon.icon16}" alt="{$a.displayname}" align="absmiddle"/>
         {/if}
         {$a.displayname}</td>
         <td align="right">
@@ -48,7 +44,7 @@
 
     <tr>
       <th colspan="2">
-        <h4><img src="{$site_url}/eveimages/icons/32/icon18_01.png" align="absmiddle"/> Market information</h4>
+        <h4><img src="{$site_url}/eveimages/Icons/items/18_128_1.png" align="absmiddle"/> Market information</h4>
       </th>
     </tr>
     <tr class="{cycle values='row,rowAlt'}">

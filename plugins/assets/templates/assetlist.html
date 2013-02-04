@@ -3,11 +3,7 @@
        <td width="65%" align="left">
         <!--img src="{$site_url}/templates/{$theme}/images/tree_{if $last}end{else}branch{/if}.png" align="absmiddle"/-->
         <a href="#" onclick="showInfo('{$asset.item.typeid}');return false;" title="{$ass.item.typename}">
-            {if $asset.item.typeGraphic}
-            <img src="{$site_url}/eveimages/types/32/{$asset.item.typeid}.png" alt="{$asset.item.typename}" align="absmiddle" />
-            {else}
-            <img src="{$site_url}/eveimages/icons/32/icon{$asset.item.icon}.png" alt="{$asset.item.typename}" align="absmiddle" />
-            {/if}
+            <img src="{$site_url}/{$asset.item.icon.icon32}" alt="{$asset.item.typename}" align="absmiddle" />
         </a>
         {$asset.item.typename}</td>
     <td width="25%">{$asset.flagText}</td>

@@ -58,6 +58,9 @@
 
     $config['eve']['journal_records'] = 2560;
     $config['eve']['transaction_records'] = 2560;
+    
+    $config['images']['types'] = 'eveimages/Types/%1$d_%2$d.png';
+    $config['images']['icons'] = 'eveimages/Icons/items/%1$d_%3$d_%2$d.png';
 
     $config['templates']['compile_dir'] = dirname(__FILE__).'/../templates/compiled';
     $config['templates']['theme_dir'] = dirname(__FILE__).'/../templates';

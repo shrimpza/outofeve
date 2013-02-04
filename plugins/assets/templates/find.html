@@ -18,11 +18,7 @@
     <tr class="{cycle values='row,rowAlt'}">
       <td width="45%" align="left">
         <a href="#" onclick="showInfo({$asset.item.typeid});return false;">
-          {if $asset.item.typeGraphic}
-            <img src="{$site_url}/eveimages/types/32/{$asset.item.typeid}.png" alt="{$asset.item.typename}" align="absmiddle" />
-          {else}
-            <img src="{$site_url}/eveimages/icons/32/icon{$asset.item.icon}.png" alt="{$asset.item.typename}" align="absmiddle" />
-          {/if}
+          <img src="{$site_url}/{$asset.item.icon.icon32}" alt="{$asset.item.typename}" align="absmiddle" />
         </a>
         {$asset.item.typename}</td>
       <td width="45%">{$asset.location.stationname}</td>
