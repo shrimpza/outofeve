@@ -10,11 +10,7 @@
     <tr class="{cycle values='row,rowAlt'}">
       <td>
         <a href="#" onclick="showInfo({$i.typeid});return false;">
-          {if $i.typeGraphic}
-            <img src="{$site_url}/eveimages/types/32/{$i.typeid}.png" alt="{$i.typename}" align="absmiddle" />
-          {else}
-            <img src="{$site_url}/eveimages/icons/32/icon{$i.icon}.png" alt="{$i.typename}" align="absmiddle" />
-          {/if}
+          <img src="{$site_url}/{$i.icon64}" alt="{$i.typename}" align="absmiddle" />
         </a>
         {$i.typename}
       </td>

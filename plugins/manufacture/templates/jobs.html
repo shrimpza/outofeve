@@ -48,17 +48,13 @@
           {/if}
           <td>
             {if $j.activity.iconno}
-              <img src="{$site_url}/eveimages/icons/32/icon{$j.activity.iconno}.png" alt="{$j.activity.activityname}" align="absmiddle" />
+              <img src="{$site_url}/{$j.activity.icon.icon32}" alt="{$j.activity.activityname}" align="absmiddle" />
             {/if}
             {$j.activity.activityname}
           </td>
           <td>
             <a href="#" onclick="showInfo({$j.outItem.typeid});return false;">
-              {if $j.outItem.typeGraphic}
-                <img src="{$site_url}/eveimages/types/32/{$j.outItem.typeid}.png" alt="{$j.outItem.typename}" align="absmiddle" />
-              {else}
-                <img src="{$site_url}/eveimages/icons/32/icon{$j.outItem.icon}.png" alt="{$j.outItem.typename}" align="absmiddle" />
-              {/if}
+              <img src="{$site_url}/{$j.outItem.icon.icon32}" alt="{$j.outItem.typename}" align="absmiddle" />
             </a>
             {$j.outItem.typename}
           </td>

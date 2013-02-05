@@ -50,11 +50,7 @@
           <td>{$o.station.stationname}</td>
           <td>
             <a href="#" onclick="showInfo({$o.item.typeid});return false;">
-              {if $o.item.typeGraphic}
-                <img src="{$site_url}/eveimages/types/32/{$o.item.typeid}.png" alt="{$o.item.typename}" align="absmiddle" />
-              {else}
-                <img src="{$site_url}/eveimages/icons/32/icon{$o.item.icon}.png" alt="{$o.item.typename}" align="absmiddle" />
-            {/if}
+              <img src="{$site_url}/{$o.item.icon.icon32}" alt="{$o.item.typename}" align="absmiddle" />
             </a>
           {$o.item.typename}</td>
           <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
@@ -119,11 +115,7 @@
           <td>{$o.station.stationname}</td>
           <td>
             <a href="#" onclick="showInfo({$o.item.typeid});return false;">
-              {if $o.item.typeGraphic}
-                <img src="{$site_url}/eveimages/types/32/{$o.item.typeid}.png" alt="{$o.item.typename}" align="absmiddle" />
-              {else}
-                <img src="{$site_url}/eveimages/icons/32/icon{$o.item.icon}.png" alt="{$o.item.typename}" align="absmiddle" />
-              {/if}
+              <img src="{$site_url}/{$o.item.icon.icon32}" alt="{$o.item.typename}" align="absmiddle" />
             </a>
           {$o.item.typename}</td>
           <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>

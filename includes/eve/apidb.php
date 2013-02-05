@@ -552,11 +552,6 @@
             }
             
             $this->icon = itemGraphic::getItemGraphic($this->typeid, $this->icon);
-
-            //$this->typeGraphic = file_exists(dirname(__FILE__).'/../../eveimages/Types/' . $this->typeid . '_32.png');
-            //if (!$this->typeGraphic && empty($this->icon)) {
-            //    $this->icon = itemGraphic::getItemGraphic(0, '74_14');
-            //}
         }
 
         function __get($name) {
@@ -636,15 +631,6 @@
             }
             
             $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
-            
-//            if (!empty($this->icon)) {
-//                $iconParts = explode('_', $this->icon);
-//                if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_64_' . $iconParts[1] . '.png')) {
-//                    $this->icon = $iconParts[0] . '_64_' . $iconParts[1];
-//                } else if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_32_' . $iconParts[1] . '.png')) {
-//                    $this->icon = $iconParts[0] . '_32_' . $iconParts[1];
-//                }
-//            }
 
             $this->category = $evedb->eveItemCategory($this->categoryid);
         }
@@ -754,6 +740,7 @@
         var $activityid = 0;
         var $activityname = '';
         var $iconno = '';
+        var $icon;
 
         function eveIndustryActivity($evedb, $activityId) {
             $res = $evedb->db->QueryA('select activityid, activityname, iconno from ramActivities where activityid = ?', array($activityId));
@@ -762,6 +749,7 @@
                     $this->$var = $val;
                 }
             }
+            $this->icon = itemGraphic::getItemGraphic(0, $this->iconno);
         }
     }
 
@@ -786,17 +774,6 @@
             }
             
             $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
-
-            
-//            if (!empty($this->icon)) {
-//                $iconParts = explode('_', $this->icon);
-//                if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_64_' . $iconParts[1] . '.png')) {
-//                    $this->icon = $iconParts[0] . '_64_' . $iconParts[1];
-//                } else if (file_exists(dirname(__FILE__).'/../../eveimages/Icons/' . $iconParts[0] . '_32_' . $iconParts[1] . '.png')) {
-//                    $this->icon = $iconParts[0] . '_32_' . $iconParts[1];
-//                }
-//            }
-
         }
     }
 

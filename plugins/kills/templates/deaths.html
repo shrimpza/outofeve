@@ -26,7 +26,7 @@
   {foreach from=$deaths item=kill}
   <div class="killHead shadeDark boderDark" onclick="toggleKill({$kill.killID})">
     {if $corp}<img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_64.jpg" alt="{$kill.victim.characterName}" align="left" style="padding-right: 5px; margin-right: 0px;" />{/if}
-    <img src="{$site_url}/eveimages/types/64/{$kill.victim.ship.typeid}.png" alt="{$kill.victim.ship.typename}" align="left" />
+    <img src="{$site_url}/{$kill.victim.ship.icon.icon64}" alt="{$kill.victim.ship.typename}" align="left" />
       <h3>{if $corp}{$kill.victim.characterName}, {/if}{$kill.victim.ship.typename}</h3>
       <h4>{$kill.solarSystem.solarsystemname}, {$kill.solarSystem.region.regionname} ({$kill.solarSystem.security|eveNum:1})</h4>
       {$kill.date|date_format:"%d/%m/%Y %H:%M"}
@@ -42,7 +42,7 @@
               <td width="10%">
                 <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_32.jpg" alt="{$kill.victim.characterName}" align="left" />
                 <a href="#" onclick="showInfo({$kill.victim.ship.typeid});return false;">
-                  <img src="{$site_url}/eveimages/types/32/{$kill.victim.ship.typeid}.png" alt="{$kill.victim.ship.typename}" align="left" />
+                  <img src="{$site_url}/{$kill.victim.ship.icon.icon32}" alt="{$kill.victim.ship.typename}" align="left" />
                 </a>
               </td>
               <td width="45%">
@@ -66,15 +66,9 @@
                   {if $attacker.characterID > 0}
                     <img src="http://image.eveonline.com/Character/{$attacker.characterID}_32.jpg" alt="{$attacker.characterName}" align="left" />
                   {/if}
-                  {if $attacker.ship.typeGraphic}
-                    <a href="#" onclick="showInfo({$attacker.ship.typeid});return false;">
-                      <img src="{$site_url}/eveimages/types/32/{$attacker.ship.typeid}.png" alt="{$attacker.ship.typename}" align="left" />
-                    </a>
-                  {elseif $attacker.ship.icon}
-                    <a href="#" onclick="showInfo({$attacker.ship.typeid});return false;">
-                      <img src="{$site_url}/eveimages/icons/32/icon{$attacker.ship.icon}.png" alt="{$attacker.ship.typename}" align="left" />
-                    </a>
-                  {/if}
+                  <a href="#" onclick="showInfo({$attacker.ship.typeid});return false;">
+                    <img src="{$site_url}/{$attacker.ship.icon.icon32}" alt="{$attacker.ship.typename}" align="left" />
+                  </a>
                 </td>
                 <td width="45%">
                   <b>Pilot:</b> {$attacker.characterName}<br />
@@ -106,11 +100,7 @@
           <tr class="{cycle values='row,rowAlt'}">
             <td>
               <a href="#" onclick="showInfo({$item.item.typeid});return false;">
-                {if $item.item.typeGraphic}
-                  <img src="{$site_url}/eveimages/types/32/{$item.item.typeid}.png" alt="{$item.item.typename}" align="absmiddle" />
-                {else}
-                  <img src="{$site_url}/eveimages/icons/32/icon{$item.item.icon}.png" alt="{$item.item.typename}" align="absmiddle" />
-                {/if}
+                <img src="{$site_url}/{$item.item.icon.icon32}" alt="{$item.item.typename}" align="absmiddle" />
               </a>
               {$item.item.typename}
             </td>
@@ -137,11 +127,7 @@
           <tr class="{cycle values='row,rowAlt'}">
             <td>
               <a href="#" onclick="showInfo({$item.item.typeid});return false;">
-                {if $item.item.typeGraphic}
-                  <img src="{$site_url}/eveimages/types/32/{$item.item.typeid}.png" alt="{$item.item.typename}" align="absmiddle" />
-                {else}
-                  <img src="{$site_url}/eveimages/icons/32/icon{$item.item.icon}.png" alt="{$item.item.typename}" align="absmiddle" />
-                {/if}
+                <img src="{$site_url}/{$item.item.icon.icon32}" alt="{$item.item.typename}" align="absmiddle" />
               </a>
               {$item.item.typename}
             </td>

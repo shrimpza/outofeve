@@ -157,11 +157,7 @@
       <tr class="{cycle values='row,rowAlt'}">
         <td>
           <a href="#" onclick="showInfo({$m.item.typeid});return false;">
-            {if $m.item.typeGraphic}
-              <img src="{$site_url}/eveimages/types/32/{$m.item.typeid}.png" alt="{$m.item.typename}" align="absmiddle" />
-            {else}
-              <img src="{$site_url}/eveimages/icons/32/icon{$m.item.icon}.png" alt="{$m.item.typename}" align="absmiddle" />
-            {/if}
+            <img src="{$site_url}/{$m.item.icon.icon32}" alt="{$m.item.typename}" align="absmiddle" />
           </a>
           {$m.item.typename}
         </td>
@@ -180,11 +176,7 @@
 
   <h2>
     <a href="#" onclick="showInfo({$asteroid.typeid});return false;">
-      {if $asteroid.typeGraphic}
-        <img src="{$site_url}/eveimages/types/64/{$asteroid.typeid}.png" alt="{$asteroid.typename}" align="absmiddle" />
-      {else}
-        <img src="{$site_url}/eveimages/icons/64/icon{$asteroid.icon}.png" alt="{$asteroid.typename}" align="absmiddle" />
-      {/if}
+      <img src="{$site_url}/{$asteroid.icon.icon64}" alt="{$asteroid.typename}" align="absmiddle" />
     </a>
     {$asteroid.typename} Additional Details:
   </h2>
