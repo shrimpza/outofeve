@@ -12,7 +12,6 @@
     require_once('api/certificates.php');
     require_once('api/mail.php');
     require_once('api/character.php');
-    require_once('apiMailClasses.php');
     require_once('apiCorpClasses.php');
     require_once('apiCorp.php');
     require_once('apidb.php');
