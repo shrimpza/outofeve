@@ -89,11 +89,7 @@
       var img = document.createElement('img');
       img.align = 'left';
       img.style.marginRight = '10px';
-      if (item.icon) {
-        img.src = 'eveimages/icons/64/icon'+item.icon+'.png';
-      } else {
-        img.src = 'eveimages/types/64/'+item.typeid+'.png';
-      }
+      img.src = item.icon.icon64;
       
       // set up the description
       var desc = document.createElement('span');
