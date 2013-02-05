@@ -18,14 +18,14 @@
       </td>
     </tr>
     <tr>
-      <th width="60%">Attribute</th>
-      <th width="40%">Value</th>
+      <th width="70%">Attribute</th>
+      <th width="30%">Value</th>
     </tr>
     {foreach from=$attributes item=a}
       <tr class="{cycle values='row,rowAlt'}">
         <td>
         {if $a.icon}
-          <img src="{$site_url}/{$a.icon.icon16}" alt="{$a.displayname}" align="absmiddle"/>
+          <img src="{$site_url}/{$a.icon.icon16}" alt="{$a.unitname}" align="absmiddle" height="16"/>
         {/if}
         {$a.displayname}</td>
         <td align="right">
@@ -44,7 +44,7 @@
 
     <tr>
       <th colspan="2">
-        <h4><img src="{$site_url}/eveimages/Icons/items/18_128_1.png" align="absmiddle"/> Market information</h4>
+        <h4><img src="{$site_url}/eveimages/Icons/items/18_128_1.png" align="absmiddle" height="32"/> Market information</h4>
       </th>
     </tr>
     <tr class="{cycle values='row,rowAlt'}">

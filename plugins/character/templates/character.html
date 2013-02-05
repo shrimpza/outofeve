@@ -54,7 +54,7 @@
         {section name=qs loop=$queue}
           <tr class="{cycle values='row,rowAlt'}">
             <td width="75%" align="left">
-              <a href="#" onclick="showInfo('{$queue[qs].typeID}');return false;"><img src="{$site_url}/eveimages/icons/32/icon50_11.png" align="left" /></a>
+              <a href="#" onclick="showInfo('{$queue[qs].typeID}');return false;"><img src="{$site_url}/{$queue[qs].skillItem.icon.icon32}" align="left" /></a>
               {$queue[qs].skillItem.typename}
               <span style="font-size: 0.9em"> <br />
                 {if $queue[qs].position > 0}
@@ -159,7 +159,7 @@
         {section name=sk loop=$grp.skills}
           <tr class="{cycle values='row,rowAlt'}">
             <td width="75%" align="left">
-              <a href="#" onclick="showInfo({$grp.skills[sk].typeID});return false;"><img src="{$site_url}/eveimages/icons/32/icon50_11.png" align="absmiddle" /></a> {$grp.skills[sk].name}
+              <a href="#" onclick="showInfo({$grp.skills[sk].typeID});return false;"><img src="{$site_url}/{$grp.skills[sk].skillItem.icon.icon32}" align="absmiddle" /></a> {$grp.skills[sk].name}
             </td>
             <td width="25%" align="right">
             {if $grp.skills[sk].training}
@@ -193,7 +193,7 @@
         {foreach from=$cat.classes item=cls}
           <tr class="{cycle values='row,rowAlt'}">
             <td width="75%" align="left">
-              <img src="{$site_url}/eveimages/icons/32/icon79_01.png" align="absmiddle" />
+<!--              <img src="{$site_url}/eveimages/icons/32/icon79_01.png" align="absmiddle" />-->
               {$cls.name}
             </td>
             <td width="25%" align="right">

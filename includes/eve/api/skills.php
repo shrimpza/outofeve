@@ -110,10 +110,12 @@
             $this->typeID = (int)$skill['typeID'];
             $this->skillPoints = (int)$skill['skillpoints'];
             $this->level = (int)$skill['level'];
+            
+            $this->skillItem = $db->eveItem($this->typeID);
         }
 
         function getName($db) {
-            $this->name = $db->typeName($this->typeID);
+            $this->name = $this->skillItem->typename;
         }
     }
 
@@ -158,6 +160,8 @@
             $this->groupID = (int)$skill['groupID'];
             $this->typeName = (string)$skill['typeName'];
             $this->description = (string)$skill->description;
+
+            $this->skillItem = eveDB::getInstance()->eveItem($this->typeID);
         }
     }
 ?>

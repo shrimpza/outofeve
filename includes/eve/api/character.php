@@ -174,7 +174,8 @@
                             'level' => (int)$knownSkill->level,
                             'skillpoints' => (int)$knownSkill->skillPoints,
                             'training' => (int)$knownSkill->inTraining,
-                            'toLevel' => (int)$knownSkill->toLevel);
+                            'toLevel' => (int)$knownSkill->toLevel,
+                            'skillItem' => $knownSkill->skillItem);
                     }
                 }
             }

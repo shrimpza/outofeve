@@ -39,6 +39,7 @@
 
                 $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 32);
                 if (file_exists($basePath . $name)) {
+                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
                     $this->icon32 = $name;
                     $this->icon64 = $name;
                     $this->icon128 = $name;
@@ -46,12 +47,17 @@
 
                 $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 64);
                 if (file_exists($basePath . $name)) {
+                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                    $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
                     $this->icon64 = $name;
                     $this->icon128 = $name;
                 }
 
                 $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 128);
                 if (file_exists($basePath . $name)) {
+                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                    $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
+                    $this->icon64 = empty($this->icon64) ? $name : $this->icon64;
                     $this->icon128 = $name;
                 }
             }
@@ -61,26 +67,38 @@
                     $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 16);
                     if (file_exists($basePath . $name)) {
                         $this->icon16 = $name;
+                        $this->icon32 = $name;
+                        $this->icon64 = $name;
+                        $this->icon128 = $name;
                     }
                 }
 
                 if (!isset($this->icon32)) {
                     $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 32);
                     if (file_exists($basePath . $name)) {
+                        $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
                         $this->icon32 = $name;
+                        $this->icon64 = $name;
+                        $this->icon128 = $name;
                     }
                 }
 
                 if (!isset($this->icon64)) {
                     $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 64);
                     if (file_exists($basePath . $name)) {
+                        $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                        $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
                         $this->icon64 = $name;
+                        $this->icon128 = $name;
                     }
                 }
 
                 if (!isset($this->icon128)) {
                     $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 128);
                     if (file_exists($basePath . $name)) {
+                        $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                        $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
+                        $this->icon64 = empty($this->icon64) ? $name : $this->icon64;
                         $this->icon128 = $name;
                     }
                 }

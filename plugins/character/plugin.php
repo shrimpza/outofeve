@@ -37,9 +37,8 @@
                 $char['training'] = objectToArray($details->trainingSkill, array('DBManager', 'eveDB'));
                 $char['faction'] = objectToArray($details->faction, array('DBManager', 'eveDB'));
                 $char['attributes'] = objectToArray($details->attributes->attributes, array('DBManager', 'eveDB'));
-                $char['raceInfo'] = $details->db->bloodlineInfo($details->bloodLine);
+                $char['raceInfo'] = objectToArray($details->db->bloodlineInfo($details->bloodLine), array('DBManager', 'eveDB'));
 
-                //$details->loadSkillQueue();
                 $details->loadSkillTree();
                 $details->loadCertificateTree();
                 
@@ -49,7 +48,7 @@
                     $queue = false;
                 }
 
-                $skills = $details->knownSkills();
+                $skills = objectToArray($details->knownSkills(), array('DBManager', 'eveDB'));
                 $certificates = $details->knownCertificates();
 
                 return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates, 'queue' => $queue));
