@@ -16,12 +16,14 @@
         }
 
         function loadCorporation() {
-            $data = new apiRequest('corp/CorporationSheet.xml.aspx', array($this->account->userId,
-                                                                           $this->account->apiKey,
-                                                                           $this->characterID));
-            if ($data->data && !$data->data->error) {
-                $this->corporation = new eveCorporation($this->account, $this, $data);
-            }
+            $this->corporation = new eveCorporation($this->account, $this);
+            
+//            $data = new apiRequest('corp/CorporationSheet.xml.aspx', array($this->account->userId,
+//                                                                           $this->account->apiKey,
+//                                                                           $this->characterID));
+//            if ($data->data && !$data->data->error) {
+//                $this->corporation = new eveCorporation($this->account, $this, $data);
+//            }
         }
     }
     

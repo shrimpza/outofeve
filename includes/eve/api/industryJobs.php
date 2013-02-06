@@ -1,6 +1,6 @@
 <?php
     class eveIndustryJobList {
-        var $jobs = array();
+        var $industryJobs = array();
 
         function load($account, $character) {
             if (count($this->industryJobs) == 0) {
