@@ -30,7 +30,7 @@
             } else {
                 $il = new eveIndustryJobList();
                 $il->load($this->site->eveAccount, $this->site->character);
-                $industryList = $il->jobs;
+                $industryList = $il->industryJobs;
             }
 
             $jobs = array();
