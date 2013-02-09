@@ -37,23 +37,21 @@ class users extends Plugin {
             if ($this->site->user->id > 0) {
 
                 //  set the current account
-                if (isset($_GET['setacc'])) {
-                    $a = $db->getObject('account', $_GET['setacc']);
-                    if ($a->user_id != $this->site->user->id) {
-                        echo '<div class="apierror">Selected account does not belong to you!</div>';
-                    } else {
-                        $this->site->user->account_id = $_GET['setacc'];
-                        $this->site->user->save();
-                    }
-                }
+//                if (isset($_GET['setacc'])) {
+//                    $a = $db->getObject('account', $_GET['setacc']);
+//                    if ($a->user_id != $this->site->user->id) {
+//                        echo '<div class="apierror">Selected account does not belong to you!</div>';
+//                    } else {
+//                        $this->site->user->account_id = $_GET['setacc'];
+//                        $this->site->user->save();
+//                    }
+//                }
                 //$this->site->user->account = $db->getObject('account', $this->site->user->account_id);
-
                 // set the current character
                 //if (isset($_GET['setchar'])) {
                 //    $this->site->user->account->character_id = $_GET['setchar'];
                 //    $this->site->user->account->save();
                 //}
-
                 // optional proxy
                 if (trim($this->site->user->proxy) <> '') {
                     $GLOBALS['config']['eve']['api_url'] = trim($this->site->user->proxy);
@@ -89,18 +87,49 @@ class users extends Plugin {
 //                if (!isset($this->site->character)) {
 //                    $this->site->character = $this->site->eveAccount->characters[0];
 //                }
-
 //                $accounts = $this->site->user->get_account_list('name');
 //                $accounts = objectToArray($accounts, array('DBManager'));
-
-                
 //                $this->site->tplVars['accounts'] = $accounts;
 //                $this->site->tplVars['characters'] = $this->charactersLite();
 //                $this->site->tplVars['curchar'] = $this->site->character->characterID;
 //                $this->site->tplVars['curacc'] = $this->site->user->account_id;
 
                 $this->loadApiKeys();
-                
+
+                if (isset($_GET['setCharKey'])) {
+                    $key = $db->getObject('apikey', $_GET['setCharKey']);
+                    if ($key->user_id != $this->site->user->id) {
+                        echo '<div class="apierror">Selected key does not belong to you!</div>';
+                    } else {
+                        $this->site->user->char_apikey_id = $_GET['setCharKey'];
+                    }
+                }
+
+                if (isset($_GET['setCorpKey'])) {
+                    $key = $db->getObject('apikey', $_GET['setCorpKey']);
+                    if ($key->user_id != $this->site->user->id) {
+                        echo '<div class="apierror">Selected key does not belong to you!</div>';
+                    } else {
+                        $this->site->user->corp_apikey_id = $_GET['setCorpKey'];
+                    }
+                }
+
+                if (isset($_GET['setChar'])) {
+                    $key = $db->getObject('apikey', $this->site->user->char_apikey_id);
+                    $key->character_id = $_GET['setChar'];
+                    $key->save();
+
+                    eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
+                }
+
+                if (isset($_GET['setCorpChar'])) {
+                    $key = $db->getObject('apikey', $this->site->user->corp_apikey_id);
+                    $key->character_id = $_GET['setCorpChar'];
+                    $key->save();
+
+                    eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
+                }
+
                 $this->site->tplVars['charKeys'] = objectToArray(eveKeyManager::getCharacterKeys());
                 $this->site->tplVars['corpKeys'] = objectToArray(eveKeyManager::getCorporateKeys());
                 $this->site->tplVars['currentCharKey'] = objectToArray(eveKeyManager::getKey($this->site->user->char_apikey_id));
@@ -117,32 +146,22 @@ class users extends Plugin {
     function loadApiKeys() {
         $keys = $this->site->user->get_apikey_list('name');
         foreach ($keys as $key) {
-            eveKeyManager::addKey($key->id, $key->name, $key->vcode, $key->keyid);
+            eveKeyManager::addKey($key->id, $key->name, $key->vcode, $key->keyid, $key->character_id);
         }
-        
+
         if ($this->site->user->char_apikey_id == 0) {
             $charKeys = eveKeyManager::getCharacterKeys();
             if ($charKeys) {
                 $this->site->user->char_apikey_id = $charKeys[0]->reference;
             }
         }
-                
+
         if ($this->site->user->corp_apikey_id == 0) {
             $corpKeys = eveKeyManager::getCorporateKeys();
             if ($corpKeys) {
                 $this->site->user->corp_apikey_id = $corpKeys[0]->reference;
             }
         }
-    }
-
-    function charactersLite() {
-        $res = array();
-        for ($i = 0; $i < count($this->site->eveAccount->characters); $i++) {
-            $res[] = array(
-                'characterID' => $this->site->eveAccount->characters[$i]->characterID,
-                'name' => $this->site->eveAccount->characters[$i]->name);
-        }
-        return $res;
     }
 
     function getSideBox() {
@@ -220,22 +239,20 @@ class users extends Plugin {
             $this->site->user->smallicons = max(0, $_POST['smallicons']);
             $this->site->user->save();
 
-            if ($this->site->eveAccount) {
-                $myMins = $this->site->user->get_mineralprice_list();
-                if ($myMins) {
-                    for ($i = 0; $i < count($myMins); $i++) {
-                        $myMins[$i]->delete();
-                    }
+            $myMins = $this->site->user->get_mineralprice_list();
+            if ($myMins) {
+                for ($i = 0; $i < count($myMins); $i++) {
+                    $myMins[$i]->delete();
                 }
+            }
 
-                $res = $this->site->eveAccount->db->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
-                for ($i = 0; $i < count($res); $i++) {
-                    $newPrice = $this->db->getObject('mineralprice', 0);
-                    $newPrice->user_id = $this->site->user->id;
-                    $newPrice->typeid = $res[$i]['typeid'];
-                    $newPrice->price = str_replace(',', '', $_POST['min_' . $res[$i]['typeid']]);
-                    $newPrice->save();
-                }
+            $res = eveDB::getInstance()->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
+            for ($i = 0; $i < count($res); $i++) {
+                $newPrice = $this->db->getObject('mineralprice', 0);
+                $newPrice->user_id = $this->site->user->id;
+                $newPrice->typeid = $res[$i]['typeid'];
+                $newPrice->price = str_replace(',', '', $_POST['min_' . $res[$i]['typeid']]);
+                $newPrice->save();
             }
         }
 
@@ -262,19 +279,17 @@ class users extends Plugin {
 
         $myMins = $this->site->user->get_mineralprice_list();
         $mins = array();
-        if ($this->site->eveAccount) {
-            $res = $this->site->eveAccount->db->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
-            for ($i = 0; $i < count($res); $i++) {
-                $newMin = $this->site->eveAccount->db->eveItem($res[$i]['typeid']);
-                if ($myMins) {
-                    for ($j = 0; $j < count($myMins); $j++) {
-                        if ($myMins[$j]->typeid == $newMin->typeid) {
-                            $newMin->customPrice = $myMins[$j]->price;
-                        }
+        $res = eveDB::getInstance()->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
+        for ($i = 0; $i < count($res); $i++) {
+            $newMin = eveDB::getInstance()->db->eveItem($res[$i]['typeid']);
+            if ($myMins) {
+                for ($j = 0; $j < count($myMins); $j++) {
+                    if ($myMins[$j]->typeid == $newMin->typeid) {
+                        $newMin->customPrice = $myMins[$j]->price;
                     }
                 }
-                $mins[] = objectToArray($newMin, array('DBManager', 'eveDB'));
             }
+            $mins[] = objectToArray($newMin, array('DBManager', 'eveDB'));
         }
 
         $vars = array();

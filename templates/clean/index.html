@@ -19,7 +19,7 @@
                 var newUrl = url.protocol + '://' + url.host + url.path + '?';
 
                 for (i in url.queryKey) {
-                    if ((i != 'setCharKey') && (i != 'setCharKeyChar')) {
+                    if ((i != 'setCharKey') && (i != 'setChar') && (i != 'setCorpKey') && (i != 'setCorpChar')) {
                         newUrl += i + '=' + url.queryKey[i] + '&';
                     }
                 }
@@ -73,7 +73,7 @@
                 <div class="chars">
                     <div>
                         {foreach from=$currentCharKey.characters item=char}
-                        <a href="#" title="{$char.characterName}" onclick="setCurrent('setchar', '{$char.characterID}')"><img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" /></a>
+                        <a href="#" title="{$char.characterName}" onclick="setCurrent('setChar', '{$char.characterID}')"><img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" /></a>
                         {/foreach}
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     {/foreach}
                     </select><br />
                     {if $currentCorpKey}
-                        <select id="corpSelect" onchange="setCurrent('setCorp', this.value)">
+                        <select id="corpSelect" onchange="setCurrent('setCorpChar', this.value)">
                         {foreach from=$currentCorpKey.characters item=char}
                             <option value="{$char.characterID}" {if $currentCharKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
                         {/foreach}

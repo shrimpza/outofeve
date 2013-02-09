@@ -120,7 +120,7 @@ class apiRequest {
                         if ($cacheResult) {
                             if (in_array($this->error->errorCode, $GLOBALS['cacheDelays'])) {
                                 $cacheResult->cachedUntil = (string) $result->cachedUntil;
-                                $this->saveCache2($cacheFile, $cacheResult->asXML(), strtotime($cacheResult->cachedUntil) + date('Z') + $cacheTimeAdd);
+                                $this->saveCache($cacheFile, $cacheResult->asXML(), strtotime($cacheResult->cachedUntil) + date('Z') + $cacheTimeAdd);
                             }
                             $result = $cacheResult;
                         }
