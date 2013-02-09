@@ -19,17 +19,26 @@ require_once('apidb.php');
 require_once('apimarket.php');
 require_once('apiConstants.php');
 
-//    $cacheDelays = array(
-//        101, 103, 115, 116, 117, 119
-//    );
-//
-//    $eveTime = time() - date('Z');
+$cacheDelays = array(
+    101, 103, 115, 116, 117, 119
+);
 
 $GLOBALS['EVEAPI_ERRORS'] = array();
 
 $GLOBALS['EVEAPI_COUNT'] = 0;
 $GLOBALS['EVEAPI_CACHECOUNT'] = 0;
 $GLOBALS['EVEAPI_REQUESTS'] = array();
+
+class eveTimeOffset {
+
+    static $offset = 0;
+
+    // converts a GTM time string to local (user-defined) time
+    static function getOffsetTime($strTime) {
+        return strtotime((string) $strTime) + self::$offset;
+    }
+
+}
 
 function apiError($method, $error) {
     if (!isset($GLOBALS['EVEAPI_NO_ERRORS']) || (isset($GLOBALS['EVEAPI_NO_ERRORS']) && !$GLOBALS['EVEAPI_NO_ERRORS']))

@@ -58,7 +58,7 @@
                 <div class="selects">
                     <select id="charKeySelect" onchange="setCurrent('setCharKey', this.value)">
                     {foreach from=$charKeys item=key}
-                        <option value="{$key.keyID}" {if $user.char_apikey_id == $key.reference}selected="true"{/if}>{$key.name}</option>
+                        <option value="{$key.keyID}" {if $currentCharKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
                     {/foreach}
                     </select><br />
                     {if $currentCharKey}
@@ -88,13 +88,13 @@
                 <div class="selects">
                     <select id="corpKeySelect" onchange="setCurrent('setCorpKey', this.value)">
                     {foreach from=$corpKeys item=key}
-                        <option value="{$key.keyID}" {if $user.corp_apikey_id == $key.reference}selected="true"{/if}>{$key.name}</option>
+                        <option value="{$key.keyID}" {if $currentCorpKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
                     {/foreach}
                     </select><br />
                     {if $currentCorpKey}
                         <select id="corpSelect" onchange="setCurrent('setCorpChar', this.value)">
                         {foreach from=$currentCorpKey.characters item=char}
-                            <option value="{$char.characterID}" {if $currentCharKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
+                            <option value="{$char.characterID}" {if $currentCorpKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
                         {/foreach}
                         </select>
                     {/if}

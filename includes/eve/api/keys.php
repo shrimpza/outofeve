@@ -12,8 +12,8 @@ class eveKeyManager {
         return self::$instance;
     }
 
-    static function addKey($reference, $name, $vCode, $keyID, $selectedCharacter = 0) {
-        self::getInstance()->keys[$reference] = new eveApiKey($reference, $name, $vCode, $keyID, $selectedCharacter);
+    static function addKey($reference, $name, $keyID, $vCode, $selectedCharacter = 0) {
+        self::getInstance()->keys[$reference] = new eveApiKey($reference, $name, $keyID, $vCode, $selectedCharacter);
     }
     
     static function getKey($reference) {
@@ -48,15 +48,16 @@ class eveApiKey {
 
     var $reference = 0;
     var $name = '';
-    var $vCode = '';
     var $keyID = 0;
+    var $vCode = '';
     var $type = '';
     var $characters = array();
     var $accessMask = 0;
     var $expires = 0;
     var $selectedCharacter = 0;
+    var $error = false;
 
-    function eveApiKey($reference, $name, $vCode, $keyID, $selectedCharacter = 0, $autoLoad = true) {
+    function eveApiKey($reference, $name, $keyID, $vCode, $selectedCharacter = 0, $autoLoad = true) {
         $this->reference = $reference;
         $this->name = $name;
         $this->keyID = $keyID;
@@ -81,6 +82,8 @@ class eveApiKey {
                 $char = new eveCharacterInfo($char);
                 $this->characters[$char->characterID] = $char;
             }
+        } else {
+            $this->error = $data->error;
         }
     }
 

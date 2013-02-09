@@ -5,22 +5,21 @@
 <div id="accountsList">
 <table width="100%" border="0">
   <tr>
-    <th>Account Name</th>
+    <th>Key Name</th>
     <th>Status</th>
   </tr>
-  {foreach from=$accounts item=a}
+  {foreach from=$keys item=k}
     <tr class="{cycle values='row,rowAlt'}">
       <td>
-        <a href="{$site_url}/?module=users&mode=accounts&delete={$a.row.id}" title="Delete"><img src="{$site_url}/templates/{$theme}/images/edit-delete-big.png" align="absmiddle"></a>
-        <a href="{$site_url}/?module=users&mode=accounts&edit={$a.row.id}" title="Edit"><img src="{$site_url}/templates/{$theme}/images/edit-edit-big.png" align="absmiddle"></a>
-        <a href="{$site_url}/?module=users&mode=accounts&setacc={$a.row.id}" title="Set Active"><img src="{$site_url}/templates/{$theme}/images/home-big.png" align="absmiddle"></a>
-        {$a.row.name}
+        <a href="{$site_url}/?module=users&mode=accounts&delete={$k.row.id}" title="Delete"><img src="{$site_url}/templates/{$theme}/images/edit-delete-big.png" align="absmiddle"></a>
+        <a href="{$site_url}/?module=users&mode=accounts&edit={$k.row.id}" title="Edit"><img src="{$site_url}/templates/{$theme}/images/edit-edit-big.png" align="absmiddle"></a>
+        {$k.row.name}
       </td>
       <td>
-          {if $a.account.error}
-            {$a.account.error}
+          {if $k.account.error}
+            {$k.account.error}
           {else}
-            Account created {$a.account.accountStatus.createDate|date_format:"%e %B %Y"}, expires <b>{$a.account.accountStatus.paidUntil|date_format:"%e %B %Y"}</b>.
+            Account created {$k.account.accountStatus.createDate|date_format:"%e %B %Y"}, expires <b>{$k.account.accountStatus.paidUntil|date_format:"%e %B %Y"}</b>.
           {/if}
       </td>
     </tr>
@@ -28,7 +27,7 @@
   <tr class="{cycle values='row,rowAlt'}">
     <th colspan="2">
       <a href="{$site_url}/?module=users&mode=accounts&edit=0"><img src="{$site_url}/templates/{$theme}/images/edit-new-big.png" align="absmiddle">
-      Add Account</a>
+      Add Key</a>
     </th>
   </tr>
 </table>

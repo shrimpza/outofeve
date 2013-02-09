@@ -61,6 +61,7 @@ class users extends Plugin {
                 $tz = new DateTimeZone($this->site->user->timezone);
                 $dt = new DateTime("now", $tz);
                 $timeOffset = $tz->getOffset($dt) / 3600;
+                eveTimeOffset::$offset = $timeOffset;
 
 //                $this->site->eveAccount = new eveAccount(trim($this->site->user->account->apiuser), trim(decryptKey($this->site->user->account->apikey)), $timeOffset);
 //
@@ -97,20 +98,20 @@ class users extends Plugin {
                 $this->loadApiKeys();
 
                 if (isset($_GET['setCharKey'])) {
-                    $key = $db->getObject('apikey', $_GET['setCharKey']);
+                    $key = $db->getObject('apikey', $_GET['setCharKey'], 'keyid');
                     if ($key->user_id != $this->site->user->id) {
                         echo '<div class="apierror">Selected key does not belong to you!</div>';
                     } else {
-                        $this->site->user->char_apikey_id = $_GET['setCharKey'];
+                        $this->site->user->char_apikey_id = $key->id;
                     }
                 }
 
                 if (isset($_GET['setCorpKey'])) {
-                    $key = $db->getObject('apikey', $_GET['setCorpKey']);
+                    $key = $db->getObject('apikey', $_GET['setCorpKey'], 'keyid');
                     if ($key->user_id != $this->site->user->id) {
                         echo '<div class="apierror">Selected key does not belong to you!</div>';
                     } else {
-                        $this->site->user->corp_apikey_id = $_GET['setCorpKey'];
+                        $this->site->user->corp_apikey_id = $key->id;
                     }
                 }
 
@@ -146,7 +147,7 @@ class users extends Plugin {
     function loadApiKeys() {
         $keys = $this->site->user->get_apikey_list('name');
         foreach ($keys as $key) {
-            eveKeyManager::addKey($key->id, $key->name, $key->vcode, $key->keyid, $key->character_id);
+            eveKeyManager::addKey($key->id, $key->name, $key->keyid, decryptKey($key->vcode), $key->character_id);
         }
 
         if ($this->site->user->char_apikey_id == 0) {
@@ -182,8 +183,8 @@ class users extends Plugin {
                 $this->name = 'User Registration';
                 return $this->register();
             case 'accounts':
-                $this->name = 'Eve Accounts';
-                return $this->accounts();
+                $this->name = 'Eve API Keys';
+                return $this->keys();
             case 'edit':
                 $this->name = 'Preferences';
                 return $this->edit();
@@ -281,7 +282,7 @@ class users extends Plugin {
         $mins = array();
         $res = eveDB::getInstance()->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
         for ($i = 0; $i < count($res); $i++) {
-            $newMin = eveDB::getInstance()->db->eveItem($res[$i]['typeid']);
+            $newMin = eveDB::getInstance()->eveItem($res[$i]['typeid']);
             if ($myMins) {
                 for ($j = 0; $j < count($myMins); $j++) {
                     if ($myMins[$j]->typeid == $newMin->typeid) {
@@ -305,112 +306,85 @@ class users extends Plugin {
         return $this->render('edit', $vars);
     }
 
-    function accounts() {
+    function keys() {
         if ($this->site->user->id == 0) {
             return '<h2>DENIED!</h2>';
         }
 
         if (isset($_GET['delete'])) {
-            $a = $this->db->getObject('account', $_GET['delete']);
-            if (($a->id > 0) && ($a->user_id != $this->site->user->id)) {
-                return $this->accountsList("Selected account doesn't belong to you!");
+            $k = $this->db->getObject('apikey', $_GET['delete']);
+            if (($k->id > 0) && ($k->user_id != $this->site->user->id)) {
+                return $this->keysList("Selected API key doesn't belong to you!");
             }
 
-            $a->delete();
+            $k->delete();
 
-            if ($this->site->user->account_id == $_GET['delete']) {
-                $this->site->user->account_id = 0;
-                $this->site->user->save();
+            if ($this->site->user->char_apikey_id == $_GET['delete']) {
+                $this->site->user->char_apikey_id = 0;
+            }else if ($this->site->user->corp_apikey_id == $_GET['delete']) {
+                $this->site->user->corp_apikey_id = 0;
             }
+            $this->site->user->save();
 
-            return $this->accountsList();
+            return $this->keysList();
         } else if (isset($_GET['edit'])) {
-            $a = $this->db->getObject('account', $_GET['edit']);
-            if (($a->id > 0) && ($a->user_id != $this->site->user->id))
-                return $this->accountsList("Selected account doesn't belong to you!");
+            $k = $this->db->getObject('apikey', $_GET['edit']);
+            
+            if (($k->id > 0) && ($k->user_id != $this->site->user->id)) {
+                return $this->keysList("Selected API key doesn't belong to you!");
+            }
 
-            $forceMenus = array(
-                'corpSheet' => array('Corporation Sheet', $this->hasForcedMenu('corpSheet')),
-                'corpAssets' => array('Corporation Assets', $this->hasForcedMenu('corpAssets')),
-                'corpTransactions' => array('Corporation Market Transactions', $this->hasForcedMenu('corpTransactions')),
-                'corpJournal' => array('Corporation Journal', $this->hasForcedMenu('corpJournal')),
-                'corpOrders' => array('Corporation Market Orders', $this->hasForcedMenu('corpOrders')),
-                'corpIndustry' => array('Corporation Manufacture &amp; Research', $this->hasForcedMenu('corpIndustry')),
-                'corpKills' => array('Corporation Kills and Deaths', $this->hasForcedMenu('corpKills')),
-                'corpStarbases' => array('Corporation Starbases', $this->hasForcedMenu('corpStarbases')),
-            );
-
-            $a->apikey = decryptKey($a->apikey);
-            $a = objectToArray($a, array('DBManager'));
-            return $this->render('account_edit', array('a' => $a, 'error' => false, 'forcemenus' => $forceMenus));
+            $k->vcode = decryptKey($k->vcode);
+            $k = objectToArray($k, array('DBManager'));
+            return $this->render('account_edit', array('k' => $k, 'error' => false));
         } else if (isset($_POST['id'])) {
-            $a = $this->db->getObject('account', $_POST['id']);
-            $a->apikey = decryptKey($a->apikey);
-            if (($a->id > 0) && ($a->user_id != $this->site->user->id)) {
-                return $this->accountsList("Selected account doesn't belong to you!");
+            $k = $this->db->getObject('apikey', $_POST['id']);
+            $k->vcode = decryptKey($k->vcode);
+            if (($k->id > 0) && ($k->user_id != $this->site->user->id)) {
+                return $this->keysList("Selected API key doesn't belong to you!");
             }
 
-            $_POST['apiuser'] = trim($_POST['apiuser']);
-            $_POST['apikey'] = trim($_POST['apikey']);
+            $_POST['keyid'] = trim($_POST['keyid']);
+            $_POST['vcode'] = trim($_POST['vcode']);
 
-            $eveAcc = new eveAccount($_POST['apiuser'], $_POST['apikey']);
-            if ($eveAcc->error) {
-                return $this->render('account_edit', array('a' => objectToArray($a, array('DBManager')), 'error' => $eveAcc->error));
+            $eveKey = new eveApiKey(0, $_POST['name'], $_POST['keyid'], $_POST['vcode']);
+            if ($eveKey->error) {
+                return $this->render('account_edit', array('k' => objectToArray($k, array('DBManager')), 'error' => $eveKey->error->errorText));
             }
-            $eveAcc->checkFullAccess();
-            if ($eveAcc->error) {
-                return $this->render('account_edit', array('a' => objectToArray($a, array('DBManager')), 'error' => $eveAcc->error));
-            }
-            if (!$eveAcc->error) {
-                $a->user_id = $this->site->user->id;
-                $a->name = $_POST['name'];
-                $a->apiuser = $_POST['apiuser'];
-                $a->apikey = encryptKey($_POST['apikey']);
-                $a->precache = isset($_POST['precache']) ? 1 : 0;
+            if (!$eveKey->error) {
+                $k->user_id = $this->site->user->id;
+                $k->name = $_POST['name'];
+                $k->keyid = $_POST['keyid'];
+                $k->vcode = encryptKey($_POST['vcode']);
 
-                if ($a->id > 0) {
-                    if ($this->forceMenus) {
-                        for ($i = 0; $i < count($this->forceMenus); $i++) {
-                            $this->forceMenus[$i]->delete();
-                        }
-                    }
+                $k->save();
+                
+                $this->loadApiKeys();
 
-                    for ($i = 0; $i < count($_POST['forcemenus']); $i++) {
-                        $m = $this->db->getObject('showmenus', 0);
-                        $m->account_id = $a->id;
-                        $m->menu = $_POST['forcemenus'][$i];
-                        $m->save();
-                    }
+//                $this->site->user->account_id = $k->id;
+//                $this->site->user->save();
 
-                    $this->forceMenus = $a->get_showmenus_list();
-                }
-
-                $a->save();
-
-                $this->site->user->account_id = $a->id;
-                $this->site->user->save();
-
-                return $this->accountsList();
+                return $this->keysList();
             }
         } else {
-            return $this->accountsList();
+            return $this->keysList();
         }
     }
 
-    function accountsList($error = false) {
-        $accounts = $this->site->user->get_account_list('name');
-        $accounts = objectToArray($accounts, array('DBManager'));
+    function keysList($error = false) {
+        $keys = $this->site->user->get_apikey_list('name');
+        $keys = objectToArray($keys, array('DBManager'));
 
         $wasErrors = $GLOBALS['EVEAPI_NO_ERRORS'];
         $GLOBALS['EVEAPI_NO_ERRORS'] = true;
-        for ($i = 0; $i < count($accounts); $i++) {
-            $eveAcc = new eveAccount(trim($accounts[$i]['row']['apiuser']), trim(decryptKey($accounts[$i]['row']['apikey'])), 0, false);
+        for ($i = 0; $i < count($keys); $i++) {
+            $eveAcc = new eveAccount(eveKeyManager::getKey($keys[$i]['row']['id']));
             $eveAcc->getAccountStatus();
-            $accounts[$i]['account'] = objectToArray($eveAcc, array('DBManager'));
+            $keys[$i]['account'] = objectToArray($eveAcc);
         }
         $GLOBALS['EVEAPI_NO_ERRORS'] = $wasErrors;
 
-        return $this->render('accounts', array('accounts' => $accounts, 'error' => $error));
+        return $this->render('accounts', array('keys' => $keys, 'error' => $error));
     }
 
     function welcome() {
