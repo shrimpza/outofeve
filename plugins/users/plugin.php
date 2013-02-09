@@ -36,22 +36,6 @@ class users extends Plugin {
             // the user is valid
             if ($this->site->user->id > 0) {
 
-                //  set the current account
-//                if (isset($_GET['setacc'])) {
-//                    $a = $db->getObject('account', $_GET['setacc']);
-//                    if ($a->user_id != $this->site->user->id) {
-//                        echo '<div class="apierror">Selected account does not belong to you!</div>';
-//                    } else {
-//                        $this->site->user->account_id = $_GET['setacc'];
-//                        $this->site->user->save();
-//                    }
-//                }
-                //$this->site->user->account = $db->getObject('account', $this->site->user->account_id);
-                // set the current character
-                //if (isset($_GET['setchar'])) {
-                //    $this->site->user->account->character_id = $_GET['setchar'];
-                //    $this->site->user->account->save();
-                //}
                 // optional proxy
                 if (trim($this->site->user->proxy) <> '') {
                     $GLOBALS['config']['eve']['api_url'] = trim($this->site->user->proxy);
@@ -63,37 +47,15 @@ class users extends Plugin {
                 $timeOffset = $tz->getOffset($dt) / 3600;
                 eveTimeOffset::$offset = $timeOffset;
 
-//                $this->site->eveAccount = new eveAccount(trim($this->site->user->account->apiuser), trim(decryptKey($this->site->user->account->apikey)), $timeOffset);
-//
-//                if ($this->site->user->account->id > 0) {
-//                    $this->forceMenus = $this->site->user->account->get_showmenus_list('id');
-//                }
-//
-//                if (isset($_POST['theme'])) {
-//                    $tmpTheme = $_POST['theme'];
-//                } else {
-//                    $tmpTheme = $this->site->user->theme;
-//                }
-//
-//                if (!empty($tmpTheme) && (is_dir($GLOBALS['config']['templates']['theme_dir'] . '/' . $tmpTheme))) {
-//                    $GLOBALS['config']['templates']['theme'] = $tmpTheme;
-//                }
-//
-//                for ($i = 0; $i < count($this->site->eveAccount->characters); $i++) {
-//                    if ($this->site->eveAccount->characters[$i]->characterID == $this->site->user->account->character_id) {
-//                        $this->site->character = $this->site->eveAccount->characters[$i];
-//                    }
-//                }
-//
-//                if (!isset($this->site->character)) {
-//                    $this->site->character = $this->site->eveAccount->characters[0];
-//                }
-//                $accounts = $this->site->user->get_account_list('name');
-//                $accounts = objectToArray($accounts, array('DBManager'));
-//                $this->site->tplVars['accounts'] = $accounts;
-//                $this->site->tplVars['characters'] = $this->charactersLite();
-//                $this->site->tplVars['curchar'] = $this->site->character->characterID;
-//                $this->site->tplVars['curacc'] = $this->site->user->account_id;
+                if (isset($_POST['theme'])) {
+                    $tmpTheme = $_POST['theme'];
+                } else {
+                    $tmpTheme = $this->site->user->theme;
+                }
+
+                if (!empty($tmpTheme) && (is_dir($GLOBALS['config']['templates']['theme_dir'] . '/' . $tmpTheme))) {
+                    $GLOBALS['config']['templates']['theme'] = $tmpTheme;
+                }
 
                 $this->loadApiKeys();
 
@@ -169,7 +131,7 @@ class users extends Plugin {
         if ($this->site->user->id == 0) {
             return $this->render('side_login', array('register' => $GLOBALS['config']['site']['registration']));
         } else {
-            return $this->render('side_logged_in', array('user' => $this->site->user->row, 'noAccount' => ($this->site->user->account->id == 0)));
+            return $this->render('side_logged_in', array('user' => $this->site->user->row, 'noKeys' => count(eveKeyManager::getInstance()->keys) == 0));
         }
     }
 
@@ -321,7 +283,7 @@ class users extends Plugin {
 
             if ($this->site->user->char_apikey_id == $_GET['delete']) {
                 $this->site->user->char_apikey_id = 0;
-            }else if ($this->site->user->corp_apikey_id == $_GET['delete']) {
+            } else if ($this->site->user->corp_apikey_id == $_GET['delete']) {
                 $this->site->user->corp_apikey_id = 0;
             }
             $this->site->user->save();
@@ -329,7 +291,7 @@ class users extends Plugin {
             return $this->keysList();
         } else if (isset($_GET['edit'])) {
             $k = $this->db->getObject('apikey', $_GET['edit']);
-            
+
             if (($k->id > 0) && ($k->user_id != $this->site->user->id)) {
                 return $this->keysList("Selected API key doesn't belong to you!");
             }
@@ -358,11 +320,8 @@ class users extends Plugin {
                 $k->vcode = encryptKey($_POST['vcode']);
 
                 $k->save();
-                
-                $this->loadApiKeys();
 
-//                $this->site->user->account_id = $k->id;
-//                $this->site->user->save();
+                $this->loadApiKeys();
 
                 return $this->keysList();
             }
@@ -402,15 +361,8 @@ class users extends Plugin {
     }
 
     function hasForcedMenu($menu) {
-        for ($i = 0; $i < count($this->forceMenus); $i++) {
-            if (isset($this->forceMenus[$i]) && ($this->forceMenus[$i]->menu == $menu)) {
-                return true;
-            }
-        }
-
         return false;
     }
-
 }
 
 function tzSort($a, $b) {

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `apikey` (
   `user_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   `keyid` int(11) NOT NULL,
-  `vcode` varchar(64) NOT NULL,
+  `vcode` varchar(256) NOT NULL,
   `character_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
