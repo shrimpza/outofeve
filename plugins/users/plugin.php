@@ -104,7 +104,7 @@ class users extends Plugin {
                 $this->site->tplVars['charKeys'] = objectToArray(eveKeyManager::getCharacterKeys());
                 $this->site->tplVars['corpKeys'] = objectToArray(eveKeyManager::getCorporateKeys());
                 $this->site->tplVars['currentCharKey'] = objectToArray(eveKeyManager::getKey($this->site->user->char_apikey_id));
-                $this->site->tplVars['currentCoprKey'] = objectToArray(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+                $this->site->tplVars['currentCorpKey'] = objectToArray(eveKeyManager::getKey($this->site->user->corp_apikey_id));
 
                 $this->site->user->activetime = date('Y-m-d H:i:s');
                 $this->site->user->save();
@@ -126,9 +126,9 @@ class users extends Plugin {
                 $this->site->user->char_apikey_id = $charKeys[0]->reference;
             }
         }
-        
+                
         if ($this->site->user->corp_apikey_id == 0) {
-            $corpKeys = eveKeyManager::getCharacterKeys();
+            $corpKeys = eveKeyManager::getCorporateKeys();
             if ($corpKeys) {
                 $this->site->user->corp_apikey_id = $corpKeys[0]->reference;
             }

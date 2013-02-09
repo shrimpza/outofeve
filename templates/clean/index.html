@@ -81,6 +81,27 @@
             </div>
             {/strip}
             {/if}
+
+            {if $corpKeys}
+            {strip}
+            <div class="charSelect">
+                <div class="selects">
+                    <select id="corpKeySelect" onchange="setCurrent('setCorpKey', this.value)">
+                    {foreach from=$corpKeys item=key}
+                        <option value="{$key.keyID}" {if $user.corp_apikey_id == $key.reference}selected="true"{/if}>{$key.name}</option>
+                    {/foreach}
+                    </select><br />
+                    {if $currentCorpKey}
+                        <select id="corpSelect" onchange="setCurrent('setCorp', this.value)">
+                        {foreach from=$currentCorpKey.characters item=char}
+                            <option value="{$char.characterID}" {if $currentCharKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
+                        {/foreach}
+                        </select>
+                    {/if}
+                </div>
+            </div>
+            {/strip}
+            {/if}
         </div>
 
         <div id="container">
