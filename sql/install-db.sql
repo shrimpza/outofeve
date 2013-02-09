@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `account` (
   KEY `user_id` (`user_id`)
 );
 
-CREATE TABLE IF NOT EXISTS `key` (
+CREATE TABLE IF NOT EXISTS `apikey` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,

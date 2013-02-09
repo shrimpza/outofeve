@@ -46,13 +46,13 @@ class users extends Plugin {
                         $this->site->user->save();
                     }
                 }
-                $this->site->user->account = $db->getObject('account', $this->site->user->account_id);
+                //$this->site->user->account = $db->getObject('account', $this->site->user->account_id);
 
                 // set the current character
-                if (isset($_GET['setchar'])) {
-                    $this->site->user->account->character_id = $_GET['setchar'];
-                    $this->site->user->account->save();
-                }
+                //if (isset($_GET['setchar'])) {
+                //    $this->site->user->account->character_id = $_GET['setchar'];
+                //    $this->site->user->account->save();
+                //}
 
                 // optional proxy
                 if (trim($this->site->user->proxy) <> '') {
@@ -90,13 +90,21 @@ class users extends Plugin {
 //                    $this->site->character = $this->site->eveAccount->characters[0];
 //                }
 
-                $accounts = $this->site->user->get_account_list('name');
-                $accounts = objectToArray($accounts, array('DBManager'));
+//                $accounts = $this->site->user->get_account_list('name');
+//                $accounts = objectToArray($accounts, array('DBManager'));
 
-                $this->site->tplVars['accounts'] = $accounts;
-                $this->site->tplVars['characters'] = $this->charactersLite();
-                $this->site->tplVars['curchar'] = $this->site->character->characterID;
-                $this->site->tplVars['curacc'] = $this->site->user->account_id;
+                
+//                $this->site->tplVars['accounts'] = $accounts;
+//                $this->site->tplVars['characters'] = $this->charactersLite();
+//                $this->site->tplVars['curchar'] = $this->site->character->characterID;
+//                $this->site->tplVars['curacc'] = $this->site->user->account_id;
+
+                $this->loadApiKeys();
+                
+                $this->site->tplVars['charKeys'] = objectToArray(eveKeyManager::getCharacterKeys());
+                $this->site->tplVars['corpKeys'] = objectToArray(eveKeyManager::getCorporateKeys());
+                $this->site->tplVars['currentCharKey'] = objectToArray(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $this->site->tplVars['currentCoprKey'] = objectToArray(eveKeyManager::getKey($this->site->user->corp_apikey_id));
 
                 $this->site->user->activetime = date('Y-m-d H:i:s');
                 $this->site->user->save();
@@ -107,9 +115,23 @@ class users extends Plugin {
     }
 
     function loadApiKeys() {
-        $keys = $this->site->user->get_key_list('name');
+        $keys = $this->site->user->get_apikey_list('name');
         foreach ($keys as $key) {
-            eveKeyManager::addKey($key->id, $key->vcode, $key->keyid);
+            eveKeyManager::addKey($key->id, $key->name, $key->vcode, $key->keyid);
+        }
+        
+        if ($this->site->user->char_apikey_id == 0) {
+            $charKeys = eveKeyManager::getCharacterKeys();
+            if ($charKeys) {
+                $this->site->user->char_apikey_id = $charKeys[0]->reference;
+            }
+        }
+        
+        if ($this->site->user->corp_apikey_id == 0) {
+            $corpKeys = eveKeyManager::getCharacterKeys();
+            if ($corpKeys) {
+                $this->site->user->corp_apikey_id = $corpKeys[0]->reference;
+            }
         }
     }
 

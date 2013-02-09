@@ -12,8 +12,8 @@ class eveKeyManager {
         return self::$instance;
     }
 
-    static function addKey($reference, $vCode, $keyID) {
-        self::getInstance()->keys[$reference] = new eveApiKey($vCode, $keyID);
+    static function addKey($reference, $name, $vCode, $keyID) {
+        self::getInstance()->keys[$reference] = new eveApiKey($reference, $name, $vCode, $keyID);
     }
     
     static function getKey($reference) {
@@ -21,7 +21,7 @@ class eveKeyManager {
     }
 
     static function getCharacterKeys() {
-        $keys = self::getInstance();
+        $keys = self::getInstance()->keys;
         $result = array();
         foreach ($keys as $key) {
             if (!$key->isCorpKey()) {
@@ -32,7 +32,7 @@ class eveKeyManager {
     }
 
     static function getCorporateKeys() {
-        $keys = self::getInstance();
+        $keys = self::getInstance()->keys;
         $result = array();
         foreach ($keys as $key) {
             if ($key->isCorpKey()) {
@@ -46,6 +46,8 @@ class eveKeyManager {
 
 class eveApiKey {
 
+    var $reference = 0;
+    var $name = '';
     var $vCode = '';
     var $keyID = 0;
     var $type = '';
@@ -54,7 +56,9 @@ class eveApiKey {
     var $expires = 0;
     var $selectedCharacter = 0;
 
-    function eveApiKey($vCode, $keyID, $autoLoad = true) {
+    function eveApiKey($reference, $name, $vCode, $keyID, $autoLoad = true) {
+        $this->reference = $reference;
+        $this->name = $name;
         $this->keyID = $keyID;
         $this->vCode = $vCode;
 
@@ -66,7 +70,7 @@ class eveApiKey {
     function load() {
         $data = new apiRequest('account/APIKeyInfo.xml.aspx', $this);
         if ((!$data->error) && ($data->data)) {
-            $key = $data->data->result;
+            $key = $data->data->result->key;
 
             $this->accessMask = (int) $key['accessMask'];
             $this->type = (String) $key['type'];
@@ -92,7 +96,7 @@ class eveApiKey {
     }
 
     function isCorpKey() {
-        return $this->type = 'Corporation';
+        return $this->type == 'Corporation';
     }
 
     function hasAccess($access) {

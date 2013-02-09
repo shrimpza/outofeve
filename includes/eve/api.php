@@ -1,6 +1,7 @@
 <?php
 
 require_once('curl.class.php');
+require_once('api/keys.php');
 require_once('api/account.php');
 require_once('api/assets.php');
 require_once('api/marketOrders.php');
