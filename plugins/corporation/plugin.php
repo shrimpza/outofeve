@@ -7,8 +7,9 @@
         function corporation($db, $site) {
             $this->Plugin($db, $site);
 
-            if ($this->site->plugins['mainmenu']->hasGroup('corp') || $this->site->plugins['users']->hasForcedMenu('corpSheet'))
+            if ($this->site->plugins['mainmenu']->hasGroup('corp') || $this->site->plugins['users']->hasForcedMenu('corpSheet')) {
                 $this->site->plugins['mainmenu']->addLink('corp', 'Corporation', '?module=corporation', 'icon07_06');
+            }
         }
 
         function getContent() {
@@ -85,8 +86,9 @@
 
                 return $this->render('corporation', array('corp' => $corp, 'members' => $members, 'systems' => $systems, 'titles' => $titles, 'active' => $active,
                                     'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
-            } else
+            } else {
                 return '<h1>No corporation!</h1>';
+            }
         }
     }
 ?>

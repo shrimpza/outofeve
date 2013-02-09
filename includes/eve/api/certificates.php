@@ -1,15 +1,13 @@
 <?php
     class eveCertificateList {
         var $certificates = array();
-        var $db = null;
         
-        function eveCertificateList($db) {
-            $this->db = $db;
+        function eveCertificateList() {
         }
         
         function load($certs, $account) {
             foreach ($certs->row as $certificate) {
-                $this->certificates[] = new eveKnownCertificate($account, $this->db, $certificate);
+                $this->certificates[] = new eveKnownCertificate($account, $certificate);
             }
         }
     }
@@ -17,18 +15,15 @@
     class eveKnownCertificate {
         var $certificateID = 0;
         
-        function eveKnownCertificate($acc, $db, $certificate)  {
+        function eveKnownCertificate($acc, $certificate)  {
             $this->certificateID = (int)$certificate['certificateID'];
         }
     }
 
     class eveCertificateTree {
         var $categories = array();
-        
-        var $db = null;
 
-        function eveCertificateTree($db) {
-            $this->db = $db;
+        function eveCertificateTree() {
         }
         
         function load() {
@@ -36,7 +31,7 @@
                 $data = new apiRequest('eve/CertificateTree.xml.aspx');
                 if ((!$data->error) && ($data->data)) {
                     foreach ($data->data->result->rowset->row as $category) {
-                        $this->categories[] = new eveCertificateCategory($this->db, $category);
+                        $this->categories[] = new eveCertificateCategory($category);
                     }
                 }
             }
@@ -60,12 +55,12 @@
         var $categoryName = "";
         var $classes = array();
 
-        function eveCertificateCategory($db, $category) {
+        function eveCertificateCategory($category) {
             $this->categoryID = (int)$category['categoryID'];
             $this->categoryName = (string)$category['categoryName'];
 
             foreach ($category->rowset->row as $class)
-                $this->classes[] = new eveCertificateClass($db, $class, $this);
+                $this->classes[] = new eveCertificateClass($class, $this);
         }
     }
 
@@ -75,13 +70,13 @@
         var $certificates = array();
         var $caregory = null;
 
-        function eveCertificateClass($db, $class, $category) {
+        function eveCertificateClass($class, $category) {
             $this->category = $category;
             $this->classID = (int)$class['classID'];
             $this->className = (string)$class['className'];
 
             foreach ($class->rowset->row as $cert) {
-                $this->certificates[] = $db->eveCertificate((int)$cert['certificateID']);
+                $this->certificates[] = eveDB::getInstance()->eveCertificate((int)$cert['certificateID']);
                 $this->certificates[count($this->certificates)-1]->cclass = $this;
             }
         }

@@ -10,7 +10,10 @@
             if (isset($this->site->character) && ($this->site->character->characterID > 0)) {
                 $this->site->plugins['mainmenu']->addGroup('Character Data', 'main');
 
-                if (isset($this->site->character->corpMember)) {
+                $corporation = new eveCorporation($this->site->eveAccount, $this->site->character);
+                $corporation->load();
+                
+                if ($corporation->corporationID > 0) {
                     $this->site->plugins['mainmenu']->addGroup('Corporation Data', 'corp');
                 }
 

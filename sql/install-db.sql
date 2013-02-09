@@ -10,6 +10,17 @@ CREATE TABLE IF NOT EXISTS `account` (
   KEY `user_id` (`user_id`)
 );
 
+CREATE TABLE IF NOT EXISTS `key` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `keyid` int(11) NOT NULL,
+  `vcode` varchar(64) NOT NULL,
+  `character_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `user_id` (`user_id`)
+);
+
 CREATE TABLE IF NOT EXISTS `mineralprice` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL,
@@ -31,6 +42,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `account_id` int(11) NOT NULL,
   `activetime` datetime NOT NULL,
   `smallicons` tinyint NOT NULL default 0,
+  `character_key_id` int(11) NOT NULL default 0,
+  `corporation_key_id` int(11) NOT NULL default 0,
   PRIMARY KEY  (`id`),
   KEY `username` (`username`,`password`)
 );
@@ -41,4 +54,4 @@ CREATE TABLE IF NOT EXISTS `showmenus` (
   `menu` varchar(64) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `account_id` (`account_id`)
-)
+);

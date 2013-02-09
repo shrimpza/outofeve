@@ -2,16 +2,14 @@
 
     class eveSkillList {
         var $skills = array();
-        var $db = null;
         var $skillPoints = 0;
         
-        function eveSkillList($db) {
-            $this->db = $db;
+        function eveSkillList() {
         }
 
         function load($skills, $account) {
             foreach ($skills->row as $skill) {
-                $newSkill = new eveKnownSkill($account, $this->db, $skill);
+                $newSkill = new eveKnownSkill($account, $skill);
                 $this->skills[] = $newSkill;
                 $this->skillPoints += $newSkill->skillPoints;
             }
@@ -31,10 +29,8 @@
 
     class eveSkillQueue {
         var $queue = array();
-        var $db = null;
 
-        function eveSkillQueue($db) {
-            $this->db = $db;
+        function eveSkillQueue() {
         }
 
         function load($account, $character) {
@@ -45,7 +41,7 @@
                                                                    array('version' => 2));
                 if ((!$data->error) && ($data->data)) {
                     foreach ($data->data->result->rowset->row as $skill) {
-                        $this->queue[] = new eveQueuedSkill($account, $this->db, $skill);
+                        $this->queue[] = new eveQueuedSkill($account, $skill);
                     }
                 }
             }
@@ -62,7 +58,7 @@
 
         var $skillItem = null;
 
-        function eveQueuedSkill($acc, $db, $qskill) {
+        function eveQueuedSkill($acc, $qskill) {
             $this->typeID = (int)$qskill['typeID'];
             $this->toLevel = (int)$qskill['level'];
             $this->position = (int)$qskill['queuePosition'];
@@ -71,7 +67,7 @@
 
             $this->remainingTime = ($this->endTime - $acc->timeOffset) - $GLOBALS['eveTime'];
 
-            $this->skillItem = $db->eveItem($this->typeID);
+            $this->skillItem = eveDB::getInstance()->eveItem($this->typeID);
         }
     }
     
@@ -85,7 +81,7 @@
 
         var $skillItem = null;
 
-        function eveTrainingSkill($acc, $db, $skill) {
+        function eveTrainingSkill($acc, $skill) {
             $this->typeID = (int)$skill->trainingTypeID;
             $this->toLevel = (int)$skill->trainingToLevel;
             $this->inTraining = (int)$skill->skillInTraining > 0;
@@ -94,7 +90,7 @@
 
             $this->remainingTime = ($this->endTime-$acc->timeOffset) - $GLOBALS['eveTime'];
 
-            $this->skillItem = $db->eveItem($this->typeID);
+            $this->skillItem = eveDB::getInstance()->eveItem($this->typeID);
         }
     }
 
@@ -106,15 +102,15 @@
         var $toLevel = 0;
         var $inTraining = false;
         
-        function eveKnownSkill($acc, $db, $skill) {
+        function eveKnownSkill($acc, $skill) {
             $this->typeID = (int)$skill['typeID'];
             $this->skillPoints = (int)$skill['skillpoints'];
             $this->level = (int)$skill['level'];
             
-            $this->skillItem = $db->eveItem($this->typeID);
+            $this->skillItem = eveDB::getInstance()->eveItem($this->typeID);
         }
 
-        function getName($db) {
+        function getName() {
             $this->name = $this->skillItem->typename;
         }
     }
