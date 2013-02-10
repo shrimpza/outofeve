@@ -1,26 +1,8 @@
 <?php
 
-//class eveCharacter {
-//
-//    var $account = null;
-//    var $detail = null;
-//    var $characterID = 0;
-//    var $name = '';
-//
-//    function eveCharacter($account, $character, $autoLoad = true) {
-//        $this->account = $account;
-//        $this->characterID = (int) $character['characterID'];
-//        $this->name = (string) $character['name'];
-//
-//        $this->detail = new eveCharacterDetail($account, $this);
-//    }
-//
-//}
-
 class eveCharacterDetail {
 
     var $key = null;
-//    var $character = null;
     var $characterID = 0;
     var $name = '';
     var $dob = 0;
@@ -47,9 +29,6 @@ class eveCharacterDetail {
 
     function eveCharacterDetail($key) {
         $this->key = $key;
-//        $this->character = $character;
-//        $this->characterID = $character->characterID;
-//        $this->name = $character->name;
     }
 
     function load() {

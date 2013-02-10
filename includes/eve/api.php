@@ -93,7 +93,7 @@ class apiRequest {
     var $data = false;
     var $error;
 
-    function apiRequest($method, $apiKey = null, $forCharacter = false) {
+    function apiRequest($method, $apiKey = null, $forCharacter = false, $extraParams = array()) {
         $result = false;
 
         $start = microtime(true);
@@ -113,6 +113,10 @@ class apiRequest {
             if ($forCharacter) {
                 $params['characterID'] = $forCharacter->characterID;
             }
+        }
+
+        if (!empty($extraParams)) {
+            $params = array_merge($params, $extraParams);
         }
 
         $cacheTimeAdd = $GLOBALS['config']['eve']['cache_time_add'];
