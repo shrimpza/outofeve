@@ -338,8 +338,8 @@ class users extends Plugin {
         $wasErrors = $GLOBALS['EVEAPI_NO_ERRORS'];
         $GLOBALS['EVEAPI_NO_ERRORS'] = true;
         for ($i = 0; $i < count($keys); $i++) {
-            $eveAcc = new eveAccount(eveKeyManager::getKey($keys[$i]['row']['id']));
-            $eveAcc->getAccountStatus();
+            $eveAcc = new eveAccountStatus(eveKeyManager::getKey($keys[$i]['row']['id']));
+            $eveAcc->load();
             $keys[$i]['account'] = objectToArray($eveAcc);
         }
         $GLOBALS['EVEAPI_NO_ERRORS'] = $wasErrors;
