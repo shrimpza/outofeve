@@ -18,21 +18,28 @@ class manufacture extends Plugin {
     }
 
     function getContent() {
-        if (!isset($_GET['p']))
+        if (!isset($_GET['p'])) {
             $_GET['p'] = 0;
-        if (!isset($_GET['activity']))
+        }
+        if (!isset($_GET['activity'])) {
             $_GET['activity'] = 0;
-        if (!isset($_GET['complete']))
+        }
+        if (!isset($_GET['complete'])) {
             $_GET['complete'] = 0;
+        }
 
         if (isset($_GET['corp'])) {
-            $this->site->character->corporation->loadIndustryJobs();
-            $industryList = $this->site->character->corporation->industryJobs;
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $il = new eveIndustryJobList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+                $il->load();
+            }
         } else {
-            $il = new eveIndustryJobList();
-            $il->load($this->site->eveAccount, $this->site->character);
-            $industryList = $il->industryJobs;
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $il = new eveIndustryJobList(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $il->load();
+            }
         }
+        $industryList = $il->industryJobs;
 
         $jobs = array();
         $activities = array();
