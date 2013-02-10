@@ -93,6 +93,7 @@ class users extends Plugin {
                     eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
                 }
 
+                // assign template variables to allow selecting of character and corporation keys and characters
                 $this->site->tplVars['charKeys'] = objectToArray(eveKeyManager::getCharacterKeys());
                 $this->site->tplVars['corpKeys'] = objectToArray(eveKeyManager::getCorporateKeys());
                 $this->site->tplVars['currentCharKey'] = objectToArray(eveKeyManager::getKey($this->site->user->char_apikey_id));

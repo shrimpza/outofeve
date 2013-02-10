@@ -8,18 +8,19 @@ class assets extends Plugin {
     function assets($db, $site) {
         $this->Plugin($db, $site);
 
-        $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'icon07_13');
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_AssetList)) {
+            $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'icon07_13');
+        }
 
-        if (($this->site->plugins['mainmenu']->hasGroup('corp'))
-                && ($this->site->character->corpMember->hasRole('corpRoleDirector')
-                || $this->site->plugins['users']->hasForcedMenu('corpAssets'))) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_AssetList)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Assets', '?module=assets&corp=1', 'icon07_13');
         }
     }
 
     function getContent() {
-        if (!isset($_GET['p']))
+        if (!isset($_GET['p'])) {
             $_GET['p'] = 0;
+        }
 
         if (isset($_GET['corp'])) {
             $this->site->character->corporation->loadAssets();

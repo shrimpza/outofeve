@@ -8,11 +8,6 @@ class character extends Plugin {
     function character($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-            $this->site->plugins['mainmenu']->addGroup('Character Data', 'main');
-            $this->site->plugins['mainmenu']->addGroup('Utilities', 'util');
-        }
-
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_CharacterInfo_FULL)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Character', '?module=character', 'icon02_16');
         }
