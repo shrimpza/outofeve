@@ -2,7 +2,6 @@
   <div class="listOptions">
     <span><a href="{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}">Transaction listing</a></span>
     <span><a href="{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days">Group by day</a></span>
-    <span><a href="{$site_url}/feed/journal.php?id={$feedId}{if $corp}&corp={$accountKey}{/if}"><img src="{$site_url}/templates/{$theme}/images/feed_small.png" border="0" align="absmiddle" /> Feed</a></span>
     {if $corp}
     <span>Account: 
       <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&accountKey='+this.value">

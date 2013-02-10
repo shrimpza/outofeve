@@ -18,42 +18,50 @@ class journal extends Plugin {
     }
 
     function getContent() {
-        if (!isset($_GET['p']))
+        if (!isset($_GET['p'])) {
             $_GET['p'] = 0;
-
-        if (!isset($_GET['accountKey']))
-            $_GET['accountKey'] = 1000;
-
-        if (isset($_GET['corp'])) {
-            $_GET['accountKey'] = max($_GET['accountKey'], 1000);
-            $this->site->character->corporation->loadJournal($_GET['accountKey']);
-            $journalItems = $this->site->character->corporation->journalItems;
-        } else {
-            $j = new eveJournal();
-            $j->load($this->site->eveAccount, $this->site->character);
-            $journalItems = $j->journal;
         }
 
-        $journal = objectToArray($journalItems, array('DBManager', 'eveDB'));
+        if (!isset($_GET['accountKey'])) {
+            $_GET['accountKey'] = 1000;
+        }
 
-        if (!isset($_GET['daycount']))
+        if (isset($_GET['corp'])) {
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $_GET['accountKey'] = max($_GET['accountKey'], 1000);
+                $j = new eveJournal(eveKeyManager::getKey($this->site->user->corp_apikey_id), $_GET['accountKey']);
+                $j->load();
+            }
+        } else {
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $j = new eveJournal(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $j->load();
+            }
+        }
+
+        $journal = objectToArray($j->journal, array('DBManager', 'eveDB'));
+
+        if (!isset($_GET['daycount'])) {
             $dayCount = 7;
-        else
+        } else {
             $dayCount = $_GET['daycount'];
+        }
 
         if (isset($_GET['type']) && ($_GET['type'] == 'days')) {
             $days = array();
 
             $refs = array();
 
-            if (!isset($_GET['filter']))
+            if (!isset($_GET['filter'])) {
                 $filter = -1;
-            else
+            } else {
                 $filter = $_GET['filter'];
+            }
 
             for ($i = 0; $i < count($journal); $i++) {
-                if (!isset($refs[$journal[$i]['refTypeID']]))
+                if (!isset($refs[$journal[$i]['refTypeID']])) {
                     $refs[$journal[$i]['refTypeID']] = $journal[$i]['refType'];
+                }
 
                 if (($filter <= 0) || ($journal[$i]['refTypeID'] == $filter)) {
                     $jDate = date('Y-m-d', $journal[$i]['date']);
@@ -77,18 +85,20 @@ class journal extends Plugin {
                         }
                         $days[$jDate]['journal'][$journal[$i]['refTypeID']]['amount'] += $journal[$i]['amount'];
 
-                        if ($journal[$i]['amount'] < 0)
+                        if ($journal[$i]['amount'] < 0) {
                             $days[$jDate]['journal'][$journal[$i]['refTypeID']]['dr'] += $journal[$i]['amount'];
-                        else
+                        } else {
                             $days[$jDate]['journal'][$journal[$i]['refTypeID']]['cr'] += $journal[$i]['amount'];
-                    }
-                    else
+                        }
+                    } else {
                         $days[$jDate]['journal'][] = $journal[$i];
+                    }
 
-                    if ($journal[$i]['amount'] < 0)
+                    if ($journal[$i]['amount'] < 0) {
                         $days[$jDate]['dr'] += $journal[$i]['amount'];
-                    else
+                    } else {
                         $days[$jDate]['cr'] += $journal[$i]['amount'];
+                    }
                 }
             }
 
@@ -115,6 +125,7 @@ class journal extends Plugin {
                 'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
             if (isset($_GET['corp'])) {
+                // todo: come back to this.
                 $vars['accounts'] = objectToArray($this->site->character->corporation->walletDivisions, array('DBManager', 'eveDB'));
             }
 
@@ -136,13 +147,12 @@ class journal extends Plugin {
                 $prevPage = 0;
             }
 
-            $feedId = md5('journal' . $this->site->user->account->id . 'u' . $this->site->user->account->user_id);
-
-            $vars = array('journal' => $journal, 'feedId' => $feedId, 'pageCount' => $pageCount,
+            $vars = array('journal' => $journal, 'pageCount' => $pageCount,
                 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
                 'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
             if (isset($_GET['corp'])) {
+                // todo: come back to this.
                 $vars['accounts'] = objectToArray($this->site->character->corporation->walletDivisions, array('DBManager', 'eveDB'));
             }
 
