@@ -4,20 +4,35 @@ class eveKillsList {
 
     var $kills = array();
     var $deaths = array();
+    var $key;
 
-    function load($account, $character) {
+    function eveKillsList($key) {
+        $this->key = $key;
+    }
+
+    function load() {
         if ((count($this->kills) == 0) && (count($this->deaths) == 0)) {
-            $data = new apiRequest('char/KillLog.xml.aspx', array($account->userId,
-                        $account->apiKey,
-                        $character->characterID),
-                            array('version' => 2));
+
+            if ($this->key->isCorpKey() && $this->key->hasAccess(CORP_KillLog)) {
+                $data = new apiRequest('corp/KillLog.xml.aspx', $this->key, $this->key->getCharacter());
+            } else if ($this->key->hasAccess(CHAR_KillLog)) {
+                $data = new apiRequest('char/KillLog.xml.aspx', $this->key, $this->key->getCharacter());
+            }
 
             if ((!$data->error) && ($data->data)) {
                 foreach ($data->data->result->rowset->row as $kill) {
-                    if ((int) $kill->victim['characterID'] == $character->characterID) {
-                        $this->deaths[] = new eveKill($account, $kill);
+                    if ($this->key->isCorpKey()) {
+                        if ((int) $kill->victim['corporationID'] == $this->key->getCharacter()->corporationID) {
+                            $this->deaths[] = new eveKill($kill);
+                        } else {
+                            $this->kills[] = new eveKill($kill);
+                        }
                     } else {
-                        $this->kills[] = new eveKill($account, $kill);
+                        if ((int) $kill->victim['characterID'] == $this->key->getCharacter()->characterID) {
+                            $this->deaths[] = new eveKill($kill);
+                        } else {
+                            $this->kills[] = new eveKill($kill);
+                        }
                     }
                 }
             }
@@ -43,7 +58,7 @@ class eveKillCharacter {
     var $ship = null;
     var $weapon = null;
 
-    function eveKillCharacter($acc, $char) {
+    function eveKillCharacter($char) {
         $this->characterID = (int) $char['characterID'];
         $this->characterName = (string) $char['characterName'];
         $this->corporationID = (int) $char['corporationID'];
@@ -108,7 +123,7 @@ class eveKillDrop {
     var $flagText = '';
     var $item = null;
 
-    function eveKillDrop($acc, $item) {
+    function eveKillDrop($item) {
         $this->typeID = (int) $item['typeID'];
         $this->flag = (int) $item['flag'];
         $this->qtyDropped = (int) $item['qtyDropped'];
@@ -135,26 +150,26 @@ class eveKill {
     var $itemsDropped = array();
     var $itemsDestroyed = array();
 
-    function eveKill($acc, $kill) {
+    function eveKill($kill) {
         $this->killID = (int) $kill['killID'];
-        $this->date = strtotime((string) $kill['killTime']) + $acc->timeOffset;
+        $this->date = eveTimeOffset::getOffsetTime($kill['killTime']);
         $this->solarSystemID = (int) $kill['solarSystemID'];
 
         $this->solarSystem = eveDB::getInstance()->eveSolarSystem($this->solarSystemID);
 
-        $this->victim = new eveKillCharacter($acc, $kill->victim);
+        $this->victim = new eveKillCharacter($kill->victim);
 
         foreach ($kill->rowset as $rowGroup) {
             if ($rowGroup['name'] == 'attackers') {
                 foreach ($rowGroup->row as $attacker) {
-                    $this->attackers[] = new eveKillCharacter($acc, $attacker);
+                    $this->attackers[] = new eveKillCharacter($attacker);
                 }
             } else if ($rowGroup['name'] == 'items') {
                 foreach ($rowGroup->row as $item) {
                     if ((int) $item['qtyDropped'] > 0) {
-                        $this->itemsDropped[] = new eveKillDrop($acc, $item);
+                        $this->itemsDropped[] = new eveKillDrop($item);
                     } else {
-                        $this->itemsDestroyed[] = new eveKillDrop($acc, $item);
+                        $this->itemsDestroyed[] = new eveKillDrop($item);
                     }
                 }
             }

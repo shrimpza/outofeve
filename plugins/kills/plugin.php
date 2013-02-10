@@ -20,21 +20,27 @@ class kills extends Plugin {
     }
 
     function getContent() {
-        if (!isset($_GET['p']))
+        if (!isset($_GET['p'])) {
             $_GET['p'] = 0;
-        if (!isset($_GET['find']))
+        }
+        if (!isset($_GET['find'])) {
             $_GET['find'] = '';
+        }
 
         if (isset($_GET['corp'])) {
-            $this->site->character->corporation->loadKills();
-            $killList = $this->site->character->corporation->kills;
-            $deathList = $this->site->character->corporation->deaths;
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $kl = new eveKillsList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+                $kl->load();
+            }
         } else {
-            $kl = new eveKillsList();
-            $kl->load($this->site->eveAccount, $this->site->character);
-            $killList = $kl->kills;
-            $deathList = $kl->deaths;
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $kl = new eveKillsList(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $kl->load();
+            }
         }
+
+        $killList = $kl->kills;
+        $deathList = $kl->deaths;
 
         if (isset($_GET['deaths'])) {
             $this->name = 'Deaths';
@@ -67,8 +73,9 @@ class kills extends Plugin {
         } else {
             $kills = array();
             for ($i = 0; $i < count($killList); $i++) {
-                if (empty($_GET['find']) || $this->filterKill($killList[$i], $_GET['find']))
+                if (empty($_GET['find']) || $this->filterKill($killList[$i], $_GET['find'])) {
                     $killList[$i]->getDropValues();
+                }
                 $kills[] = objectToArray($killList[$i], array('DBManager', 'eveDB'));
             }
 
@@ -96,27 +103,29 @@ class kills extends Plugin {
     function filterKill($kill, $filter) {
         $accept = false;
 
-        if (stripos($kill->victim->characterName, $filter) !== false)
+        if (stripos($kill->victim->characterName, $filter) !== false) {
             $accept = true;
-        else if (stripos($kill->victim->corporationName, $filter) !== false)
+        } else if (stripos($kill->victim->corporationName, $filter) !== false) {
             $accept = true;
-        else if (stripos($kill->victim->allianceName, $filter) !== false)
+        } else if (stripos($kill->victim->allianceName, $filter) !== false) {
             $accept = true;
-        else if ($kill->victim->ship && (stripos($kill->victim->ship->typename, $filter) !== false))
+        } else if ($kill->victim->ship && (stripos($kill->victim->ship->typename, $filter) !== false)) {
             $accept = true;
-        else if (stripos($kill->solarSystem->solarsystemname, $filter) !== false)
+        } else if (stripos($kill->solarSystem->solarsystemname, $filter) !== false) {
             $accept = true;
+        }
 
         if (!$accept) {
             for ($i = 0; $i < count($kill->attackers); $i++) {
-                if (stripos($kill->attackers[$i]->characterName, $filter) !== false)
+                if (stripos($kill->attackers[$i]->characterName, $filter) !== false) {
                     $accept = true;
-                else if (stripos($kill->attackers[$i]->corporationName, $filter) !== false)
+                } else if (stripos($kill->attackers[$i]->corporationName, $filter) !== false) {
                     $accept = true;
-                else if (stripos($kill->attackers[$i]->allianceName, $filter) !== false)
+                } else if (stripos($kill->attackers[$i]->allianceName, $filter) !== false) {
                     $accept = true;
-                else if ($kill->attackers[$i]->ship && (stripos($kill->attackers[$i]->ship->typename, $filter) !== false))
+                } else if ($kill->attackers[$i]->ship && (stripos($kill->attackers[$i]->ship->typename, $filter) !== false)) {
                     $accept = true;
+                }
             }
         }
 
