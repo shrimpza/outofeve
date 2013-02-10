@@ -23,12 +23,17 @@ class assets extends Plugin {
         }
 
         if (isset($_GET['corp'])) {
-            $this->site->character->corporation->loadAssets();
-            $fullAssetList = $this->site->character->corporation->assets;
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $al = new eveAssetList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+                $al->load();
+                $fullAssetList = $al->assets;
+            }
         } else {
-            $al = new eveAssetList();
-            $al->load($this->site->eveAccount, $this->site->character);
-            $fullAssetList = $al->assets;
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $al = new eveAssetList(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $al->load();
+                $fullAssetList = $al->assets;
+            }
         }
 
         if (isset($_GET['type']) && ($_GET['type'] == 'find')) {
