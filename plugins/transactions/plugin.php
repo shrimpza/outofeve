@@ -18,23 +18,28 @@ class transactions extends Plugin {
     }
 
     function getContent() {
-        if (!isset($_GET['p']))
+        if (!isset($_GET['p'])) {
             $_GET['p'] = 0;
-
-        if (!isset($_GET['accountKey']))
-            $_GET['accountKey'] = 1000;
-
-        if (isset($_GET['corp'])) {
-            $_GET['accountKey'] = max($_GET['accountKey'], 1000);
-            $this->site->character->corporation->loadTransactions($_GET['accountKey']);
-            $transItems = $this->site->character->corporation->transactions;
-        } else {
-            $tl = new eveTransactionList();
-            $tl->load($this->site->eveAccount, $this->site->character);
-            $transItems = $tl->transactions;
         }
 
-        $trans = objectToArray($transItems, array('DBManager', 'eveDB'));
+        if (!isset($_GET['accountKey'])) {
+            $_GET['accountKey'] = 1000;
+        }
+
+        if (isset($_GET['corp'])) {
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $_GET['accountKey'] = max($_GET['accountKey'], 1000);
+                $tl = new eveTransactionList(eveKeyManager::getKey($this->site->user->corp_apikey_id), $_GET['accountKey']);
+                $tl->load();
+            }
+        } else {
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $tl = new eveTransactionList(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $tl->load();
+            }
+        }
+
+        $trans = objectToArray($tl->transactions, array('DBManager', 'eveDB'));
 
         if (count($trans) > 50) {
             $trans = array_chunk($trans, 50);
@@ -57,6 +62,7 @@ class transactions extends Plugin {
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
         if (isset($_GET['corp'])) {
+            // todo: come back to this.
             $vars['accounts'] = objectToArray($this->site->character->corporation->walletDivisions, array('DBManager', 'eveDB'));
         }
 
