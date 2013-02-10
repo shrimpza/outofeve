@@ -20,12 +20,16 @@
     $printStats = true;
     if ((!isset($_GET['popup']) && !isset($_GET['jsonMode'])) && $printStats) {
         echo '<script type="text/javascript">document.getElementById("footer").innerHTML = document.getElementById("footer").innerHTML + "<br />';
+
         echo '<small><small>Processed in ' . round($time, 4) . ' seconds, ';
-        echo ($site->db->numQueries + (isset($site->eveAccount) ? (int)$site->eveAccount->db->db->numQueries : 0)) . ' DB queries; ';
-        echo $GLOBALS['EVEAPI_COUNT'] . ' live API requests, ' . $GLOBALS['EVEAPI_CACHECOUNT'] . ' from cache; ';
+        echo ($site->db->numQueries + eveDB::getInstance()->db->numQueries) . ' DB queries; ';
+
+        echo apiStats::$liveRequests . ' live API requests, ' . apiStats::$cacheRequests . ' from cache; ';
+        
         echo round((memory_get_usage()/1024), 2) . 'kb memory used.<br />';
+        
         echo '<b>API Activity:</b><br />';
-        foreach ($GLOBALS['EVEAPI_REQUESTS'] as $req) {
+        foreach (apiStats::$requests as $req) {
             echo $req['cache'] ? '[Cached] ' : '';
             echo $req['method'];
             echo ' - ' . round($req['time'], 4) . ' secs';

@@ -25,10 +25,6 @@ $cacheDelays = array(
 
 $GLOBALS['EVEAPI_ERRORS'] = array();
 
-$GLOBALS['EVEAPI_COUNT'] = 0;
-$GLOBALS['EVEAPI_CACHECOUNT'] = 0;
-$GLOBALS['EVEAPI_REQUESTS'] = array();
-
 class eveTimeOffset {
 
     static $offset = 0;
@@ -58,6 +54,33 @@ class ApiError {
     function ApiError($errorCode, $errorText) {
         $this->errorCode = $errorCode;
         $this->errorText = $errorText;
+    }
+
+}
+
+class apiStats {
+
+    static $requests = array();
+    static $errors = array();
+    static $cacheRequests = 0;
+    static $liveRequests = 0;
+
+    static function addRequest($method, $requestTime, $cached, $expires) {
+        self::$requests[] = array(
+            'method' => $method,
+            'time' => $requestTime,
+            'cache' => $cached,
+            'cacheUntil' => $expires
+        );
+        if ($cached) {
+            self::$cacheRequests++;
+        } else {
+            self::$liveRequests++;
+        }
+    }
+
+    static function addError($error) {
+        self::$errors[] = $error;
     }
 
 }
@@ -102,7 +125,6 @@ class apiRequest {
             } else {
                 $apiResponse = $http->post($apiUrl . '/' . $method, $params);
             }
-            $GLOBALS['EVEAPI_COUNT']++;
             $httpResponse = $http->getInfo();
 
             /**
@@ -148,16 +170,15 @@ class apiRequest {
                 $this->error = new ApiError(1, 'HTTP error: ' + $httpResponse['http_code']);
             }
         } else {
-            $GLOBALS['EVEAPI_CACHECOUNT']++;
             $result = $cacheResult;
         }
 
-        $GLOBALS['EVEAPI_REQUESTS'][] = array(
-            'method' => $method,
-            'time' => microtime(time) - $start,
-            'cache' => $result == $cacheResult,
-            'cacheUntil' => isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0,
-        );
+        apiStats::addRequest(
+                $method, microtime(time) - $start, $result == $cacheResult, isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0);
+
+        if ($this->error) {
+            apiStats::addError($error);
+        }
 
         $this->data = $result;
     }
