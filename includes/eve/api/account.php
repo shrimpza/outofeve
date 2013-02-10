@@ -9,14 +9,14 @@ class eveAccountStatus {
     var $logonMinutes = 0;
     var $key;
 
-    function eveAccount($key) {
+    function eveAccountStatus($key) {
         $this->key = $key;
     }
 
     function load() {
-        if (!$this->apiKey->isCorpKey() && $this->apiKey->hasAccess(CHAR_AccountStatus)) {
+        if (!$this->key->isCorpKey() && $this->key->hasAccess(CHAR_AccountStatus)) {
 
-            $accData = new apiRequest('account/AccountStatus.xml.aspx', $this->apiKey);
+            $accData = new apiRequest('account/AccountStatus.xml.aspx', $this->key);
 
             if (!$accData->data) {
                 return;
@@ -34,7 +34,7 @@ class eveAccountStatus {
                 $this->logonCount = (int) $accStatus->logonCount;
                 $this->logonMinutes = (int) $accStatus->logonMinutes;
             }
-        } else if ($this->apiKey->isCorpKey()) {
+        } else if ($this->key->isCorpKey()) {
             $this->error = 'No account status available for corporation key.';
         } else {
             $this->error = 'Key does not provide access to account status. Check key access options.';

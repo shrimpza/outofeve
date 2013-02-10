@@ -19,7 +19,7 @@
           {if $k.account.error}
             {$k.account.error}
           {else}
-            Account created {$k.account.accountStatus.createDate|date_format:"%e %B %Y"}, expires <b>{$k.account.accountStatus.paidUntil|date_format:"%e %B %Y"}</b>.
+            Account created {$k.account.createDate|date_format:"%e %B %Y"}, expires <b>{$k.account.paidUntil|date_format:"%e %B %Y"}</b>.
           {/if}
       </td>
     </tr>
