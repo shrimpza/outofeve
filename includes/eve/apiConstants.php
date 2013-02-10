@@ -3,7 +3,7 @@
 define('CHAR_Locations', 134217728); // Allows the fetching of coordinate and name data for items owned by the character.
 define('CHAR_Contracts', 67108864); // List of all Contracts the character is involved in.
 define('CHAR_AccountStatus', 33554432); // EVE player account status.
-define('CHAR_CharacterInfo', 16777216); // Sensitive Character Information, exposes account balance and last known location on top of the other Character Information call.
+define('CHAR_CharacterInfo_FULL', 16777216); // Sensitive Character Information, exposes account balance and last known location on top of the other Character Information call.
 define('CHAR_CharacterInfo', 8388608); // Character information, exposes skill points and current ship information on top of'Show Info'information.
 define('CHAR_WalletTransactions', 4194304); // Market transaction journal of character.
 define('CHAR_WalletJournal', 2097152); // Wallet journal of character.

@@ -1,25 +1,26 @@
 <?php
 
-class eveCharacter {
-
-    var $account = null;
-    var $detail = null;
-    var $characterID = 0;
-    var $name = '';
-
-    function eveCharacter($account, $character, $autoLoad = true) {
-        $this->account = $account;
-        $this->characterID = (int) $character['characterID'];
-        $this->name = (string) $character['name'];
-
-        $this->detail = new eveCharacterDetail($account, $this);
-    }
-
-}
+//class eveCharacter {
+//
+//    var $account = null;
+//    var $detail = null;
+//    var $characterID = 0;
+//    var $name = '';
+//
+//    function eveCharacter($account, $character, $autoLoad = true) {
+//        $this->account = $account;
+//        $this->characterID = (int) $character['characterID'];
+//        $this->name = (string) $character['name'];
+//
+//        $this->detail = new eveCharacterDetail($account, $this);
+//    }
+//
+//}
 
 class eveCharacterDetail {
 
-    var $character = null;
+    var $key = null;
+//    var $character = null;
     var $characterID = 0;
     var $name = '';
     var $dob = 0;
@@ -44,60 +45,58 @@ class eveCharacterDetail {
     var $outpostList = null;
     var $faction = null;
 
-    function eveCharacterDetail($account, $character) {
-        $this->account = $account;
-        $this->character = $character;
-
-        $this->characterID = $character->characterID;
-        $this->name = $character->name;
+    function eveCharacterDetail($key) {
+        $this->key = $key;
+//        $this->character = $character;
+//        $this->characterID = $character->characterID;
+//        $this->name = $character->name;
     }
 
     function load() {
-        $data = new apiRequest('char/CharacterSheet.xml.aspx', array($this->account->userId,
-                    $this->account->apiKey,
-                    $this->characterID));
+        if ($this->key->hasAccess(CHAR_CharacterInfo_FULL) || $this->key->hasAccess(CHAR_CharacterInfo)) {
 
-        if ((!$data->error) && ($data->data)) {
-            $result = $data->data->result;
-            $this->characterID = (int) $result->characterID;
-            $this->name = (string) $result->name;
-            $this->dob = strtotime((string) $result->DoB) + $account->timeOffset;
-            $this->race = (string) $result->race;
-            $this->bloodLine = (string) $result->bloodLine;
-            $this->ancestry = (string) $result->ancestry;
-            $this->gender = (string) $result->gender;
-            $this->corporationName = (string) $result->corporationName;
-            $this->corporationID = (int) $result->corporationID;
-            $this->allianceName = (string) $result->allianceName;
-            $this->allianceID = (int) $result->allianceID;
-            $this->cloneName = (string) $result->cloneName;
-            $this->cloneSkillPoints = (int) $result->cloneSkillPoints;
-            $this->balance = (float) $result->balance;
+            $data = new apiRequest('char/CharacterSheet.xml.aspx', $this->key, $this->key->getCharacter());
 
-            foreach ($result->rowset as $rowset) {
-                if ($rowset['name'] == 'skills') {
-                    $this->skills = new eveSkillList();
-                    $this->skills->load($rowset, $account);
-                } else if ($rowset['name'] == 'certificates') {
-                    $this->certificates = new eveCertificateList();
-                    $this->certificates->load($rowset, $account);
+            if ((!$data->error) && ($data->data)) {
+                $result = $data->data->result;
+                $this->characterID = (int) $result->characterID;
+                $this->name = (string) $result->name;
+                $this->dob = eveTimeOffset::getOffsetTime($result->DoB);
+                $this->race = (string) $result->race;
+                $this->bloodLine = (string) $result->bloodLine;
+                $this->ancestry = (string) $result->ancestry;
+                $this->gender = (string) $result->gender;
+                $this->corporationName = (string) $result->corporationName;
+                $this->corporationID = (int) $result->corporationID;
+                $this->allianceName = (string) $result->allianceName;
+                $this->allianceID = (int) $result->allianceID;
+                $this->cloneName = (string) $result->cloneName;
+                $this->cloneSkillPoints = (int) $result->cloneSkillPoints;
+                $this->balance = (float) $result->balance;
+
+                foreach ($result->rowset as $rowset) {
+                    if ($rowset['name'] == 'skills') {
+                        $this->skills = new eveSkillList();
+                        $this->skills->load($rowset);
+                    } else if ($rowset['name'] == 'certificates') {
+                        $this->certificates = new eveCertificateList();
+                        $this->certificates->load($rowset);
+                    }
                 }
-            }
 
-            $this->attributes = new eveAttributeList();
-            $this->attributes->load($this, $result->attributes, $result->attributeEnhancers);
-        } else if ($data->error) {
-            apiError('char/CharacterSheet.xml.aspx', $data->data->error);
+                $this->attributes = new eveAttributeList();
+                $this->attributes->load($this, $result->attributes, $result->attributeEnhancers);
+            }
         }
 
-        $this->skillQueue = new eveSkillQueue();
-        $this->skillQueue->load($this->account, $this->character);
+        $this->skillQueue = new eveSkillQueue($this->key);
+        $this->skillQueue->load();
 
-        $trainingData = new apiRequest('char/SkillInTraining.xml.aspx', array($this->account->userId,
-                    $this->account->apiKey,
-                    $this->characterID));
-        if ($trainingData->data) {
-            $this->trainingSkill = new eveTrainingSkill($this->account, $trainingData->data->result);
+        if ($this->key->hasAccess(CHAR_SkillInTraining)) {
+            $trainingData = new apiRequest('char/SkillInTraining.xml.aspx', $this->key, $this->key->getCharacter());
+            if ($trainingData->data) {
+                $this->trainingSkill = new eveTrainingSkill($trainingData->data->result);
+            }
         }
 
 
@@ -109,11 +108,11 @@ class eveCharacterDetail {
     }
 
     function loadFaction() {
-        $data = new apiRequest('char/FacWarStats.xml.aspx', array($this->account->userId,
-                    $this->account->apiKey,
-                    $this->characterID), null, false);
-        if ((!$data->error) && ($data->data)) {
-            $this->faction = new eveCharacterFaction($this->account, $factionData->data->result);
+        if ($this->key->hasAccess(CHAR_FacWarStats)) {
+            $data = new apiRequest('char/FacWarStats.xml.aspx', $this->key, $this->key->getCharacter());
+            if ((!$data->error) && ($data->data)) {
+                $this->faction = new eveCharacterFaction($data->result);
+            }
         }
     }
 
@@ -265,10 +264,10 @@ class eveCharacterFaction {
     var $victoryPointsLastWeek = 0;
     var $victoryPointsTotal = 0;
 
-    function eveCharacterFaction($acc, $faction) {
+    function eveCharacterFaction($faction) {
         $this->factionID = (int) $faction->trainingTypeID;
         $this->factionName = (string) $faction->factionName;
-        $this->enlisted = strtotime((string) $faction->enlisted) + $acc->timeOffset;
+        $this->enlisted = eveTimeOffset::getOffsetTime($faction->enlisted);
         $this->currentRank = (int) $faction->currentRank;
         $this->highestRank = (int) $faction->highestRank;
         $this->killsYesterday = (int) $faction->killsYesterday;

@@ -1,63 +1,75 @@
 <?php
 
-    class character extends Plugin {
-        var $name = 'Character';
-        var $level = 1;
+class character extends Plugin {
 
-        function character($db, $site) {
-            $this->Plugin($db, $site);
+    var $name = 'Character';
+    var $level = 1;
 
-            if (isset($this->site->character) && ($this->site->character->characterID > 0)) {
-                $this->site->plugins['mainmenu']->addGroup('Character Data', 'main');
+    function character($db, $site) {
+        $this->Plugin($db, $site);
 
-                $corporation = new eveCorporation($this->site->eveAccount, $this->site->character);
-                $corporation->load();
-                
-                if ($corporation->corporationID > 0) {
-                    $this->site->plugins['mainmenu']->addGroup('Corporation Data', 'corp');
-                }
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+            $this->site->plugins['mainmenu']->addGroup('Character Data', 'main');
+            $this->site->plugins['mainmenu']->addGroup('Utilities', 'util');
+        }
 
-                $this->site->plugins['mainmenu']->addGroup('Utilities', 'util');
-            }
-
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_CharacterInfo_FULL)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Character', '?module=character', 'icon02_16');
         }
 
-        function getContent() {
-            if ($this->site->character) {
-                $this->site->character->detail->load();
-                $details = $this->site->character->detail;
-                
-                $char = array();
-                $char['name'] = $details->name;
-                $char['characterID'] = $details->characterID;
-                $char['race'] = $details->race;
-                $char['bloodLine'] = $details->bloodLine;
-                $char['gender'] = $details->gender;
-                $char['corporationName'] = $details->corporationName;
-                $char['balance'] = $details->balance;
-                $char['skillPoints'] = $details->skills->skillPoints;
-                $char['training'] = objectToArray($details->trainingSkill, array('DBManager', 'eveDB'));
-                $char['faction'] = objectToArray($details->faction, array('DBManager', 'eveDB'));
-                $char['attributes'] = objectToArray($details->attributes->attributes, array('DBManager', 'eveDB'));
-                $char['raceInfo'] = objectToArray($details->db->bloodlineInfo($details->bloodLine), array('DBManager', 'eveDB'));
+        /* if (isset($this->site->character) && ($this->site->character->characterID > 0)) {
+          $this->site->plugins['mainmenu']->addGroup('Character Data', 'main');
 
-                $details->loadSkillTree();
-                $details->loadCertificateTree();
-                
-                if ($details->skillQueue != null) {
-                    $queue = objectToArray($details->skillQueue->queue, array('DBManager', 'eveDB'));
-                } else {
-                    $queue = false;
-                }
+          $corporation = new eveCorporation($this->site->eveAccount, $this->site->character);
+          $corporation->load();
 
-                $skills = objectToArray($details->knownSkills(), array('DBManager', 'eveDB'));
-                $certificates = $details->knownCertificates();
+          if ($corporation->corporationID > 0) {
+          $this->site->plugins['mainmenu']->addGroup('Corporation Data', 'corp');
+          }
 
-                return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates, 'queue' => $queue));
-            } else
-                return '<h1>No character!</h1>';
+          $this->site->plugins['mainmenu']->addGroup('Utilities', 'util');
+          }
+
+          $this->site->plugins['mainmenu']->addLink('main', 'Character', '?module=character', 'icon02_16'); */
+    }
+
+    function getContent() {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+            $character = new eveCharacterDetail(eveKeyManager::getKey($this->site->user->char_apikey_id));
+            $character->load();
+
+            $char = array();
+            $char['name'] = $character->name;
+            $char['characterID'] = $character->characterID;
+            $char['race'] = $character->race;
+            $char['bloodLine'] = $character->bloodLine;
+            $char['gender'] = $character->gender;
+            $char['corporationName'] = $character->corporationName;
+            $char['balance'] = $character->balance;
+            $char['skillPoints'] = $character->skills->skillPoints;
+            $char['training'] = objectToArray($character->trainingSkill, array('DBManager', 'eveDB'));
+            $char['faction'] = objectToArray($character->faction, array('DBManager', 'eveDB'));
+            $char['attributes'] = objectToArray($character->attributes->attributes, array('DBManager', 'eveDB'));
+            $char['raceInfo'] = objectToArray(eveDB::getInstance()->bloodlineInfo($character->bloodLine), array('DBManager', 'eveDB'));
+
+            $character->loadSkillTree();
+            $character->loadCertificateTree();
+
+            if ($character->skillQueue != null) {
+                $queue = objectToArray($character->skillQueue->queue, array('DBManager', 'eveDB'));
+            } else {
+                $queue = false;
+            }
+
+            $skills = objectToArray($character->knownSkills(), array('DBManager', 'eveDB'));
+            $certificates = $character->knownCertificates();
+
+            return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates, 'queue' => $queue));
+        } else {
+            return '<h1>No character!</h1>';
         }
     }
+
+}
 
 ?>

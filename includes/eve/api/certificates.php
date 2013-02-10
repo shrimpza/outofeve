@@ -5,9 +5,9 @@
         function eveCertificateList() {
         }
         
-        function load($certs, $account) {
+        function load($certs) {
             foreach ($certs->row as $certificate) {
-                $this->certificates[] = new eveKnownCertificate($account, $certificate);
+                $this->certificates[] = new eveKnownCertificate($certificate);
             }
         }
     }
@@ -15,7 +15,7 @@
     class eveKnownCertificate {
         var $certificateID = 0;
         
-        function eveKnownCertificate($acc, $certificate)  {
+        function eveKnownCertificate($certificate)  {
             $this->certificateID = (int)$certificate['certificateID'];
         }
     }
@@ -41,8 +41,9 @@
             for ($i = 0; $i < count($this->categories); $i++) {
                 for ($j = 0; $j < count($this->categories[$i]->classes); $j++) {
                     for ($k = 0; $k < count($this->categories[$i]->classes[$j]->certificates); $k++) {
-                        if ($this->categories[$i]->classes[$j]->certificates[$k]->certificateid == $certificateId)
+                        if ($this->categories[$i]->classes[$j]->certificates[$k]->certificateid == $certificateId) {
                             return $this->categories[$i]->classes[$j]->certificates[$k];
+                        }
                     }
                 }
             }

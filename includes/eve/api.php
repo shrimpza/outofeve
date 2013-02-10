@@ -28,6 +28,7 @@ $GLOBALS['EVEAPI_ERRORS'] = array();
 class eveTimeOffset {
 
     static $offset = 0;
+    static $eveTime = 0;
 
     // converts a GTM time string to local (user-defined) time
     static function getOffsetTime($strTime) {
@@ -35,6 +36,8 @@ class eveTimeOffset {
     }
 
 }
+
+eveTimeOffset::$eveTime = time() - date('Z');
 
 function apiError($method, $error) {
     if (!isset($GLOBALS['EVEAPI_NO_ERRORS']) || (isset($GLOBALS['EVEAPI_NO_ERRORS']) && !$GLOBALS['EVEAPI_NO_ERRORS']))
@@ -90,7 +93,7 @@ class apiRequest {
     var $data = false;
     var $error;
 
-    function apiRequest($method, $apiKey, $forCharacter = false) {
+    function apiRequest($method, $apiKey = null, $forCharacter = false) {
         $result = false;
 
         $start = microtime(true);
@@ -108,7 +111,7 @@ class apiRequest {
             $params['keyID'] = $apiKey->keyID;
             $params['vCode'] = $apiKey->vCode;
             if ($forCharacter) {
-                $params['characterID'] = $forCharacter;
+                $params['characterID'] = $forCharacter->characterID;
             }
         }
 
