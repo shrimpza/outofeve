@@ -19,9 +19,16 @@ class corporation extends Plugin {
             $corporation = new eveCorporation($corpKey);
             $corporation->load();
 
-
             $corp = objectToArray($corporation);
-
+            
+            
+            if ($corpKey->hasAccess(CORP_AccountBalance)) {
+                $balances = new eveCorporationWalletList($corpKey);
+                $balances->load($corporation->walletDivisions);
+                
+                $bals = objectToArray($balances);
+            }
+            
             if (!isset($_POST['active'])) {
                 $_POST['active'] = 4;
             }
@@ -95,6 +102,7 @@ class corporation extends Plugin {
 
             return $this->render('corporation', array(
                 'corp' => $corp, 
+                'balances' => $bals, 
                 'members' => $members, 
                 'systems' => $systems, 
                 'titles' => $titles, 

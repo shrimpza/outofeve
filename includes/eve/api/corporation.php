@@ -19,28 +19,11 @@ class eveCorporation {
     var $station = null;
     var $divisions = array();
     var $walletDivisions = array();
-    //var $logo = array();
-    //var $account = null;
-    //var $character = null;
-    //var $members = array();
     var $titles = array();
-    //var $assets = array();
-    //var $orders = array();
-    //var $journalItems = array();
-    //var $transactions = array();
-    //var $industryJobs = array();
-    //var $kills = array();
-    //var $deaths = array();
     var $starbases = array();
 
     function eveCorporation($key) {
         $this->key = $key;
-        //$this->account = $account;
-        //$this->character = $character;
-
-        //if ($corpData) {
-        //    $this->load($corpData);
-        //}
     }
 
     function load() {
@@ -82,64 +65,7 @@ class eveCorporation {
                 }
             }
         }
-
-        // todo: deprecate logo details, will retrieve from eve servers
-        //$this->logo['graphicID'] = (int) $result->logo->graphicID;
-        //$this->logo['layers'][] = array('shape' => (int) $result->logo->shape1,
-        //    'color' => (int) $result->logo->color1);
-        //$this->logo['layers'][] = array('shape' => (int) $result->logo->shape2,
-        //    'color' => (int) $result->logo->color2);
-        //$this->logo['layers'][] = array('shape' => (int) $result->logo->shape3,
-        //    'color' => (int) $result->logo->color3);
-
-//            $this->loadBalances();
-//            $this->loadMembers();
     }
-
-//        function loadBalances() {
-//            $balanceData = new apiRequest('corp/AccountBalance.xml.aspx', array($this->account->userId,
-//                                                                                   $this->account->apiKey,
-//                                                                                   $this->character->characterID));
-//
-//            if ($balanceData->data) {
-//                if (!$balanceData->data->error) {
-//                    foreach ($balanceData->data->result->rowset->row as $balance) {
-//                        for ($i = 0; $i < count($this->walletDivisions); $i++) {
-//                            if ($this->walletDivisions[$i]['key'] == (int)$balance['accountKey']) {
-//                                $this->walletDivisions[$i]['balance'] = (float)$balance['balance'];
-//                            }
-//                        }
-//                    }
-//
-//                    $this->loadedBalances = true;
-//                }
-//            }
-//        }
-//        function loadMembers($full = false) {
-//            if (count($this->members) == 0) {
-//                $memberData = new apiRequest('corp/MemberTracking.xml.aspx', array($this->account->userId,
-//                                                                                   $this->account->apiKey,
-//                                                                                   $this->character->characterID));
-//
-//                if ($memberData->data) {
-//                    if (!$memberData->data->error) {
-//                        foreach ($memberData->data->result->rowset->row as $member) {
-//                            $this->members[] = new eveCorporationMember($this->account, $this, $this->db, $member);
-//                        }
-//
-//                        $this->loadedMembers = true;
-//                    }
-//                }
-//            }
-//
-//            for ($i = 0; $i < count($this->members); $i++) {
-//                if ($full) {
-//                    $this->members[$i]->loadDetail();
-//                }
-//                if ($this->members[$i]->characterID == $this->character->characterID)
-//                    $this->character->corpMember = $this->members[$i];
-//            }
-//        }
 
     function loadStarbases($full = true) {
         $starbaseData = new apiRequest('corp/StarbaseList.xml.aspx', array($this->account->userId,
@@ -250,9 +176,6 @@ class eveCorporationMemberList {
             if ($full) {
                 $this->members[$i]->loadDetail();
             }
-            //if ($this->members[$i]->characterID == $this->character->characterID) {
-            //    $corporation->character->corpMember = $this->members[$i];
-            //}
         }
     }
 

@@ -46,11 +46,11 @@
         </tr>
         {/if}
 
-        {if $corp.loadedBalances}
+        {if $balances}
           <tr>
             <th colspan="2">Wallet Balances</th>
           </tr>
-          {foreach from=$corp.walletDivisions item=wallet}
+          {foreach from=$balances.wallets item=wallet}
           <tr class="{cycle values='row,rowAlt'}">
             <td align="right"><b>{$wallet.description}:</b></td>
             <td align="right">{$wallet.balance|eveNum}&nbsp;&nbsp;</td>
