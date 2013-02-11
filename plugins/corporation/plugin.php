@@ -14,7 +14,7 @@ class corporation extends Plugin {
     }
 
     function getContent() {
-        if ($this->site->character->corporation) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
             $this->site->character->corporation->loadMembers(true);
 
             $corp = objectToArray($this->site->character->corporation, array('DBManager', 'eveDB', 'eveCharacter'));
