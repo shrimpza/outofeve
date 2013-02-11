@@ -15,26 +15,27 @@ class corporation extends Plugin {
 
     function getContent() {
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
-            $this->site->character->corporation->loadMembers(true);
+            $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+            $corporation = new eveCorporation($corpKey);
+            $corporation->load();
 
-            $corp = objectToArray($this->site->character->corporation, array('DBManager', 'eveDB', 'eveCharacter'));
 
-            // no need to duplicate member list, it's not used again
-            unset($corp['members']);
+            $corp = objectToArray($corporation);
 
-            if (!isset($_POST['active']))
+            if (!isset($_POST['active'])) {
                 $_POST['active'] = 4;
-            if (!isset($_POST['system']))
+            }
+            if (!isset($_POST['system'])) {
                 $_POST['system'] = 0;
-            if (!isset($_POST['title']))
+            }
+            if (!isset($_POST['title'])) {
                 $_POST['title'] = '';
+            }
 
             $activeDay = 86400;
             $activeWeek = $activeDay * 7;
             $activeMonth = $activeWeek * 4;
             $active3Months = $activeMonth * 3;
-
-            $members = array();
 
             $active = array(array('min' => 0, 'max' => $activeWeek, 'count' => 0, 'name' => 'Last 7 days'),
                 array('min' => $activeWeek, 'max' => $activeMonth, 'count' => 0, 'name' => 'Last month'),
@@ -43,13 +44,19 @@ class corporation extends Plugin {
             $systems = array();
             $titles = array();
 
-            foreach ($this->site->character->corporation->members as $member) {
+            $memberList = new eveCorporationMemberList($corpKey);
+            $memberList->load();
+
+            $members = array();
+
+            foreach ($memberList->members as $member) {
                 if ($member->locationID) {
                     $sys = null;
                     if (isset($member->location->stationid)) {
                         $sys = $member->location->solarSystem;
-                    } else if (isset($member->location->solarsystemid))
+                    } else if (isset($member->location->solarsystemid)) {
                         $sys = $member->location;
+                    }
 
                     if ($sys) {
                         if (isset($systems[$sys->solarsystemid])) {
@@ -75,18 +82,24 @@ class corporation extends Plugin {
                 }
 
                 $n = array_push($members, $member);
-                if (($_POST['title'] <> '') && ($member->title != $_POST['title']))
+                if (($_POST['title'] <> '') && ($member->title != $_POST['title'])) {
                     array_pop($members);
-                else if (($_POST['system'] > 0) && ($sys->solarsystemid != $_POST['system']))
+                } else if (($_POST['system'] > 0) && ($sys->solarsystemid != $_POST['system'])) {
                     array_pop($members);
-                else if (($_POST['active'] < 4) && ($member->activeTimeSlot != $_POST['active']))
+                } else if (($_POST['active'] < 4) && ($member->activeTimeSlot != $_POST['active'])) {
                     array_pop($members);
+                }
             }
 
             $members = objectToArray($members, array('DBManager', 'eveDB', 'eveCharacter'));
 
-            return $this->render('corporation', array('corp' => $corp, 'members' => $members, 'systems' => $systems, 'titles' => $titles, 'active' => $active,
-                        'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
+            return $this->render('corporation', array(
+                'corp' => $corp, 
+                'members' => $members, 
+                'systems' => $systems, 
+                'titles' => $titles, 
+                'active' => $active,
+                'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
         } else {
             return '<h1>No corporation!</h1>';
         }
