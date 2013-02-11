@@ -8,12 +8,14 @@ class kills extends Plugin {
     function kills($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_KillLog)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_KillLog)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Kills', '?module=kills', 'icon26_05');
             $this->site->plugins['mainmenu']->addLink('main', 'Deaths', '?module=kills&deaths=1', 'icon04_07');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_KillLog)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_KillLog)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Kills', '?module=kills&corp=1', 'icon26_05');
             $this->site->plugins['mainmenu']->addLink('corp', 'Deaths', '?module=kills&deaths=1&corp=1', 'icon04_07');
         }

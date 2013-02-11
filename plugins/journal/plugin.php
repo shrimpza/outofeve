@@ -8,11 +8,13 @@ class journal extends Plugin {
     function journal($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletJournal)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletJournal)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Journal', '?module=journal', 'icon07_12');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletJournal)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletJournal)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Journal', '?module=journal&corp=1', 'icon07_12');
         }
     }

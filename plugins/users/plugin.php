@@ -8,102 +8,106 @@ class users extends Plugin {
     function users($db, $site) {
         $this->Plugin($db, $site);
 
-        if (isset($_POST['login'])) {
-            if (!empty($_POST['username']) && !empty($_POST['password'])) {
-                setcookie('user[username]', $_POST['username'], time() + (60 * 60 * 24 * 30), '/');
-                setcookie('user[password]', md5($_POST['password']), time() + (60 * 60 * 24 * 30), '/');
+        // initialise an empty user
+        $this->site->user = $db->getObject('user', 0);
 
-                $_COOKIE['user']['username'] = $_POST['username'];
-                $_COOKIE['user']['password'] = md5($_POST['password']);
+        if (isset($_GET['logout'])) {
+            // user requested logout, clear session cookie
+            setcookie('ooe_session', '', time() - (60 * 60 * 24 * 30), '/');
+            unset($_COOKIE['ooe_session']);
+        } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
+            // user is logging in
+            $checkUser = $db->QueryA('select id from user where username = ? and password = ?', array($_POST['username'], md5($_POST['password'])));
+            if (is_array($checkUser) && $checkUser[0]['id'] > 0) {
+                // generate session and set cookie
+                $sessionId = md5(uniqid(time(), true));
+                setcookie('ooe_session', $sessionId, time() + (60 * 60 * 24 * 30), '/');
+
+                // set session in user
+                $this->site->user = $db->getObject('user', $checkUser[0]['id']);
+                $this->site->user->session_id = $sessionId;
             }
-        } else if (isset($_GET['logout'])) {
-            setcookie('user[username]', '', time() - (60 * 60 * 24 * 30), '/');
-            setcookie('user[password]', '', time() - (60 * 60 * 24 * 30), '/');
-
-            unset($_COOKIE['user']);
+        } else if (isset($_COOKIE['ooe_session'])) {
+            // session set, check if it exists
+            $checkUser = $db->QueryA('select id from user where session_id = ?', array($_COOKIE['ooe_session']));
+            if (!is_array($checkUser)) {
+                // invalid session, unset
+                setcookie('ooe_session', '', time() - (60 * 60 * 24 * 30), '/');
+                unset($_COOKIE['ooe_session']);
+            } else {
+                $this->site->user = $db->getObject('user', $checkUser[0]['id']);
+            }
         }
 
-        if (!empty($_COOKIE['user']['username']) && !empty($_COOKIE['user']['password'])) {
-            $checkUser = $db->QueryA('select id from user where username = ? and password = ?', array($_COOKIE['user']['username'], $_COOKIE['user']['password']));
-        } else {
-            $checkUser = null;
-        }
+        // the user is valid
+        if ($this->site->user->id > 0) {
 
-        // user is logged in
-        if (is_array($checkUser)) {
-            $this->site->user = $db->getObject('user', $checkUser[0]['id']);
+            // optional proxy
+            if (trim($this->site->user->proxy) <> '') {
+                $GLOBALS['config']['eve']['api_url'] = trim($this->site->user->proxy);
+            }
 
-            // the user is valid
-            if ($this->site->user->id > 0) {
+            // timezone adjustment
+            $tz = new DateTimeZone($this->site->user->timezone);
+            $dt = new DateTime("now", $tz);
+            $timeOffset = $tz->getOffset($dt) / 3600;
+            eveTimeOffset::$offset = $timeOffset;
 
-                // optional proxy
-                if (trim($this->site->user->proxy) <> '') {
-                    $GLOBALS['config']['eve']['api_url'] = trim($this->site->user->proxy);
-                }
+            if (isset($_POST['theme'])) {
+                $tmpTheme = $_POST['theme'];
+            } else {
+                $tmpTheme = $this->site->user->theme;
+            }
 
-                // timezone adjustment
-                $tz = new DateTimeZone($this->site->user->timezone);
-                $dt = new DateTime("now", $tz);
-                $timeOffset = $tz->getOffset($dt) / 3600;
-                eveTimeOffset::$offset = $timeOffset;
+            if (!empty($tmpTheme) && (is_dir($GLOBALS['config']['templates']['theme_dir'] . '/' . $tmpTheme))) {
+                $GLOBALS['config']['templates']['theme'] = $tmpTheme;
+            }
 
-                if (isset($_POST['theme'])) {
-                    $tmpTheme = $_POST['theme'];
+            // load the user's eve api keys
+            $this->loadApiKeys();
+
+            if (isset($_GET['setCharKey'])) {
+                $key = $db->getObject('apikey', $_GET['setCharKey'], 'keyid');
+                if ($key->user_id != $this->site->user->id) {
+                    echo '<div class="apierror">Selected key does not belong to you!</div>';
                 } else {
-                    $tmpTheme = $this->site->user->theme;
+                    $this->site->user->char_apikey_id = $key->id;
                 }
-
-                if (!empty($tmpTheme) && (is_dir($GLOBALS['config']['templates']['theme_dir'] . '/' . $tmpTheme))) {
-                    $GLOBALS['config']['templates']['theme'] = $tmpTheme;
-                }
-
-                $this->loadApiKeys();
-
-                if (isset($_GET['setCharKey'])) {
-                    $key = $db->getObject('apikey', $_GET['setCharKey'], 'keyid');
-                    if ($key->user_id != $this->site->user->id) {
-                        echo '<div class="apierror">Selected key does not belong to you!</div>';
-                    } else {
-                        $this->site->user->char_apikey_id = $key->id;
-                    }
-                }
-
-                if (isset($_GET['setCorpKey'])) {
-                    $key = $db->getObject('apikey', $_GET['setCorpKey'], 'keyid');
-                    if ($key->user_id != $this->site->user->id) {
-                        echo '<div class="apierror">Selected key does not belong to you!</div>';
-                    } else {
-                        $this->site->user->corp_apikey_id = $key->id;
-                    }
-                }
-
-                if (isset($_GET['setChar'])) {
-                    $key = $db->getObject('apikey', $this->site->user->char_apikey_id);
-                    $key->character_id = $_GET['setChar'];
-                    $key->save();
-
-                    eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
-                }
-
-                if (isset($_GET['setCorpChar'])) {
-                    $key = $db->getObject('apikey', $this->site->user->corp_apikey_id);
-                    $key->character_id = $_GET['setCorpChar'];
-                    $key->save();
-
-                    eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
-                }
-
-                // assign template variables to allow selecting of character and corporation keys and characters
-                $this->site->tplVars['charKeys'] = objectToArray(eveKeyManager::getCharacterKeys());
-                $this->site->tplVars['corpKeys'] = objectToArray(eveKeyManager::getCorporateKeys());
-                $this->site->tplVars['currentCharKey'] = objectToArray(eveKeyManager::getKey($this->site->user->char_apikey_id));
-                $this->site->tplVars['currentCorpKey'] = objectToArray(eveKeyManager::getKey($this->site->user->corp_apikey_id));
-
-                $this->site->user->activetime = date('Y-m-d H:i:s');
-                $this->site->user->save();
             }
-        } else {
-            $this->site->user = $db->getObject('user', 0);
+
+            if (isset($_GET['setCorpKey'])) {
+                $key = $db->getObject('apikey', $_GET['setCorpKey'], 'keyid');
+                if ($key->user_id != $this->site->user->id) {
+                    echo '<div class="apierror">Selected key does not belong to you!</div>';
+                } else {
+                    $this->site->user->corp_apikey_id = $key->id;
+                }
+            }
+
+            if (isset($_GET['setChar'])) {
+                $key = $db->getObject('apikey', $this->site->user->char_apikey_id);
+                $key->character_id = $_GET['setChar'];
+                $key->save();
+
+                eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
+            }
+
+            if (isset($_GET['setCorpChar'])) {
+                $key = $db->getObject('apikey', $this->site->user->corp_apikey_id);
+                $key->character_id = $_GET['setCorpChar'];
+                $key->save();
+
+                eveKeyManager::getInstance()->keys[$key->id]->selectedCharacter = $key->character_id;
+            }
+
+            // assign template variables to allow selecting of character and corporation keys and characters
+            $this->site->tplVars['charKeys'] = objectToArray(eveKeyManager::getCharacterKeys());
+            $this->site->tplVars['corpKeys'] = objectToArray(eveKeyManager::getCorporateKeys());
+            $this->site->tplVars['currentCharKey'] = objectToArray(eveKeyManager::getKey($this->site->user->char_apikey_id));
+            $this->site->tplVars['currentCorpKey'] = objectToArray(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+
+            $this->site->user->activetime = date('Y-m-d H:i:s');
+            $this->site->user->save();
         }
     }
 
@@ -364,6 +368,7 @@ class users extends Plugin {
     function hasForcedMenu($menu) {
         return false;
     }
+
 }
 
 function tzSort($a, $b) {

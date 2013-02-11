@@ -8,7 +8,8 @@ class mail extends Plugin {
     function mail($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MailMessages)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MailMessages)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Mail', '?module=mail', 'icon94_08');
         }
     }

@@ -10,17 +10,20 @@ class mainmenu extends Plugin {
         $this->Plugin($db, $site);
 
         // add the menu group for character stuff
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
             $this->addGroup('Character', 'main');
         }
 
         // add menu group for corp stuff
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
             $this->addGroup('Corporation', 'corp');
         }
 
         // similar again, since we want utils at the end of the menu, not before corp items
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
             $this->addGroup('Utilities', 'util');
         }
     }

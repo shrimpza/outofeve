@@ -8,11 +8,13 @@ class transactions extends Plugin {
     function transactions($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletTransactions)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletTransactions)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Market Transactions', '?module=transactions', 'icon18_01');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletTransactions)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletTransactions)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Market Transactions', '?module=transactions&corp=1', 'icon18_01');
         }
     }

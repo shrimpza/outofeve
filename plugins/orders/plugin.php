@@ -8,11 +8,13 @@ class orders extends Plugin {
     function orders($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MarketOrders)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MarketOrders)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Market Orders', '?module=orders', 'icon17_02');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_MarketOrders)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_MarketOrders)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Market Orders', '?module=orders&corp=1', 'icon17_02');
         }
     }
