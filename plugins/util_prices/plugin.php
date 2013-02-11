@@ -7,7 +7,7 @@
         function util_prices($db, $site) {
             $this->Plugin($db, $site);
 
-            $this->site->plugins['mainmenu']->addLink('util', 'Market Prices', '?module=util_prices', 'icon06_03');
+            $this->site->plugins['mainmenu']->addLink('util', 'Market Prices', '?module=util_prices', 'util_prices');
         }
 
         function getContent() {

@@ -10,7 +10,7 @@ class corporation extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_CorporationSheet)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Corporation', '?module=corporation', 'icon07_06');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Corporation', '?module=corporation', 'corp');
         }
     }
 

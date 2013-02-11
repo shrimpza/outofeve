@@ -5,7 +5,7 @@
     <ul>
       {section name=lnk loop=$mg.links}
         <li><a href="{$mg.links[lnk].l}">
-          {if $mg.links[lnk].i}<img src="{$site_url}/eveimages/icons/{if $smallicons}16{else}32{/if}/{$mg.links[lnk].i}.png" align="absmiddle" /> {/if}
+          {if $mg.links[lnk].i}<img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_{if $smallicons}16{else}32{/if}.png" align="absmiddle" /> {/if}
           {$mg.links[lnk].t}
         </a></li>
       {/section}

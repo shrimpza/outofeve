@@ -7,7 +7,7 @@
         function util_mining($db, $site) {
             $this->Plugin($db, $site);
 
-            $this->site->plugins['mainmenu']->addLink('util', 'Mining Calculator', '?module=util_mining', 'icon12_08');
+            $this->site->plugins['mainmenu']->addLink('util', 'Mining Calculator', '?module=util_mining', 'util_mining');
         }
 
         function getContent() {

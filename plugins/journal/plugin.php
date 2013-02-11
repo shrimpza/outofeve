@@ -10,12 +10,12 @@ class journal extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
                 && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletJournal)) {
-            $this->site->plugins['mainmenu']->addLink('main', 'Journal', '?module=journal', 'icon07_12');
+            $this->site->plugins['mainmenu']->addLink('main', 'Journal', '?module=journal', 'journal');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletJournal)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Journal', '?module=journal&corp=1', 'icon07_12');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Journal', '?module=journal&corp=1', 'journal');
         }
     }
 

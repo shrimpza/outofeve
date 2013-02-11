@@ -10,12 +10,12 @@ class orders extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
                 && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MarketOrders)) {
-            $this->site->plugins['mainmenu']->addLink('main', 'Market Orders', '?module=orders', 'icon17_02');
+            $this->site->plugins['mainmenu']->addLink('main', 'Market Orders', '?module=orders', 'orders');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_MarketOrders)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Market Orders', '?module=orders&corp=1', 'icon17_02');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Market Orders', '?module=orders&corp=1', 'orders');
         }
     }
 

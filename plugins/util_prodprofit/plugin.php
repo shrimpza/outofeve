@@ -7,7 +7,7 @@
         function util_prodprofit($db, $site) {
             $this->Plugin($db, $site);
 
-            $this->site->plugins['mainmenu']->addLink('util', 'Production Profitability', '?module=util_prodprofit', 'icon32_02');
+            $this->site->plugins['mainmenu']->addLink('util', 'Production Profitability', '?module=util_prodprofit', 'util_prodprofit');
         }
 
         function productionCost($item, $meLevel, $region) {

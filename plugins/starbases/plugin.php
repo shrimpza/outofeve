@@ -10,7 +10,7 @@ class starbases extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_StarbaseList)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Starbases', '?module=starbases', 'icon40_14');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Starbases', '?module=starbases', 'starbases');
         }
     }
 

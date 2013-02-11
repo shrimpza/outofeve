@@ -10,12 +10,12 @@ class manufacture extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
                 && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_IndustryJobs)) {
-            $this->site->plugins['mainmenu']->addLink('main', 'Manufacture &amp; Research', '?module=manufacture', 'icon33_02');
+            $this->site->plugins['mainmenu']->addLink('main', 'Manufacture &amp; Research', '?module=manufacture', 'industry');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_IndustryJobs)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Manufacture &amp; Research', '?module=manufacture&corp=1', 'icon33_02');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Manufacture &amp; Research', '?module=manufacture&corp=1', 'industry');
         }
     }
 

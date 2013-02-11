@@ -7,7 +7,7 @@
         function util_production($db, $site) {
             $this->Plugin($db, $site);
 
-            $this->site->plugins['mainmenu']->addLink('util', 'Production Cost', '?module=util_production', 'icon18_02');
+            $this->site->plugins['mainmenu']->addLink('util', 'Production Cost', '?module=util_production', 'util_production');
         }
 
         function getContent() {

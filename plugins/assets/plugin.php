@@ -10,12 +10,12 @@ class assets extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id) 
                 && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_AssetList)) {
-            $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'icon07_13');
+            $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'assets');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_AssetList)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Assets', '?module=assets&corp=1', 'icon07_13');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Assets', '?module=assets&corp=1', 'assets');
         }
     }
 
