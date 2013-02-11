@@ -20,15 +20,15 @@ class corporation extends Plugin {
             $corporation->load();
 
             $corp = objectToArray($corporation);
-            
-            
+
+
             if ($corpKey->hasAccess(CORP_AccountBalance)) {
                 $balances = new eveCorporationWalletList($corpKey);
                 $balances->load($corporation->walletDivisions);
-                
+
                 $bals = objectToArray($balances);
             }
-            
+
             if (!isset($_POST['active'])) {
                 $_POST['active'] = 4;
             }
@@ -51,63 +51,65 @@ class corporation extends Plugin {
             $systems = array();
             $titles = array();
 
-            $memberList = new eveCorporationMemberList($corpKey);
-            $memberList->load();
+            if ($corpKey->hasAccess(CORP_MemberTrackingExtended)) {
+                $memberList = new eveCorporationMemberList($corpKey);
+                $memberList->load();
 
-            $members = array();
+                $members = array();
 
-            foreach ($memberList->members as $member) {
-                if ($member->locationID) {
-                    $sys = null;
-                    if (isset($member->location->stationid)) {
-                        $sys = $member->location->solarSystem;
-                    } else if (isset($member->location->solarsystemid)) {
-                        $sys = $member->location;
-                    }
+                foreach ($memberList->members as $member) {
+                    if ($member->locationID) {
+                        $sys = null;
+                        if (isset($member->location->stationid)) {
+                            $sys = $member->location->solarSystem;
+                        } else if (isset($member->location->solarsystemid)) {
+                            $sys = $member->location;
+                        }
 
-                    if ($sys) {
-                        if (isset($systems[$sys->solarsystemid])) {
-                            $systems[$sys->solarsystemid]['count']++;
-                        } else {
-                            $systems[$sys->solarsystemid] = array('name' => $sys->solarsystemname, 'count' => 1);
+                        if ($sys) {
+                            if (isset($systems[$sys->solarsystemid])) {
+                                $systems[$sys->solarsystemid]['count']++;
+                            } else {
+                                $systems[$sys->solarsystemid] = array('name' => $sys->solarsystemname, 'count' => 1);
+                            }
                         }
                     }
-                }
-                if ($member->title) {
-                    if (isset($titles[$member->title])) {
-                        $titles[$member->title]++;
-                    } else {
-                        $titles[$member->title] = 1;
+                    if ($member->title) {
+                        if (isset($titles[$member->title])) {
+                            $titles[$member->title]++;
+                        } else {
+                            $titles[$member->title] = 1;
+                        }
                     }
-                }
-                for ($i = 0; $i < count($active); $i++) {
-                    if ((time() - $active[$i]['min'] >= ($member->logoffDateTime - $this->site->user->account->timeOffset))
-                            && (time() - $active[$i]['max'] <= ($member->logoffDateTime - $this->site->user->account->timeOffset))) {
-                        $member->activeTimeSlot = $i;
-                        $active[$i]['count']++;
+                    for ($i = 0; $i < count($active); $i++) {
+                        if ((time() - $active[$i]['min'] >= ($member->logoffDateTime - $this->site->user->account->timeOffset))
+                                && (time() - $active[$i]['max'] <= ($member->logoffDateTime - $this->site->user->account->timeOffset))) {
+                            $member->activeTimeSlot = $i;
+                            $active[$i]['count']++;
+                        }
+                    }
+
+                    $n = array_push($members, $member);
+                    if (($_POST['title'] <> '') && ($member->title != $_POST['title'])) {
+                        array_pop($members);
+                    } else if (($_POST['system'] > 0) && ($sys->solarsystemid != $_POST['system'])) {
+                        array_pop($members);
+                    } else if (($_POST['active'] < 4) && ($member->activeTimeSlot != $_POST['active'])) {
+                        array_pop($members);
                     }
                 }
 
-                $n = array_push($members, $member);
-                if (($_POST['title'] <> '') && ($member->title != $_POST['title'])) {
-                    array_pop($members);
-                } else if (($_POST['system'] > 0) && ($sys->solarsystemid != $_POST['system'])) {
-                    array_pop($members);
-                } else if (($_POST['active'] < 4) && ($member->activeTimeSlot != $_POST['active'])) {
-                    array_pop($members);
-                }
+                $members = objectToArray($members, array('DBManager', 'eveDB', 'eveCharacter'));
             }
 
-            $members = objectToArray($members, array('DBManager', 'eveDB', 'eveCharacter'));
-
             return $this->render('corporation', array(
-                'corp' => $corp, 
-                'balances' => $bals, 
-                'members' => $members, 
-                'systems' => $systems, 
-                'titles' => $titles, 
-                'active' => $active,
-                'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
+                        'corp' => $corp,
+                        'balances' => $bals,
+                        'members' => $members,
+                        'systems' => $systems,
+                        'titles' => $titles,
+                        'active' => $active,
+                        'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
         } else {
             return '<h1>No corporation!</h1>';
         }

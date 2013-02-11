@@ -67,23 +67,6 @@ class eveCorporation {
         }
     }
 
-    function loadStarbases($full = true) {
-        $starbaseData = new apiRequest('corp/StarbaseList.xml.aspx', array($this->account->userId,
-                    $this->account->apiKey,
-                    $this->character->characterID),
-                        array('version' => 2));
-
-        if ($starbaseData->data) {
-            if (!$starbaseData->data->error) {
-                foreach ($starbaseData->data->result->rowset->row as $starbase) {
-                    $this->starbases[] = new eveStarbase($this->account, $starbase, $this, $full);
-                }
-            } else {
-                apiError('corp/StarbaseList.xml.aspx', $starbaseData->data->error);
-            }
-        }
-    }
-
 }
 
 class eveCorporationWalletDivision {
