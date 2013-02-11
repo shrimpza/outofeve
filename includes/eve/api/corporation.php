@@ -44,9 +44,9 @@ class eveCorporation {
     }
 
     function load() {
-        $data = new apiRequest('corp/CorporationSheet.xml.aspx', $this->key, $this->key->getCharacter());
-
         if ($this->key->hasAccess(CORP_CorporationSheet)) {
+            $data = new apiRequest('corp/CorporationSheet.xml.aspx', $this->key, $this->key->getCharacter());
+
             if ((!$data->error) && ($data->data)) {
                 $result = $data->data->result;
 
@@ -233,10 +233,10 @@ class eveCorporationMemberList {
         $this->key = $key;
     }
 
-    function load($full = false) {
+    function load($full = true, $extended = true) {
         if (count($this->members) == 0) {
             if ($this->key->hasAccess(CORP_MemberTrackingExtended)) {
-                $data = new apiRequest('corp/MemberTracking.xml.aspx', $this->key, $this->key->getCharacter());
+                $data = new apiRequest('corp/MemberTracking.xml.aspx', $this->key, $this->key->getCharacter(), array('extended' => $extended ? 1 : 0));
 
                 if ($data->data && !$data->data->error) {
                     foreach ($data->data->result->rowset->row as $member) {
@@ -269,6 +269,7 @@ class eveCorporationMember {
     var $logoffDateTime = 0;
     var $locationID = 0;
     var $shipTypeID = 0;
+    var $shipType = '';
     var $roles = 0;
     var $grantableRoles = 0;
     var $locationName = '';
@@ -287,6 +288,7 @@ class eveCorporationMember {
         $this->logoffDateTime = eveTimeOffset::getOffsetTime($member['logoffDateTime']);
         $this->locationID = (int) $member['locationID'];
         $this->shipTypeID = (int) $member['shipTypeID'];
+        $this->shipType = (string) $member['shipType'];
         $this->roles = (int) $member['roles'];
         $this->grantableRoles = (int) $member['grantableRoles'];
 

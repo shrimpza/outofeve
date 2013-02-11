@@ -64,7 +64,7 @@
 
     <td width="50%" valign="top">
 
-      {if $corp.loadedMembers}
+      {if $members}
       <table width="100%" border="0">
         <tr>
           <th>Members</th>
@@ -137,13 +137,13 @@
                 <tr><td align="right"><b>Last Active:</b></td><td>{$member.logoffDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
               {/if}
               {if $member.baseID}
-                <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/eveimages/types/32/{$member.base.stationtypeid}.png" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
+                <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/{$member.base.icon.icon32}" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
               {/if}
               {if $member.locationID}
-                <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/eveimages/types/32/{$member.location.stationtypeid}.png" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
+                <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/{$member.location.icon.icon32}" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
               {/if}
-              {if $member.shipTypeID}
-                <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/eveimages/types/32/{$member.ship.typeid}.png" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
+              {if $member.ship}
+                <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/{$member.ship.icon.icon32}" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
               {/if}
             </table>
           </td>
