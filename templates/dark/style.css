@@ -20,15 +20,15 @@
 /* basic colours for everything        */
 /* =================================== */
 .shadeLight {
-    background: #f3f3f3;
+    background-image: url('images/bg/white_trans_l.png');
 }
 
 .shadeMid {
-    background: #efefef;
+    background-image: url('images/bg/white_trans.png');
 }
 
 .shadeDark {
-    background: #e5e8e8;
+    background-image: url('images/bg/white_trans_d.png');
 }
 
 .borderLight {
@@ -44,7 +44,23 @@
 }
 
 .textLight {
-    color: #555;
+    color: #eee;
+}
+
+/* =================================== */
+/* some plugin specific tweaks         */
+/* =================================== */
+
+#killList .killHead {
+    padding: 3px 3px 7px 3px;
+}
+
+.groupHead td {
+    padding: 2px;
+}
+
+#assetList .contents td {
+    padding: 2px;
 }
 
 /* =================================== */
@@ -52,7 +68,7 @@
 /* =================================== */
 
 #header-full {
-    background-image: url('images/bg/diagonal-noise.png');
+    background-image: url('images/bg/navy_blue.png');
 }
 
 #header {
@@ -78,7 +94,7 @@
 
 #main {
     margin-left: 200px;
-    background-color: #ffffff;
+    background-image: url('images/bg/white_trans_l.png');
     padding: 8px;
 }
 
@@ -95,7 +111,7 @@
 #footer-wrapper {
     clear: both;
     margin-top: 50px;
-    background-image: url('images/bg/diagonal-noise.png');
+    background-image: url('images/bg/navy_blue.png');
 }
 
 /* =================================== */
@@ -105,18 +121,21 @@
 body {
     margin: 0;
     padding: 0;
-    background: #ffffff;
-    background-image: url("images/bg/debut_light.png");
+    background: #000000;
+    background-image: url("images/bg/twinkle_twinkle.png");
     font-family: "Trebuchet MS", Verdana, Helvetica;
     font-size: small;
+    color: #ffffff;
 }
 
-.a {
+.a, a {
     text-decoration: none;
+    color: orange;
 }
 
 a:visited {
     text-decoration: none;
+    color: darkorange;
 }
 
 img {
@@ -125,8 +144,7 @@ img {
 
 infoLink a, .infoLink a:visited {
     text-decoration: none;
-    color: #000;
-    border-bottom: 1px dotted #00f;
+    color: #ffffff;
 }
 
 /* =================================== */
@@ -135,9 +153,9 @@ infoLink a, .infoLink a:visited {
 
 #header .charSelect {
     float: right;
-    background: #ffffff;
-    border: 1px solid #afafaf;
-    padding: 0px;
+    background-image: url('images/bg/white_trans_l.png');
+    /*    border: 1px solid #454545;*/
+    padding: 2px;
     margin: 5px;
     vertical-align: middle;
     height: 72px;
@@ -183,8 +201,7 @@ infoLink a, .infoLink a:visited {
 /* =================================== */
 
 th {
-    background: #efefef;
-    /*    border: 1px solid #E5E8E6;*/
+    background-image: url('images/bg/white_trans.png');
     text-align: center;
     font-size: 1.05em;
     padding: 4px 2px 4px 2px;
@@ -193,15 +210,14 @@ th {
 .sub {
     text-align: center;
     font-weight: bold;
-    color: #555;
-    background: #f3f3f3;
+    background-image: url('images/bg/white_trans_d.png');
 }
 
 .row {
 }
 
 .rowAlt {
-    background: #F8F8F8;
+    background-image: url('images/bg/white_trans_l.png');
 }
 
 /* =================================== */
@@ -209,23 +225,23 @@ th {
 /* =================================== */
 
 .moneyOut {
-    color: #b00;
+    color: #d00;
 }
 
 .moneyIn {
-    color: #090;
+    color: #0b0;
 }
 
 .bad {
-    color: #b00;
+    color: #d00;
 }
 
 .good {
-    color: #090;
+    color: #0b0;
 }
 
 .maybe {
-    color: #009;
+    color: #00b;
 }
 
 /* =================================== */
@@ -233,18 +249,15 @@ th {
 /* =================================== */
 
 #navigation .header {
-    background: #ffffff;
     text-align: left;
     font-weight: bold;
     padding: 5px;
-    background: #EFEFEF;
+    background-image: url('images/bg/white_trans_d.png');
     font-size: 1.1em;
 }
 
 #navigation .body {
-    /*    border: 1px solid #E5E8E6;*/
-    /*    background: #EFEFEF;*/
-    background: #ffffff;
+    background-image: url('images/bg/white_trans_l.png');
     border-top: 0px;
     margin-bottom: 10px;
 }
@@ -272,11 +285,11 @@ th {
 }
 
 .menu a:link, .menu a:active, .menu a:visited {
-    color: #000000;
+    color: #ffffff;
 }
 
 .menu a:hover {
-    background: #efefef;
+    background-image: url('images/bg/white_trans_l.png');
 }
 
 #navigation .menuNote {
@@ -385,8 +398,7 @@ th {
     vertical-align: middle;
     font-size: 1.1em;
     padding: 10px;
-    background: #f3f3f3;	
-    /*    border: 1px solid #e5e8e6;*/
+    background-image: url('images/bg/white_trans_d.png');
 }
 
 .listOptions a {
@@ -400,5 +412,8 @@ th {
 .pageNav {
     border: 1px solid #b5b8b6;
     text-align: center;
-    background: #e1e1e1;
+    background-color: #444;
+    color: orange;
+    font-weight: bold;
+    margin: 2px;
 }

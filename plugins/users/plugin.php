@@ -365,10 +365,6 @@ class users extends Plugin {
         return $this->render('rsspage', array('feeds' => $feeds, 'about' => file_exists('about/index.html')));
     }
 
-    function hasForcedMenu($menu) {
-        return false;
-    }
-
 }
 
 function tzSort($a, $b) {
