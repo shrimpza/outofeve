@@ -25,8 +25,8 @@
 
   {foreach from=$deaths item=kill}
   <div class="killHead shadeDark boderDark" onclick="toggleKill({$kill.killID})">
-    {if $corp}<img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_64.jpg" alt="{$kill.victim.characterName}" align="left" style="padding-right: 5px; margin-right: 0px;" />{/if}
-    <img src="{$site_url}/{$kill.victim.ship.icon.icon64}" alt="{$kill.victim.ship.typename}" align="left" />
+    {if $corp}<img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_64.jpg" class="i64" alt="{$kill.victim.characterName}" align="left" style="padding-right: 5px; margin-right: 0px;" />{/if}
+    <img src="{$site_url}/{$kill.victim.ship.icon.icon64}" class="i64s" alt="{$kill.victim.ship.typename}" align="left" />
       <h3>{if $corp}{$kill.victim.characterName}, {/if}{$kill.victim.ship.typename}</h3>
       <h4>{$kill.solarSystem.solarsystemname}, {$kill.solarSystem.region.regionname} ({$kill.solarSystem.security|eveNum:1})</h4>
       {$kill.date|date_format:"%d/%m/%Y %H:%M"}
@@ -40,9 +40,9 @@
           <table border="0" width="100%">
             <tr>
               <td width="10%">
-                <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_32.jpg" alt="{$kill.victim.characterName}" align="left" />
+                <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_32.jpg" class="i32" alt="{$kill.victim.characterName}" align="left" />
                 <a href="#" onclick="showInfo({$kill.victim.ship.typeid});return false;">
-                  <img src="{$site_url}/{$kill.victim.ship.icon.icon32}" alt="{$kill.victim.ship.typename}" align="left" /></a>
+                  <img src="{$site_url}/{$kill.victim.ship.icon.icon32}" class="i32" alt="{$kill.victim.ship.typename}" align="left" /></a>
               </td>
               <td width="45%">
                 <b>Pilot:</b> {$kill.victim.characterName}<br />
@@ -63,10 +63,10 @@
               <tr>
                 <td width="10%">
                   {if $attacker.characterID > 0}
-                    <img src="http://image.eveonline.com/Character/{$attacker.characterID}_32.jpg" alt="{$attacker.characterName}" align="left" />
+                    <img src="http://image.eveonline.com/Character/{$attacker.characterID}_32.jpg" class="i32" alt="{$attacker.characterName}" align="left" />
                   {/if}
                   <a href="#" onclick="showInfo({$attacker.ship.typeid});return false;">
-                    <img src="{$site_url}/{$attacker.ship.icon.icon32}" alt="{$attacker.ship.typename}" align="left" /></a>
+                    <img src="{$site_url}/{$attacker.ship.icon.icon32}" class="i32" alt="{$attacker.ship.typename}" align="left" /></a>
                 </td>
                 <td width="45%">
                   <b>Pilot:</b> {$attacker.characterName}<br />
@@ -98,7 +98,7 @@
           <tr class="{cycle values='row,rowAlt'}">
             <td>
               <a href="#" onclick="showInfo({$item.item.typeid});return false;">
-                <img src="{$site_url}/{$item.item.icon.icon32}" alt="{$item.item.typename}" align="absmiddle" /></a>
+                <img src="{$site_url}/{$item.item.icon.icon32}" class="i32" alt="{$item.item.typename}" align="absmiddle" /></a>
               {$item.item.typename}
             </td>
             <td align="right">
@@ -124,7 +124,7 @@
           <tr class="{cycle values='row,rowAlt'}">
             <td>
               <a href="#" onclick="showInfo({$item.item.typeid});return false;">
-                <img src="{$site_url}/{$item.item.icon.icon32}" alt="{$item.item.typename}" align="absmiddle" /></a>
+                <img src="{$site_url}/{$item.item.icon.icon32}" class="i32" alt="{$item.item.typename}" align="absmiddle" /></a>
               {$item.item.typename}
             </td>
             <td align="right">

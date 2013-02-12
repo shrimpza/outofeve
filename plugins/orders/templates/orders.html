@@ -45,11 +45,11 @@
       {foreach from=$selling item=o}
         <tr class="{cycle values='row,rowAlt'}">
           {if $corp}
-            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.jpg" class="i32" align="absmiddle" alt="{$o.charName}" title="{$o.charName}" /></td>
           {/if}
           <td>{$o.station.stationname}</td>
           <td>
-            <a href="#" onclick="showInfo({$o.item.typeid});return false;"><img src="{$site_url}/{$o.item.icon.icon32}" alt="{$o.item.typename}" align="absmiddle" /></a>
+            <a href="#" onclick="showInfo({$o.item.typeid});return false;"><img src="{$site_url}/{$o.item.icon.icon32}" class="i32" alt="{$o.item.typename}" align="absmiddle" /></a>
           {$o.item.typename}</td>
           <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
           <td align="right"">{$o.price|eveNum}</td>
@@ -108,12 +108,12 @@
       {foreach from=$buying item=o}
         <tr class="{cycle values='row,rowAlt'}">
           {if $corp}
-            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" class="i32" align="absmiddle" alt="{$o.charName}" title="{$o.charName}" /></td>
           {/if}
           <td>{$o.station.stationname}</td>
           <td>
             <a href="#" onclick="showInfo({$o.item.typeid});return false;">
-              <img src="{$site_url}/{$o.item.icon.icon32}" alt="{$o.item.typename}" align="absmiddle" />
+              <img src="{$site_url}/{$o.item.icon.icon32}" class="i32" alt="{$o.item.typename}" align="absmiddle" />
             </a>
           {$o.item.typename}</td>
           <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>

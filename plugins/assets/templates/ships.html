@@ -28,7 +28,7 @@
     <tr class="groupHead shadeDark borderDark textLight">
       <td colspan="3" onclick="toggleAssets('{$ship._ooe_id}')">
         <a href="#" onclick="showInfo('{$ship.item.typeid}');return false;">
-          <img src="{$site_url}/{$ship.item.icon.icon64}" alt="{$ship.item.typename}" align="left" style="margin-right: 10px" />
+          <img src="{$site_url}/{$ship.item.icon.icon64}" class="i64" alt="{$ship.item.typename}" align="left" style="margin-right: 10px" />
         </a>
         {$ship.item.typename}<br />{$ship.item.group.groupname}<br /><small>{$ship.locationName}</small></td>
     </tr>
@@ -45,7 +45,7 @@
                         {if (($ass.flag >= 11) && ($ass.flag <= 34))}
                           <div class="slot{$ass.flag}">
                             <a href="#" onclick="showInfo('{$ass.item.typeid}');return false;" title="{$ass.item.typename}">
-                              <img src="{$site_url}/{$ass.item.icon.icon64}" alt="{$ass.item.typename}" align="absmiddle" />
+                              <img src="{$site_url}/{$ass.item.icon.icon64}" class="i64" alt="{$ass.item.typename}" align="absmiddle" />
                             </a>
                           </div>
                         {/if}
@@ -55,7 +55,7 @@
                       {foreach from=$ship.contents item=ass name='poo'}
                         {if (($ass.flag >= 92) && ($ass.flag <= 99))}
                           <a href="#" onclick="showInfo('{$ass.item.typeid}');return false;" title="{$ass.item.typename}">
-                            <img src="{$site_url}/{$ass.item.icon.icon64}" alt="{$ass.item.typename}" align="absmiddle" class="rig" />
+                            <img src="{$site_url}/{$ass.item.icon.icon64}" class="i64" alt="{$ass.item.typename}" align="absmiddle" class="rig" />
                           </a>
                         {/if}
                       {/foreach}

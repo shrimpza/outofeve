@@ -143,7 +143,7 @@
 
 {if $asteroid}
   <h2>
-    <img src="{$site_url}/eveimages/icons/64/icon18_02.png" align="absmiddle" />
+    <img src="{$site_url}/eveimages/Icons/items/icon18_64_2.png" align="absmiddle" />
     Refining:
   </h2>
   <table width="100%" border="0">
@@ -157,7 +157,7 @@
       <tr class="{cycle values='row,rowAlt'}">
         <td>
           <a href="#" onclick="showInfo({$m.item.typeid});return false;">
-            <img src="{$site_url}/{$m.item.icon.icon32}" alt="{$m.item.typename}" align="absmiddle" />
+            <img src="{$site_url}/{$m.item.icon.icon32}" class="i32" alt="{$m.item.typename}" align="absmiddle" />
           </a>
           {$m.item.typename}
         </td>
@@ -176,7 +176,7 @@
 
   <h2>
     <a href="#" onclick="showInfo({$asteroid.typeid});return false;">
-      <img src="{$site_url}/{$asteroid.icon.icon64}" alt="{$asteroid.typename}" align="absmiddle" />
+      <img src="{$site_url}/{$asteroid.icon.icon64}" class="i64" alt="{$asteroid.typename}" align="absmiddle" />
     </a>
     {$asteroid.typename} Additional Details:
   </h2>

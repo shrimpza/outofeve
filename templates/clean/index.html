@@ -48,78 +48,81 @@
 
     <body>
 
-        <div id="header">
-            <div style="float: left;">
-                <a href="{$site_url}/"><img src="{$site_url}/templates/{$theme}/images/title.png" border="0" /></a>
-            </div>
-            {if $charKeys}
-            {strip}
-            <div class="charSelect">
-                <div class="selects">
-                    <select id="charKeySelect" onchange="setCurrent('setCharKey', this.value)">
-                    {foreach from=$charKeys item=key}
-                        <option value="{$key.keyID}" {if $currentCharKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
-                    {/foreach}
-                    </select><br />
-                    {if $currentCharKey}
+        <div id="header-full">
+            <div id="header">
+                <div style="float: left;">
+                    <a href="{$site_url}/"><img src="{$site_url}/templates/{$theme}/images/title.png" border="0" /></a>
+                </div>
+                {if $charKeys}
+                {strip}
+                <div class="charSelect">
+                    <div class="selects">
+                        <select id="charKeySelect" onchange="setCurrent('setCharKey', this.value)">
+                            {foreach from=$charKeys item=key}
+                            <option value="{$key.keyID}" {if $currentCharKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
+                            {/foreach}
+                        </select><br />
+                        {if $currentCharKey}
                         <select id="characterSelect" onchange="setCurrent('setChar', this.value)">
-                        {foreach from=$currentCharKey.characters item=char}
+                            {foreach from=$currentCharKey.characters item=char}
                             <option value="{$char.characterID}" {if $currentCharKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
-                        {/foreach}
+                            {/foreach}
                         </select>
+                        {/if}
+                    </div>
+                    {if $currentCharKey}
+                    <div class="chars">
+                        <div>
+                            {foreach from=$currentCharKey.characters item=char}
+                            <a href="#" title="{$char.characterName}" onclick="setCurrent('setChar', '{$char.characterID}')"><img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" /></a>
+                            {/foreach}
+                        </div>
+                    </div>
                     {/if}
                 </div>
-                {if $currentCharKey}
-                <div class="chars">
-                    <div>
-                        {foreach from=$currentCharKey.characters item=char}
-                        <a href="#" title="{$char.characterName}" onclick="setCurrent('setChar', '{$char.characterID}')"><img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" /></a>
-                        {/foreach}
+                {/strip}
+                {/if}
+
+                {if $corpKeys}
+                {strip}
+                <div class="charSelect">
+                    <div class="selects">
+                        <select id="corpKeySelect" onchange="setCurrent('setCorpKey', this.value)">
+                            {foreach from=$corpKeys item=key}
+                            <option value="{$key.keyID}" {if $currentCorpKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
+                            {/foreach}
+                        </select><br />
+                        {if $currentCorpKey}
+                        <select id="corpSelect" onchange="setCurrent('setCorpChar', this.value)">
+                            {foreach from=$currentCorpKey.characters item=char}
+                            <option value="{$char.characterID}" {if $currentCorpKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
+                            {/foreach}
+                        </select>
+                        {/if}
                     </div>
                 </div>
+                {/strip}
                 {/if}
             </div>
-            {/strip}
-            {/if}
-
-            {if $corpKeys}
-            {strip}
-            <div class="charSelect">
-                <div class="selects">
-                    <select id="corpKeySelect" onchange="setCurrent('setCorpKey', this.value)">
-                    {foreach from=$corpKeys item=key}
-                        <option value="{$key.keyID}" {if $currentCorpKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
-                    {/foreach}
-                    </select><br />
-                    {if $currentCorpKey}
-                        <select id="corpSelect" onchange="setCurrent('setCorpChar', this.value)">
-                        {foreach from=$currentCorpKey.characters item=char}
-                            <option value="{$char.characterID}" {if $currentCorpKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
-                        {/foreach}
-                        </select>
-                    {/if}
-                </div>
-            </div>
-            {/strip}
-            {/if}
         </div>
 
         <div id="container">
 
             <div id="navigation">
-		{foreach item=block from=$sideBlocks}
+                {foreach item=block from=$sideBlocks}
                 {include file="sideblock_left.html" title=$block.title content=$block.content}
                 {/foreach}
             </div>
 
             <div id="main">
-		{$content}
+                {$content}
+                <div style="clear: both"><!-- pull stuff down --></div>
             </div>
 
-            <div id="footer-wrapper">
-                <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a> <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a></div>
-            </div>
+        </div>
 
+        <div id="footer-wrapper">
+            <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a> <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a></div>
         </div>
 
         {if $errors}

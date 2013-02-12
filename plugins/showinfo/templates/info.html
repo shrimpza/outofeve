@@ -9,7 +9,7 @@
     <tr>
       <td colspan="2" class="description">
         <div class="icon">
-            <img src="{$site_url}/{$item.icon.icon64}" alt="{$item.typename}" />
+            <img src="{$site_url}/{$item.icon.icon64}" alt="{$item.typename}" class="i64" />
         </div>
         <div class="desc">
           {$item._description|nl2br}
@@ -25,7 +25,7 @@
       <tr class="{cycle values='row,rowAlt'}">
         <td>
         {if $a.icon}
-          <img src="{$site_url}/{$a.icon.icon16}" alt="{$a.unitname}" align="absmiddle" height="16"/>
+          <img src="{$site_url}/{$a.icon.icon16}" align="absmiddle" class="i16"/>
         {/if}
         {$a.displayname}</td>
         <td align="right">
@@ -44,7 +44,7 @@
 
     <tr>
       <th colspan="2">
-        <h4><img src="{$site_url}/eveimages/Icons/items/18_128_1.png" align="absmiddle" height="32"/> Market information</h4>
+        <h4><img src="{$site_url}/eveimages/Icons/items/18_128_1.png" align="absmiddle" class="i32"/> Market information</h4>
       </th>
     </tr>
     <tr class="{cycle values='row,rowAlt'}">

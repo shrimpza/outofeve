@@ -20,7 +20,7 @@
     {foreach from=$starbases item=s}
     <tr class="killHead">
       <td colspan="2" onclick="toggleStarbase({$s.itemID})">
-        <img src="{$site_url}/{$s.tower.icon.icon64}" alt="{$s.tower.typename}" align="left" style="margin-right: 20px" />
+        <img src="{$site_url}/{$s.tower.icon.icon64}" class="i64" alt="{$s.tower.typename}" align="left" style="margin-right: 20px" />
         <h3>{$s.tower.typename}<br />
         {if $s.moonID > 0}{$s.moon.itemname}{else}{$s.solarSystem.solarsystemname}{/if}, {$s.solarSystem.region.regionname} ({$s.solarSystem.security|eveNum:1})</h3>
         {if $s.state == 0}<h4 class="bad">Unanchored</h4>
@@ -90,7 +90,7 @@
             <tr class="{cycle values='row,rowAlt'}">
               <td>
                 <a href="#" onclick="showInfo({$f.resource.typeid});return false;">
-                  <img src="{$site_url}/{$f.resource.icon.icon32}" alt="{$f.resource.typename}" align="absmiddle" />
+                  <img src="{$site_url}/{$f.resource.icon.icon32}" class="i32" alt="{$f.resource.typename}" align="absmiddle" />
                 </a>
                 {$f.resource.typename}
               </td>

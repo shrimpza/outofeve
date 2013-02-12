@@ -36,7 +36,7 @@
     {foreach from=$trans item=t}
       <tr class="{cycle values='row,rowAlt'}">
         <td>
-          <a href="#" onclick="showInfo({$t.item.typeid});return false;"><img src="{$site_url}/{$t.item.icon.icon32}" alt="{$t.item.typename}" align="absmiddle" /></a>
+          <a href="#" onclick="showInfo({$t.item.typeid});return false;"><img src="{$site_url}/{$t.item.icon.icon32}" class="i32" alt="{$t.item.typename}" align="absmiddle" /></a>
           {$t.item.typename}
         </td>
         <td align="right">{$t.qty|eveNumInt}</td>
