@@ -74,8 +74,8 @@ class kills extends Plugin {
                 $prevPage = 0;
             }
 
-            return $this->render('deaths', array('deaths' => $deaths, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp'],
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage)));
+            return $this->render('deaths', array('deaths' => $deaths, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp']),
+                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
         } else {
             $kills = array();
             for ($i = 0; $i < count($killList); $i++) {
@@ -101,8 +101,8 @@ class kills extends Plugin {
                 $prevPage = 0;
             }
 
-            return $this->render('kills', array('kills' => $kills, 'find' => $_GET['find'], 'corp' => isset($_GET['corp'],
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage)));
+            return $this->render('kills', array('kills' => $kills, 'find' => $_GET['find'], 'corp' => isset($_GET['corp']),
+                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
         }
     }
 

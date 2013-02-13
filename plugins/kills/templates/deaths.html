@@ -1,16 +1,16 @@
 <div id="killList">
   <div class="listOptions">
-    <span>Search: 
-      <input type="text" id="killFind" value="{$find}" /> 
-      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&find='+document.getElementById('killFind').value">Go</button>
-      (Pilots, corporations, alliances, ships and systems)
-    </span>
     <span>Death Type: 
       <select id="deathType" onchange="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&deathType='+this.value">
         <option value="0" {if $deathType == 0}selected="selected"{/if}>All Deaths</option>
         <option value="1" {if $deathType == 1}selected="selected"{/if}>Player Deaths</option>
         <option value="2" {if $deathType == 2}selected="selected"{/if}>NPC Deaths</option>
       </select>
+    </span>
+    <span>Search: 
+      <input type="text" id="killFind" value="{$find}" /> 
+      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&find='+document.getElementById('killFind').value">Go</button>
+      (Pilots, corporations, alliances, ships and systems)
     </span>
   </div>
 
