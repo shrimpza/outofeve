@@ -21,13 +21,14 @@
 
 <table width="100%" border="0">
   <tr>
-    <th width="60%">Item</th>
-    <th width="30%">Location</th>
+    <th width="40%">Item</th>
+    <th width="25%">Group</th>
+    <th width="25%">Location</th>
     <th width="10%">Quantity</th>
   </tr>
   {foreach from=$assets item=lol key=locid}
     <tr class="groupHead shadeDark borderDark textLight">
-      <td colspan="3" onclick="toggleAssets('{$locid}')">
+      <td colspan="4" onclick="toggleAssets('{$locid}')">
       {if $lol.location.stationid}
         <img src="{$site_url}/{$lol.location.icon.icon32}" class="i32" alt="{$lol.location.stationname}" align="absmiddle" />
       {/if}
@@ -35,7 +36,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan="3">
+      <td colspan="4">
         <div style="display:none" id="{$locid}">
           {foreach from=$lol.assets item=ass name='foo'}
             {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}

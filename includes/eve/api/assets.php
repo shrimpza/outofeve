@@ -9,7 +9,7 @@ class eveAssetList {
         $this->key = $key;
     }
 
-    function load() {
+    function load($loadGroups = false) {
         if (count($this->assets) == 0) {
             if ($this->key->isCorpKey() && $this->key->hasAccess(CORP_AssetList)) {
                 $data = new apiRequest('corp/AssetList.xml.aspx', $this->key, $this->key->getCharacter());
@@ -19,7 +19,7 @@ class eveAssetList {
             
             if ((!$data->error) && ($data->data)) {
                 foreach ($data->data->result->rowset->row as $asset) {
-                    $this->assets[] = new eveAsset($asset);
+                    $this->assets[] = new eveAsset($asset, null, $loadGroups);
                 }
             }
         }
@@ -42,7 +42,7 @@ class eveAsset {
     // internal use id. seems the api duplicates the same ID multiple items within a /single/ result set.
     var $_ooe_id = 0;
 
-    function eveAsset($asset, $parentLocation = null) {
+    function eveAsset($asset, $parentLocation = null, $loadGroup = false) {
         $this->typeID = (int) $asset['typeID'];
         $this->itemID = (int) $asset['itemID'];
         $this->flag = (int) $asset['flag'];
@@ -66,11 +66,15 @@ class eveAsset {
         $this->qty = (int) $asset['quantity'];
 
         $this->flagText = eveDB::getInstance()->flagText($this->flag);
+        
+        if ($this->item && $loadGroup) {
+            $this->item->getGroup();
+        }
 
         if (isset($asset->rowset) && ($asset->rowset['name'] == 'contents')) {
             $this->contents = array();
             foreach ($asset->rowset->row as $subAsset) {
-                $this->contents[] = new eveAsset($subAsset, $this->location);
+                $this->contents[] = new eveAsset($subAsset, $this->location, $loadGroup);
             }
         }
 

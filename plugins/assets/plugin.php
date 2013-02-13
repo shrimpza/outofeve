@@ -13,7 +13,7 @@ class assets extends Plugin {
             $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'assets');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) 
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_AssetList)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Assets', '?module=assets&corp=1', 'assets');
         }
@@ -27,13 +27,13 @@ class assets extends Plugin {
         if (isset($_GET['corp'])) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
                 $al = new eveAssetList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
-                $al->load();
+                $al->load(true);
                 $fullAssetList = $al->assets;
             }
         } else {
             if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
                 $al = new eveAssetList(eveKeyManager::getKey($this->site->user->char_apikey_id));
-                $al->load();
+                $al->load(true);
                 $fullAssetList = $al->assets;
             }
         }
@@ -51,9 +51,11 @@ class assets extends Plugin {
             $this->name .= ': My Ships';
             $ships = $this->searchAssetCategory($fullAssetList, 6);
             usort($ships, 'assetNameSort');
-            for ($i = 0; $i < count($ships); $i++)
-                if ($ships[$i]->contents)
+            for ($i = 0; $i < count($ships); $i++) {
+                if ($ships[$i]->contents) {
                     usort($ships[$i]->contents, 'assetSlotSort');
+                }
+            }
 
 
             if (count($ships) > 10) {
@@ -88,15 +90,15 @@ class assets extends Plugin {
                         $assets[(string) $asset->locationID]['locationName'] = $asset->locationName;
                         $assets[(string) $asset->locationID]['assets'] = array();
                     }
-                    if ($asset->contents)
+                    if ($asset->contents) {
                         usort($asset->contents, 'assetSlotSort');
+                    }
                     $assets[(string) $asset->locationID]['assets'][] = $asset;
 
                     usort($assets[(string) $asset->locationID]['assets'], 'assetSlotSort');
                 }
             }
             usort($assets, 'assetStationSort');
-
 
             if (count($assets) > 15) {
                 $assets = array_chunk($assets, 15);
@@ -125,10 +127,12 @@ class assets extends Plugin {
         $result = array();
 
         for ($i = 0; $i < count($ass); $i++) {
-            if ($ass[$i]->contents)
+            if ($ass[$i]->contents) {
                 $result = array_merge($result, $this->searchAsset($ass[$i]->contents, $search));
-            if ((stripos($ass[$i]->item->typename, $search) !== false) || (stripos($ass[$i]->locationName, $search) !== false))
+            }
+            if ((stripos($ass[$i]->item->typename, $search) !== false) || (stripos($ass[$i]->locationName, $search) !== false)) {
                 array_push($result, $ass[$i]);
+            }
         }
 
         return $result;
@@ -139,11 +143,14 @@ class assets extends Plugin {
 
         for ($i = 0; $i < count($ass); $i++) {
             $ass[$i]->item->getGroup();
-            if (($ass[$i]->item->group) && ($ass[$i]->item->group->category) && ($ass[$i]->item->group->category->categoryid == $search))
-                if (($search <> 6) || (($search == 6) && ($ass[$i]->item->groupid <> 31)))      // nasty way to filter shuttles from the ships list
+            if (($ass[$i]->item->group) && ($ass[$i]->item->group->category) && ($ass[$i]->item->group->category->categoryid == $search)) {
+                if (($search <> 6) || (($search == 6) && ($ass[$i]->item->groupid <> 31))) {     // nasty way to filter shuttles from the ships list
                     $result[] = $ass[$i];
-            if ($ass[$i]->contents)
+                }
+            }
+            if ($ass[$i]->contents) {
                 $result = array_merge($result, $this->searchAssetCategory($ass[$i]->contents, $search));
+            }
         }
 
         return $result;
@@ -152,20 +159,23 @@ class assets extends Plugin {
 }
 
 function assetStationSort($a, $b) {
-    if ($a['locationName'] == $b['locationName'])
+    if ($a['locationName'] == $b['locationName']) {
         return 0;
+    }
     return ($a['locationName'] < $b['locationName']) ? -1 : 1;
 }
 
 function assetSlotSort($a, $b) {
-    if ($a->flagText == $b->flagText)
+    if ($a->flagText == $b->flagText) {
         return 0;
+    }
     return ($a->flagText < $b->flagText) ? -1 : 1;
 }
 
 function assetNameSort($a, $b) {
-    if ($a->item->typename == $b->item->typename)
+    if ($a->item->typename == $b->item->typename) {
         return 0;
+    }
     return ($a->item->typename < $b->item->typename) ? -1 : 1;
 }
 
