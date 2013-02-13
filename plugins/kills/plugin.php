@@ -28,6 +28,9 @@ class kills extends Plugin {
         if (!isset($_GET['find'])) {
             $_GET['find'] = '';
         }
+        if (!isset($_GET['deathType'])) {
+            $_GET['deathType'] = 0;
+        }
 
         if (isset($_GET['corp'])) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
@@ -48,7 +51,8 @@ class kills extends Plugin {
             $this->name = 'Deaths';
             $deaths = array();
             for ($i = 0; $i < count($deathList); $i++) {
-                if (empty($_GET['find']) || $this->filterKill($deathList[$i], $_GET['find'])) {
+                if ((empty($_GET['find']) || $this->filterKill($deathList[$i], $_GET['find']))
+                        && $this->filterDeath($deathList[$i], $_GET['deathType'])) {
                     $deathList[$i]->getDropValues();
                     $deaths[] = objectToArray($deathList[$i], array('DBManager', 'eveDB'));
                 }
@@ -70,8 +74,8 @@ class kills extends Plugin {
                 $prevPage = 0;
             }
 
-            return $this->render('deaths', array('deaths' => $deaths, 'find' => $_GET['find'],
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 'corp' => isset($_GET['corp'])));
+            return $this->render('deaths', array('deaths' => $deaths, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp'],
+                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage)));
         } else {
             $kills = array();
             for ($i = 0; $i < count($killList); $i++) {
@@ -97,8 +101,8 @@ class kills extends Plugin {
                 $prevPage = 0;
             }
 
-            return $this->render('kills', array('kills' => $kills, 'find' => $_GET['find'],
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 'corp' => isset($_GET['corp'])));
+            return $this->render('kills', array('kills' => $kills, 'find' => $_GET['find'], 'corp' => isset($_GET['corp'],
+                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage)));
         }
     }
 
@@ -127,6 +131,23 @@ class kills extends Plugin {
                     $accept = true;
                 } else if ($kill->attackers[$i]->ship && (stripos($kill->attackers[$i]->ship->typename, $filter) !== false)) {
                     $accept = true;
+                }
+            }
+        }
+
+        return $accept;
+    }
+
+    function filterDeath($death, $deathType) {
+        $accept = false;
+
+        if ($deathType == 0) {
+            $accept = true;
+        } else {
+            for ($i = 0; $i < count($death->attackers); $i++) {
+                $accept = $deathType == 1 ? $death->attackers[$i]->characterID > 0 : $death->attackers[$i]->characterID == 0;
+                if ($accept) {
+                    break;
                 }
             }
         }
