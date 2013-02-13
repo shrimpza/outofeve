@@ -12,21 +12,6 @@ class character extends Plugin {
                 eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_CharacterInfo_FULL)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Character', '?module=character', 'char');
         }
-
-        /* if (isset($this->site->character) && ($this->site->character->characterID > 0)) {
-          $this->site->plugins['mainmenu']->addGroup('Character Data', 'main');
-
-          $corporation = new eveCorporation($this->site->eveAccount, $this->site->character);
-          $corporation->load();
-
-          if ($corporation->corporationID > 0) {
-          $this->site->plugins['mainmenu']->addGroup('Corporation Data', 'corp');
-          }
-
-          $this->site->plugins['mainmenu']->addGroup('Utilities', 'util');
-          }
-
-          $this->site->plugins['mainmenu']->addLink('main', 'Character', '?module=character', 'icon02_16'); */
     }
 
     function getContent() {
