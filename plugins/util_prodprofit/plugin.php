@@ -11,7 +11,7 @@ class util_prodprofit extends Plugin {
         $this->site->plugins['mainmenu']->addLink('util', 'Production Profitability', '?module=util_prodprofit', 'util_prodprofit');
     }
 
-    function productionCost($item, $meLevel, $region) {
+    function productionCost($item, $meLevel, $region, $peLevel) {
         $tPerfect = 0;
         $tYou = 0;
 
@@ -32,12 +32,7 @@ class util_prodprofit extends Plugin {
                     $prcAvgSell = $item->blueprint->materials[$i]['item']->pricing->avgSell;
                 }
 
-                if (isset($this->site->character->skills['3388'])) {
-                    $pe = $this->site->character->skills['3388']->level;
-                } else {
-                    $pe = 0;
-                }
-                $peFactor = 1.25 - (0.05 * $pe);
+                $peFactor = 1.25 - (0.05 * $peLevel);
                 $meFactor = $item->blueprint->wastefactor / (1 + $meLevel);
 
                 $item->blueprint->materials[$i]['waste'] = floor($item->blueprint->materials[$i]['quantity'] * ($meFactor / 100));
@@ -107,6 +102,18 @@ class util_prodprofit extends Plugin {
                 $fullAssetList = $al->assets;
             }
         }
+        
+        $peLevel = 0;
+
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+            $character = new eveCharacterDetail(eveKeyManager::getKey($this->site->user->char_apikey_id));
+            $character->load();
+
+            $skills = $character->skills;
+            if ($skills->getSkill('3388')) {
+                $peLevel = $skills->getSkill('3388')->level;
+            }
+        }
 
         $allBlueprints = $this->blueprintAssets($fullAssetList, 9);
 
@@ -141,7 +148,7 @@ class util_prodprofit extends Plugin {
         for ($i = 0; $i < count($blueprints); $i++) {
             $item = eveDB::getInstance()->eveItemFromBlueprintType($blueprints[$i]->item->typeid);
             $item->getPricing($region);
-            $prod = $this->productionCost($item, $meLevel, $region);
+            $prod = $this->productionCost($item, $meLevel, $region, $peLevel);
 
             $bps[] = array('item' => objectToArray($item, array('DBManager', 'eveDB')), 'production' => $prod);
         }
