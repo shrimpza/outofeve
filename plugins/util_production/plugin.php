@@ -25,8 +25,6 @@ class util_production extends Plugin {
             $_POST['item'] = '';
         }
 
-        $items = array();
-
         $region = $_POST['region'];
         $meLevel = $_POST['meLevel'];
 
@@ -34,6 +32,18 @@ class util_production extends Plugin {
         $tYou = 0;
 
         if (!empty($_POST['item'])) {
+
+            $peLevel = 0;
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $character = new eveCharacterDetail(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $character->load();
+
+                $skills = $character->skills;
+                if ($skills->getSkill('3388')) {
+                    $peLevel = $skills->getSkill('3388')->level;
+                }
+            }
+
             $_POST['item'] = mysql_escape_string(trim(stripslashes($_POST['item'])));
 
             $item = eveDB::getInstance()->eveItem($_POST['item'], true);
@@ -61,12 +71,7 @@ class util_production extends Plugin {
                             $prcAvgSell = $item->blueprint->materials[$i]['item']->pricing->avgSell;
                         }
 
-                        if (isset($this->site->character->skills['3388'])) {
-                            $pe = $this->site->character->skills['3388']->level;
-                        } else {
-                            $pe = 0;
-                        }
-                        $peFactor = 1.25 - (0.05 * $pe);
+                        $peFactor = 1.25 - (0.05 * $peLevel);
                         $meFactor = $item->blueprint->wastefactor / (1 + $meLevel);
 
                         $item->blueprint->materials[$i]['waste'] = floor($item->blueprint->materials[$i]['quantity'] * ($meFactor / 100));
