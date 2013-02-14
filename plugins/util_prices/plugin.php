@@ -1,7 +1,7 @@
 <?php
 
     class util_prices extends Plugin {
-        var $name = 'Pricing Calculator';
+        var $name = 'Market Prices';
         var $level = 1;
 
         function util_prices($db, $site) {
@@ -11,12 +11,13 @@
         }
 
         function getContent() {
-            if (!isset($_POST['region']))
+            if (!isset($_POST['region'])) {
                 $_POST['region'] = 0;
-            if (!isset($_POST['items']))
+            }
+            if (!isset($_POST['items'])) {
                 $_POST['items'] = '';
+            }
 
-            $db = $this->site->eveAccount->db;
             $items = array();
 
             $region = $_POST['region'];
@@ -34,7 +35,7 @@
                 $name = mysql_escape_string(trim(stripslashes($name[0])));
                 $name = str_replace(array('Drones_Active=', '['), '', $name);
 
-                $newItem = $db->eveItem($name, true);
+                $newItem = eveDB::getInstance()->eveItem($name, true);
                 if ($newItem) {
                     $newItem->getPricing($region);
 
@@ -48,7 +49,7 @@
 
             $items = objectToArray($items, array('DBManager', 'eveDB'));
 
-            $regions = $db->regionList();
+            $regions = eveDB::getInstance()->regionList();
 
             return $this->render('pricing', 
                                     array(  'items' => $items, 

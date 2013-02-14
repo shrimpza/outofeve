@@ -10,8 +10,7 @@
     <tr class="{cycle values='row,rowAlt'}">
       <td>
         <a href="#" onclick="showInfo({$i.typeid});return false;">
-          <img src="{$site_url}/{$i.icon64}" class="i64" alt="{$i.typename}" align="absmiddle" />
-        </a>
+            <img src="{$site_url}/{$i.icon.icon32}" class="i32" alt="{$i.typename}" align="absmiddle" /></a>
         {$i.typename}
       </td>
       <td align="right">{$i.baseprice|eveNum}</td>
