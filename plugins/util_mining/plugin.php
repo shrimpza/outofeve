@@ -60,7 +60,40 @@ class util_mining extends Plugin {
         $minerals = array();
         $asteroid = null;
 
+        $miningBonus = 1;
+        $astrogeoBonus = 1;
+        $droneMiningBonus = 1;
+        $refiningBonus = 1;
+        $refineryBonus = 1;
+
         if ($_POST['miner']) {
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $character = new eveCharacterDetail(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $character->load();
+
+                $skills = $character->skills;
+                if ($skills->getSkill('3386')) {
+                    $miningBonus = 1 + ($skills->getSkill('3386')->level * 0.05);
+                }
+
+                if ($skills->getSkill('3410')) {
+                    $astrogeoBonus = 1 + ($skills->getSkill('3410')->level * 0.05);
+                }
+
+                if ($skills->getSkill('3438')) {
+                    $droneMiningBonus = 1 + ($skills->getSkill('3438')->level * 0.05);
+                }
+
+                if ($skills->getSkill('3385')) {
+                    $refiningBonus = 1 + ($skills->getSkill('3385')->level * 0.02);
+                }
+
+                if ($skills->getSkill('3389')) {
+                    $refineryBonus = 1 + ($skills->getSkill('3389')->level * 0.04);
+                }
+            }
+
+
             $miner = eveDB::getInstance()->eveItem($_POST['miner']);
             $upgrade = eveDB::getInstance()->eveItem($_POST['upgrade']);
             if ($miner) {
@@ -102,18 +135,6 @@ class util_mining extends Plugin {
                         }
                     }
 
-                    if (isset($this->site->character->skills['3386'])) {
-                        $miningBonus = 1 + ($this->site->character->skills['3386']->level * 0.05);
-                    } else {
-                        $miningBonus = 1;
-                    }
-
-                    if (isset($this->site->character->skills['3410'])) {
-                        $astrogeoBonus = 1 + ($this->site->character->skills['3410']->level * 0.05);
-                    } else {
-                        $astrogeoBonus = 1;
-                    }
-
                     $miningAmount = $miningAmount * $miningBonus * $astrogeoBonus * (1 + ($_POST['shipbonus'] / 100));
                     $miningAmount = $miningAmount / $roid->volume;
 
@@ -148,12 +169,6 @@ class util_mining extends Plugin {
                                 $droneMiningAmount = $droneMiningAmount[0]['valueint'];
                             }
 
-                            if (isset($this->site->character->skills['3438'])) {
-                                $droneMiningBonus = 1 + ($this->site->character->skills['3438']->level * 0.05);
-                            } else {
-                                $droneMiningBonus = 1;
-                            }
-
                             $droneMiningAmount *= $droneMiningBonus;
                             $droneMiningAmount = $droneMiningAmount / $roid->volume;
 
@@ -181,18 +196,6 @@ class util_mining extends Plugin {
 
                     $mins = eveDB::getInstance()->db->QueryA('select materialTypeID, quantity from invTypeMaterials where typeID = ?', array($roid->typeid));
                     $minerals = array();
-
-                    if (isset($this->site->character->skills['3385'])) {
-                        $refiningBonus = 1 + ($this->site->character->skills['3385']->level * 0.02);
-                    } else {
-                        $refiningBonus = 1;
-                    }
-
-                    if (isset($this->site->character->skills['3389'])) {
-                        $refineryBonus = 1 + ($this->site->character->skills['3389']->level * 0.04);
-                    } else {
-                        $refineryBonus = 1;
-                    }
 
                     $wasteFactor = ($_POST['station'] / 100) + 0.375 * $refiningBonus * $refineryBonus;
 
