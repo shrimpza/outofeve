@@ -49,7 +49,7 @@
         EVE API and paths, for caching, themes, etc.
     *************************************************************************/
     $config['eve']['cache_dir'] = dirname(__FILE__).'/../cache/';
-    $config['eve']['api_url'] = 'http://api.eve-online.com';
+    $config['eve']['api_url'] = 'https://api.eveonline.com';
     $config['eve']['method'] = 'POST';
     
     // Add this many seconds to the cachedUntil time
