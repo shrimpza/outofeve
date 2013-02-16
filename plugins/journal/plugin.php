@@ -127,8 +127,12 @@ class journal extends Plugin {
                 'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
             if (isset($_GET['corp'])) {
-                // todo: come back to this.
-                $vars['accounts'] = objectToArray($this->site->character->corporation->walletDivisions, array('DBManager', 'eveDB'));
+                if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                    $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+                    $corporation = new eveCorporation($corpKey);
+                    $corporation->load();
+                }
+                $vars['accounts'] = objectToArray($corporation->walletDivisions);
             }
 
             return $this->render('days', $vars);
@@ -154,8 +158,12 @@ class journal extends Plugin {
                 'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
             if (isset($_GET['corp'])) {
-                // todo: come back to this.
-                $vars['accounts'] = objectToArray($this->site->character->corporation->walletDivisions, array('DBManager', 'eveDB'));
+                if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                    $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+                    $corporation = new eveCorporation($corpKey);
+                    $corporation->load();
+                }
+                $vars['accounts'] = objectToArray($corporation->walletDivisions);
             }
 
             return $this->render('journal', $vars);

@@ -26,7 +26,7 @@ class orders extends Plugin {
         if (!isset($_GET['complete'])) {
             $_GET['complete'] = 0;
         }
-        
+
         if (isset($_GET['corp'])) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
                 $_GET['accountKey'] = max($_GET['accountKey'], 1000);
@@ -46,11 +46,13 @@ class orders extends Plugin {
         $selling = array();
 
         for ($i = 0; $i < count($orderList); $i++) {
-            if (($_GET['complete'] > 0) || (($_GET['complete'] == 0) && ($orderList[$i]->orderState == 0) && ($orderList[$i]->remainingTime > 0))) {
-                if ($orderList[$i]->buying) {
-                    $buying[] = objectToArray($orderList[$i], array('DBManager', 'eveDB'));
-                } else {
-                    $selling[] = objectToArray($orderList[$i], array('DBManager', 'eveDB'));
+            if ($orderList[$i]->duration > 0) {
+                if (($_GET['complete'] > 0) || (($_GET['complete'] == 0) && ($orderList[$i]->orderState == 0) && ($orderList[$i]->remainingTime > 0))) {
+                    if ($orderList[$i]->buying) {
+                        $buying[] = objectToArray($orderList[$i], array('DBManager', 'eveDB'));
+                    } else {
+                        $selling[] = objectToArray($orderList[$i], array('DBManager', 'eveDB'));
+                    }
                 }
             }
         }
@@ -58,8 +60,12 @@ class orders extends Plugin {
         $vars = array('buying' => $buying, 'selling' => $selling, 'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey'], 'complete' => $_GET['complete']);
 
         if (isset($_GET['corp'])) {
-            // todo: come back to this
-            $vars['accounts'] = objectToArray($this->site->character->corporation->walletDivisions, array('DBManager', 'eveDB'));
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+                $corporation = new eveCorporation($corpKey);
+                $corporation->load();
+            }
+            $vars['accounts'] = objectToArray($corporation->walletDivisions);
         }
 
         return $this->render('orders', $vars);

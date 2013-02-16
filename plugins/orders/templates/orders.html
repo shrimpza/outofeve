@@ -5,7 +5,7 @@
         <select id="accountKey" onchange="window.location='{$site_url}/?module=orders&corp=1&accountKey='+this.value">
           <option value="0">All</option>
           {foreach from=$accounts item=acc}
-            <option value="{$acc.key}" {if $accountKey == $acc.key}selected="selected"{/if}>{$acc.description}</option>
+            <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
           {/foreach}
         </select>
       </span>&nbsp;
