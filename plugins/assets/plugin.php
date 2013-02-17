@@ -8,12 +8,12 @@ class assets extends Plugin {
     function assets($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id) 
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
                 && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_AssetList)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'assets');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) 
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_AssetList)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Assets', '?module=assets&corp=1', 'assets');
         }
@@ -99,6 +99,33 @@ class assets extends Plugin {
                 }
             }
             usort($assets, 'assetStationSort');
+
+            foreach ($assets as $k => $v) {
+                $ships = array();
+                $containers = array();
+                $shuttles = array();
+                $items = array();
+
+                usort($v['assets'], 'assetNameSort');
+
+                foreach ($v['assets'] as $ass) {
+                    if ($ass->item->groupid == 31) {
+                        $shuttles[] = $ass;
+                    } else if (($ass->item->group) && ($ass->item->group->category) && ($ass->item->group->category->categoryid == 6)) {
+                        if ($ass->contents) {
+                            usort($ass->contents, 'assetSlotSort');
+                        }
+                        $ships[] = $ass;
+                    } else if ($ass->contents) {
+                        usort($ass->contents, 'assetNameSort');
+                        $containers[] = $ass;
+                    } else {
+                        $items[] = $ass;
+                    }
+                }
+
+                $assets[$k]['assets'] = array_merge($ships, $containers, $shuttles, $items);
+            }
 
             if (count($assets) > 15) {
                 $assets = array_chunk($assets, 15);
