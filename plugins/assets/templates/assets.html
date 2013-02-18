@@ -2,6 +2,14 @@
   <div class="listOptions">
     <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}">All assets, by location</a></span>
     <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships">Ships</a></span>
+    <span>Group: 
+      <select id="group" onchange="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&group='+this.value">
+        <option value="0" {if $group == 0}selected="selected"{/if}>All</option>
+        {foreach from=$groups item=grp}
+          <option value="{$grp.groupid}" {if $group == $grp.groupid}selected="selected"{/if}>{$grp.groupname}</option>
+        {/foreach}
+      </select>
+    </span>
     <span>Search: 
       <input type="text" id="assetFind" value="{$search}" /> 
       <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=find&item='+document.getElementById('assetFind').value">Go</button>
@@ -39,7 +47,9 @@
       <td colspan="4">
         <div style="display:none" id="{$locid}">
           {foreach from=$lol.assets item=ass name='foo'}
-            {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
+            {if !$ass.hide}
+                {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
+            {/if}
           {/foreach}
         </div>
       </td>
