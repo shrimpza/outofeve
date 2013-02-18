@@ -39,26 +39,16 @@ class eveTimeOffset {
 
 eveTimeOffset::$eveTime = time() - date('Z');
 
-function apiError($method, $error) {
-    if (!isset($GLOBALS['EVEAPI_NO_ERRORS']) || (isset($GLOBALS['EVEAPI_NO_ERRORS']) && !$GLOBALS['EVEAPI_NO_ERRORS']))
-        $GLOBALS['EVEAPI_ERRORS'][] = 'API "' . $method . '": [' . (string) $error['code'] . '] ' . (string) $error;
-}
-
-function otherError($method, $error) {
-    if (!isset($GLOBALS['EVEAPI_NO_ERRORS']) || (isset($GLOBALS['EVEAPI_NO_ERRORS']) && !$GLOBALS['EVEAPI_NO_ERRORS']))
-        $GLOBALS['EVEAPI_ERRORS'][] = $method . ': ' . $error;
-}
-
-class ApiError {
+class apiError {
 
     var $errorCode = 0;
     var $errorText = '';
-    var $request = '';
+    var $method = '';
 
-    function ApiError($errorCode, $errorText, $request) {
+    function apiError($errorCode, $errorText, $method) {
         $this->errorCode = $errorCode;
         $this->errorText = $errorText;
-        $this->request = $request;
+        $this->method = $method;
     }
 
 }
@@ -144,7 +134,7 @@ class apiRequest {
                     $result = new SimpleXMLElement($apiResponse);
                 } catch (Exception $e) {
                     $result = false;
-                    $this->error = new ApiError($e->getCode(), $e->getMessage(), $method);
+                    $this->error = new apiError($e->getCode(), $e->getMessage(), $method);
                 }
 
                 /**
@@ -155,7 +145,7 @@ class apiRequest {
                      * Received an error from the API, try to fall back to cached data which may work...
                      */
                     if (isset($result->error) && !isset($cacheResult->error)) {
-                        $this->error = new ApiError((int) $result->error['code'], (string) $result->error, $method);
+                        $this->error = new apiError((int) $result->error['code'], (string) $result->error, $method);
                         $cacheResult = $this->checkCache($cacheFile, true);
                         if ($cacheResult) {
                             if (in_array($this->error->errorCode, $GLOBALS['cacheDelays'])) {
@@ -176,7 +166,7 @@ class apiRequest {
                     }
                 }
             } else {
-                $this->error = new ApiError(1, 'HTTP error: ' + $httpResponse['http_code'], $method);
+                $this->error = new apiError(1, 'HTTP error: ' + $httpResponse['http_code'], $method);
             }
         } else {
             $result = $cacheResult;
