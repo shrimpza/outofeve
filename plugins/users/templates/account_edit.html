@@ -1,7 +1,3 @@
-{if $error}
-  <div class="error">{if $error.code}Eve API Error: {/if}{$error.message}</div>
-{/if}
-
 <div class="inputForm">
 <form method="post" action="{$site_url}/?module=users&mode=accounts" style="float:left">
 <input type="hidden" name="id" value="{$k.row.id}" /><br />

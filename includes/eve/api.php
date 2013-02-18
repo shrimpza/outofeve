@@ -176,7 +176,7 @@ class apiRequest {
                 $method, microtime(time) - $start, $result == $cacheResult, isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0);
 
         if ($this->error) {
-            apiStats::addError($error);
+            apiStats::addError($this->error);
         }
 
         $this->data = $result;

@@ -303,7 +303,7 @@ class users extends Plugin {
 
             $k->vcode = decryptKey($k->vcode);
             $k = objectToArray($k, array('DBManager'));
-            return $this->render('account_edit', array('k' => $k, 'error' => false));
+            return $this->render('account_edit', array('k' => $k));
         } else if (isset($_POST['id'])) {
             $k = $this->db->getObject('apikey', $_POST['id']);
             $k->vcode = decryptKey($k->vcode);
@@ -316,7 +316,7 @@ class users extends Plugin {
 
             $eveKey = new eveApiKey(0, $_POST['name'], $_POST['keyid'], $_POST['vcode']);
             if ($eveKey->error) {
-                return $this->render('account_edit', array('k' => objectToArray($k, array('DBManager')), 'error' => $eveKey->error->errorText));
+                return $this->render('account_edit', array('k' => objectToArray($k, array('DBManager'))));
             }
             if (!$eveKey->error) {
                 $k->user_id = $this->site->user->id;
@@ -335,20 +335,17 @@ class users extends Plugin {
         }
     }
 
-    function keysList($error = false) {
+    function keysList() {
         $keys = $this->site->user->get_apikey_list('name');
         $keys = objectToArray($keys, array('DBManager'));
 
-        $wasErrors = $GLOBALS['EVEAPI_NO_ERRORS'];
-        $GLOBALS['EVEAPI_NO_ERRORS'] = true;
         for ($i = 0; $i < count($keys); $i++) {
             $eveAcc = new eveAccountStatus(eveKeyManager::getKey($keys[$i]['row']['id']));
             $eveAcc->load();
             $keys[$i]['account'] = objectToArray($eveAcc);
         }
-        $GLOBALS['EVEAPI_NO_ERRORS'] = $wasErrors;
 
-        return $this->render('accounts', array('keys' => $keys, 'error' => $error));
+        return $this->render('accounts', array('keys' => $keys));
     }
 
     function welcome() {
