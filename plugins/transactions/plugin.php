@@ -24,6 +24,10 @@ class transactions extends Plugin {
             $_GET['p'] = 0;
         }
 
+        if (!isset($_GET['transType'])) {
+            $_GET['transType'] = 0;
+        }
+
         if (!isset($_GET['accountKey'])) {
             $_GET['accountKey'] = 1000;
         }
@@ -41,7 +45,18 @@ class transactions extends Plugin {
             }
         }
 
-        $trans = objectToArray($tl->transactions, array('DBManager', 'eveDB'));
+        $transList = array();
+        foreach ($tl->transactions as $trans) {
+            if ($_GET['transType'] == 1 && !$trans->purchase) {
+                $transList[] = $trans;
+            } else if ($_GET['transType'] == 2 && $trans->purchase) {
+                $transList[] = $trans;
+            } else if ($_GET['transType'] == 0) {
+                $transList[] = $trans;
+            }
+        }
+
+        $trans = objectToArray($transList, array('DBManager', 'eveDB'));
 
         if (count($trans) > 50) {
             $trans = array_chunk($trans, 50);
@@ -59,7 +74,7 @@ class transactions extends Plugin {
             $prevPage = 0;
         }
 
-        $vars = array('trans' => $trans, 'pageCount' => $pageCount,
+        $vars = array('trans' => $trans, 'transType' => $_GET['transType'], 'pageCount' => $pageCount,
             'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 

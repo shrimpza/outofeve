@@ -1,6 +1,13 @@
 <div id="transactionList">
-  {if $corp}
   <div class="listOptions">
+    <span>Transaction Type: 
+      <select id="transType" onchange="window.location='{$site_url}/?module=transactions{if $corp}&corp=1{/if}&transType='+this.value">
+        <option value="0" {if $transType == 0}selected="selected"{/if}>All Transactions</option>
+        <option value="1" {if $transType == 1}selected="selected"{/if}>Sales</option>
+        <option value="2" {if $transType == 2}selected="selected"{/if}>Purchases</option>
+      </select>
+    </span>
+    {if $corp}
     <span>Account: 
       <select id="accountKey" onchange="window.location='{$site_url}/?module=transactions&corp=1&accountKey='+this.value">
         {foreach from=$accounts item=acc}
@@ -8,8 +15,8 @@
         {/foreach}
       </select>
     </span>
+    {/if}
   </div>
-  {/if}
 
   {if $pageCount > 0}
   <div align="right">
