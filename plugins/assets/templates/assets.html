@@ -36,11 +36,14 @@
   </tr>
   {foreach from=$assets item=lol key=locid}
     <tr class="groupHead shadeDark borderDark textLight">
-      <td colspan="4" onclick="toggleAssets('{$locid}')">
-      {if $lol.location.stationid}
-        <img src="{$site_url}/{$lol.location.icon.icon32}" class="i32" alt="{$lol.location.stationname}" align="absmiddle" />
-      {/if}
-      {$lol.locationName}
+      <td colspan="3" onclick="toggleAssets('{$locid}')">
+        {if $lol.location.stationid}
+          <img src="{$site_url}/{$lol.location.icon.icon32}" class="i32" alt="{$lol.location.stationname}" align="absmiddle" />
+        {/if}
+        {$lol.locationName}
+      </td>
+      <td align="right">
+        {$lol.assets|@count}
       </td>
     </tr>
     <tr>
@@ -48,7 +51,7 @@
         <div style="display:none" id="{$locid}">
           {foreach from=$lol.assets item=ass name='foo'}
             {if !$ass.hide}
-                {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
+              {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
             {/if}
           {/foreach}
         </div>

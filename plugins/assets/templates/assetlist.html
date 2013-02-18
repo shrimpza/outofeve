@@ -7,7 +7,12 @@
             {$asset.item.typename}</td>
         <td width="25%">{$asset.item.group.groupname}</td>
         <td width="25%">{$asset.flagText}</td>
-        <td width="10%" align="right">{$asset.qty|eveNumInt}</td>
+        <td width="10%" align="right">
+          {if $asset.contents}
+            ({$asset.contents|@count|eveNumInt})
+          {/if}
+          {$asset.qty|eveNumInt}
+        </td>
     </tr>
     </table>
     {if $asset.contents}
