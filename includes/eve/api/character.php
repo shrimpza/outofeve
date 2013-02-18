@@ -1,5 +1,18 @@
 <?php
 
+function getCharacterName($id) {
+    $charData = new apiRequest('eve/CharacterName.xml.aspx', array(), array('ids' => $id));
+    if (!$charData->data) {
+        return 'Lookup Error';
+    }
+
+    if ($charData->data->error) {
+        return 'Lookup Error';
+    } else {
+        return (string) $charData->data->result->rowset->row['name'];
+    }
+}
+
 class eveCharacterDetail {
 
     var $key = null;

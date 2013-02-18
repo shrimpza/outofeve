@@ -115,7 +115,7 @@ class mail extends Plugin {
                     $pts[1] = $db->eveSolarSystem($pts[1])->solarsystemname;
                 } else if ($pts[0] == 'charID' || $pts[0] == 'characterID'
                         || $pts[0] == 'corpID' || $pts[0] == 'corporationID') {
-                    $pts[1] = characterName($pts[1]);
+                    $pts[1] = getCharacterName($pts[1]);
                 }
                 $pts[0] = ucwords(ereg_replace("([A-Z]|[0-9]+)", " \\0", substr($pts[0], 0, strlen($pts[0]) - 2)));
             }
