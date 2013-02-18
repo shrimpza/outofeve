@@ -23,7 +23,6 @@ class eveAccountStatus {
             }
 
             if ($accData->data->error) {
-                apiError('account/AccountStatus.xml.aspx', $accData->data->error);
                 $this->error = (string) $accData->data->error;
             } else {
                 $accStatus = $accData->data->result;

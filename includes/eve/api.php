@@ -53,10 +53,12 @@ class ApiError {
 
     var $errorCode = 0;
     var $errorText = '';
+    var $request = '';
 
-    function ApiError($errorCode, $errorText) {
+    function ApiError($errorCode, $errorText, $request) {
         $this->errorCode = $errorCode;
         $this->errorText = $errorText;
+        $this->request = $request;
     }
 
 }
@@ -142,7 +144,7 @@ class apiRequest {
                     $result = new SimpleXMLElement($apiResponse);
                 } catch (Exception $e) {
                     $result = false;
-                    $this->error = new ApiError($e->getCode(), $e->getMessage());
+                    $this->error = new ApiError($e->getCode(), $e->getMessage(), $method);
                 }
 
                 /**
@@ -153,7 +155,7 @@ class apiRequest {
                      * Received an error from the API, try to fall back to cached data which may work...
                      */
                     if (isset($result->error) && !isset($cacheResult->error)) {
-                        $this->error = new ApiError((int) $result->error['code'], (string) $result->error);
+                        $this->error = new ApiError((int) $result->error['code'], (string) $result->error, $method);
                         $cacheResult = $this->checkCache($cacheFile, true);
                         if ($cacheResult) {
                             if (in_array($this->error->errorCode, $GLOBALS['cacheDelays'])) {
@@ -174,7 +176,7 @@ class apiRequest {
                     }
                 }
             } else {
-                $this->error = new ApiError(1, 'HTTP error: ' + $httpResponse['http_code']);
+                $this->error = new ApiError(1, 'HTTP error: ' + $httpResponse['http_code'], $method);
             }
         } else {
             $result = $cacheResult;
@@ -241,7 +243,6 @@ function characterName($id) {
     }
 
     if ($charData->data->error) {
-        apiError('eve/CharacterName.xml.aspx', $charData->data->error);
         return 'Lookup Error';
     } else {
         return (string) $charData->data->result->rowset->row['name'];
