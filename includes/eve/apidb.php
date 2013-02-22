@@ -124,7 +124,6 @@ class eveDB {
     var $industryCompleteTextCache = array();
     var $certificateCache = array();
     var $towerFuelCache = array();
-    var $eveNameCache = array();
     var $refTypes = array();
     var $outpostList = null;
     var $corpRoleList = array();
@@ -320,16 +319,6 @@ class eveDB {
         }
 
         return $this->certificateCache[$certificateId];
-    }
-
-    function eveName($itemId) {
-        $itemId = (string) $itemId;
-
-        if (!isset($this->eveNameCache[$itemId])) {
-            $this->eveNameCache[$itemId] = new eveName($itemId);
-        }
-
-        return $this->eveNameCache[$itemId];
     }
 
     function regionList() {
@@ -794,27 +783,6 @@ class eveCertificate {
         }
 
         $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
-    }
-
-}
-
-class eveName {
-
-    var $itemid = 0;
-    var $itemname = '';
-    var $categoryid = 0;
-    var $groupid = 0;
-    var $typeid = 0;
-
-    function eveName($itemId) {
-        $res = eveDB::getInstance()->db->QueryA('select itemid, itemname, categoryid, groupid, typeid
-                                       from eveNames
-                                       where itemId = ?', array($itemId));
-        if ($res) {
-            foreach ($res[0] as $var => $val) {
-                $this->$var = $val;
-            }
-        }
     }
 
 }

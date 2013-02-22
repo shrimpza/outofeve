@@ -118,8 +118,7 @@ class eveNotificationsList {
             if (count($this->notifications) > 0) {
                 $ids = array();
                 foreach ($this->notifications as $note) {
-                    if ((!empty($note->senderID) && $note->senderID > 0)
-                            && ($note->item->itemid == 0)) {
+                    if ((!empty($note->senderID) && $note->senderID > 0) && ($note->item->itemid == 0)) {
                         $ids[] = $note->senderID;
                     }
                 }
@@ -147,9 +146,10 @@ class eveNotificationsList {
 
             foreach ($this->notifications as $m) {
                 if ($m->notificationID == $notificationId) {
-                    $data = new apiRequest('char/NotificationTexts.xml.aspx', array($this->key, $this->key->getCharacter(), array('ids' => $m->notificationID)));
+                    $data = new apiRequest('char/NotificationTexts.xml.aspx', $this->key, $this->key->getCharacter(), array('ids' => $m->notificationID));
                     if ((!$data->error) && ($data->data)) {
-                        foreach ($notificationData->data->result->rowset->row as $text) {
+                            print_r($text);
+                        foreach ($data->data->result->rowset->row as $text) {
                             if ((int) $text['notificationID'] == $m->notificationID) {
                                 $result = new eveNotificationText($text);
                                 $result->headers = $m;
@@ -241,8 +241,6 @@ class eveNotification {
         }
 
         $this->title = $notificationTitles[$this->typeID];
-
-        $this->sender = eveDB::getInstance()->eveName($this->senderID);
     }
 
 }

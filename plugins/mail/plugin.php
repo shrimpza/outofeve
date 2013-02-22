@@ -66,7 +66,7 @@ class mail extends Plugin {
         } else if (isset($_GET['notificationID'])) {
             $nl = new eveNotificationsList(eveKeyManager::getKey($this->site->user->char_apikey_id));
             $nl->load();
-            $message = objectToArray($nl->getNotification($m), array('DBManager', 'eveDB'));
+            $message = objectToArray($nl->getNotification($_GET['notificationID']), array('DBManager', 'eveDB'));
             $message['text'] = $this->spiffyNotificationText($message['text']);
             $message['headers']['sentDate'] = date('d M Y H:i', $message['headers']['sentDate']);
         }
