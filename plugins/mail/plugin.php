@@ -96,7 +96,7 @@ class mail extends Plugin {
                 // doesn't work... wtf are these date stamps
                 //$pts[1] = date('d M Y H:i', substr($pts[1], 0, 10));
                 $pts[1] = date('d M Y H:i', $pts[1]);
-                echo $pts[1] . "\n";
+                //echo $pts[1] . "\n";
             } else if ($pts[0] == 'header') {
                 $useLine = false;
             } else if ($pts[0] == 'body') {

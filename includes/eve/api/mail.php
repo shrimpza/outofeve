@@ -4,13 +4,51 @@ function mailSort($a, $b) {
     return ($a->sentDate > $b->sentDate) ? -1 : 1;
 }
 
+class eveMailingList {
+
+    var $key;
+    var $lists = array();
+
+    function eveMailingList($key) {
+        $this->key = $key;
+    }
+
+    function load() {
+        if ($this->key->hasAccess(CHAR_MailingLists)) {
+            if (count($this->mail) == 0) {
+                $data = new apiRequest('char/MailingLists.xml.aspx', $this->key, $this->key->getCharacter());
+                if ((!$data->error) && ($data->data)) {
+                    foreach ($data->data->result->rowset->row as $list) {
+                        $this->lists[] = array(
+                            'listID' => (int) $list['listID'],
+                            'displayName' => (string) $list['displayName']);
+                    }
+                }
+            }
+        }
+    }
+
+    function getListName($listId) {
+        $result = '';
+        foreach ($this->lists as $list) {
+            if ($list['listID'] == $listId) {
+                $result = $list['displayName'];
+            }
+        }
+        return $result;
+    }
+
+}
+
 class eveMailList {
 
     var $key;
     var $mail = array();
+    var $mailingList = null;
 
     function eveMailList($key) {
         $this->key = $key;
+        $this->mailingList = new eveMailingList($key);
     }
 
     function load() {
@@ -24,6 +62,8 @@ class eveMailList {
                 }
             }
 
+            $this->mailingList->load();
+
             // get list of character and corp names for messages
             if (count($this->mail) > 0) {
                 usort($this->mail, 'mailSort');
@@ -31,7 +71,13 @@ class eveMailList {
                 $ids = array();
                 foreach ($this->mail as $mail) {
                     if (!empty($mail->senderID) && $mail->senderID > 0) {
-                        $ids[] = $mail->senderID;
+                        
+                        // check if the mail is a mailing list message
+                        $mail->senderName = $this->mailingList->getListName($mail->senderID);
+                        
+                        if (empty($mail->senderName)) {
+                            $ids[] = $mail->senderID;
+                        }
                     }
                     if (!empty($mail->toCorpID) && $mail->toCorpID > 0) {
                         $ids[] = $mail->toCorpID;
@@ -148,7 +194,7 @@ class eveNotificationsList {
                 if ($m->notificationID == $notificationId) {
                     $data = new apiRequest('char/NotificationTexts.xml.aspx', $this->key, $this->key->getCharacter(), array('ids' => $m->notificationID));
                     if ((!$data->error) && ($data->data)) {
-                            print_r($text);
+                        print_r($text);
                         foreach ($data->data->result->rowset->row as $text) {
                             if ((int) $text['notificationID'] == $m->notificationID) {
                                 $result = new eveNotificationText($text);
