@@ -113,8 +113,10 @@ class users extends Plugin {
 
     function loadApiKeys() {
         $keys = $this->site->user->get_apikey_list('name');
-        foreach ($keys as $key) {
-            eveKeyManager::addKey($key->id, $key->name, $key->keyid, decryptKey($key->vcode), $key->character_id);
+        if ($keys) {
+            foreach ($keys as $key) {
+                eveKeyManager::addKey($key->id, $key->name, $key->keyid, decryptKey($key->vcode), $key->character_id);
+            }
         }
 
         if ($this->site->user->char_apikey_id == 0) {
