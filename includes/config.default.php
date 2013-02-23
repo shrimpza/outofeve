@@ -18,6 +18,10 @@
     // enable the precache.php script to pre-load API data
     $config['site']['precache'] = false;
 
+    // if enabled, load times, DB usage and API access info will be printed
+    // in the footer of each page
+    $config['site']['showstats'] = false;
+
 
     /*************************************************************************
         Database for OOE (users, API details, etc)

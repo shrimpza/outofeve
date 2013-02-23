@@ -16,9 +16,7 @@
     $time_end = microtime(true);
     $time = $time_end - $time_start;
 
-    // some info, comment to remove.
-    $printStats = true;
-    if ((!isset($_GET['popup']) && !isset($_GET['jsonMode'])) && $printStats) {
+    if ((!isset($_GET['popup']) && !isset($_GET['jsonMode'])) && $GLOBALS['config']['site']['showstats']) {
         echo '<script type="text/javascript">document.getElementById("footer").innerHTML = document.getElementById("footer").innerHTML + "<br />';
 
         echo '<small><small>Processed in ' . round($time, 4) . ' seconds, ';
