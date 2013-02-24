@@ -1,32 +1,19 @@
-{if $error}
-  <div class="error">{if $error.code}Eve API Error: {/if}{$error.message}</div>
-{/if}
-
 <div class="inputForm">
 <form method="post" action="{$site_url}/?module=users&mode=accounts" style="float:left">
-<input type="hidden" name="id" value="{$a.row.id}" /><br />
-<h2>{if $a.row.id}Edit{else}New{/if} Account</h2>
-  <label>Account Name:</label>
-    <input type="text" name="name" value="{$a.row.name}" /><br />
-  <label id="_uid">EVE API User ID:</label>
-    <input type="text" name="apiuser" value="{$a.row.apiuser}" /><br />
-  <label id="_api">EVE API <b>Full Access</b> Key:</label>
-    <input type="text" name="apikey" value="{$a.row.apikey}" /><br />
-  <label></label><span>Your API User ID and <b>Full Access</b> API Key can be found <a href="http://myeve.eve-online.com/api/">here</a>.</span><br /><br />
-  <label>&nbsp;</label><input type="checkbox" name="precache" value="1" {if $a.row.precache > 0}checked="checked"{/if} style="width: 20px" /> Enable precaching<br />
-  <label></label><span>Enabling precaching will allow this account's selected character's API data to be pre-loaded, allowing smother loading of pages.</span><br /><br />
+<input type="hidden" name="id" value="{$k.row.id}" /><br />
+<h2>{if $k.row.id}Edit{else}Add{/if} API Key</h2>
+  <label>Key Name:</label>
+    <input type="text" name="name" value="{$k.row.name}" /><br />
+  <label id="_uid">EVE API Key ID:</label>
+    <input type="text" name="keyid" value="{$k.row.keyid}" /><br />
+  <label id="_api">EVE API Verification Code:</label>
+    <input type="text" name="vcode" value="{$k.row.vcode}" /><br />
+  <label></label><span>Your API Key ID and API Verification Code (vCode) can be found (or created if you don't yet have any) <a href="https://support.eveonline.com/api">here</a>.</span><br /><br />
 
-  {if $a.row.id}
-  <hr />
-    <label>&nbsp;</label><b>Force menu options:</b><br />
-    {foreach from=$forcemenus key=menuid item=menu}
-      <label>&nbsp;</label><input type="checkbox" name="forcemenus[]" value="{$menuid}" {if $menu[1]}checked="checked"{/if} style="width: 20px" /> {$menu[0]}<br />
-    {/foreach}
-  {/if}
   <br /><br />
   <label></label><input type="submit" value="Save" />
 
-<div class="note">Note: "Account Name" is for your reference only, and can be anything you'd like. It is NOT related to your Eve-Online account at all. You should in fact NOT use your Eve account name.</div>
+<div class="note">Note: "Key Name" is for your reference only, and can be anything you'd like. It is NOT related to your Eve-Online account at all. You should in fact NOT use your Eve account name.</div>
 
 </form>
 </div>

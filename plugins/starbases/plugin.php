@@ -1,24 +1,30 @@
 <?php
 
-    class starbases extends Plugin {
-        var $name = 'Starbases';
-        var $level = 1;
+class starbases extends Plugin {
 
-        function starbases($db, $site) {
-            $this->Plugin($db, $site);
+    var $name = 'Starbases';
+    var $level = 1;
 
-            if (($this->site->plugins['mainmenu']->hasGroup('corp')) 
-                    && ($this->site->character->corpMember->hasRole('corpRoleDirector')
-                        || $this->site->plugins['users']->hasForcedMenu('corpStarbases')))
-                $this->site->plugins['mainmenu']->addLink('corp', 'Starbases', '?module=starbases', 'icon40_14');
+    function starbases($db, $site) {
+        $this->Plugin($db, $site);
+
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_StarbaseList)) {
+            $this->site->plugins['mainmenu']->addLink('corp', 'Starbases', '?module=starbases', 'starbases');
         }
+    }
 
-        function getContent() {
-            if (!isset($_GET['p']))
+    function getContent() {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+            if (!isset($_GET['p'])) {
                 $_GET['p'] = 0;
+            }
 
-            $this->site->character->corporation->loadStarbases();
-            $starbases = $this->site->character->corporation->starbases;
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_StarbaseList)) {
+                $sl = new eveStarbaseList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+                $sl->load();
+                $starbases = $sl->starbases;
+            }
 
             for ($i = 0; $i < count($starbases); $i++) {
                 $starbases[$i]->setupFuelPricing();
@@ -51,12 +57,12 @@
 
                 $starbases[$i]->fuelGroups = $fuelGroups;
             }
- 
+
             if (count($starbases) > 10) {
                 $starbases = array_chunk($starbases, 10);
 
                 $pageCount = count($starbases);
-                $pageNum = max((int)$_GET['p'], 0);
+                $pageNum = max((int) $_GET['p'], 0);
                 $nextPage = min($pageNum + 1, $pageCount);
                 $prevPage = max($pageNum - 1, 0);
 
@@ -71,8 +77,12 @@
             $starbases = objectToArray($starbases, array('DBManager', 'eveDB'));
 
             return $this->render('starbases', array('starbases' => $starbases,
-                                 'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
+                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
+        } else {
+            return '<h1>No corporation!</h1>';
         }
     }
+
+}
 
 ?>

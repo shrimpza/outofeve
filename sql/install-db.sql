@@ -1,11 +1,10 @@
-CREATE TABLE IF NOT EXISTS `account` (
+CREATE TABLE IF NOT EXISTS `apikey` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(32) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `apiuser` varchar(16) NOT NULL,
-  `apikey` varchar(256) NOT NULL,
-  `character_id` varchar(16) NOT NULL,
-  `precache`  tinyint default 0,
+  `name` varchar(32) NOT NULL,
+  `keyid` int(11) NOT NULL,
+  `vcode` varchar(256) NOT NULL,
+  `character_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 );
@@ -28,17 +27,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   `theme` varchar(64) NOT NULL,
   `proxy` varchar(256) NOT NULL,
   `level` tinyint(4) NOT NULL,
-  `account_id` int(11) NOT NULL,
   `activetime` datetime NOT NULL,
-  `smallicons` tinyint NOT NULL default 0,
+  `smallicons` tinyint(4) default '0',
+  `char_apikey_id` int(11) NOT NULL,
+  `corp_apikey_id` int(11) NOT NULL,
+  `session_id` varchar(128) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `username` (`username`,`password`)
+  KEY `username` (`username`,`password`),
+  KEY `session_id` (`session_id`)
 );
-
-CREATE TABLE IF NOT EXISTS `showmenus` (
-  `id` int(11) NOT NULL auto_increment,
-  `account_id` int(11) NOT NULL,
-  `menu` varchar(64) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `account_id` (`account_id`)
-)

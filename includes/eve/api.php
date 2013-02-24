@@ -1,274 +1,229 @@
 <?php
 
-    require_once('curl.class.php');
-    require_once('apiClasses.php');
-    require_once('apiMailClasses.php');
-    require_once('apiCorpClasses.php');
-    require_once('apiChar.php');
-    require_once('apiCorp.php');
-    require_once('apidb.php');
-    require_once('apimarket.php');
-    require_once('apiConstants.php');
+require_once('curl.class.php');
+require_once('api/keys.php');
+require_once('api/account.php');
+require_once('api/assets.php');
+require_once('api/marketOrders.php');
+require_once('api/marketTransactions.php');
+require_once('api/industryJobs.php');
+require_once('api/journal.php');
+require_once('api/kills.php');
+require_once('api/skills.php');
+require_once('api/certificates.php');
+require_once('api/mail.php');
+require_once('api/character.php');
+require_once('api/corporation.php');
+require_once('api/starbase.php');
+require_once('apidb.php');
+require_once('apimarket.php');
+require_once('apiConstants.php');
 
-    $cacheDelays = array(
-        101, 103, 115, 116, 117, 119
-    );
+$cacheDelays = array(
+    101, 103, 115, 116, 117, 119
+);
 
-    $eveTime = time() - date('Z');
+$GLOBALS['EVEAPI_ERRORS'] = array();
 
-    $GLOBALS['EVEAPI_ERRORS'] = array();
+class eveTimeOffset {
 
-    function apiError($method, $error) {
-        if (!isset($GLOBALS['EVEAPI_NO_ERRORS']) || (isset($GLOBALS['EVEAPI_NO_ERRORS']) && !$GLOBALS['EVEAPI_NO_ERRORS']))
-            $GLOBALS['EVEAPI_ERRORS'][] = 'API "' . $method . '": [' . (string)$error['code'] . '] ' . (string)$error;
+    static $offset = 0;
+    static $eveTime = 0;
+
+    // converts a GTM time string to local (user-defined) time
+    static function getOffsetTime($strTime) {
+        return strtotime((string) $strTime) + self::$offset;
     }
 
-    function otherError($method, $error) {
-        if (!isset($GLOBALS['EVEAPI_NO_ERRORS']) || (isset($GLOBALS['EVEAPI_NO_ERRORS']) && !$GLOBALS['EVEAPI_NO_ERRORS']))
-            $GLOBALS['EVEAPI_ERRORS'][] = $method . ': ' . $error;
+}
+
+eveTimeOffset::$eveTime = time() - date('Z');
+
+class apiError {
+
+    var $errorCode = 0;
+    var $errorText = '';
+    var $method = '';
+
+    function apiError($errorCode, $errorText, $method) {
+        $this->errorCode = $errorCode;
+        $this->errorText = $errorText;
+        $this->method = $method;
     }
 
-    class apiRequest {
-        var $cachedResponse = '';
-        var $response = '';
-        var $data = null;
+}
 
-        /**
-        * This is probably the most disgusting function you have ever seen in your entire life.
-        * GLHF.
-        */
-        function apiRequest($method, $user = null, $params = null, $printErrors = true) {
-            $http = new cURL();
-            $http->setOption('CURLOPT_USERAGENT', 'Out of Eve (dev; shrimp@shrimpworks.za.net)');
-            $http->setOption('CURLOPT_TIMEOUT', 45);
+class apiStats {
 
-            $apiUrl = $GLOBALS['config']['eve']['api_url'];
-            $fetchMethod = $GLOBALS['config']['eve']['method'];
+    static $requests = array();
+    static $errors = array();
+    static $cacheRequests = 0;
+    static $liveRequests = 0;
 
-            if (!$params)
-                $params = array();
+    static function addRequest($method, $requestTime, $cached, $expires) {
+        self::$requests[] = array(
+            'method' => $method,
+            'time' => $requestTime,
+            'cache' => $cached,
+            'cacheUntil' => $expires
+        );
+        if ($cached) {
+            self::$cacheRequests++;
+        } else {
+            self::$liveRequests++;
+        }
+    }
 
-            if ($user) {
-                $params['userID'] = $user[0];
-                $params['apiKey'] = $user[1];
-                if (isset($user[2]))
-                    $params['characterID'] = $user[2];
+    static function addError($error) {
+        self::$errors[] = $error;
+    }
+
+}
+
+class apiRequest {
+
+    var $data = false;
+    var $error;
+
+    function apiRequest($method, $apiKey = null, $forCharacter = false, $extraParams = array()) {
+        $result = false;
+
+        $start = microtime(true);
+
+        $http = new cURL();
+        $http->setOption('CURLOPT_USERAGENT', 'Out of Eve (shrimp@shrimpworks.za.net)');
+        $http->setOption('CURLOPT_TIMEOUT', 45);
+
+        $apiUrl = $GLOBALS['config']['eve']['api_url'];
+        $fetchMethod = $GLOBALS['config']['eve']['method'];
+
+        $params = array();
+
+        if (isset($apiKey)) {
+            $params['keyID'] = $apiKey->keyID;
+            $params['vCode'] = $apiKey->vCode;
+            if ($forCharacter) {
+                $params['characterID'] = $forCharacter->characterID;
             }
+        }
 
-            $hadError = false;
-            $cachedError = false;
+        if (!empty($extraParams)) {
+            $params = array_merge($params, $extraParams);
+        }
 
-            $cached = $this->checkCache($method, $params);
+        $cacheTimeAdd = $GLOBALS['config']['eve']['cache_time_add'];
 
-            if (!empty($this->cachedResponse)) {
+        $cacheSum = md5($method . implode('.', $params));
+        $cacheFile = $GLOBALS['config']['eve']['cache_dir'] . $cacheSum;
+
+        $cacheResult = $this->checkCache($cacheFile);
+
+        if (!$cacheResult) {
+            if (strtoupper($fetchMethod == 'GET')) {
+                $apiResponse = $http->get($apiUrl . '/' . $method . $this->queryString($params));
+            } else {
+                $apiResponse = $http->post($apiUrl . '/' . $method, $params);
+            }
+            $httpResponse = $http->getInfo();
+
+            /**
+             * Ensure we received no HTTP errors, and we received actual data
+             */
+            if (($httpResponse['http_code'] >= 200) && ($httpResponse['http_code'] <= 300) && (!empty($apiResponse))) {
                 try {
-                    $tmp = @new SimpleXMLElement($this->cachedResponse);
+                    $result = new SimpleXMLElement($apiResponse);
                 } catch (Exception $e) {
+                    $result = false;
+                    $this->error = new apiError($e->getCode(), $e->getMessage(), $method);
                 }
-                $cachedError = isset($tmp->error);
-                $cachedDate = $tmp->cachedUntil;
-                if (isset($tmp) && isset($tmp->cachedUntil) && ((strtotime($tmp->cachedUntil) + date('Z') + 300) > time())) {
-                    $this->response = $this->cachedResponse;
-                    $this->data = $tmp;
-                }
-            }
 
-            if (!isset($this->data)) {
-                $logFile = @fopen($GLOBALS['config']['eve']['cache_dir'] . '_api.log', 'a+');
-
-                if (!$cached) {
-                    if (strtoupper($fetchMethod == 'GET')) {
-                        $this->response = $http->get($apiUrl . '/' . $method . $this->queryString($params));
-                        echo $apiUrl . '/' . $method . $this->queryString($params);
-                    } else
-                        $this->response = $http->post($apiUrl . '/' . $method, $params);
-                }
-                $resonseInfo = $http->getInfo();
-
-                if (($resonseInfo['http_code'] >= 200) && ($resonseInfo['http_code'] <= 300) && (!empty($this->response))) {
-                    try {
-                        $this->data = @new SimpleXMLElement($this->response);
-                    } catch (Exception $e) {
-                        $hadError = true;
-                        @fwrite($logFile, date('Y-d-m H:i:s: ') . "\t" . $method . "\t" . $e->getMessage() . "\n");
-                        if ($printErrors)
-                            otherError($method, $e->getMessage() . '. Using local cache.');
-                        if (!empty($this->cachedResponse)) {
-                            try {
-                                $this->data = @new SimpleXMLElement($this->cachedResponse);
-                            } catch (Exception $e) {
-                                @fwrite($logFile, date('Y-d-m H:i:s: ') . "\tCache load failed\t" . $e->getMessage() . "\n");
-                                if ($printErrors)
-                                    otherError($method, 'Superhypermegaultrabbqfail: ' . $e->getMessage());
+                /**
+                 * Loading of results from the API was successful
+                 */
+                if ($result) {
+                    /**
+                     * Received an error from the API, try to fall back to cached data which may work...
+                     */
+                    if (isset($result->error) && !isset($cacheResult->error)) {
+                        $this->error = new apiError((int) $result->error['code'], (string) $result->error, $method);
+                        $cacheResult = $this->checkCache($cacheFile, true);
+                        if ($cacheResult) {
+                            if (in_array($this->error->errorCode, $GLOBALS['cacheDelays'])) {
+                                $cacheResult->cachedUntil = (string) $result->cachedUntil;
+                                $this->saveCache($cacheFile, $cacheResult->asXML(), strtotime($cacheResult->cachedUntil) + date('Z') + $cacheTimeAdd);
                             }
-                        }
-                    }
-
-                    if (isset($this->data->error) && (!empty($this->cachedResponse) && !$cachedError)) {
-                        $hadError = true;
-                        @fwrite($logFile, date('Y-d-m H:i:s: ') . "\t" . $method . "\t" . (string)$this->data->error . "\n");
-                        $errorCode = (int)$this->data->error['code'];
-                        $errorCache = (string)$this->data->cachedUntil;
-                        if ($printErrors) {
-                            apiError($method, $this->data->error);
-                        }
-                        try {
-                            $this->data = @new SimpleXMLElement($this->cachedResponse);
-                            $this->data->gotError = $errorCode;
-                            if (in_array($errorCode, $GLOBALS['cacheDelays'])) {
-                                $this->data->cachedUntil = $errorCache;
-                                $this->response = $this->data->asXML();
-                                $this->saveCache($method, $params, strtotime($this->data->cachedUntil) + date('Z') + 300);
-                            }
-                        } catch (Exception $e) {
-                            if ($printErrors)
-                                otherError($method, 'Superhypermegaultrabbqfail: ' . $e->getMessage());
-                            @fwrite($logFile, date('Y-d-m H:i:s: ') . "\tCache load failed\t" . $e->getMessage() . "\n");
-                        }
-                    }
-
-                    if (!$hadError && !$cached && isset($this->data->cachedUntil))
-                        $this->saveCache($method, $params, strtotime($this->data->cachedUntil) + date('Z') + 300);
-                } else {
-                    @fwrite($logFile, date('Y-d-m H:i:s: ') . "\tHTTP error: $method\t" . $this->response . "\n");
-                    if ((!empty($this->cachedResponse) && !$cachedError)) {
-                        if ($printErrors)
-                            otherError($method, 'API error (HTTP ' . $resonseInfo['http_code'] . '); using local cache -- expired ' . $cachedDate);
-                        try {
-                            $this->data = @new SimpleXMLElement($this->cachedResponse);
-                        } catch (Exception $e) {
+                            $result = $cacheResult;
                         }
                     } else {
-                        @fwrite($logFile, date('Y-d-m H:i:s: ') . "\tFailed with no cache: $method\t" . $this->response . "\n");
-                        otherError($method, 'Failed to get API data from '.$method.': ' . $this->response);
+                        /**
+                         * Everything went well, save the result to cache if needed.
+                         */
+                        if (array_key_exists($method, $GLOBALS['config']['eve']['cache_override'])) {
+                            $this->saveCache($cacheFile, $apiResponse, time() + $GLOBALS['config']['eve']['cache_override'][$method]);
+                        } else if (isset($result->cachedUntil)) {
+                            $this->saveCache($cacheFile, $apiResponse, strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd);
+                        }
                     }
                 }
-                @fclose($logFile);
+            } else {
+                $this->error = new apiError(1, 'HTTP error: ' + $httpResponse['http_code'], $method);
             }
+        } else {
+            $result = $cacheResult;
         }
 
-        function queryString($params) {
-            $res = '?';
-            foreach ($params as $key => $value) {
-                $res .= $key . '=' . urlencode($value) . '&';
-            }
-            return substr($res, 0, -1);
+        apiStats::addRequest(
+                $method, microtime(time) - $start, $result == $cacheResult, isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0);
+
+        if ($this->error) {
+            apiStats::addError($this->error);
         }
 
-        function checkCache($method, $params)
-        {
-            $cacheSum = md5($method . implode('.', $params));
-            $this->cacheFile = $GLOBALS['config']['eve']['cache_dir'] . $cacheSum;
+        $this->data = $result;
+    }
 
-            if (file_exists($this->cacheFile)) {
-                $this->cachedResponse = file_get_contents($this->cacheFile);
-                if (time() <= (filemtime($this->cacheFile))) {
-                    $this->response = $this->cachedResponse;
-                    return true;
-                }
-            }
-
-            return false;
+    function queryString($params) {
+        $res = '?';
+        foreach ($params as $key => $value) {
+            $res .= $key . '=' . urlencode($value) . '&';
         }
+        return substr($res, 0, -1);
+    }
 
-        function saveCache($method, $params, $cachedUntil) {
-            $cacheSum = md5($method . implode('.', $params));
-            $this->cacheFile = $GLOBALS['config']['eve']['cache_dir'] . $cacheSum;
-
-            file_put_contents($this->cacheFile, $this->response);
-            touch($this->cacheFile, $cachedUntil);
-        }
-
-        function clearOldCache() {
-            // maximum cache age is 7 days - one week
-            $maxAge = 3600 * 24 * 7;
-
-            $files = scandir($GLOBALS['config']['eve']['cache_dir']);
-            foreach ($files as $file) {
-                $file = $GLOBALS['config']['eve']['cache_dir'] . $file;
-                if (is_file($file)) {
-                    echo 'heh: ' . (time() - (filemtime($file)));
-                    break;
-                    if (time() - (filemtime($file)) > $maxAge) {
-                        unlink($file);
-                    }
+    function checkCache($cacheFile, $force = false) {
+        $res = false;
+        if (file_exists($cacheFile)) {
+            if ($force || (time() <= filemtime($cacheFile))) {
+                $cachedResponse = file_get_contents($cacheFile);
+                if (!empty($cachedResponse)) {
+                    $res = new SimpleXMLElement($cachedResponse);
                 }
             }
         }
+
+        return $res;
     }
 
-    class eveAccount {
-        var $userId = '';
-        var $apiKey = '';
-        var $characters = array();
-        var $accountStatus = null;
-        var $error = false;
-        var $timeOffset = 0;
+    function saveCache($cacheFile, $cacheContent, $cachedUntil) {
+        file_put_contents($cacheFile, $cacheContent);
+        touch($cacheFile, $cachedUntil);
+    }
 
-        var $db = null;
+    function clearOldCache() {
+        // maximum cache age is 7 days - one week
+        $maxAge = 3600 * 24 * 7;
 
-        function eveAccount($userId, $apiKey, $timeOffset = 0, $autoLoad = true) {
-            $this->userId = $userId;
-            $this->apiKey = $apiKey;
-            $this->timeOffset = $timeOffset * 3600;
-
-            $this->db = new eveDB();
-
-            if ($autoLoad) {
-                $this->getCharacters();
+        $files = scandir($GLOBALS['config']['eve']['cache_dir']);
+        foreach ($files as $file) {
+            $file = $GLOBALS['config']['eve']['cache_dir'] . $file;
+            if (is_file($file)) {
+                if (time() - (filemtime($file)) > $maxAge) {
+                    unlink($file);
+                }
             }
-        }
-
-        function getCharacters() {
-            $charData = new apiRequest('account/Characters.xml.aspx', array($this->userId, $this->apiKey));
-            if ($charData->data) {
-                if ($charData->data->error)
-                    $this->error = array('code' => (int)$charData->data->error['code'], 'message' => (string)$charData->data->error);
-
-                if (!$this->error)
-                    foreach ($charData->data->result->rowset->row as $char)
-                        $this->characters[] = new eveCharacter($this, (int)$char['characterID']);
-
-                if (!$this->error && count($this->characters) == 0)
-                    $this->error = array('code' => 1, 'message' => 'No characters (WTF?)!');
-            }
-        }
-
-        function getAccountStatus() {
-            $accData = new apiRequest('account/AccountStatus.xml.aspx', array($this->userId,
-                                                                               $this->apiKey));
-
-            if (!$accData->data) {
-                return;
-            }
-
-            if ($accData->data->error) {
-                apiError('account/AccountStatus.xml.aspx', $accData->data->error);
-                $this->error = (string)$accData->data->error;
-            } else {
-                $this->accountStatus = new eveAccountStatus($this, $accData->data->result);
-            }
-        }
-
-        function checkFullAccess() {
-            $balanceTest = new apiRequest('char/AccountBalance.xml.aspx', array($this->userId, $this->apiKey, $this->characters[0]->characterID));
-            if ($balanceTest->data->error)
-                $this->error = array('code' => (int)$balanceTest->data->error['code'], 'message' => (string)$balanceTest->data->error);
         }
     }
 
-    function characterName($id) {
-            $charData = new apiRequest('eve/CharacterName.xml.aspx', array(), array('ids' => $id));
-            if (!$charData->data) {
-                return 'Lookup Error';
-            }
-
-            if ($charData->data->error) {
-                apiError('eve/CharacterName.xml.aspx', $charData->data->error);
-                return 'Lookup Error';
-            } else {
-                return (string)$charData->data->result->rowset->row['name'];
-            }
-    }
+}
 
 ?>

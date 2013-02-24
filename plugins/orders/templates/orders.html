@@ -5,7 +5,7 @@
         <select id="accountKey" onchange="window.location='{$site_url}/?module=orders&corp=1&accountKey='+this.value">
           <option value="0">All</option>
           {foreach from=$accounts item=acc}
-            <option value="{$acc.key}" {if $accountKey == $acc.key}selected="selected"{/if}>{$acc.description}</option>
+            <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
           {/foreach}
         </select>
       </span>&nbsp;
@@ -45,17 +45,11 @@
       {foreach from=$selling item=o}
         <tr class="{cycle values='row,rowAlt'}">
           {if $corp}
-            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.jpg" class="i32" align="absmiddle" alt="{$o.charName}" title="{$o.charName}" /></td>
           {/if}
           <td>{$o.station.stationname}</td>
           <td>
-            <a href="#" onclick="showInfo({$o.item.typeid});return false;">
-              {if $o.item.typeGraphic}
-                <img src="{$site_url}/eveimages/types/32/{$o.item.typeid}.png" alt="{$o.item.typename}" align="absmiddle" />
-              {else}
-                <img src="{$site_url}/eveimages/icons/32/icon{$o.item.icon}.png" alt="{$o.item.typename}" align="absmiddle" />
-            {/if}
-            </a>
+            <a href="#" onclick="showInfo({$o.item.typeid});return false;"><img src="{$site_url}/{$o.item.icon.icon32}" class="i32" alt="{$o.item.typename}" align="absmiddle" /></a>
           {$o.item.typename}</td>
           <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
           <td align="right"">{$o.price|eveNum}</td>
@@ -114,16 +108,12 @@
       {foreach from=$buying item=o}
         <tr class="{cycle values='row,rowAlt'}">
           {if $corp}
-            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" align="absmiddle" width="32" height="32" alt="{$o.charName}" title="{$o.charName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" class="i32" align="absmiddle" alt="{$o.charName}" title="{$o.charName}" /></td>
           {/if}
           <td>{$o.station.stationname}</td>
           <td>
             <a href="#" onclick="showInfo({$o.item.typeid});return false;">
-              {if $o.item.typeGraphic}
-                <img src="{$site_url}/eveimages/types/32/{$o.item.typeid}.png" alt="{$o.item.typename}" align="absmiddle" />
-              {else}
-                <img src="{$site_url}/eveimages/icons/32/icon{$o.item.icon}.png" alt="{$o.item.typename}" align="absmiddle" />
-              {/if}
+              <img src="{$site_url}/{$o.item.icon.icon32}" class="i32" alt="{$o.item.typename}" align="absmiddle" />
             </a>
           {$o.item.typename}</td>
           <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>

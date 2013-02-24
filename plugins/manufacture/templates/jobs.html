@@ -44,22 +44,16 @@
         {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
         <tr class="{$rowClass}">
           {if $corp}
-            <td align="center"><img src="http://image.eveonline.com/Character/{$j.installerID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$j.installerName}" title="{$j.installerName}" /></td>
+            <td align="center"><img src="http://image.eveonline.com/Character/{$j.installerID}_32.jpg" class="i32" align="absmiddle" alt="{$j.installerName}" title="{$j.installerName}" /></td>
           {/if}
           <td>
             {if $j.activity.iconno}
-              <img src="{$site_url}/eveimages/icons/32/icon{$j.activity.iconno}.png" alt="{$j.activity.activityname}" align="absmiddle" />
+              <img src="{$site_url}/{$j.activity.icon.icon32}" class="i32" alt="{$j.activity.activityname}" align="absmiddle" />
             {/if}
             {$j.activity.activityname}
           </td>
           <td>
-            <a href="#" onclick="showInfo({$j.outItem.typeid});return false;">
-              {if $j.outItem.typeGraphic}
-                <img src="{$site_url}/eveimages/types/32/{$j.outItem.typeid}.png" alt="{$j.outItem.typename}" align="absmiddle" />
-              {else}
-                <img src="{$site_url}/eveimages/icons/32/icon{$j.outItem.icon}.png" alt="{$j.outItem.typename}" align="absmiddle" />
-              {/if}
-            </a>
+            <a href="#" onclick="showInfo({$j.outItem.typeid});return false;"><img src="{$site_url}/{$j.outItem.icon.icon32}" class="i32" alt="{$j.outItem.typename}" align="absmiddle" /></a>
             {$j.outItem.typename}
           </td>
           <td>{$j.outLocation.stationname}</td>

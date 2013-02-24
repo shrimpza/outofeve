@@ -1,0 +1,423 @@
+/* icon styles to force icon scaling in cases where icons are only available in 
+  the wrong sizes */
+.i16 {
+    width: 16px;
+}
+
+.i32 {
+    width: 32px;
+}
+
+.i64 {
+    width: 64px;
+}
+
+.i128 {
+    width: 128px;
+}
+
+/* =================================== */
+/* basic colours for everything        */
+/* =================================== */
+.shadeLight {
+    background-image: url('images/bg/white_trans_l.png');
+}
+
+.shadeMid {
+    background-image: url('images/bg/white_trans.png');
+}
+
+.shadeDark {
+    background-image: url('images/bg/white_trans_d.png');
+}
+
+.borderLight {
+    border: 0px;
+}
+
+.borderMid {
+    border: 0px;
+}
+
+.borderDark {
+    border: 0px;
+}
+
+.textLight {
+    color: #eee;
+}
+
+/* =================================== */
+/* some plugin specific tweaks         */
+/* =================================== */
+
+#killList .killHead {
+    padding: 3px 3px 7px 3px;
+}
+
+.groupHead td {
+    padding: 2px;
+}
+
+#assetList .contents td {
+    padding: 2px;
+}
+
+/* =================================== */
+/* page layout/conatainers             */
+/* =================================== */
+
+#header-full {
+    background-image: url('images/bg/navy_blue.png');
+}
+
+#header {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 85px;
+    margin-bottom: 10px;
+    font-size: large;
+    padding: 0px;
+}
+
+#container {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#containerPopup {
+    left: 10px;
+    right: 10px;
+}
+
+#main {
+    margin-left: 200px;
+    background-image: url('images/bg/white_trans_l.png');
+    padding: 8px;
+}
+
+#mainPopup {
+}
+
+#navigation {
+    width: 190px;
+    float: left;
+    /*    background-color: #ffffff;*/
+    /*    padding: 8px;*/
+}
+
+#footer-wrapper {
+    clear: both;
+    margin-top: 50px;
+    background-image: url('images/bg/navy_blue.png');
+}
+
+/* =================================== */
+/* base type things                   */
+/* =================================== */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #000000;
+    background-image: url("images/bg/twinkle_twinkle.png");
+    font-family: "Trebuchet MS", Verdana, Helvetica;
+    font-size: small;
+    color: #ffffff;
+}
+
+.a, a {
+    text-decoration: none;
+    color: orange;
+}
+
+a:visited {
+    text-decoration: none;
+    color: darkorange;
+}
+
+img {
+    border: 0px;
+}
+
+infoLink a, .infoLink a:visited {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* =================================== */
+/* page header                         */
+/* =================================== */
+
+#header .charSelect {
+    float: right;
+    background-image: url('images/bg/white_trans_l.png');
+    /*    border: 1px solid #454545;*/
+    padding: 2px;
+    margin: 5px;
+    vertical-align: middle;
+    height: 72px;
+}
+
+#header .chars {
+    float: left;
+    display: inline;
+}
+
+#header .selects {
+    padding: 2px;
+    float: left;
+    width: 190px;
+    display: inline;
+}
+
+#header .selects select {
+    width: 180px;
+    margin: 5px;
+}
+
+#header .chars img {
+    padding: 4px;
+}
+
+
+/* =================================== */
+/* footer...                           */
+/* =================================== */
+
+#footer {
+    font-size: 1.3em;
+    padding: 3px;
+    padding-right: 15px;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* =================================== */
+/* table bits                          */
+/* =================================== */
+
+th {
+    background-image: url('images/bg/white_trans.png');
+    text-align: center;
+    font-size: 1.05em;
+    padding: 4px 2px 4px 2px;
+}
+
+.sub {
+    text-align: center;
+    font-weight: bold;
+    background-image: url('images/bg/white_trans_d.png');
+}
+
+.row {
+}
+
+.rowAlt {
+    background-image: url('images/bg/white_trans_l.png');
+}
+
+/* =================================== */
+/* various colours and things          */
+/* =================================== */
+
+.moneyOut {
+    color: #d00;
+}
+
+.moneyIn {
+    color: #0b0;
+}
+
+.bad {
+    color: #d00;
+}
+
+.good {
+    color: #0b0;
+}
+
+.maybe {
+    color: #00b;
+}
+
+/* =================================== */
+/* menus                               */
+/* =================================== */
+
+#navigation .header {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px;
+    background-image: url('images/bg/white_trans_d.png');
+    font-size: 1.1em;
+}
+
+#navigation .body {
+    background-image: url('images/bg/white_trans_l.png');
+    border-top: 0px;
+    margin-bottom: 10px;
+}
+
+.menu {
+    width: 181px;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.menu li {
+    cursor: pointer;
+}
+
+.menu a {
+    display: block;
+    width: 100%;
+    padding: 2px 4px 2px 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.menu a:link, .menu a:active, .menu a:visited {
+    color: #ffffff;
+}
+
+.menu a:hover {
+    background-image: url('images/bg/white_trans_l.png');
+}
+
+#navigation .menuNote {
+    font-size: 1em;
+    color: #ff6400;
+    background-color: #ffffc8;
+    border: 1px double #ff7e28;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    width: 160px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+/* =================================== */
+/* error messages and displays         */
+/* =================================== */
+
+#errorPopup {
+    position: absolute;
+    top: 0px;
+    left: 20%;
+    right: 20%;
+    z-index: 1000;
+    color: #000;
+    background-color: #fb9;
+    border: 4px outset #d41;
+    border-top: none;
+    padding: 5px;
+    text-align: left;
+    font-weight: bold;
+}
+
+#errorPopup h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #d41;
+}
+
+.error {
+    font-size: 1.3em;
+    color: #000;
+    background-color: #f96;
+    border: 4px double #d41;
+    padding: 15px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#errorPopup a {
+    color: #000;
+}
+
+.apierror {
+    border-bottom: 1px dotted #d41;
+    padding: 3px 0px 3px 10px;
+    font-weight: normal;
+}
+
+.ok {
+    font-size: 1.3em;
+    color: #000;
+    background-color: #9f6;
+    border: 4px double #4d1;
+    padding: 15px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.note {
+    font-size: 1.2em;
+    color: #ff6400;
+    background-color: #ffffc8;
+    border: 1px double #ff7e28;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 15px;
+    padding-left: 80px;
+    width: 600px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    background-image: url('images/note.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+
+/* =================================== */
+/* style for filters and things on     */
+/* the tops of pages with data lists   */
+/* =================================== */
+
+.listOptions {
+    margin: 10px;
+    margin-left: 2px;
+}
+
+.listOptions span {
+    vertical-align: middle;
+    font-size: 1.1em;
+    padding: 10px;
+    background-image: url('images/bg/white_trans_d.png');
+}
+
+.listOptions a {
+    text-decoration: none;
+}
+
+/* =================================== */
+/* pagination buttons...               */
+/* =================================== */
+
+.pageNav {
+    border: 1px solid #b5b8b6;
+    text-align: center;
+    background-color: #444;
+    color: orange;
+    font-weight: bold;
+    margin: 2px;
+}

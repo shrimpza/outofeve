@@ -7,7 +7,7 @@
           <th colspan="2">{$corp.corporationName} [{$corp.ticker}]</th>
         </tr>
         <tr>
-          <td colspan="2" align="center"><img src="http://image.eveonline.com/Corporation/{$corp.corporationID}_128.png" alt="{$corp.corporationName}" /></td>
+          <td colspan="2" align="center"><img src="http://image.eveonline.com/Corporation/{$corp.corporationID}_128.png" class="i128" alt="{$corp.corporationName}" /></td>
         </tr>
         <tr>
           <td width="30%" align="right"><b>Alliance:</b></td>
@@ -15,11 +15,11 @@
         </tr>
         <tr>
           <td align="right"><b>CEO:</b></td>
-          <td><img src="http://image.eveonline.com/Character/{$corp.ceoID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$corp.ceoName}" /> {$corp.ceoName}</td>
+          <td><img src="http://image.eveonline.com/Character/{$corp.ceoID}_32.jpg" class="i32" align="absmiddle" alt="{$corp.ceoName}" /> {$corp.ceoName}</td>
         </tr>
         <tr>
           <td align="right"><b>Headquarters:</b></td>
-          <td><img src="{$site_url}/eveimages/types/32/{$corp.station.stationtypeid}.png" alt="{$corp.station.stationname}" align="absmiddle" /> {$corp.station.stationname}</td>
+          <td><img src="{$site_url}/{$corp.station.icon.icon32}" class="i32" alt="{$corp.station.stationname}" align="absmiddle" /> {$corp.station.stationname}</td>
         </tr>
         <tr>
           <td align="right"><b>Members:</b></td>
@@ -46,11 +46,11 @@
         </tr>
         {/if}
 
-        {if $corp.loadedBalances}
+        {if $balances}
           <tr>
             <th colspan="2">Wallet Balances</th>
           </tr>
-          {foreach from=$corp.walletDivisions item=wallet}
+          {foreach from=$balances.wallets item=wallet}
           <tr class="{cycle values='row,rowAlt'}">
             <td align="right"><b>{$wallet.description}:</b></td>
             <td align="right">{$wallet.balance|eveNum}&nbsp;&nbsp;</td>
@@ -64,7 +64,7 @@
 
     <td width="50%" valign="top">
 
-      {if $corp.loadedMembers}
+      {if $members}
       <table width="100%" border="0">
         <tr>
           <th>Members</th>
@@ -122,7 +122,7 @@
         {foreach from=$members item=member}
         {cycle values='row,rowAlt' assign=rowclass}
         <tr class="{$rowclass}" onclick="toggleMember('member{$member.characterID}')" style="cursor:pointer">
-          <td><img src="http://image.eveonline.com/Character/{$member.characterID}_32.jpg" align="absmiddle" width="32" height="32" alt="{$member.name}" /> {$member.name}</td>
+          <td><img src="http://image.eveonline.com/Character/{$member.characterID}_32.jpg" class="i32" align="absmiddle" alt="{$member.name}" /> {$member.name}</td>
         </tr>
         <tr id="member{$member.characterID}" class="{$rowclass}" style="display:none">
           <td>
@@ -137,13 +137,13 @@
                 <tr><td align="right"><b>Last Active:</b></td><td>{$member.logoffDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
               {/if}
               {if $member.baseID}
-                <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/eveimages/types/32/{$member.base.stationtypeid}.png" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
+                <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/{$member.base.icon.icon32}" class="i32" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
               {/if}
               {if $member.locationID}
-                <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/eveimages/types/32/{$member.location.stationtypeid}.png" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
+                <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/{$member.location.icon.icon32}" class="i32" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
               {/if}
-              {if $member.shipTypeID}
-                <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/eveimages/types/32/{$member.ship.typeid}.png" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
+              {if $member.ship}
+                <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/{$member.ship.icon.icon32}" class="i32" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
               {/if}
             </table>
           </td>

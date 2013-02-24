@@ -18,6 +18,10 @@
     // enable the precache.php script to pre-load API data
     $config['site']['precache'] = false;
 
+    // if enabled, load times, DB usage and API access info will be printed
+    // in the footer of each page
+    $config['site']['showstats'] = false;
+
 
     /*************************************************************************
         Database for OOE (users, API details, etc)
@@ -49,10 +53,18 @@
         EVE API and paths, for caching, themes, etc.
     *************************************************************************/
     $config['eve']['cache_dir'] = dirname(__FILE__).'/../cache/';
-    $config['eve']['api_url'] = 'http://api.eve-online.com';
+    $config['eve']['api_url'] = 'https://api.eveonline.com';
     $config['eve']['method'] = 'POST';
+    
+    // Add this many seconds to the cachedUntil time
+    // May prove useful for potential slight overlaps on some re-requests
+    $config['eve']['cache_time_add'] = 120;
+
     $config['eve']['journal_records'] = 2560;
     $config['eve']['transaction_records'] = 2560;
+    
+    $config['images']['types'] = 'eveimages/Types/%1$d_%2$d.png';
+    $config['images']['icons'] = 'eveimages/Icons/items/%1$d_%3$d_%2$d.png';
 
     $config['templates']['compile_dir'] = dirname(__FILE__).'/../templates/compiled';
     $config['templates']['theme_dir'] = dirname(__FILE__).'/../templates';

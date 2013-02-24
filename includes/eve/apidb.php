@@ -1,555 +1,700 @@
 <?php
 
-    class eveDB {
-        var $typeNameCache = array();
-        var $itemCache = array();
-        var $itemGroupCache = array();
-        var $itemCategoryCache = array();
-        var $itemFlagCache = array();
-        var $blueprintCache = array();
-        var $activityCache = array();
-        var $stationCache = array();
-        var $solarSystemCache = array();
-        var $regionCache = array();
-        var $celestialCache = array();
-        var $flagTextCache = array();
-        var $industryCompleteTextCache = array();
-        var $certificateCache = array();
-        var $towerFuelCache = array();
-        var $eveNameCache = array();
+class itemGraphic {
 
-        var $refTypes = array();
+    var $icon16;
+    var $icon32;
+    var $icon64;
+    var $icon128;
+    private static $iconCache = null;
 
-        var $outpostList = null;
-
-        var $corpRoleList = array();
-
-        var $db = null;
-
-        function eveDB() {
-            if (!isset($this->db))
-                $this->db = new DBManager($GLOBALS['config']['evedatabase']);
+    static function getItemGraphic($typeId, $icon) {
+        if (self::$iconCache == null) {
+            self::$iconCache = array();
         }
 
-        function bloodlineInfo($bloodlineName) {
-            $res = $this->db->QueryA("select b.bloodlineName, r.raceName, ib.iconFile as bicon, ir.iconFile as ricon
+        if (in_array($typeId, array_keys(self::$iconCache))) {
+            return self::$iconCache[$typeId . '.' . $icon];
+        } else {
+            self::$iconCache[$typeId . '.' . $icon] = new itemGraphic($typeId, $icon);
+            return self::$iconCache[$typeId . '.' . $icon];
+        }
+    }
+
+    function itemGraphic($typeId, $icon) {
+        $basePath = dirname(__FILE__) . '/../../';
+        $iconParts = false;
+        if (isset($icon) && !empty($icon)) {
+            $iconParts = explode('_', $icon);
+        }
+
+        if (isset($typeId) && $typeId) {
+            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 16);
+            if (file_exists($basePath . $name)) {
+                $this->icon16 = $name;
+                $this->icon32 = $name;
+                $this->icon64 = $name;
+                $this->icon128 = $name;
+            }
+
+            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 32);
+            if (file_exists($basePath . $name)) {
+                $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                $this->icon32 = $name;
+                $this->icon64 = $name;
+                $this->icon128 = $name;
+            }
+
+            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 64);
+            if (file_exists($basePath . $name)) {
+                $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
+                $this->icon64 = $name;
+                $this->icon128 = $name;
+            }
+
+            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 128);
+            if (file_exists($basePath . $name)) {
+                $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
+                $this->icon64 = empty($this->icon64) ? $name : $this->icon64;
+                $this->icon128 = $name;
+            }
+        }
+
+        if ($iconParts) {
+            if (!isset($this->icon16)) {
+                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 16);
+                if (file_exists($basePath . $name)) {
+                    $this->icon16 = $name;
+                    $this->icon32 = $name;
+                    $this->icon64 = $name;
+                    $this->icon128 = $name;
+                }
+            }
+
+            if (!isset($this->icon32)) {
+                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 32);
+                if (file_exists($basePath . $name)) {
+                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                    $this->icon32 = $name;
+                    $this->icon64 = $name;
+                    $this->icon128 = $name;
+                }
+            }
+
+            if (!isset($this->icon64)) {
+                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 64);
+                if (file_exists($basePath . $name)) {
+                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                    $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
+                    $this->icon64 = $name;
+                    $this->icon128 = $name;
+                }
+            }
+
+            if (!isset($this->icon128)) {
+                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 128);
+                if (file_exists($basePath . $name)) {
+                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
+                    $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
+                    $this->icon64 = empty($this->icon64) ? $name : $this->icon64;
+                    $this->icon128 = $name;
+                }
+            }
+        }
+    }
+
+}
+
+class eveDB {
+
+    var $typeNameCache = array();
+    var $itemCache = array();
+    var $itemGroupCache = array();
+    var $itemCategoryCache = array();
+    var $itemFlagCache = array();
+    var $blueprintCache = array();
+    var $activityCache = array();
+    var $stationCache = array();
+    var $solarSystemCache = array();
+    var $regionCache = array();
+    var $celestialCache = array();
+    var $flagTextCache = array();
+    var $industryCompleteTextCache = array();
+    var $certificateCache = array();
+    var $towerFuelCache = array();
+    var $refTypes = array();
+    var $outpostList = null;
+    var $corpRoleList = array();
+    var $db = null;
+    static $instance = null;
+
+    function eveDB() {
+        if (!isset($this->db)) {
+            $this->db = new DBManager($GLOBALS['config']['evedatabase']);
+        }
+    }
+
+    static function getInstance() {
+        if (self::$instance == null) {
+            self::$instance = new eveDB();
+        }
+        return self::$instance;
+    }
+
+    function bloodlineInfo($bloodlineName) {
+        $res = $this->db->QueryA("select b.bloodlineName, r.raceName, ib.iconFile as bicon, ir.iconFile as ricon
                                         from chrBloodlines b 
                                         inner join chrRaces r on r.raceId = b.raceId
                                         inner join eveIcons ib on ib.iconId = b.iconId
                                         inner join eveIcons ir on ir.iconId = r.iconId
                                         where b.bloodlineName = ?", array($bloodlineName));
-            if ($res)
-                return $res[0];
-            else
-                return false;
+        if ($res) {
+            $res = $res[0];
+            $res['ricon'] = itemGraphic::getItemGraphic(0, $res['ricon']);
+            $res['bicon'] = itemGraphic::getItemGraphic(0, $res['bicon']);
+            return $res;
+        } else {
+            return false;
+        }
+    }
+
+    function typeName($typeId) {
+        $typeId = (string) $typeId;
+
+        if (!isset($this->typeNameCache[$typeId])) {
+            $res = $this->db->QueryA('select typeName from invTypes where typeID = ?', array($typeId));
+            if ($res) {
+                $this->typeNameCache[$typeId] = $res[0]['typename'];
+            }
         }
 
-        function typeName($typeId) {
-            $typeId = (string)$typeId;
+        return $this->typeNameCache[$typeId];
+    }
 
-            if (!isset($this->typeNameCache[$typeId])) {
-                $res = $this->db->QueryA('select typeName from invTypes where typeID = ?', array($typeId));
-                if ($res)
-                    $this->typeNameCache[$typeId] = $res[0]['typename'];
+    function flagText($flagId) {
+        $flagId = (string) $flagId;
+
+        if (!isset($this->flagTextCache[$flagId])) {
+            $res = $this->db->QueryA('select flagText from invFlags where flagID = ?', array($flagId));
+            if ($res) {
+                $this->flagTextCache[$flagId] = $res[0]['flagtext'];
+            }
+        }
+
+        return $this->flagTextCache[$flagId];
+    }
+
+    function industryCompleteText($completedStatus) {
+        $completedStatus = (string) $completedStatus;
+
+        if (!isset($this->industryCompleteTextCache[$completedStatus])) {
+            $res = $this->db->QueryA('select completedStatusText from ramCompletedStatuses where completedStatus = ?', array($completedStatus));
+            if ($res) {
+                $this->industryCompleteTextCache[$completedStatus] = $res[0]['completedstatustext'];
+            }
+        }
+
+        return $this->industryCompleteTextCache[$completedStatus];
+    }
+
+    function getTypeId($typeName) {
+        $typeId = 0;
+        $res = $this->db->QueryA('select typeID from invTypes where UCASE(typeName) = UCASE(?)', array($typeName));
+        if ($res) {
+            $typeId = $res[0]['typeid'];
+        }
+
+        return $typeId;
+    }
+
+    function getRegionId($regionName) {
+        $regionId = 0;
+        $res = $this->db->QueryA('select regionID from mapRegions where UCASE(regionName) = UCASE(?)', array($regionName));
+        if ($res) {
+            $regionId = $res[0]['regionid'];
+        }
+
+        return $regionId;
+    }
+
+    function refType($refTypeId) {
+        $refTypeId = (string) $refTypeId;
+
+        if (!isset($this->refTypes[$refTypeId])) {
+            $eveRefTypes = new apiRequest('eve/RefTypes.xml.aspx');
+            foreach ($eveRefTypes->data->result->rowset->row as $refType) {
+                $this->refTypes[(string) $refType['refTypeID']] = (string) $refType['refTypeName'];
+            }
+        }
+
+        return $this->refTypes[$refTypeId];
+    }
+
+    function eveItem($typeId, $byName = false) {
+        $typeId = (string) $typeId;
+
+        if ($byName) {
+            $typeId = $this->getTypeId($typeId);
+        }
+
+        if ($typeId != '0') {
+            if (!isset($this->itemCache[$typeId])) {
+                $this->itemCache[$typeId] = new eveItem($typeId);
+            }
+        } else {
+            return false;
+        }
+
+        return $this->itemCache[$typeId];
+    }
+
+    function eveItemFlag($flagId) {
+        $flagId = (string) $flagId;
+
+        if (!isset($this->itemFlagCache[$flagId])) {
+            $this->itemFlagCache[$flagId] = new eveItemFlag($flagId);
+        }
+
+        return $this->itemFlagCache[$flagId];
+    }
+
+    function eveItemGroup($groupId) {
+        $groupId = (string) $groupId;
+
+        if (!isset($this->itemGroupCache[$groupId])) {
+            $this->itemGroupCache[$groupId] = new eveItemGroup($groupId);
+        }
+
+        return $this->itemGroupCache[$groupId];
+    }
+
+    function eveItemCategory($categoryId) {
+        $categoryId = (string) $categoryId;
+
+        if (!isset($this->itemCategoryCache[$categoryId])) {
+            $this->itemCategoryCache[$categoryId] = new eveItemCategory($categoryId);
+        }
+
+        return $this->itemCategoryCache[$categoryId];
+    }
+
+    function eveItemBlueprint($typeId) {
+        $typeId = (string) $typeId;
+
+        if (!isset($this->blueprintCache[$typeId])) {
+            $this->blueprintCache[$typeId] = new eveItemBlueprint($typeId);
+        }
+
+        return $this->blueprintCache[$typeId];
+    }
+
+    function eveIndustryActivity($activityId) {
+        $activityId = (string) $activityId;
+
+        if (!isset($this->activityCache[$activityId])) {
+            $this->activityCache[$activityId] = new eveIndustryActivity($activityId);
+        }
+
+        return $this->activityCache[$activityId];
+    }
+
+    // retrieves the item a blueprint produces, based on a blueprint type
+    // from invTypes, NOT invBlueprintTypes.
+    function eveItemFromBlueprintType($typeId) {
+        $res = $this->db->QueryA('select producttypeid from invBlueprintTypes where blueprinttypeid = ?', array($typeId));
+        if ($res) {
+            return $this->eveItem($res[0]['producttypeid']);
+        } else {
+            return null;
+        }
+    }
+
+    function eveCertificate($certificateId) {
+        $certificateId = (string) $certificateId;
+
+        if (!isset($this->certificateCache[$certificateId])) {
+            $this->certificateCache[$certificateId] = new eveCertificate($certificateId);
+        }
+
+        return $this->certificateCache[$certificateId];
+    }
+
+    function regionList() {
+        return $this->db->QueryA("select regionID, regionName from mapRegions where RegionName <> 'Unknown' order by regionName", array());
+    }
+
+    function eveStation($stationId) {
+        $stationId = (int) $stationId;
+
+        // see http://wiki.eve-id.net/APIv2_Corp_AssetList_XML
+        if (($stationId >= 66000000) && ($stationId < 67000000)) {
+            $stationId -= 6000001;
+        }
+
+        $stationId = (string) $stationId;
+
+        if (!isset($this->stationCache[$stationId])) {
+            $this->stationCache[$stationId] = new eveStation($stationId);
+        }
+
+        $theStation = $this->stationCache[$stationId];
+
+        if ($theStation->stationid == 0) {
+            if ($this->outpostList == null) {
+                $this->loadOutpostList();
             }
 
-            return $this->typeNameCache[$typeId];
-        }
-
-        function flagText($flagId) {
-            $flagId = (string)$flagId;
-
-            if (!isset($this->flagTextCache[$flagId])) {
-                $res = $this->db->QueryA('select flagText from invFlags where flagID = ?', array($flagId));
-                if ($res)
-                    $this->flagTextCache[$flagId] = $res[0]['flagtext'];
+            $outpost = $this->outpostList->getOutpost($stationId);
+            if ($outpost) {
+                $this->stationCache[$stationId] = $outpost;
+                $theStation = $this->stationCache[$stationId];
             }
-
-            return $this->flagTextCache[$flagId];
         }
 
-        function industryCompleteText($completedStatus) {
-            $completedStatus = (string)$completedStatus;
+        $theStation->stationname = str_replace('Moon ', 'M', $theStation->stationname);
 
-            if (!isset($this->industryCompleteTextCache[$completedStatus])) {
-                $res = $this->db->QueryA('select completedStatusText from ramCompletedStatuses where completedStatus = ?', array($completedStatus));
-                if ($res)
-                    $this->industryCompleteTextCache[$completedStatus] = $res[0]['completedstatustext'];
+        return $theStation;
+    }
+
+    function eveSolarSystem($solarSystemId) {
+        if (is_array($solarSystemId)) {
+            if (!isset($this->solarSystemCache[$solarSystemId['solarsystemid']])) {
+                $this->solarSystemCache[$solarSystemId['solarsystemid']] = new eveSolarSystem($solarSystemId);
             }
+            $solarSystemId = $solarSystemId['solarsystemid'];
+        } else {
+            $solarSystemId = (string) $solarSystemId;
 
-            return $this->industryCompleteTextCache[$completedStatus];
-        }
-
-        function getTypeId($typeName) {
-            $typeId = 0;
-            $res = $this->db->QueryA('select typeID from invTypes where UCASE(typeName) = UCASE(?)', array($typeName));
-            if ($res)
-                $typeId = $res[0]['typeid'];
-
-            return $typeId;
-        }
-
-        function getRegionId($regionName) {
-            $regionId = 0;
-            $res = $this->db->QueryA('select regionID from mapRegions where UCASE(regionName) = UCASE(?)', array($regionName));
-            if ($res)
-                $regionId = $res[0]['regionid'];
-
-            return $regionId;
-        }
-
-        function refType($refTypeId) {
-            $refTypeId = (string)$refTypeId;
-
-            if (!isset($this->refTypes[$refTypeId])) {
-                $eveRefTypes = new apiRequest('eve/RefTypes.xml.aspx');
-                foreach ($eveRefTypes->data->result->rowset->row as $refType)
-                    $this->refTypes[(string)$refType['refTypeID']] = (string)$refType['refTypeName'];
+            if (!isset($this->solarSystemCache[$solarSystemId])) {
+                $this->solarSystemCache[$solarSystemId] = new eveSolarSystem($solarSystemId);
             }
-
-            return $this->refTypes[$refTypeId];
         }
 
-        function eveItem($typeId, $byName = false) {
-            $typeId = (string)$typeId;
+        return $this->solarSystemCache[$solarSystemId];
+    }
 
-            if ($byName)
-                $typeId = $this->getTypeId($typeId);
+    function eveRegion($regionId) {
+        $regionId = (string) $regionId;
 
-            if ($typeId != '0') {
-                if (!isset($this->itemCache[$typeId]))
-                    $this->itemCache[$typeId] = new eveItem($this, $typeId);
-            }
-            else
-                return false;
-
-            return $this->itemCache[$typeId];
+        if (!isset($this->regionCache[$regionId])) {
+            $this->regionCache[$regionId] = new eveRegion($regionId);
         }
 
-        function eveItemFlag($flagId) {
-            $flagId = (string)$flagId;
+        return $this->regionCache[$regionId];
+    }
 
-            if (!isset($this->itemFlagCache[$flagId]))
-                $this->itemFlagCache[$flagId] = new eveItemFlag($this, $flagId);
+    function eveCelestial($itemId) {
+        $itemId = (string) $itemId;
 
-            return $this->itemFlagCache[$flagId];
+        if (!isset($this->celestialCache[$itemId])) {
+            $this->celestialCache[$itemId] = new eveCelestial($itemId);
         }
 
-        function eveItemGroup($groupId) {
-            $groupId = (string)$groupId;
+        return $this->celestialCache[$itemId];
+    }
 
-            if (!isset($this->itemGroupCache[$groupId]))
-                $this->itemGroupCache[$groupId] = new eveItemGroup($this, $groupId);
+    function eveAllSystems($regionID = 0) {
+        $res = array();
 
-            return $this->itemGroupCache[$groupId];
+        $regionLimit = '';
+        if ($regionID > 0) {
+            $regionLimit = ' where regionID = ' . $regionID;
         }
 
-        function eveItemCategory($categoryId) {
-            $categoryId = (string)$categoryId;
-
-            if (!isset($this->itemCategoryCache[$categoryId]))
-                $this->itemCategoryCache[$categoryId] = new eveItemCategory($this, $categoryId);
-
-            return $this->itemCategoryCache[$categoryId];
-        }
-
-        function eveItemBlueprint($typeId) {
-            $typeId = (string)$typeId;
-
-            if (!isset($this->blueprintCache[$typeId]))
-                $this->blueprintCache[$typeId] = new eveItemBlueprint($this, $typeId);
-
-            return $this->blueprintCache[$typeId];
-        }
-
-        function eveIndustryActivity($activityId) {
-            $activityId = (string)$activityId;
-
-            if (!isset($this->activityCache[$activityId]))
-                $this->activityCache[$activityId] = new eveIndustryActivity($this, $activityId);
-
-            return $this->activityCache[$activityId];
-        }
-
-        // retrieves the item a blueprint produces, based on a blueprint type
-        // from invTypes, NOT invBlueprintTypes.
-        function eveItemFromBlueprintType($typeId) {
-            $res = $this->db->QueryA('select producttypeid from invBlueprintTypes where blueprinttypeid = ?', array($typeId));
-            if ($res)
-                return $this->eveItem($res[0]['producttypeid']);
-            else
-                return null;
-        }
-
-        function eveCertificate($certificateId) {
-            $certificateId = (string)$certificateId;
-
-            if (!isset($this->certificateCache[$certificateId]))
-                $this->certificateCache[$certificateId] = new eveCertificate($this, $certificateId);
-
-            return $this->certificateCache[$certificateId];
-        }
-
-        function eveName($itemId) {
-            $itemId = (string)$itemId;
-
-            if (!isset($this->eveNameCache[$itemId]))
-                $this->eveNameCache[$itemId] = new eveName($this, $itemId);
-
-            return $this->eveNameCache[$itemId];
-        }
-
-        function regionList() {
-            return $this->db->QueryA("select regionID, regionName from mapRegions where RegionName <> 'Unknown' order by regionName", array());
-        }
-
-        function eveStation($stationId) {
-            $stationId = (int)$stationId;
-
-            // see http://wiki.eve-id.net/APIv2_Corp_AssetList_XML
-            if (($stationId >= 66000000) && ($stationId < 67000000)) {
-                $stationId -= 6000001;
-            }
-
-            $stationId = (string)$stationId;
-
-            if (!isset($this->stationCache[$stationId]))
-                $this->stationCache[$stationId] = new eveStation($this, $stationId);
-
-            $theStation = $this->stationCache[$stationId];
-
-            if ($theStation->stationid == 0) {
-                if ($this->outpostList == null)
-                    $this->loadOutpostList();
-
-                $outpost = $this->outpostList->getOutpost($stationId);
-                if ($outpost) {
-                    $this->stationCache[$stationId] = $outpost;
-                    $theStation = $this->stationCache[$stationId];
-                }
-            }
-
-            $theStation->stationname = str_replace('Moon ', 'M', $theStation->stationname);
-
-            return $theStation;
-        }
-
-        function eveSolarSystem($solarSystemId) {
-            if (is_array($solarSystemId)) {
-                if (!isset($this->solarSystemCache[$solarSystemId['solarsystemid']]))
-                    $this->solarSystemCache[$solarSystemId['solarsystemid']] = new eveSolarSystem($this, $solarSystemId);
-                $solarSystemId = $solarSystemId['solarsystemid'];
-            } else {
-                $solarSystemId = (string)$solarSystemId;
-
-                if (!isset($this->solarSystemCache[$solarSystemId]))
-                    $this->solarSystemCache[$solarSystemId] = new eveSolarSystem($this, $solarSystemId);
-            }
-
-            return $this->solarSystemCache[$solarSystemId];
-        }
-
-        function eveRegion($regionId) {
-            $regionId = (string)$regionId;
-
-            if (!isset($this->regionCache[$regionId]))
-                $this->regionCache[$regionId] = new eveRegion($this, $regionId);
-
-            return $this->regionCache[$regionId];
-        }
-
-        function eveCelestial($itemId) {
-            $itemId = (string)$itemId;
-
-            if (!isset($this->celestialCache[$itemId]))
-                $this->celestialCache[$itemId] = new eveCelestial($this, $itemId);
-
-            return $this->celestialCache[$itemId];
-        }
-
-        function eveAllSystems($regionID = 0) {
-            $res = array();
-
-            $regionLimit = '';
-            if ($regionID > 0)
-                $regionLimit = ' where regionID = ' . $regionID;
-
-            $sysList = $this->db->QueryA('select solarsystemid, regionid, solarsystemname, security, x, z, factionid 
+        $sysList = $this->db->QueryA('select solarsystemid, regionid, solarsystemname, security, x, z, factionid 
                                           from mapSolarSystems ' . $regionLimit . '
                                           order by solarSystemName', array());
-            for ($i = 0; $i < count($sysList); $i++) {
-                $sys = $this->eveSolarSystem($sysList[$i]);
-                $res[] = $sys;
-            }
-
-            for ($i = 0; $i < count($res); $i++)
-                $res[$i]->getJumps();
-
-            return $res;
+        for ($i = 0; $i < count($sysList); $i++) {
+            $sys = $this->eveSolarSystem($sysList[$i]);
+            $res[] = $sys;
         }
 
-        function calcJumps($fromSystemID, $toSystemID, $minSec = 0) {
-            $result = array('jumps' => 0, 'systems' => array());
+        for ($i = 0; $i < count($res); $i++) {
+            $res[$i]->getJumps();
+        }
 
-            $source = $fromSystemID; 
-            $destination = $toSystemID;
+        return $res;
+    }
 
-            $sid = $source; 
-            $did = $destination;
+    function calcJumps($fromSystemID, $toSystemID, $minSec = 0) {
+        $result = array('jumps' => 0, 'systems' => array());
 
-            $open[$sid]['weight'] = 0; 
-            $open[$sid]['parent'] = null; 
-            $open[$sid]['sid'] = $sid;
-            do {
-                foreach($open as $value) {
-                    $sid = $value['sid']; 
-                    $weight = $value['weight']; 
-                    $parent = $value['parent'];
+        $source = $fromSystemID;
+        $destination = $toSystemID;
 
-                    $closed[$sid]['weight'] = $weight; 
-                    $closed[$sid]['parent'] = $parent; 
-                    $closed[$sid]['sid'] = $sid;
+        $sid = $source;
+        $did = $destination;
 
-                    // found path to destination
-                    if ($sid == $did) {
-                        $result['jumps'] = $weight;
+        $open[$sid]['weight'] = 0;
+        $open[$sid]['parent'] = null;
+        $open[$sid]['sid'] = $sid;
+        do {
+            foreach ($open as $value) {
+                $sid = $value['sid'];
+                $weight = $value['weight'];
+                $parent = $value['parent'];
 
-                        unset($path); 
-                        $backparent = $sid;
-                        while ($backparent != '') {
-                            $path[] = $backparent;
-                            $backparent = $closed[$backparent]['parent'];
-                        }
+                $closed[$sid]['weight'] = $weight;
+                $closed[$sid]['parent'] = $parent;
+                $closed[$sid]['sid'] = $sid;
 
-                        $path = array_reverse($path);
-                        foreach($path as $backsys)
-                            $result['systems'][] = $this->eveSolarSystem($backsys);
+                // found path to destination
+                if ($sid == $did) {
+                    $result['jumps'] = $weight;
 
-                        unset($open); 
-                        break;
-                    } else {
-                        $jumps = $this->db->QueryA('select toSolarSystemID, security
+                    unset($path);
+                    $backparent = $sid;
+                    while ($backparent != '') {
+                        $path[] = $backparent;
+                        $backparent = $closed[$backparent]['parent'];
+                    }
+
+                    $path = array_reverse($path);
+                    foreach ($path as $backsys) {
+                        $result['systems'][] = $this->eveSolarSystem($backsys);
+                    }
+
+                    unset($open);
+                    break;
+                } else {
+                    $jumps = $this->db->QueryA('select toSolarSystemID, security
                                                     from mapSolarSystemJumps, mapSolarSystems
                                                     where solarSystemID = toSolarSystemID and fromSolarSystemID = ?', array($sid));
-                        for ($i = 0; $i < count($jumps); $i++) {
-                            $nsid = $jumps[$i]['tosolarsystemid']; 
-                            $nweight = $weight + 1; 
-                            $nparent = $sid; 
-                            $nsec = $jumps[$i]['security'];
+                    for ($i = 0; $i < count($jumps); $i++) {
+                        $nsid = $jumps[$i]['tosolarsystemid'];
+                        $nweight = $weight + 1;
+                        $nparent = $sid;
+                        $nsec = $jumps[$i]['security'];
 
-                            if (($minSec == 0) || ($nsec >= $minSec)) {
-                                if (!isset($closed[$nsid]['weight']) || ($closed[$nsid]['weight'] >= $nweight)) {
-                                    $open[$nsid]['weight'] = $nweight; 
-                                    $open[$nsid]['parent'] = $sid; 
-                                    $open[$nsid]['sid'] = $nsid;
-                                }
+                        if (($minSec == 0) || ($nsec >= $minSec)) {
+                            if (!isset($closed[$nsid]['weight']) || ($closed[$nsid]['weight'] >= $nweight)) {
+                                $open[$nsid]['weight'] = $nweight;
+                                $open[$nsid]['parent'] = $sid;
+                                $open[$nsid]['sid'] = $nsid;
                             }
                         }
-                        unset($jumps);
-                        unset($open[$sid]);
                     }
+                    unset($jumps);
+                    unset($open[$sid]);
                 }
-            } while (count($open) > 0);
+            }
+        } while (count($open) > 0);
 
-            return $result;
-        }
+        return $result;
+    }
 
-        function loadOutpostList() {
-            if ($this->outpostList == null) {
-                $outpostData = new apiRequest('eve/ConquerableStationList.xml.aspx');
-                if ($outpostData->data) {
-                    if (!$outpostData->data->error) {
-                        $this->outpostList = new eveOutpostList($this, $outpostData->data->result);
-                    }
+    function loadOutpostList() {
+        if ($this->outpostList == null) {
+            $outpostData = new apiRequest('eve/ConquerableStationList.xml.aspx');
+            if ($outpostData->data) {
+                if (!$outpostData->data->error) {
+                    $this->outpostList = new eveOutpostList($outpostData->data->result);
                 }
             }
         }
+    }
 
-        function eveFuelRequirements($towedId) {
-            $towedId = (string)$towedId;
+    function eveFuelRequirements($towedId) {
+        $towedId = (string) $towedId;
 
-            if (!isset($this->towerFuelCache[$towedId])) {
-                $this->towerFuelCache[$towedId] = $this->db->QueryA('select r.resourcetypeid, r.purpose, r.quantity, p.purposeText, r.factionid
+        if (!isset($this->towerFuelCache[$towedId])) {
+            $this->towerFuelCache[$towedId] = $this->db->QueryA('select r.resourcetypeid, r.purpose, r.quantity, p.purposeText, r.factionid
                                                                      from invControlTowerResources r, invControlTowerResourcePurposes p
                                                                      where r.controltowertypeid = ? and p.purpose = r.purpose
                                                                      order by r.purpose, r.resourcetypeid', array($towedId));
-                for ($i = 0; $i < count($this->towerFuelCache[$towedId]); $i++) {
-                    $this->towerFuelCache[$towedId][$i]['resource'] = $this->eveItem($this->towerFuelCache[$towedId][$i]['resourcetypeid']);
-                }
+            for ($i = 0; $i < count($this->towerFuelCache[$towedId]); $i++) {
+                $this->towerFuelCache[$towedId][$i]['resource'] = $this->eveItem($this->towerFuelCache[$towedId][$i]['resourcetypeid']);
             }
-
-            return $this->towerFuelCache[$towedId];
         }
 
-        function corpRoleList() {
-            if (count($this->corpRoleList) == 0) {
-                $this->corpRoleList = $this->db->QueryA('select roleBit, roleName from crpRoles order by roleBit', array());
-            }
-
-            return $this->corpRoleList;
-        }
+        return $this->towerFuelCache[$towedId];
     }
 
-    class eveItem {
-        var $typeid = 0;
-        var $typename = '';
-        var $marketgroupid = 0;
-        var $groupid = 0;
-        var $volume = 0;
-        var $capacity = 0;
-        var $portionsize = 0;
-        var $baseprice = 0;
-        var $icon = '74_14';
-        var $typeGraphic = false;
-        var $_description = false;
-        var $metagroupid = 0;
+    function corpRoleList() {
+        if (count($this->corpRoleList) == 0) {
+            $this->corpRoleList = $this->db->QueryA('select roleBit, roleName from crpRoles order by roleBit', array());
+        }
 
-        var $pricing = null;
-        var $blueprint = null;
-        var $group = null;
+        return $this->corpRoleList;
+    }
 
-        var $evedb = null;
+}
 
-        function eveItem($evedb, $typeId) {
-            $this->evedb = $evedb;
+class eveItem {
 
-            $res = $this->evedb->db->QueryA('select t.groupid, t.typeid, t.typename, t.marketgroupid, t.volume, 
-                                               t.capacity, t.portionsize, t.baseprice, i.iconFile as icon, m.metagroupid
+    var $typeid = 0;
+    var $typename = '';
+    var $marketgroupid = 0;
+    var $groupid = 0;
+    var $volume = 0;
+    var $capacity = 0;
+    var $portionsize = 0;
+    var $baseprice = 0;
+    var $icon = null;
+    var $_description = false;
+    var $metagroupid = 0;
+    var $pricing = null;
+    var $blueprint = null;
+    var $group = null;
+
+    function eveItem($typeId) {
+        $res = eveDB::getInstance()->db->QueryA('select t.groupid, t.typeid, t.typename, t.marketgroupid, t.volume, 
+                                               t.capacity, t.portionsize, t.baseprice, m.metagroupid, 
+                                               \'\' as icon
                                              from invTypes t
-                                               left outer join eveIcons i on i.iconId = t.iconId
                                                left outer join invMetaTypes m on m.typeid = t.typeid
                                              where t.typeID = ?', array($typeId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
-
-            $this->typeGraphic = file_exists(dirname(__FILE__).'/../../eveimages/types/32/' . $this->typeid . '.png');
-            if (!$this->typeGraphic && empty($this->icon))
-                $this->icon = '74_14';
-        }
-
-        function __get($name) {
-            if ($name == 'description')
-                return $this->getDescription();
-        }
-
-        function getDescription() {
-            if ($this->_description == false) {
-                $res = $this->evedb->db->QueryA('select description from invTypes where typeID = ?', array($this->typeid));
-                if ($res)
-                    $this->_description = $res[0]['description'];
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
             }
-
-            return $this->_description;
         }
 
-        function getBlueprint() {
-            if ($this->blueprint == null)
-                $this->blueprint = $this->evedb->eveItemBlueprint($this->typeid);
+        $this->icon = itemGraphic::getItemGraphic($this->typeid, $this->icon);
+    }
 
-            return $this->blueprint;
-        }
-
-        function getGroup() {
-            if (($this->groupid) && ($this->group == null))
-                $this->group = $this->evedb->eveItemGroup($this->groupid);
-
-            return $this->group;
-        }
-
-        function getPricing($regionId = 0) {
-            if (($this->pricing == null) && ($this->marketgroupid > 0))
-                $this->pricing = new ItemPricing($this->typeid, $regionId);
-            else if (!$this->marketgroupid)
-                $this->pricing = new ItemPricing(0, $regionId);
+    function __get($name) {
+        if ($name == 'description') {
+            return $this->getDescription();
         }
     }
 
-    class eveItemFlag {
-        var $flagid = 0;
-        var $flagname = '';
-        var $flagtext = '';
+    function getDescription() {
+        if ($this->_description == false) {
+            $res = eveDB::getInstance()->db->QueryA('select description from invTypes where typeID = ?', array($this->typeid));
+            if ($res) {
+                $this->_description = $res[0]['description'];
+            }
+        }
 
-        function eveItemFlag($evedb, $flagId) {
-            $res = $evedb->db->QueryA('select flagid, flagname, flagtext from invFlags where flagid = ?', array($flagId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+        return $this->_description;
+    }
+
+    function getBlueprint() {
+        if ($this->blueprint == null) {
+            $this->blueprint = eveDB::getInstance()->eveItemBlueprint($this->typeid);
+        }
+
+        return $this->blueprint;
+    }
+
+    function getGroup() {
+        if (($this->groupid) && ($this->group == null)) {
+            $this->group = eveDB::getInstance()->eveItemGroup($this->groupid);
+        }
+
+        return $this->group;
+    }
+
+    function getPricing($regionId = 0) {
+        if (($this->pricing == null) && ($this->marketgroupid > 0)) {
+            $this->pricing = new ItemPricing($this->typeid, $regionId);
+        } else if (!$this->marketgroupid) {
+            $this->pricing = new ItemPricing(0, $regionId);
         }
     }
 
-    class eveItemGroup {
-        var $groupid = 0;
-        var $categoryid = 0;
-        var $groupname = '';
-        var $icon = '';
+}
 
-        var $category = null;
+class eveItemFlag {
 
-        function eveItemGroup($evedb, $groupId) {
-            $res = $evedb->db->QueryA('select t.groupid, t.categoryid, t.groupname, i.iconFile as icon
+    var $flagid = 0;
+    var $flagname = '';
+    var $flagtext = '';
+
+    function eveItemFlag($flagId) {
+        $res = eveDB::getInstance()->db->QueryA('select flagid, flagname, flagtext from invFlags where flagid = ?', array($flagId));
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
+        }
+    }
+
+}
+
+class eveItemGroup {
+
+    var $groupid = 0;
+    var $categoryid = 0;
+    var $groupname = '';
+    var $icon = '';
+    var $category = null;
+
+    function eveItemGroup($groupId) {
+        $res = eveDB::getInstance()->db->QueryA('select t.groupid, t.categoryid, t.groupname, i.iconFile as icon
                                        from invGroups t
                                          left outer join eveIcons i on i.iconId = t.iconId
                                        where t.groupid = ?', array($groupId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
+        }
 
-            $this->category = $evedb->eveItemCategory($this->categoryid);
+        $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
+
+        $this->category = eveDB::getInstance()->eveItemCategory($this->categoryid);
+    }
+
+}
+
+class eveItemCategory {
+
+    var $categoryid = 0;
+    var $categoryname = '';
+
+    function eveItemCategory($categoryId) {
+        $res = eveDB::getInstance()->db->QueryA('select categoryid, categoryname from invCategories where categoryid = ?', array($categoryId));
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
         }
     }
 
-    class eveItemCategory {
-        var $categoryid = 0;
-        var $categoryname = '';
+}
 
-        function eveItemCategory($evedb, $categoryId) {
-            $res = $evedb->db->QueryA('select categoryid, categoryname from invCategories where categoryid = ?', array($categoryId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
-        }
-    }
+class eveItemBlueprint {
 
-    class eveItemBlueprint {
-        var $blueprinttypeid = 0;
-        var $producttypeid = 0;
-        var $productiontime = 0;
-        var $wastefactor = 0;
+    var $blueprinttypeid = 0;
+    var $producttypeid = 0;
+    var $productiontime = 0;
+    var $wastefactor = 0;
+    var $materials = array();
+    var $extraMaterials = array();
+    var $skills = array();
+    var $blueprintItem = null;
 
-        var $materials = array();
-        var $extraMaterials = array();
-        var $skills = array();
+    function eveItemBlueprint($typeId) {
 
-        var $blueprintItem = null;
-
-        function eveItemBlueprint($evedb, $typeId) {
-            $this->evedb = $evedb;
-
-            $res = $this->evedb->db->QueryA('select blueprinttypeid, producttypeid, productiontime, wastefactor 
+        $res = eveDB::getInstance()->db->QueryA('select blueprinttypeid, producttypeid, productiontime, wastefactor 
                                              from invBlueprintTypes
                                              where producttypeid = ?', array($typeId));
-            if ($res) {
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
 
-                $this->blueprintItem = $this->evedb->eveItem($this->blueprinttypeid);
+            $this->blueprintItem = eveDB::getInstance()->eveItem($this->blueprinttypeid);
 
-                /*
-                 * As of Dominion, this became hectic.
-                 * First, get raw materials required
-                 */
-                $this->materials = $this->evedb->db->QueryA('select materialTypeID, quantity
+            /*
+             * As of Dominion, this became hectic.
+             * First, get raw materials required
+             */
+            $this->materials = eveDB::getInstance()->db->QueryA('select materialTypeID, quantity
                                                              from invTypeMaterials
                                                              where typeID = ?', array($this->producttypeid));
-                for ($i = 0; $i < count($this->materials); $i++) {
-                    $this->materials[$i]['item'] = $this->evedb->eveItem($this->materials[$i]['materialtypeid']);
-                }
+            for ($i = 0; $i < count($this->materials); $i++) {
+                $this->materials[$i]['item'] = eveDB::getInstance()->eveItem($this->materials[$i]['materialtypeid']);
+            }
 
-                /*
-                 * Load additional parts (RAM bits, T1 base types, etc) and skills
-                 */
-                $tmp = $this->evedb->db->QueryA('select t.typeID, t.typeName, r.quantity, r.damagePerJob, g.categoryID, 
+            /*
+             * Load additional parts (RAM bits, T1 base types, etc) and skills
+             */
+            $tmp = eveDB::getInstance()->db->QueryA('select t.typeID, t.typeName, r.quantity, r.damagePerJob, g.categoryID, 
                                                    coalesce(b.blueprintTypeID, 0) as invBlueprintTypeID
                                                  from ramTypeRequirements r
                                                    inner join invTypes t on r.requiredTypeID = t.typeID
@@ -557,260 +702,276 @@
                                                    left join invBlueprintTypes b on b.productTypeID = t.typeID
                                                  where r.activityID = 1
                                                    and r.typeID = ?', array($this->blueprinttypeid));
-                for ($i = 0; $i < count($tmp); $i++) {
-                    $tmp[$i]['item'] = $this->evedb->eveItem($tmp[$i]['typeid']);
-                    if ($tmp[$i]['categoryid'] == 16) {
-                        /*
-                         * Skillz go into their own list for better orginisation
-                         */
-                        $this->skills[] = $tmp[$i];
-                    } else {
-                        $this->extraMaterials[] = $tmp[$i];
-                        /*
-                         * If this component has it's own BP, we need to reduce
-                         * this BP's raw material requirements by the materials
-                         * required for the componont's construction. *boggle*
-                         */
-                        if ($tmp[$i]['invblueprinttypeid'] > 0) {
-                            $this->reduceMaterials($evedb, $tmp[$i]['typeid']);
-                        }
+            for ($i = 0; $i < count($tmp); $i++) {
+                $tmp[$i]['item'] = eveDB::getInstance()->eveItem($tmp[$i]['typeid']);
+                if ($tmp[$i]['categoryid'] == 16) {
+                    /*
+                     * Skillz go into their own list for better orginisation
+                     */
+                    $this->skills[] = $tmp[$i];
+                } else {
+                    $this->extraMaterials[] = $tmp[$i];
+                    /*
+                     * If this component has it's own BP, we need to reduce
+                     * this BP's raw material requirements by the materials
+                     * required for the componont's construction. *boggle*
+                     */
+                    if ($tmp[$i]['invblueprinttypeid'] > 0) {
+                        $this->reduceMaterials($tmp[$i]['typeid']);
                     }
                 }
             }
         }
+    }
 
-        function reduceMaterials($evedb, $typeId) {
-            $bp = $evedb->eveItemBlueprint($typeId);
-            $newMaterials = array();
-            for ($i = 0; $i < count($this->materials); $i++) {
-                for ($j = 0; $j < count($bp->materials); $j++) {
-                    if ($this->materials[$i]['materialtypeid'] == $bp->materials[$j]['materialtypeid']) {
-                        $this->materials[$i]['quantity'] -= $bp->materials[$i]['quantity'];
-                    }
-                }
-                if ($this->materials[$i]['quantity'] > 0) {
-                    $newMaterials[] = $this->materials[$i];
+    function reduceMaterials($typeId) {
+        $bp = eveDB::getInstance()->eveItemBlueprint($typeId);
+        $newMaterials = array();
+        for ($i = 0; $i < count($this->materials); $i++) {
+            for ($j = 0; $j < count($bp->materials); $j++) {
+                if ($this->materials[$i]['materialtypeid'] == $bp->materials[$j]['materialtypeid']) {
+                    $this->materials[$i]['quantity'] -= $bp->materials[$i]['quantity'];
                 }
             }
-            $this->materials = $newMaterials;
+            if ($this->materials[$i]['quantity'] > 0) {
+                $newMaterials[] = $this->materials[$i];
+            }
         }
+        $this->materials = $newMaterials;
     }
 
-    class eveIndustryActivity {
-        var $activityid = 0;
-        var $activityname = '';
-        var $iconno = '';
+}
 
-        function eveIndustryActivity($evedb, $activityId) {
-            $res = $evedb->db->QueryA('select activityid, activityname, iconno from ramActivities where activityid = ?', array($activityId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+class eveIndustryActivity {
+
+    var $activityid = 0;
+    var $activityname = '';
+    var $iconno = '';
+    var $icon;
+
+    function eveIndustryActivity($activityId) {
+        $res = eveDB::getInstance()->db->QueryA('select activityid, activityname, iconno from ramActivities where activityid = ?', array($activityId));
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
         }
+        $this->icon = itemGraphic::getItemGraphic(0, $this->iconno);
     }
 
-    class eveCertificate {
-        var $certificateid = 0;
-        var $categoryid = 0;
-        var $classid = 0;
-        var $corpid = 0;
-        var $icon = 0;
-        var $grade = 0;
-        var $description = '';
+}
 
-        function eveCertificate($evedb, $certificateId) {
-            $res = $evedb->db->QueryA('select c.certificateid, c.categoryid, c.classid, c.corpid, i.iconFile as icon, c.grade, c.description
+class eveCertificate {
+
+    var $certificateid = 0;
+    var $categoryid = 0;
+    var $classid = 0;
+    var $corpid = 0;
+    var $icon = 0;
+    var $grade = 0;
+    var $description = '';
+
+    function eveCertificate($certificateId) {
+        $res = eveDB::getInstance()->db->QueryA('select c.certificateid, c.categoryid, c.classid, c.corpid, i.iconFile as icon, c.grade, c.description
                                        from crtCertificates c
                                          left outer join eveIcons i on i.iconId = c.iconId
                                        where c.certificateid = ?', array($certificateId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
         }
+
+        $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
     }
 
-    class eveName {
-        var $itemid = 0;
-        var $itemname = '';
-        var $categoryid = 0;
-        var $groupid = 0;
-        var $typeid = 0;
+}
 
-        function eveName($evedb, $itemId) {
-            $res = $evedb->db->QueryA('select itemid, itemname, categoryid, groupid, typeid
-                                       from eveNames
-                                       where itemId = ?', array($itemId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
-        }
-    }
+class eveStation {
 
-    class eveStation {
-        var $stationid = 0;
-        var $solarsystemid = 0;
-        var $regionid = 0;
-        var $stationname = '';
-        var $stationtypeid = 0;
+    var $stationid = 0;
+    var $solarsystemid = 0;
+    var $regionid = 0;
+    var $stationname = '';
+    var $stationtypeid = 0;
+    var $icon;
+    var $solarSystem = null;
+    var $region = null;
 
-        var $solarSystem = null;
-        var $region = null;
-
-        function eveStation($evedb, $stationId) {
-            $res = $evedb->db->QueryA('select stationid, solarsystemid, regionid, stationname, stationtypeid 
+    function eveStation($stationId) {
+        $res = eveDB::getInstance()->db->QueryA('select stationid, solarsystemid, regionid, stationname, stationtypeid 
                                        from staStations
                                        where stationID = ?', array($stationId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
 
-            if ($this->solarsystemid)
-                $this->solarSystem = $evedb->eveSolarSystem($this->solarsystemid);
+            $this->icon = itemGraphic::getItemGraphic($this->stationtypeid, '');
+        }
+
+        if ($this->solarsystemid) {
+            $this->solarSystem = eveDB::getInstance()->eveSolarSystem($this->solarsystemid);
         }
     }
 
-    class eveSolarSystem {
-        var $solarsystemid = 0;
-        var $regionid = 0;
-        var $solarsystemname = '';
-        var $security = 0;
-        var $x = 0;
-        var $z = 0;
-        var $factionid = 0;
+}
 
-        var $jumps = false;
+class eveSolarSystem {
 
-        var $region = null;
+    var $solarsystemid = 0;
+    var $regionid = 0;
+    var $solarsystemname = '';
+    var $security = 0;
+    var $x = 0;
+    var $z = 0;
+    var $factionid = 0;
+    var $jumps = false;
+    var $region = null;
 
-        function eveSolarSystem($evedb, $systemId) {
-            $this->evedb = $evedb;
-            
-            if (is_array($systemId))
-                $res = array($systemId);
-            else
-                $res = $this->evedb->db->QueryA('select s.solarsystemid, s.regionid, s.solarsystemname, s.security, s.x, s.z,
+    function eveSolarSystem($systemId) {
+        if (is_array($systemId)) {
+            $res = array($systemId);
+        } else {
+            $res = eveDB::getInstance()->db->QueryA('select s.solarsystemid, s.regionid, s.solarsystemname, s.security, s.x, s.z,
                                                  coalesce(s.factionid, r.factionid) as factionid
                                                  from mapSolarSystems s, mapRegions r
                                                  where solarSystemID = ? and r.regionID = s.regionID', array($systemId));
-
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
-
-            $this->security = round(max(0, $this->security), 1);
-
-            if ($this->regionid)
-                $this->region = $evedb->eveRegion($this->regionid);
         }
 
-        function getJumps() {
-            if (!$this->jumps) {
-                $this->jumps = array();
-                $jumps = $this->evedb->db->QueryA('select toSolarSystemID from mapSolarSystemJumps where fromSolarSystemID = ?', array($this->solarsystemid));
-                if ($jumps)
-                    for ($i = 0; $i < count($jumps); $i++)
-                        $this->jumps[] = $this->evedb->eveSolarSystem($jumps[$i]['tosolarsystemid']);
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
             }
         }
-    }
 
-    class eveRegion {
-        var $regionid = 0;
-        var $regionname = '';
+        $this->security = round(max(0, $this->security), 1);
 
-        function eveRegion($evedb, $regionId) {
-            $res = $evedb->db->QueryA('select regionid, regionname from mapRegions where regionID = ?', array($regionId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
+        if ($this->regionid) {
+            $this->region = eveDB::getInstance()->eveRegion($this->regionid);
         }
     }
 
-    class eveCelestial {
-        var $itemid = 0;
-        var $typeid = 0;
-        var $solarsystemid = 0;
-        var $regionid = 0;
-        var $x = 0;
-        var $z = 0;
-        var $itemname = '';
-        var $security = 0;
-
-        var $solarsystem = null;
-        var $region = null;
-
-        function eveCelestial($evedb, $itemId) {
-            $res = $evedb->db->QueryA('select itemid, typeid, solarsystemid, regionid, x, z, itemname, security 
-                                       from mapDenormalize
-                                       where itemID = ?', array($itemId));
-            if ($res)
-                foreach ($res[0] as $var => $val)
-                    $this->$var = $val;
-
-            $this->security = round(max(0, $this->security), 1);
-
-            if ($this->solarsystemid)
-                $this->solarSystem = $evedb->eveSolarSystem($this->solarsystemid);
-
-            if ($this->regionid)
-                $this->region = $evedb->eveRegion($this->regionid);
-        }
-    }
-
-
-    class eveOutpostList {
-        var $outposts = null;
-
-        var $db = null;
-
-        function eveOutpostList($evedb, $outposts) {
-            $this->db = $evedb;
-            foreach ($outposts->rowset->row as $outpost)
-                $this->outposts[] = new eveOutpost($this->db, $outpost);
-        }
-
-        function getOutpost($stationId) {
-            foreach ($this->outposts as $outpost) {
-                if ($outpost->stationid == $stationId) {
-                    $outpost->loadDetail($this->db);
-                    return $outpost;
+    function getJumps() {
+        if (!$this->jumps) {
+            $this->jumps = array();
+            $jumps = eveDB::getInstance()->db->QueryA('select toSolarSystemID from mapSolarSystemJumps where fromSolarSystemID = ?', array($this->solarsystemid));
+            if ($jumps) {
+                for ($i = 0; $i < count($jumps); $i++) {
+                    $this->jumps[] = eveDB::getInstance()->eveSolarSystem($jumps[$i]['tosolarsystemid']);
                 }
             }
-
-            return false;
         }
     }
 
-    /**
-     * This outpost class contains exactly the same structure as a regular station
-     * so they are interchangable with no changes required elsewhere.
-     */
-    class eveOutpost {
-        var $stationid = 0;
-        var $solarsystemid = 0;
-        var $regionid = 0;
-        var $stationname = '';
-        var $stationtypeid = 0;
+}
 
-        var $solarSystem = null;
-        var $region = null;
+class eveRegion {
 
-        function eveOutpost($evedb, $outpost) {
-            $this->stationid = (int)$outpost['stationID'];
-            $this->stationname = (string)$outpost['stationName'];
-            $this->stationtypeid = (int)$outpost['stationTypeID'];
-            $this->solarsystemid = (int)$outpost['solarSystemID'];
-        }
+    var $regionid = 0;
+    var $regionname = '';
 
-        function loadDetail($evedb) {
-            if ($this->solarsystem) {
-                $this->solarsystem = $evedb->eveSolarSystem($this->solarsystemid);
-                $this->regionid = $this->solarsystem->regionid;
-                $this->region = $evedb->eveRegion($this->regionid);
-
-                $this->stationname = $this->solarsystem->solarsystemname . ' - ' . $this->stationname;
+    function eveRegion($regionId) {
+        $res = eveDB::getInstance()->db->QueryA('select regionid, regionname from mapRegions where regionID = ?', array($regionId));
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
             }
         }
     }
+
+}
+
+class eveCelestial {
+
+    var $itemid = 0;
+    var $typeid = 0;
+    var $solarsystemid = 0;
+    var $regionid = 0;
+    var $x = 0;
+    var $z = 0;
+    var $itemname = '';
+    var $security = 0;
+    var $solarsystem = null;
+    var $region = null;
+
+    function eveCelestial($itemId) {
+        $res = eveDB::getInstance()->db->QueryA('select itemid, typeid, solarsystemid, regionid, x, z, itemname, security 
+                                       from mapDenormalize
+                                       where itemID = ?', array($itemId));
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
+        }
+
+        $this->security = round(max(0, $this->security), 1);
+
+        if ($this->solarsystemid) {
+            $this->solarSystem = eveDB::getInstance()->eveSolarSystem($this->solarsystemid);
+        }
+
+        if ($this->regionid) {
+            $this->region = eveDB::getInstance()->eveRegion($this->regionid);
+        }
+    }
+
+}
+
+class eveOutpostList {
+
+    var $outposts = array();
+
+    function eveOutpostList($outposts) {
+        foreach ($outposts->rowset->row as $outpost) {
+            $this->outposts[] = new eveOutpost($outpost);
+        }
+    }
+
+    function getOutpost($stationId) {
+        foreach ($this->outposts as $outpost) {
+            if ($outpost->stationid == $stationId) {
+                $outpost->loadDetail();
+                return $outpost;
+            }
+        }
+
+        return false;
+    }
+
+}
+
+/**
+ * This outpost class contains exactly the same structure as a regular station
+ * so they are interchangable with no changes required elsewhere.
+ */
+class eveOutpost {
+
+    var $stationid = 0;
+    var $solarsystemid = 0;
+    var $regionid = 0;
+    var $stationname = '';
+    var $stationtypeid = 0;
+    var $solarSystem = null;
+    var $region = null;
+
+    function eveOutpost($outpost) {
+        $this->stationid = (int) $outpost['stationID'];
+        $this->stationname = (string) $outpost['stationName'];
+        $this->stationtypeid = (int) $outpost['stationTypeID'];
+        $this->solarsystemid = (int) $outpost['solarSystemID'];
+    }
+
+    function loadDetail() {
+        if ($this->solarsystem) {
+            $this->solarsystem = eveDB::getInstance()->eveSolarSystem($this->solarsystemid);
+            $this->regionid = $this->solarsystem->regionid;
+            $this->region = eveDB::getInstance()->eveRegion($this->regionid);
+
+            $this->stationname = $this->solarsystem->solarsystemname . ' - ' . $this->stationname;
+        }
+    }
+
+}
 
 ?>

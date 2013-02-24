@@ -109,11 +109,7 @@
       <tr class="{cycle values='row,rowAlt'}">
         <td>
           <a href="#" onclick="showInfo({$i.item.typeid});return false;">
-            {if $i.item.typeGraphic}
-              <img src="{$site_url}/eveimages/types/32/{$i.item.typeid}.png" alt="{$i.item.typename}" align="absmiddle" />
-            {else}
-              <img src="{$site_url}/eveimages/icons/32/icon{$i.item.icon}.png" alt="{$i.item.typename}" align="absmiddle" />
-            {/if}
+            <img src="{$site_url}/{$i.item.icon.icon32}" class="i32" alt="{$i.item.typename}" align="absmiddle" />
           </a>
           {$i.item.typename}
         </td>

@@ -1,5 +1,5 @@
 *******************************************************************************
-Out of Eve 1.7 INC Installation Notes
+Out of Eve 2.0 Retribution Installation Notes
  - http://www.outofeve.com/
  - http://code.google.com/p/ooe/
  - http://shrimpworks.za.net/
@@ -11,24 +11,27 @@ Requirements:
   MySQL
 
 Prerequesits:
-  MySQL Eve static data dump
-  (Incursion MySQL dump: http://eve.no-ip.de/inc101/)
-  Eve icons (outofeve-eveimages-x.x.zip)
+  MySQL Eve static data dump 
+    (https://forums.eveonline.com/default.aspx?g=posts&t=205274)
+  Icons and Types images from the Eve Community Toolkit 
+    (http://community.eveonline.com/community/toolkit.asp)
 
 *******************************************************************************
 
 Installation is quite straight-forward. Extract and upload the entire contents 
 of the outofeve-x.x source package to your web server.
 
-Extract and upload the contents of outofeve-eveimages-x.x to the same location.
+Extract the ExpansionName_x.x_Types and ExpansionName_x.x_Icons packages from 
+the community toolkit into the "eveimages" directory.
 
 When you have the MySQL database dump imported, you will need to run the 
-included "sql/additional-tables.sql" SQL script, which will create tables for
-the missing Manufacturing completion status descriptions and corporation roles.
+included "sql/additional-tables.sql" SQL script on that database, which will 
+create tables for the missing Manufacturing completion status descriptions, 
+corporation roles and icons converted from YAML format.
 
 In addition to importing CCP's database dump, you will need to create an 
 additional database for Out of Eve's users and Eve account details. Once you 
-have a  database created and ready, execute the contents of 
+have a database created and ready, execute the contents of 
 "sql/install-db.sql" on that database to create the required tables.
 
 
@@ -40,7 +43,7 @@ suitable and match your environment. Most things should not need changing. Just
 make sure the "$config['site']['url']" option is correct; it should be the
 relative path to your Out of Eve site. For example, if you're running it from:
 
-  http://my.website/outofeve/
+  http://mywebsite.com/outofeve/
 
 Then "$config['site']['url']" should be set to "/outofeve".
 

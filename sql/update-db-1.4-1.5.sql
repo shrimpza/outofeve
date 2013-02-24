@@ -1,1 +1,0 @@
-ALTER TABLE `user` ADD `smallicons` TINYINT NOT NULL DEFAULT '0';
