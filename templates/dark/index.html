@@ -36,10 +36,18 @@
           });
         });
         
+        $(".showInfo").each(function() {
+          $(this).css("cursor", "pointer");
+          $(this).click(function() {
+            showInfo($(this).data('typeid'));
+          });
+        });
+                
         $("#errorPopup").find("a").click(function() {
           $("#errorPopup").hide();
           return false;
         });
+        
       });
 
       function setCurrent(type, id) {
