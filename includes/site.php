@@ -1,7 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__) . '/config.php');
-require_once('smarty/Smarty.class.php');
+require_once('smarty3/Smarty.class.php');
 require_once('api.php');
 require_once(dirname(__FILE__) . '/functions.php');
 require_once(dirname(__FILE__) . '/database.php');
@@ -66,14 +66,14 @@ class Site {
             }
         }
 
-        $tpl = new Smarty();
-        $tpl->template_dir = $GLOBALS['config']['templates']['theme_dir'] . '/' . $GLOBALS['config']['templates']['theme'];
-        $tpl->compile_dir = $GLOBALS['config']['templates']['compile_dir'];
+        $smarty = new Smarty();
+        $smarty->setTemplateDir($GLOBALS['config']['templates']['theme_dir'] . '/' . $GLOBALS['config']['templates']['theme']);
+        $smarty->setCompileDir($GLOBALS['config']['templates']['compile_dir']);
 
-        $tpl->assign('pluginTitle', $pluginTitle);
-        $tpl->assign('content', $content);
-        $tpl->assign('sideBlocks', $sideBlocks);
-        $tpl->assign('pluginCSS', $pluginCSS);
+        $smarty->assign('pluginTitle', $pluginTitle);
+        $smarty->assign('content', $content);
+        $smarty->assign('sideBlocks', $sideBlocks);
+        $smarty->assign('pluginCSS', $pluginCSS);
 
         $this->tplVars['title'] = $GLOBALS['config']['site']['title'];
         $this->tplVars['site_url'] = $GLOBALS['config']['site']['url'];
@@ -83,13 +83,13 @@ class Site {
         }
 
         foreach ($this->tplVars as $var => $val) {
-            $tpl->assign($var, $val);
+            $smarty->assign($var, $val);
         }
 
         if (isset($_GET['popup'])) {
-            $tpl->display('popup.html');
+            $smarty->display('popup.html');
         } else {
-            $tpl->display('index.html');
+            $smarty->display('index.html');
         }
     }
 
