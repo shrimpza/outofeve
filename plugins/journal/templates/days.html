@@ -11,7 +11,7 @@
       <select onchange="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&daycount={$dayCount}&filter='+this.value">
         <option value="-1" {if $filter == -1}selected="true"{/if}>All, Grouped</option>
         {foreach from=$refTypes key=r item=rName}
-          <option value="{$r}" {if $filter == $r}selected="true"{/if}>{$rName}</option>
+        <option value="{$r}" {if $filter == $r}selected="true"{/if}>{$rName}</option>
         {/foreach}
       </select>
     </span>
@@ -20,7 +20,7 @@
       <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&type=days&daycount={$dayCount}&filter={$filter}&accountKey='+this.value">
         <option value="0">All</option>
         {foreach from=$accounts item=acc}
-          <option value="{$acc.key}" {if $accountKey == $acc.key}selected="selected"{/if}>{$acc.description}</option>
+        <option value="{$acc.key}" {if $accountKey == $acc.key}selected="selected"{/if}>{$acc.description}</option>
         {/foreach}
       </select>
     </span>
@@ -30,11 +30,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-      <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&daycount={$dayCount}&filter={$filter}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&daycount={$dayCount}&filter={$filter}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-      <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&daycount={$dayCount}&filter={$filter}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&daycount={$dayCount}&filter={$filter}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
     {/if}
   </div>
   {/if}
@@ -50,29 +50,29 @@
       {if $filter == 0}<th>Balance</th>{/if}
     </tr>
     {foreach from=$days item=d}
-      <tr class="sub shadeLight textLight">
-        <td {if $filter >= 0}colspan="4"{/if}>{$d.date|date_format:"%A %d %B %Y"}</td>
-        <td><div class="moneyOut" style="text-align: right">{$d.dr|eveNum}</div></td>
-        <td><div class="moneyIn" style="text-align: right">{$d.cr|eveNum}</div></td>
-        {if !$filter}<td>&nbsp;</td>{/if}
-      </tr>
-      {foreach from=$d.journal item=j}
-        <tr class="{cycle values='row,rowAlt'}">
-          {if $filter >= 0}<td>{$j.date|date_format:"%H:%M"}</td>{/if}
-          <td>{$j.refType}</td>
-          {if $filter >= 0}<td>{$j.fromName}</td>{/if}
-          {if $filter >= 0}<td>{$j.toName}</td>{/if}
-          <td align="right" class="moneyOut">{if $j.dr < 0}{$j.dr|eveNum}{/if}</td>
-          <td align="right" class="moneyIn">{if $j.cr > 0}{$j.cr|eveNum}{/if}</td>
-          {if $filter == 0}<td align="right">{$j.balance|eveNum}</td>{/if}
-        </tr>
-      {/foreach}
-      <tr><td colspan="7">&nbsp;</td></tr>
+    <tr class="sub shadeLight textLight">
+      <td {if $filter >= 0}colspan="4"{/if}>{$d.date|date_format:"%A %d %B %Y"}</td>
+      <td><div class="moneyOut" style="text-align: right">{$d.dr|eveNum}</div></td>
+      <td><div class="moneyIn" style="text-align: right">{$d.cr|eveNum}</div></td>
+      {if !$filter}<td>&nbsp;</td>{/if}
+    </tr>
+    {foreach from=$d.journal item=j}
+    <tr class="{cycle values='row,rowAlt'}">
+      {if $filter >= 0}<td>{$j.date|date_format:"%H:%M"}</td>{/if}
+      <td>{$j.refType}</td>
+      {if $filter >= 0}<td>{$j.fromName}</td>{/if}
+      {if $filter >= 0}<td>{$j.toName}</td>{/if}
+      <td align="right" class="moneyOut">{if $j.dr < 0}{$j.dr|eveNum}{/if}</td>
+      <td align="right" class="moneyIn">{if $j.cr > 0}{$j.cr|eveNum}{/if}</td>
+      {if $filter == 0}<td align="right">{$j.balance|eveNum}</td>{/if}
+    </tr>
+    {/foreach}
+    <tr><td colspan="7">&nbsp;</td></tr>
     {/foreach}
   </table>
 
   {if !$days}
-    <h3>No journal entries found!</h3>
+  <h3>No journal entries found!</h3>
   {/if}
 
 </div>

@@ -6,7 +6,7 @@
     <span>Account: 
       <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&accountKey='+this.value">
         {foreach from=$accounts item=acc}
-          <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
+        <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
         {/foreach}
       </select>
     </span>
@@ -16,11 +16,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-      <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-      <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
     {/if}
   </div>
   {/if}
@@ -36,20 +36,20 @@
       <th>Balance</th>
     </tr>
     {foreach from=$journal item=j}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td>{$j.date|date_format:"%d/%m/%Y %H:%M"}</td>
-        <td>{$j.refType}</td>
-        <td>{$j.fromName}</td>
-        <td>{$j.toName}</td>
-        <td align="right" class="moneyOut">{if $j.amount < 0}{$j.amount|eveNum}{/if}</td>
-        <td align="right" class="moneyIn">{if $j.amount > 0}{$j.amount|eveNum}{/if}</td>
-        <td align="right">{$j.balance|eveNum}</td>
-      </tr>
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>{$j.date|date_format:"%d/%m/%Y %H:%M"}</td>
+      <td>{$j.refType}</td>
+      <td>{$j.fromName}</td>
+      <td>{$j.toName}</td>
+      <td align="right" class="moneyOut">{if $j.amount < 0}{$j.amount|eveNum}{/if}</td>
+      <td align="right" class="moneyIn">{if $j.amount > 0}{$j.amount|eveNum}{/if}</td>
+      <td align="right">{$j.balance|eveNum}</td>
+    </tr>
     {/foreach}
   </table>
 
   {if !$journal}
-    <h3>No journal entries found!</h3>
+  <h3>No journal entries found!</h3>
   {/if}
 
 </div>

@@ -10,78 +10,76 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
     {/if}
   </div>
   {/if}
 
   {if !$kills}
-    <h3>{if $corp}Your corporation has{else}You have{/if} no kills!</h3>
+  <h3>{if $corp}Your corporation has{else}You have{/if} no kills!</h3>
   {/if}
 
   {foreach from=$kills item=kill}
-  <div class="killHead shadeDark boderDark" onclick="toggleKill({$kill.killID})">
+  <div class="killHead shadeDark boderDark" data-killid="{$kill.killID}">
     <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_64.jpg" class="i64" alt="{$kill.victim.characterName}" align="left" style="padding-right: 5px; margin-right: 0px;" />
     <img src="{$site_url}/{$kill.victim.ship.icon.icon64}" class="i64" alt="{$kill.victim.ship.typename}" align="left" />
-      <h3>{$kill.victim.characterName}, {$kill.victim.corporationName}</h3>
-      <h4>{$kill.solarSystem.solarsystemname}, {$kill.solarSystem.region.regionname} ({$kill.solarSystem.security|eveNum:1})</h4>
-      {$kill.date|date_format:"%d/%m/%Y %H:%M"}
+    <h3>{$kill.victim.characterName}, {$kill.victim.corporationName}</h3>
+    <h4>{$kill.solarSystem.solarsystemname}, {$kill.solarSystem.region.regionname} ({$kill.solarSystem.security|eveNum:1})</h4>
+    {$kill.date|date_format:"%d/%m/%Y %H:%M"}
   </div>
   <div class="killDetail" id="{$kill.killID}" style="display:none">
 
     <div class="killInvolvedParties">
       <div class="title shadeMid borderDark textLight">Involved Parties</div>
-        <div class="subTitle shadeLight borderLight textLight">Victim</div>
-        <div class="character">
-          <table border="0" width="100%">
-            <tr>
-              <td width="10%">
-                <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_32.jpg" class="i32" alt="{$kill.victim.characterName}" align="left" />
-                <a href="#" onclick="showInfo({$kill.victim.ship.typeid});return false;">
-                  <img src="{$site_url}/{$kill.victim.ship.icon.icon32}" class="i32" alt="{$kill.victim.ship.typename}" align="left" /></a>
-              </td>
-              <td width="45%">
-                <b>Pilot:</b> {$kill.victim.characterName}<br />
-                <b>Corp:</b> {$kill.victim.corporationName}<br />
-                <b>Alliance:</b> {$kill.victim.allianceName}
-              </td>
-              <td width="45%">
-                <b>Ship:</b> {$kill.victim.ship.typename}<br />
-                <b>Damage Taken:</b> {$kill.victim.damageTaken|eveNumInt}<br />
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="subTitle shadeLight borderLight textLight">Attackers</div>
-        {foreach from=$kill.attackers item=attacker}
-          <div class="character {cycle values='row,rowAlt'}">
-            <table border="0" width="100%">
-              <tr>
-                <td width="10%">
-                  {if $attacker.characterID > 0}
-                    <img src="http://image.eveonline.com/Character/{$attacker.characterID}_32.jpg" class="i32" alt="{$attacker.characterName}" align="left" />
-                  {/if}
-                  <a href="#" onclick="showInfo({$attacker.ship.typeid});return false;">
-                    <img src="{$site_url}/{$attacker.ship.icon.icon32}" class="i32" alt="{$attacker.ship.typename}" align="left" /></a>
-                </td>
-                <td width="45%">
-                  <b>Pilot:</b> {$attacker.characterName}<br />
-                  <b>Corp:</b> {$attacker.corporationName}<br />
-                  <b>Alliance:</b> {$attacker.allianceName}
-                </td>
-                <td width="45%">
-                  <b>Ship:</b> {$attacker.ship.typename}<br />
-                  <b>Damage Dealt:</b> {$attacker.damageDone|eveNumInt}<br />
-                  <b>Weapon:</b> {$attacker.weapon.typename}
-                </td>
-              </tr>
-            </table>
-          </div>
-        {/foreach}
+      <div class="subTitle shadeLight borderLight textLight">Victim</div>
+      <div class="character">
+        <table border="0" width="100%">
+          <tr>
+            <td width="10%">
+              <img src="http://image.eveonline.com/Character/{$kill.victim.characterID}_32.jpg" class="i32" alt="{$kill.victim.characterName}" align="left" />
+              <img src="{$site_url}/{$kill.victim.ship.icon.icon32}" class="i32 showInfo" data-typeid="{$kill.victim.ship.typeid}" alt="{$kill.victim.ship.typename}" align="left" />
+            </td>
+            <td width="45%">
+              <b>Pilot:</b> {$kill.victim.characterName}<br />
+              <b>Corp:</b> {$kill.victim.corporationName}<br />
+              <b>Alliance:</b> {$kill.victim.allianceName}
+            </td>
+            <td width="45%">
+              <b>Ship:</b> {$kill.victim.ship.typename}<br />
+              <b>Damage Taken:</b> {$kill.victim.damageTaken|eveNumInt}<br />
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="subTitle shadeLight borderLight textLight">Attackers</div>
+      {foreach from=$kill.attackers item=attacker}
+      <div class="character {cycle values='row,rowAlt'}">
+        <table border="0" width="100%">
+          <tr>
+            <td width="10%">
+              {if $attacker.characterID > 0}
+              <img src="http://image.eveonline.com/Character/{$attacker.characterID}_32.jpg" class="i32" alt="{$attacker.characterName}" align="left" />
+              {/if}
+              <img src="{$site_url}/{$attacker.ship.icon.icon32}" class="i32 showInfo" data-typeid="{$attacker.ship.typeid}" alt="{$attacker.ship.typename}" align="left" />
+            </td>
+            <td width="45%">
+              <b>Pilot:</b> {$attacker.characterName}<br />
+              <b>Corp:</b> {$attacker.corporationName}<br />
+              <b>Alliance:</b> {$attacker.allianceName}
+            </td>
+            <td width="45%">
+              <b>Ship:</b> {$attacker.ship.typename}<br />
+              <b>Damage Dealt:</b> {$attacker.damageDone|eveNumInt}<br />
+              <b>Weapon:</b> {$attacker.weapon.typename}
+            </td>
+          </tr>
+        </table>
+      </div>
+      {/foreach}
     </div>
 
     <div class="killDroppedItems">
@@ -97,8 +95,7 @@
           {foreach from=$kill.itemsDropped item=item}
           <tr class="{cycle values='row,rowAlt'}">
             <td>
-              <a href="#" onclick="showInfo({$item.item.typeid});return false;">
-                <img src="{$site_url}/{$item.item.icon.icon32}" class="i32" alt="{$item.item.typename}" align="absmiddle" /></a>
+              <img src="{$site_url}/{$item.item.icon.icon32}" class="i32 showInfo" data-typeid="{$item.item.typeid}" alt="{$item.item.typename}" align="absmiddle" />
               {$item.item.typename}
             </td>
             <td align="right">
@@ -123,8 +120,7 @@
           {foreach from=$kill.itemsDestroyed item=item}
           <tr class="{cycle values='row,rowAlt'}">
             <td>
-              <a href="#" onclick="showInfo({$item.item.typeid});return false;">
-                <img src="{$site_url}/{$item.item.icon.icon32}" class="i32" alt="{$item.item.typename}" align="absmiddle" /></a>
+              <img src="{$site_url}/{$item.item.icon.icon32}" class="i32 showInfo" data-typeid="{$item.item.typeid}" alt="{$item.item.typename}" align="absmiddle" />
               {$item.item.typename}
             </td>
             <td align="right">
@@ -169,14 +165,14 @@
   {/foreach}
 </div>
 
-{literal}
 <script>
-  function toggleKill(id) {
-    var kill = document.getElementById(id);
-    if (kill.style.display == '')
-      kill.style.display = 'none';
-    else
-      kill.style.display = '';
-  }
+  $(document).ready(function() {
+    $('.killHead').each(function() {
+      $(this).css('cursor', 'pointer');
+      $(this).click(function() {
+        $('#' + $(this).data('killid')).toggle('fast');
+      });
+    });
+    
+  });
 </script>
-{/literal}
