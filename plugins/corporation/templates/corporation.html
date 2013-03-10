@@ -47,15 +47,15 @@
         {/if}
 
         {if $balances}
-          <tr>
-            <th colspan="2">Wallet Balances</th>
-          </tr>
-          {foreach from=$balances.wallets item=wallet}
-          <tr class="{cycle values='row,rowAlt'}">
-            <td align="right"><b>{$wallet.description}:</b></td>
-            <td align="right">{$wallet.balance|eveNum}&nbsp;&nbsp;</td>
-          </tr>
-          {/foreach}
+        <tr>
+          <th colspan="2">Wallet Balances</th>
+        </tr>
+        {foreach from=$balances.wallets item=wallet}
+        <tr class="{cycle values='row,rowAlt'}">
+          <td align="right"><b>{$wallet.description}:</b></td>
+          <td align="right">{$wallet.balance|eveNum}&nbsp;&nbsp;</td>
+        </tr>
+        {/foreach}
         {/if}
       </table>
 
@@ -73,77 +73,77 @@
         <tr>
           <td>
             <form action="{$site_url}/?module=corporation" method="post">
-            <table width="100%" border="0">
-              <tr>
-                <td class="sub" colspan="2">Filter Members</td>
-              </tr>
-              <tr>
-                <td align="right"><b>Title:</b></td>
-                <td>
-                  <select name="title" style="width: 200px">
-                    <option value="">All</option>
-                    {foreach from=$titles item=cnt key=title}
+              <table width="100%" border="0">
+                <tr>
+                  <td class="sub" colspan="2">Filter Members</td>
+                </tr>
+                <tr>
+                  <td align="right"><b>Title:</b></td>
+                  <td>
+                    <select name="title" style="width: 200px">
+                      <option value="">All</option>
+                      {foreach from=$titles item=cnt key=title}
                       <option value="{$title}" {if $title == $selTitle}selected="selected"{/if}>{$title} ({$cnt|eveNumInt})</option>
-                    {/foreach}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td align="right"><b>In System:</b></td>
-                <td>
-                  <select name="system" style="width: 200px">
-                    <option value="">All</option>
-                    {foreach from=$systems item=system key=id}
+                      {/foreach}
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right"><b>In System:</b></td>
+                  <td>
+                    <select name="system" style="width: 200px">
+                      <option value="">All</option>
+                      {foreach from=$systems item=system key=id}
                       <option value="{$id}" {if $id == $selSystem}selected="selected"{/if}>{$system.name} ({$system.count|eveNumInt})</option>
-                    {/foreach}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td align="right"><b>Last Active:</b></td>
-                <td>
-                  <select name="active" style="width: 200px">
-                    <option value="4">All</option>
-                    {foreach from=$active item=act key=actNum}
+                      {/foreach}
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right"><b>Last Active:</b></td>
+                  <td>
+                    <select name="active" style="width: 200px">
+                      <option value="4">All</option>
+                      {foreach from=$active item=act key=actNum}
                       <option value="{$actNum}" {if $actNum == $selActive}selected="selected"{/if}>{$act.name} ({$act.count|eveNumInt})</option>
-                    {/foreach}
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td align="right">&nbsp;</td>
-                <td><input type="submit" value="Filter" /></td>
-              </tr>
-            </table>
+                      {/foreach}
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="right">&nbsp;</td>
+                  <td><input type="submit" value="Filter" /></td>
+                </tr>
+              </table>
             </form>
           </td>
         </tr>
 
         {foreach from=$members item=member}
         {cycle values='row,rowAlt' assign=rowclass}
-        <tr class="{$rowclass}" onclick="toggleMember('member{$member.characterID}')" style="cursor:pointer">
+        <tr class="{$rowclass} memberHead" data-memberid="{$member.characterID}">
           <td><img src="http://image.eveonline.com/Character/{$member.characterID}_32.jpg" class="i32" align="absmiddle" alt="{$member.name}" /> {$member.name}</td>
         </tr>
-        <tr id="member{$member.characterID}" class="{$rowclass}" style="display:none">
+        <tr id="{$member.characterID}" class="{$rowclass}" style="display:none">
           <td>
             <table width="100%" border="0">
               {if $member.title}
-                <tr><td align="right"><b>Title:</b></td><td>{$member.title}</td></tr>
+              <tr><td align="right"><b>Title:</b></td><td>{$member.title}</td></tr>
               {/if}
               {if $member.startDateTime}
-                <tr><td align="right"><b>Join Date:</b></td><td>{$member.startDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
+              <tr><td align="right"><b>Join Date:</b></td><td>{$member.startDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
               {/if}
               {if $member.logoffDateTime > 20000}
-                <tr><td align="right"><b>Last Active:</b></td><td>{$member.logoffDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
+              <tr><td align="right"><b>Last Active:</b></td><td>{$member.logoffDateTime|date_format:"%d/%m/%Y %H:%M"}</td></tr>
               {/if}
               {if $member.baseID}
-                <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/{$member.base.icon.icon32}" class="i32" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
+              <tr><td align="right"><b>Base Location:</b></td><td><img src="{$site_url}/{$member.base.icon.icon32}" class="i32" alt="{$member.base.stationname}" align="absmiddle" /> {$member.base.stationname}</td></tr>
               {/if}
               {if $member.locationID}
-                <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/{$member.location.icon.icon32}" class="i32" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
+              <tr><td align="right"><b>Current Location:</b></td><td>{if $member.location.stationid}<img src="{$site_url}/{$member.location.icon.icon32}" class="i32" alt="{$member.locationName}" align="absmiddle" /> {/if}{$member.locationName}</td></tr>
               {/if}
               {if $member.ship}
-                <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/{$member.ship.icon.icon32}" class="i32" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
+              <tr><td align="right"><b>Ship:</b></td><td><img src="{$site_url}/{$member.ship.icon.icon32}" class="i32 showInfo" data-typeid="{$member.ship.typeid}" alt="{$member.ship.typename}" align="absmiddle" /> {$member.ship.typename}</td></tr>
               {/if}
             </table>
           </td>
@@ -157,15 +157,14 @@
   </tr>
 </table>
 
-{literal}
 <script>
-  function toggleMember(mId) {
-    var m = document.getElementById(mId);
-    if (m.style.display == '') {
-      m.style.display = 'none';
-    } else {
-      m.style.display = '';
-    }
-  }
+  $(document).ready(function() {
+    $('.memberHead').each(function() {
+      $(this).css('cursor', 'pointer');
+      $(this).click(function() {
+        $('#' + $(this).data('memberid')).toggle('fast');
+      });
+    });
+    
+  });
 </script>
-{/literal}
