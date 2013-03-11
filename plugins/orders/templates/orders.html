@@ -112,9 +112,7 @@
       {/if}
       <td>{$o.station.stationname}</td>
       <td>
-        <a href="#" onclick="showInfo({$o.item.typeid});return false;">
-          <img src="{$site_url}/{$o.item.icon.icon32}" class="i32" alt="{$o.item.typename}" align="absmiddle" />
-        </a>
+        <img src="{$site_url}/{$o.item.icon.icon32}" class="i32 showInfo" data-typeid="{$o.item.typeid}" alt="{$o.item.typename}" align="absmiddle" />
         {$o.item.typename}</td>
       <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
       <td align="right"">{$o.price|eveNum}</td>

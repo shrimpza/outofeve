@@ -34,7 +34,7 @@
         <select name="region" style="width: 280px">
           <option value="0">All</option>
           {section name=r loop=$regions}
-            <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
+          <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
           {/section}
         </select>
       </td>
@@ -66,141 +66,137 @@
     <th colspan="2">You</th>
   </tr>
   <tr>
-    <th>Qty</th>
-    <th>Cost</th>
-    <th>Qty</th>
-    <th>Cost</th>
+    <th width="15%">Qty</th>
+    <th width="15%">Cost</th>
+    <th width="15%">Qty</th>
+    <th width="15%">Cost</th>
   </tr>
-    {foreach from=$proditem.blueprint.materials item=m}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td>
-          <a href="#" onclick="showInfo({$m.item.typeid});return false;">
-            <img src="{$site_url}/{$m.item.icon.icon32}" class="i32" alt="{$m.item.typename}" align="absmiddle" />
-          </a>
-          {$m.item.typename}
-        </td>
-        <td align="right">{$m.qty_perfect|eveNumInt}</td>
-        <td align="right">{$m.price_perfect|eveNum}</td>
-        <td align="right">{$m.qty_you|eveNumInt}</td>
-        <td align="right">{$m.price_you|eveNum}</td>
-      </tr>
-    {/foreach}
+  {foreach from=$proditem.blueprint.materials item=m}
+  <tr class="{cycle values='row,rowAlt'}">
+    <td width="40%">
+      <img src="{$site_url}/{$m.item.icon.icon32}" class="i32 showInfo" data-typeid="{$m.item.typeid}" alt="{$m.item.typename}" align="absmiddle" />
+      {$m.item.typename}
+    </td>
+    <td align="right">{$m.qty_perfect|eveNumInt}</td>
+    <td align="right">{$m.price_perfect|eveNum}</td>
+    <td align="right">{$m.qty_you|eveNumInt}</td>
+    <td align="right">{$m.price_you|eveNum}</td>
+  </tr>
+  {/foreach}
 
-    {if $proditem.blueprint.extraMaterials}
-    <tr>
-      <th colspan="5">Components and Extra Materials</th>
-    </tr>
-    {foreach from=$proditem.blueprint.extraMaterials item=m}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td>
-          <a href="#" onclick="showInfo({$m.item.typeid});return false;">
-            <img src="{$site_url}/{$m.item.icon.icon32}" class="i32" alt="{$m.item.typename}" align="absmiddle" />
-          </a>
-          {$m.item.typename}
-        </td>
-        <td align="right">{$m.quantity*$m.damageperjob|eveNum}</td>
-        <td align="right">{$m.item.pricing.avgSell*$m.qtyscale|eveNum}</td>
-        <td align="right">{$m.quantity*$m.damageperjob|eveNum}</td>
-        <td align="right">{$m.item.pricing.avgSell*$m.qtyscale|eveNum}</td>
-      </tr>
-    {/foreach}
-    {/if}
+  {if $proditem.blueprint.extraMaterials}
+  <tr>
+    <th colspan="5">Components and Extra Materials</th>
+  </tr>
+  {foreach from=$proditem.blueprint.extraMaterials item=m}
+  <tr class="{cycle values='row,rowAlt'}">
+    <td>
+      <img src="{$site_url}/{$m.item.icon.icon32}" class="i32 showInfo" data-typeid="{$m.item.typeid}" alt="{$m.item.typename}" align="absmiddle" />
+      {$m.item.typename}
+    </td>
+    <td align="right">{$m.quantity*$m.damageperjob|eveNum}</td>
+    <td align="right">{$m.item.pricing.avgSell*$m.qtyscale|eveNum}</td>
+    <td align="right">{$m.quantity*$m.damageperjob|eveNum}</td>
+    <td align="right">{$m.item.pricing.avgSell*$m.qtyscale|eveNum}</td>
+  </tr>
+  {/foreach}
+  {/if}
 
-    {if $proditem.blueprint.skills}
-    <tr>
-      <th colspan="5">Required Skills</th>
-    </tr>
-    {foreach from=$proditem.blueprint.skills item=s}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td colspan="5">
-          <a href="#" onclick="showInfo({$s.item.typeid});return false;">
-            <img src="{$site_url}/{$s.item.icon.icon32}" class="i32" alt="{$s.item.typename}" align="absmiddle" />
-          </a>
-          {$s.item.typename}
-        </td>
-      </tr>
-    {/foreach}
-    {/if}
+  {if $proditem.blueprint.skills}
+  <tr>
+    <th colspan="5">Required Skills</th>
+  </tr>
+  {foreach from=$proditem.blueprint.skills item=s}
+  <tr class="{cycle values='row,rowAlt'}">
+    <td colspan="5">
+      <img src="{$site_url}/{$s.item.icon.icon32}" class="i32 showInfo" data-typeid="{$s.item.typeid}" alt="{$s.item.typename}" align="absmiddle" />
+      {$s.item.typename}
+    </td>
+  </tr>
+  {/foreach}
+  {/if}
 
   <tr>
     <th>{if $proditem.portionsize > 1}<div align="right">1 run, {$proditem.portionsize} units:{/if}</div></th>
-    <th></th>
-    <th><div align="right">{$totals.perfect|eveNum}</div></th>
-    <th></th>
-    <th><div align="right">{$totals.you|eveNum}</div></th>
-  </tr>
-  {if $proditem.portionsize > 1}
+<th>&nbsp;</th>
+<th><div align="right">{$totals.perfect|eveNum}</div></th>
+<th>&nbsp;</th>
+<th><div align="right">{$totals.you|eveNum}</div></th>
+</tr>
+{if $proditem.portionsize > 1}
+<tr>
+  <th><div align="right">Unit cost:</div></th>
+<th>&nbsp;</th>
+<th><div align="right">{$totals.perfect/$proditem.portionsize|eveNum}</div></th>
+<th>&nbsp;</th>
+<th><div align="right">{$totals.you/$proditem.portionsize|eveNum}</div></th>
+</tr>
+{/if}
+
+<tr>
+  <th>
+<div align="right">
+  Runs: <input type="text" id="runsInput" value="1" style="width:40px;"/>:
+</div>
+</th>
+<th>&nbsp;</th>
+<th><div align="right" id="runsPerfect">{$totals.perfect|eveNum}</div></th>
+<th>&nbsp;</th>
+<th><div align="right" id="runsYou">{$totals.you|eveNum}</div></th>
+</tr>
+</table>
+
+<h2>
+  Current Market Details for {$proditem.typename}:
+</h2>
+<table width="100%" border="0">
   <tr>
-    <th><div align="right">Unit cost:</div></th>
-    <th></th>
-    <th><div align="right">{$totals.perfect/$proditem.portionsize|eveNum}</div></th>
-    <th></th>
-    <th><div align="right">{$totals.you/$proditem.portionsize|eveNum}</div></th>
+    <th rowspan="3" width="128">
+      <img src="{$site_url}/{$proditem.icon.icon64}" class="i64 showInfo" data-typeid="{$proditem.typeid}" alt="{$proditem.typename}" align="absmiddle" />
+    </th>
+    <th colspan="4">Buying</th>
+    <th colspan="4">Selling</th>
   </tr>
-  {/if}
+  <tr>
+    <th>Min</th>
+    <th>Max</th>
+    <th>Avg</th>
+    <th>Qty</th>
+    <th>Min</th>
+    <th>Max</th>
+    <th>Avg</th>
+    <th>Qty</th>
+  </tr>
+  <tr>
+    <td align="right">{$proditem.pricing.minBuy|eveNum}</td>
+    <td align="right">{$proditem.pricing.maxBuy|eveNum}</td>
+    <td align="right">{$proditem.pricing.avgBuy|eveNum}</td>
+    <td align="right">{$proditem.pricing.qtyBuy|eveNumInt}</td>
+    <td align="right">{$proditem.pricing.minSell|eveNum}</td>
+    <td align="right">{$proditem.pricing.maxSell|eveNum}</td>
+    <td align="right">{$proditem.pricing.avgSell|eveNum}</td>
+    <td align="right">{$proditem.pricing.qtySell|eveNumInt}</td>
+  </tr>
+</table>
 
-    <tr>
-      <th><div align="right">Runs: <input type="text" id="runsInput" onchange="calcRuns(this.value)" onkeypress="calcRuns(this.value)" onkeyup="calcRuns(this.value)" value="1" style="width:40px;"/>:</div></th>
-      <th></th>
-      <th><div align="right" id="runsPerfect">{$totals.perfect|eveNum}</div></th>
-      <th></th>
-      <th><div align="right" id="runsYou">{$totals.you|eveNum}</div></th>
-    </tr>
-  </table>
+<div class="note">Note: "Perfect" column factors in a Production Efficiency skill level of 5, "You" uses your current Production Efficiency skill level.<br /><br />
+  * Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
 
-  <h2>
-    Current Market Details for {$proditem.typename}:
-  </h2>
-  <table width="100%" border="0">
-    <tr>
-      <th rowspan="3" width="128>
-        <a href="#" onclick="showInfo({$proditem.typeid});return false;">
-          <img src="{$site_url}/{$proditem.icon.icon64}" class="i64" alt="{$proditem.typename}" align="absmiddle" />
-        </a>
-      </th>
-      <th colspan="4">Buying</th>
-      <th colspan="4">Selling</th>
-    </tr>
-    <tr>
-      <th>Min</th>
-      <th>Max</th>
-      <th>Avg</th>
-      <th>Qty</th>
-      <th>Min</th>
-      <th>Max</th>
-      <th>Avg</th>
-      <th>Qty</th>
-    </tr>
-    <tr>
-      <td align="right">{$proditem.pricing.minBuy|eveNum}</td>
-      <td align="right">{$proditem.pricing.maxBuy|eveNum}</td>
-      <td align="right">{$proditem.pricing.avgBuy|eveNum}</td>
-      <td align="right">{$proditem.pricing.qtyBuy|eveNumInt}</td>
-      <td align="right">{$proditem.pricing.minSell|eveNum}</td>
-      <td align="right">{$proditem.pricing.maxSell|eveNum}</td>
-      <td align="right">{$proditem.pricing.avgSell|eveNum}</td>
-      <td align="right">{$proditem.pricing.qtySell|eveNumInt}</td>
-    </tr>
-  </table>
+<script type="text/javascript">
+  var runPerfect = {$totals.perfect};
+  var runYou     = {$totals.you};
+  
+  $(document).ready(function() {
+    $("#runsInput").on('keyup', function() {
+      calcRuns($("#runsInput").val());
+    });
+  });
 
-  <div class="note">Note: "Perfect" column factors in a Production Efficiency skill level of 5, "You" uses your current Production Efficiency skill level.<br /><br />
-    * Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
-
-    <script type="text/javascript">
-
-      var runPerfect = {$totals.perfect};
-      var runYou     = {$totals.you};
-
-      {literal}
-
-      function calcRuns(runCount)
-      {
-        var p = runPerfect * runCount;
-        var y = runYou * runCount;
-        document.getElementById('runsPerfect').innerHTML  = p.numberFormat('0,0.00');
-        document.getElementById('runsYou').innerHTML      = y.numberFormat('0,0.00');
-      }
-
-      {/literal}
-    </script>
+  function calcRuns(runCount) {
+    var p = runPerfect * runCount;
+    var y = runYou * runCount;
+    $('#runsPerfect').html(p.numberFormat('0,0.00'));
+    $('#runsYou').html(y.numberFormat('0,0.00'));
+  }
+</script>
 {/if}

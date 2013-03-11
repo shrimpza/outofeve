@@ -2,7 +2,7 @@
   <div class="listOptions">
     <span>Search: 
       <input type="text" id="killFind" value="{$find}" /> 
-      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&find='+document.getElementById('killFind').value">Go</button>
+      <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&find='+$('#killFind').val()">Go</button>
       (Pilots, corporations, alliances, ships and systems)
     </span>
   </div>
