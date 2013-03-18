@@ -11,7 +11,7 @@
     <span>Account: 
       <select id="accountKey" onchange="window.location='{$site_url}/?module=transactions&corp=1&accountKey='+this.value">
         {foreach from=$accounts item=acc}
-          <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
+        <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
         {/foreach}
       </select>
     </span>
@@ -21,11 +21,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-      <button onclick="window.location='{$site_url}/?module=transactions{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=transactions{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-      <button onclick="window.location='{$site_url}/?module=transactions{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=transactions{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
     {/if}
   </div>
   {/if}
@@ -41,27 +41,27 @@
       <th>Station</th>
     </tr>
     {foreach from=$trans item=t}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td>
-          <a href="#" onclick="showInfo({$t.item.typeid});return false;"><img src="{$site_url}/{$t.item.icon.icon32}" class="i32" alt="{$t.item.typename}" align="absmiddle" /></a>
-          {$t.item.typename}
-        </td>
-        <td align="right">{$t.qty|eveNumInt}</td>
-        {if $t.purchase}
-          <td align="right" class="moneyOut">-{$t.totalPrice|eveNum}</td>
-        {else}
-          <td align="right" class="moneyIn">{$t.totalPrice|eveNum}</td>
-        {/if}
-        <td align="center">{$t.transactionTime|date_format:"%d/%m/%Y %H:%M"}</td>
-        {if $corp}<td>{$t.characterName}</td>{/if}
-        <td>{$t.clientName}</td>
-        <td>{$t.station.stationname}</td>
-      </tr>
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>
+        <img src="{$site_url}/{$t.item.icon.icon32}" class="i32 showInfo" data-typeid="{$t.item.typeid}" alt="{$t.item.typename}" align="absmiddle" />
+        {$t.item.typename}
+      </td>
+      <td align="right">{$t.qty|eveNumInt}</td>
+      {if $t.purchase}
+      <td align="right" class="moneyOut">-{$t.totalPrice|eveNum}</td>
+      {else}
+      <td align="right" class="moneyIn">{$t.totalPrice|eveNum}</td>
+      {/if}
+      <td align="center">{$t.transactionTime|date_format:"%d/%m/%Y %H:%M"}</td>
+      {if $corp}<td>{$t.characterName}</td>{/if}
+      <td>{$t.clientName}</td>
+      <td>{$t.station.stationname}</td>
+    </tr>
     {/foreach}
   </table>
 
   {if !$trans}
-    <h3>No market transactions found!</h3>
+  <h3>No market transactions found!</h3>
   {/if}
 
 </div>

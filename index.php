@@ -17,7 +17,7 @@
     $time = $time_end - $time_start;
 
     if ((!isset($_GET['popup']) && !isset($_GET['jsonMode'])) && $GLOBALS['config']['site']['showstats']) {
-        echo '<script type="text/javascript">document.getElementById("footer").innerHTML = document.getElementById("footer").innerHTML + "<br />';
+        echo '<script type="text/javascript">$("#footer").html($("#footer").html() + "<br />';
 
         echo '<small><small>Processed in ' . round($time, 4) . ' seconds, ';
         echo ($site->db->numQueries + eveDB::getInstance()->db->numQueries) . ' DB queries; ';
@@ -33,7 +33,7 @@
             echo ' - ' . round($req['time'], 4) . ' secs';
             echo ' - exp ' . date('d/n/Y H:i:s', $req['cacheUntil']) . '<br />';
         }
-        echo '</small></small>";';
+        echo '</small></small>");';
         echo '</script>';
     }
 

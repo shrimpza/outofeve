@@ -1,81 +1,77 @@
 <div id="mail">
-    <div class="listOptions">
-        <span><a href="{$site_url}/?module=mail"><img src="{$site_url}/templates/{$theme}/images/mail/mail_all_32.png" alt="All" align="absmiddle"/> All</a></span>
-        <span><a href="{$site_url}/?module=mail&personal=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_personal_32.png" alt="Personal" align="absmiddle" /> Personal</a></span>
-        <span><a href="{$site_url}/?module=mail&corp=1"><img src="templates/{$theme}/images/mail/mail_corp_32.png" alt="Corporation" align="absmiddle" /> Corporation</a></span>
-        <span><a href="{$site_url}/?module=mail&lists=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_list_32.png" alt="Lists" align="absmiddle" /> Mailing Lists</a></span>
-        <span><a href="{$site_url}/?module=mail&notifications=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_notif_32.png" alt="Notifications" align="absmiddle" /> Notifications</a></span>
-    </div>
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=mail"><img src="{$site_url}/templates/{$theme}/images/mail/mail_all_32.png" alt="All" align="absmiddle"/> All</a></span>
+    <span><a href="{$site_url}/?module=mail&personal=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_personal_32.png" alt="Personal" align="absmiddle" /> Personal</a></span>
+    <span><a href="{$site_url}/?module=mail&corp=1"><img src="templates/{$theme}/images/mail/mail_corp_32.png" alt="Corporation" align="absmiddle" /> Corporation</a></span>
+    <span><a href="{$site_url}/?module=mail&lists=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_list_32.png" alt="Lists" align="absmiddle" /> Mailing Lists</a></span>
+    <span><a href="{$site_url}/?module=mail&notifications=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_notif_32.png" alt="Notifications" align="absmiddle" /> Notifications</a></span>
+  </div>
 
-    {if !$mail}
-    <h3>No notifications!</h3>
-    {else}
-    <div class="messageList">
-        <table width="100%" border="0">
-            {foreach from=$mail item=m}
-            {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
-            <tr class="{$rowClass} message {if $m.read}unread{/if}" onclick="getMessage('{$m.notificationID}')">
-                <td>
-                    {if $m.senderName}<img src="http://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />{/if}
-                    <span class="sender">{if $m.senderName}{$m.senderName}{else}{$m.sender.itemname}{/if}</span><br />
-                    <span class="date">{$m.sentDate|date_format:"%d/%m/%Y %H:%M"}</span><br />
-                    <span class="title">{$m.title}</span>
-                </td>
-            </tr>
-            {/foreach}
-        </table>
-    </div>
-    {/if}
+  {if !$mail}
+  <h3>No notifications!</h3>
+  {else}
+  <div class="messageList">
+    <table width="100%" border="0">
+      {foreach from=$mail item=m}
+      {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
+      <tr class="{$rowClass} message {if $m.read}unread{/if}" data-messageid="{$m.notificationID}">
+        <td>
+          {if $m.senderName}<img src="http://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />{/if}
+          <span class="sender">{if $m.senderName}{$m.senderName}{else}{$m.sender.itemname}{/if}</span><br />
+          <span class="date">{$m.sentDate|date_format:"%d/%m/%Y %H:%M"}</span><br />
+          <span class="title">{$m.title}</span>
+        </td>
+      </tr>
+      {/foreach}
+    </table>
+  </div>
+  {/if}
 
-    <div class="messageBody borderMid" id="messageBody" style="display: none;">
-        <table width="100%" border="0">
-            <tr>
-                <td class="messageHeader shadeMid borderMid" align="right" width="150"><b>Subject</b></td>
-                <td class="messageHeader shadeMid borderMid" id="msg_title"></td>
-            </tr>
-            <tr>
-                <td class="messageHeader shadeMid borderMid" align="right"><b>Date</b></td>
-                <td class="messageHeader shadeMid borderMid" id="msg_date"></td>
-            </tr>
-            <tr>
-                <td class="messageHeader shadeMid borderMid" align="right"><b>Sender</b></td>
-                <td class="messageHeader shadeMid borderMid" id="msg_sender">
+  <div class="messageBody borderMid" id="messageBody" style="display: none;">
+    <table width="100%" border="0">
+      <tr>
+        <td class="messageHeader shadeMid borderMid" align="right" width="150"><b>Subject</b></td>
+        <td class="messageHeader shadeMid borderMid" id="msg_title"></td>
+      </tr>
+      <tr>
+        <td class="messageHeader shadeMid borderMid" align="right"><b>Date</b></td>
+        <td class="messageHeader shadeMid borderMid" id="msg_date"></td>
+      </tr>
+      <tr>
+        <td class="messageHeader shadeMid borderMid" align="right"><b>Sender</b></td>
+        <td class="messageHeader shadeMid borderMid" id="msg_sender">
 
-                </td>
-            </tr>
-        </table>
-        <div class="messageContent" id="msg_message"></div>
-    </div>
+        </td>
+      </tr>
+    </table>
+    <div class="messageContent" id="msg_message"></div>
+  </div>
 
 </div>
 
-<script src="{$site_url}/includes/javascript/json2.js"></script>
-<script src="{$site_url}/includes/javascript/json-ajax.js"></script>
-
-<script>
-    {literal}
-
-    function getMessage(msgId) {
-        jsonRequest('index.php', 'module=mail&notificationID=' + msgId, 'GET', gotMessage);
-    }
-
-    function gotMessage(message) {
-        if (message) {
-            document.getElementById('msg_title').innerHTML = message.headers.title;
-            document.getElementById('msg_date').innerHTML = message.headers.sentDate;
-            var fromImg = '';
-            if (message.headers.senderName != '') {
-                fromImg = '<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
-                document.getElementById('msg_sender').innerHTML = fromImg + message.headers.senderName;
-            } else {
-                document.getElementById('msg_sender').innerHTML = fromImg + message.headers.sender.itemname;
-            }
-            ///    + message.headers.senderName;
-
-            document.getElementById('msg_message').innerHTML = message.text;
-            document.getElementById('messageBody').style.display = '';
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.message').click(function() {
+      getMessage($(this).data('messageid'));
+    });
+  });
+  
+  function getMessage(msgId) {
+    jQuery.getJSON('index.php', { jsonMode: 1, module: 'mail', notificationID: msgId }, function(message) {
+      if (message) {
+        var fromImg = '';
+        if (message.headers.senderName != '') {
+          fromImg = '<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
+          $('#msg_sender').html(fromImg + message.headers.senderName);
+        } else {
+          $('#msg_sender').html(fromImg + message.headers.sender.itemname);
         }
-    }
 
-    {/literal}
+        $('#msg_title').html(message.headers.title);
+        $('#msg_date').html(message.headers.sentDate);
+        $('#msg_message').html(message.text);
+        $('#messageBody').css('display', '');
+      }
+    });
+  }
 </script>

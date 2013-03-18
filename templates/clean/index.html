@@ -1,140 +1,169 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>{$title}{if $pluginTitle} - {$pluginTitle}{/if}</title>
-        {if $pluginCSS}<link href="{$site_url}/plugins/{$pluginCSS}" rel="stylesheet" type="text/css" />{/if}
-        <link href="{$site_url}/templates/{$theme}/style.css" rel="stylesheet" type="text/css" />
-        <script src="{$site_url}/includes/javascript/number-functions.js"></script>
-        <script src="{$site_url}/includes/javascript/parseuri.js"></script>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$title}{if $pluginTitle} - {$pluginTitle}{/if}</title>
+    {if $pluginCSS}<link href="{$site_url}/plugins/{$pluginCSS}" rel="stylesheet" type="text/css" />{/if}
+    <link href="{$site_url}/templates/{$theme}/style.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="{$site_url}/includes/javascript/number-functions.js"></script>
+    <script type="text/javascript" src="{$site_url}/includes/javascript/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{$site_url}/includes/javascript/parseuri.js"></script>
 
-        <script type="text/javascript">
-            var baseUrl = '{$site_url}';
-            {literal}
-            function setCurrent(type, id) {
-                var url = parseUri(window.location);
-                if (url.port && (url.port != 80)) {
-                    url.host += ':' + url.port;
-                }
-                var newUrl = url.protocol + '://' + url.host + url.path + '?';
+    <script type="text/javascript">
+      var baseUrl = '{$site_url}';
+            
+      $(document).ready(function() {
+        $("#charKeySelect").change(function() {
+          setCurrent('setCharKey', $(this).val());
+        });
+        
+        $("#characterSelect").change(function() {
+          setCurrent('setChar', $(this).val());
+        });
 
-                for (i in url.queryKey) {
-                    if ((i != 'setCharKey') && (i != 'setChar') && (i != 'setCorpKey') && (i != 'setCorpChar')) {
-                        newUrl += i + '=' + url.queryKey[i] + '&';
-                    }
-                }
+        $("#corpKeySelect").change(function() {
+          setCurrent('setCorpKey', $(this).val());
+        });
 
-                newUrl += type + '=' + id;
+        $("#corpSelect").change(function() {
+          setCurrent('setCorpChar', $(this).val());
+        });
 
-                window.location = newUrl;
-            }
+        $(".charSelectImg").each(function() {
+          $(this).css("cursor", "pointer");
+          $(this).click(function() {
+            setCurrent('setChar', $(this).data('charid'));
+          });
+        }); 
+        
+        $(".showInfo").each(function() {
+          $(this).css("cursor", "pointer");
+          $(this).click(function() {
+            showInfo($(this).data('typeid'));
+          });
+        });
 
-            function showInfo(typeId) {
-                window.open(baseUrl+"/?module=showinfo&popup=1&typeId="+typeId, "type"+typeId, "location=0,status=0,scrollbars=1,width=450,height=550");
-            }
+        $("#errorPopup").find("a").click(function() {
+          $("#errorPopup").hide();
+          return false;
+        });
 
-            function toggleErrors() {
-                var errPop = document.getElementById('errorPopup');
-                if (errPop.style.display == 'none') {
-                    errPop.style.display = '';
-                } else {
-                    errPop.style.display = 'none';
-                }
-            }
-            {/literal}
-        </script>
+      });
 
-    </head>
+      function setCurrent(type, id) {
+        var url = parseUri(window.location);
+        if (url.port && (url.port != 80)) {
+          url.host += ':' + url.port;
+        }
+        var newUrl = url.protocol + '://' + url.host + url.path + '?';
 
-    <body>
+        for (i in url.queryKey) {
+          if ((i != 'setCharKey') && (i != 'setChar') && (i != 'setCorpKey') && (i != 'setCorpChar')) {
+            newUrl += i + '=' + url.queryKey[i] + '&';
+          }
+        }
 
-        <div id="header-full">
-            <div id="header">
-                <div style="float: left;">
-                    <a href="{$site_url}/"><img src="{$site_url}/templates/{$theme}/images/title.png" border="0" /></a>
-                </div>
-                {if $charKeys}
-                {strip}
-                <div class="charSelect">
-                    <div class="selects">
-                        <select id="charKeySelect" onchange="setCurrent('setCharKey', this.value)">
-                            {foreach from=$charKeys item=key}
-                            <option value="{$key.keyID}" {if $currentCharKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
-                            {/foreach}
-                        </select><br />
-                        {if $currentCharKey}
-                        <select id="characterSelect" onchange="setCurrent('setChar', this.value)">
-                            {foreach from=$currentCharKey.characters item=char}
-                            <option value="{$char.characterID}" {if $currentCharKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
-                            {/foreach}
-                        </select>
-                        {/if}
-                    </div>
-                    {if $currentCharKey}
-                    <div class="chars">
-                        <div>
-                            {foreach from=$currentCharKey.characters item=char}
-                            <a href="#" title="{$char.characterName}" onclick="setCurrent('setChar', '{$char.characterID}')"><img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" /></a>
-                            {/foreach}
-                        </div>
-                    </div>
-                    {/if}
-                </div>
-                {/strip}
-                {/if}
+        newUrl += type + '=' + id;
 
-                {if $corpKeys}
-                {strip}
-                <div class="charSelect">
-                    <div class="selects">
-                        <select id="corpKeySelect" onchange="setCurrent('setCorpKey', this.value)">
-                            {foreach from=$corpKeys item=key}
-                            <option value="{$key.keyID}" {if $currentCorpKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
-                            {/foreach}
-                        </select><br />
-                        {if $currentCorpKey}
-                        <select id="corpSelect" onchange="setCurrent('setCorpChar', this.value)">
-                            {foreach from=$currentCorpKey.characters item=char}
-                            <option value="{$char.characterID}" {if $currentCorpKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
-                            {/foreach}
-                        </select>
-                        {/if}
-                    </div>
-                </div>
-                {/strip}
-                {/if}
-            </div>
+        window.location = newUrl;
+      }
+
+      function showInfo(typeId) {
+        window.open(baseUrl+"/?module=showinfo&popup=1&typeId="+typeId, "type"+typeId, "location=0,status=0,scrollbars=1,width=450,height=550");
+      }
+    </script>
+
+  </head>
+
+  <body>
+
+    <div id="header-full">
+      <div id="header">
+        <div style="float: left;">
+          <a href="{$site_url}/"><img src="{$site_url}/templates/{$theme}/images/title.png" border="0" /></a>
         </div>
-
-        <div id="container">
-
-            <div id="navigation">
-                {foreach item=block from=$sideBlocks}
-                {include file="sideblock_left.html" title=$block.title content=$block.content}
-                {/foreach}
-            </div>
-
-            <div id="main">
-                {$content}
-                <div style="clear: both"><!-- pull stuff down --></div>
-            </div>
-
-        </div>
-
-        <div id="footer-wrapper">
-            <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a> <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a></div>
-        </div>
-
-        {if $errors}
-        <div id="errorPopup" style="display: block;">
-            <h3><img src="{$site_url}/templates/{$theme}/images/error.png" border="0" align="absmiddle" /> Encountered the following API error(s):</h3>
-            {foreach item=error from=$errors}
-            <div class="apierror">{$error.method}: [{$error.errorCode}] {$error.errorText}</div>
+        {if $charKeys}
+        {strip}
+        <div class="charSelect">
+          <div class="selects">
+            <select id="charKeySelect">
+              {foreach from=$charKeys item=key}
+              <option value="{$key.keyID}" {if $currentCharKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
+              {/foreach}
+            </select><br />
+            {if $currentCharKey}
+            <select id="characterSelect">
+              {foreach from=$currentCharKey.characters item=char}
+              <option value="{$char.characterID}" {if $currentCharKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
+              {/foreach}
+            </select>
+            {/if}
+          </div>
+          {if $currentCharKey}
+          <div class="chars">
+            {foreach from=$currentCharKey.characters item=char}
+            <img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" class="charSelectImg" data-charid="{$char.characterID}" title="{$char.characterName}" />
             {/foreach}
-            <div align="right"><a href="#" onclick="toggleErrors(); return false;">[ Close ]</a></div>
+          </div>
+          {/if}
         </div>
+        {/strip}
         {/if}
 
-    </body>
+        {if $corpKeys}
+        {strip}
+        <div class="charSelect">
+          <div class="selects">
+            <select id="corpKeySelect">
+              {foreach from=$corpKeys item=key}
+              <option value="{$key.keyID}" {if $currentCorpKey.reference == $key.reference}selected="true"{/if}>{$key.name}</option>
+              {/foreach}
+            </select><br />
+            {if $currentCorpKey}
+            <select id="corpSelect" onchange="setCurrent('setCorpChar', this.value)">
+              {foreach from=$currentCorpKey.characters item=char}
+              <option value="{$char.characterID}" {if $currentCorpKey.selectedCharacter == $char.characterID}selected="true"{/if}>{$char.characterName}</option>
+              {/foreach}
+            </select>
+            {/if}
+          </div>
+        </div>
+        {/strip}
+        {/if}
+      </div>
+    </div>
+
+    <div id="container">
+
+      <div id="navigation">
+        {foreach item=block from=$sideBlocks}
+        {include file="sideblock_left.html" title=$block.title content=$block.content}
+        {/foreach}
+      </div>
+
+      <div id="main">
+        {$content}
+        <div style="clear: both"><!-- pull stuff down --></div>
+      </div>
+
+    </div>
+
+    <div id="footer-wrapper">
+      <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a> 
+        <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a>
+      </div>
+    </div>
+
+    {if $errors}
+    <div id="errorPopup" style="display: block;">
+      <h3><img src="{$site_url}/templates/{$theme}/images/error.png" border="0" align="absmiddle" /> Encountered the following API error(s):</h3>
+      {foreach item=error from=$errors}
+      <div class="apierror">{$error.method}: [{$error.errorCode}] {$error.errorText}</div>
+      {/foreach}
+      <div align="right"><a href="#">[ Close ]</a></div>
+    </div>
+    {/if}
+
+  </body>
 
 </html>

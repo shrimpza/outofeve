@@ -3,8 +3,8 @@
     <td align="center" valign="top" rowspan="999" width="260">
       <img src="http://image.eveonline.com/Character/{$character.characterID}_256.jpg" /><br />
       {if $character.raceInfo}
-        <img src="{$site_url}/{$character.raceInfo.ricon.icon128}" alt="{$character.raceInfo.racename}" title="{$character.raceInfo.racename}" />
-        <img src="{$site_url}/{$character.raceInfo.bicon.icon128}" alt="{$character.raceInfo.bloodlinename}" title="{$character.raceInfo.bloodlinename}" />
+      <img src="{$site_url}/{$character.raceInfo.ricon.icon128}" alt="{$character.raceInfo.racename}" title="{$character.raceInfo.racename}" />
+      <img src="{$site_url}/{$character.raceInfo.bicon.icon128}" alt="{$character.raceInfo.bloodlinename}" title="{$character.raceInfo.bloodlinename}" />
       {/if}
     </td>
     <th colspan="2">
@@ -27,18 +27,18 @@
   <tr>
     <td align="right"><b>Currently Training:</b></td>
     {if $character.training.inTraining}
-      <td>{$character.training.skillItem.typename} to level {$character.training.toLevel|eveRoman}, 
-        {if $character.training.remainingTime > 0}
-          <span style="font-size: 0.9em">eta {$character.training.remainingTime|formatTime}</span>
-        {else}
-          <span class="good">Complete!</span>
-        {/if}
-      </td>
+    <td>{$character.training.skillItem.typename} to level {$character.training.toLevel|eveRoman}, 
+      {if $character.training.remainingTime > 0}
+      <span style="font-size: 0.9em">eta {$character.training.remainingTime|formatTime}</span>
+      {else}
+      <span class="good">Complete!</span>
+      {/if}
+    </td>
     {else}
-      <td><i><span class="bad">Nothing!</span></i></td>
+    <td><i><span class="bad">Nothing!</span></i></td>
     {/if}
   </tr>
-  
+
   <tr><td colspan="2">&nbsp;</td></tr>
 
   <tr>
@@ -49,37 +49,37 @@
   </tr>
   <tr>
     <td colspan="2">
-      <table width="100%" border="0" style="" id="skillQueueList">
+      <table width="100%" border="0" id="skillQueueList">
         {if $queue}
         {section name=qs loop=$queue}
-          <tr class="{cycle values='row,rowAlt'}">
-            <td width="75%" align="left">
-              <a href="#" onclick="showInfo('{$queue[qs].typeID}');return false;"><img src="{$site_url}/{$queue[qs].skillItem.icon.icon32}" class="i32" align="left" /></a>
-              {$queue[qs].skillItem.typename}
-              <span style="font-size: 0.9em"> <br />
-                {if $queue[qs].position > 0}
-                  <b>Start:</b> {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"} - 
-                {else}
-                  <b>Training</b> - 
-                {/if}
-                  <b>ETA:</b> {$queue[qs].remainingTime|formatTime}
-              </span>
-            </td>
-            <td width="25%" align="right">
+        <tr class="{cycle values='row,rowAlt'}">
+          <td width="75%" align="left">
+            <img src="{$site_url}/{$queue[qs].skillItem.icon.icon32}" class="i32 showInfo" data-typeid="{$queue[qs].typeID}" align="left" />
+            {$queue[qs].skillItem.typename}
+            <span style="font-size: 0.9em"> <br />
               {if $queue[qs].position > 0}
-                <img src="{$site_url}/templates/{$theme}/images/skills/queuelevel{$queue[qs].toLevel}.png" alt="{$queue[qs].skillItem.typename} - Queued Level {$queue[qs].toLevel|eveRoman}" title="{$queue[qs].skillItem.typename} - Queued Level {$queue[qs].toLevel|eveRoman}" />
+              <b>Start:</b> {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"} - 
               {else}
-                <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$queue[qs].toLevel}.png" alt="{$queue[qs].skillItem.typename} - Training to level {$queue[qs].toLevel|eveRoman}" title="{$queue[qs].skillItem.typename} - Training to level {$queue[qs].toLevel|eveRoman}" />
+              <b>Training</b> - 
               {/if}
-            </td>
-          </tr>
+              <b>ETA:</b> {$queue[qs].remainingTime|formatTime}
+            </span>
+          </td>
+          <td width="25%" align="right">
+            {if $queue[qs].position > 0}
+            <img src="{$site_url}/templates/{$theme}/images/skills/queuelevel{$queue[qs].toLevel}.png" alt="{$queue[qs].skillItem.typename} - Queued Level {$queue[qs].toLevel|eveRoman}" title="{$queue[qs].skillItem.typename} - Queued Level {$queue[qs].toLevel|eveRoman}" />
+            {else}
+            <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$queue[qs].toLevel}.png" alt="{$queue[qs].skillItem.typename} - Training to level {$queue[qs].toLevel|eveRoman}" title="{$queue[qs].skillItem.typename} - Training to level {$queue[qs].toLevel|eveRoman}" />
+            {/if}
+          </td>
+        </tr>
         {/section}
         {else}
-          <tr>
-            <td width="75%" align="center" colspan="2">
-              Queue empty!
-            </td>
-          </tr>
+        <tr>
+          <td width="75%" align="center" colspan="2">
+            Queue empty!
+          </td>
+        </tr>
         {/if}
       </table>
     </td>
@@ -94,139 +94,128 @@
   </tr>
   <tr>
     {foreach from=$character.attributes item=attr}
-      <tr>
-        <td align="right">
-          <b>{$attr.name|ucfirst}:</b>
-        </td>
-        <td>
-          {$attr.value|eveNum}<span style="font-size: 0.9em">
-          {if $attr.bonus}
-            &nbsp; (using {$attr.implant}: +{$attr.bonus})
-          {else}
-            &nbsp; (No implant)
-          {/if}
-          </span>
-        </td>
-      </tr>
-    {/foreach}
+  <tr>
+    <td align="right">
+      <b>{$attr.name|ucfirst}:</b>
+    </td>
+    <td>
+      {$attr.value|eveNum}<span style="font-size: 0.9em">
+        {if $attr.bonus}
+        &nbsp; (using {$attr.implant}: +{$attr.bonus})
+        {else}
+        &nbsp; (No implant)
+        {/if}
+      </span>
+    </td>
   </tr>
+  {/foreach}
+</tr>
 
 {if $character.faction}
-    <tr><td colspan="2">&nbsp;</td></tr>
-    <tr>
-      <th colspan="2">
-        <img src="{$site_url}/templates/{$theme}/images/menu/faction_32.png" align="absmiddle" />
-        <span style="font-size: 1.25em">Factional Warfare</span>
-      </th>
-    </tr>
-    <tr>
-      <td align="right"><b>Faction:</b></td>
-      <td>{$character.faction.factionName}</td>
-    </tr>
-    <tr>
-      <td align="right"><b>Enlisted:</b></td>
-      <td>{$character.faction.enlisted|date_format:"%d/%m/%Y"}</td>
-    </tr>
-    <tr>
-      <td align="right"><b>Current Rank:</b></td>
-      <td>{$character.faction.currentRank+1}/10</td>
-    </tr>
-    <tr>
-      <td align="right"><b>Total Kills:</b></td>
-      <td>{$character.faction.killsTotal|eveNumInt}</td>
-    </tr>
-    <tr>
-      <td align="right"><b>Total Victory Points</b></td>
-      <td>{$character.faction.killsTotal|eveNumInt}</td>
-    </tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr>
+  <th colspan="2">
+    <img src="{$site_url}/templates/{$theme}/images/menu/faction_32.png" align="absmiddle" />
+    <span style="font-size: 1.25em">Factional Warfare</span>
+  </th>
+</tr>
+<tr>
+  <td align="right"><b>Faction:</b></td>
+  <td>{$character.faction.factionName}</td>
+</tr>
+<tr>
+  <td align="right"><b>Enlisted:</b></td>
+  <td>{$character.faction.enlisted|date_format:"%d/%m/%Y"}</td>
+</tr>
+<tr>
+  <td align="right"><b>Current Rank:</b></td>
+  <td>{$character.faction.currentRank+1}/10</td>
+</tr>
+<tr>
+  <td align="right"><b>Total Kills:</b></td>
+  <td>{$character.faction.killsTotal|eveNumInt}</td>
+</tr>
+<tr>
+  <td align="right"><b>Total Victory Points</b></td>
+  <td>{$character.faction.killsTotal|eveNumInt}</td>
+</tr>
 {/if}
 
-  <tr><td colspan="2">&nbsp;</td></tr>
-  <tr>
-    <th colspan="2" style="cursor:pointer" onclick="toggleSkills()">
-      <img src="{$site_url}/templates/{$theme}/images/menu/skills_32.png" align="absmiddle" />
-      <span style="font-size: 1.25em">Known Skills</span>
-    </th>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <table width="100%" border="0" style="display:none;" id="knownSkillList">
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr>
+  <th colspan="2" style="cursor:pointer" id="toggleKnownSkillList">
+    <img src="{$site_url}/templates/{$theme}/images/menu/skills_32.png" align="absmiddle" />
+    <span style="font-size: 1.25em">Known Skills</span>
+  </th>
+</tr>
+<tr>
+  <td colspan="2">
+    <table width="100%" border="0" style="display:none;" id="knownSkillList">
       {foreach from=$skills item=grp}
-        <tr>
-          {math equation="(s / t) * 100" s=$grp.skillpoints t=$character.skillPoints assign=grpPercent}
-          <td class="sub" colspan="2">{$grp.name} <span style="font-size: 0.85em">- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
-        </tr>
-        {section name=sk loop=$grp.skills}
-          <tr class="{cycle values='row,rowAlt'}">
-            <td width="75%" align="left">
-              <a href="#" onclick="showInfo({$grp.skills[sk].typeID});return false;"><img src="{$site_url}/{$grp.skills[sk].skillItem.icon.icon32}" class="i32" align="absmiddle" /></a> {$grp.skills[sk].name}
-            </td>
-            <td width="25%" align="right">
-            {if $grp.skills[sk].training}
-              <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$grp.skills[sk].toLevel}.png" alt="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" title="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" />
-            {else}
-              <img src="{$site_url}/templates/{$theme}/images/skills/level{$grp.skills[sk].level}.png" alt="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" title="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" />
-            {/if}
-            </td>
-          </tr>
-        {/section}
+      <tr>
+        {math equation="(s / t) * 100" s=$grp.skillpoints t=$character.skillPoints assign=grpPercent}
+        <td class="sub" colspan="2">{$grp.name} <span style="font-size: 0.85em">- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
+      </tr>
+      {section name=sk loop=$grp.skills}
+      <tr class="{cycle values='row,rowAlt'}">
+        <td width="75%" align="left">
+          <img src="{$site_url}/{$grp.skills[sk].skillItem.icon.icon32}" class="i32 showInfo" data-typeid="{$grp.skills[sk].typeID}" align="absmiddle" /> {$grp.skills[sk].name}
+        </td>
+        <td width="25%" align="right">
+          {if $grp.skills[sk].training}
+          <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$grp.skills[sk].toLevel}.png" alt="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" title="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" />
+          {else}
+          <img src="{$site_url}/templates/{$theme}/images/skills/level{$grp.skills[sk].level}.png" alt="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" title="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" />
+          {/if}
+        </td>
+      </tr>
+      {/section}
       {/foreach}
-      </table>
-    </td>
-  </tr>
+    </table>
+  </td>
+</tr>
 
-  {if $certificates}
-  <tr><td colspan="2">&nbsp;</td></tr>
-  <tr>
-    <th colspan="2" style="cursor:pointer" onclick="toggleCerts()">
-      <img src="{$site_url}/templates/{$theme}/images/menu/certs_32.png" align="absmiddle" />
-      <span style="font-size: 1.25em">Certificates</span>
-    </th>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <table width="100%" border="0" style="display:none;" id="certificatesList">
+{if $certificates}
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr>
+  <th colspan="2" style="cursor:pointer" id="toggleCertificatesList">
+    <img src="{$site_url}/templates/{$theme}/images/menu/certs_32.png" align="absmiddle" />
+    <span style="font-size: 1.25em">Certificates</span>
+  </th>
+</tr>
+<tr>
+  <td colspan="2">
+    <table width="100%" border="0" style="display:none;" id="certificatesList">
       {foreach from=$certificates item=cat}
-        <tr>
-          <td class="sub" colspan="2">{$cat.name}</td>
-        </tr>
-        {foreach from=$cat.classes item=cls}
-          <tr class="{cycle values='row,rowAlt'}">
-            <td width="75%" align="left">
-<!--              <img src="{$site_url}/eveimages/icons/32/icon79_01.png" align="absmiddle" />-->
-              {$cls.name}
-            </td>
-            <td width="25%" align="right">
-              <img src="{$site_url}/templates/{$theme}/images/skills/level{$cls.grade}.png" alt="{$cls.name} - Grade {$cls.grade|eveRoman}" title="{$cls.name} - Grade {$cls.grade|eveRoman}" />
-            </td>
-          </tr>
-        {/foreach}
+      <tr>
+        <td class="sub" colspan="2">{$cat.name}</td>
+      </tr>
+      {foreach from=$cat.classes item=cls}
+      <tr class="{cycle values='row,rowAlt'}">
+        <td width="75%" align="left">
+          {$cls.name}
+        </td>
+        <td width="25%" align="right">
+          <img src="{$site_url}/templates/{$theme}/images/skills/level{$cls.grade}.png" alt="{$cls.name} - Grade {$cls.grade|eveRoman}" title="{$cls.name} - Grade {$cls.grade|eveRoman}" />
+        </td>
+      </tr>
       {/foreach}
-      </table>
-    </td>
-  </tr>
-  {/if}
+      {/foreach}
+    </table>
+  </td>
+</tr>
+{/if}
 
 </table>
 
-{literal}
-<script>
-  function toggleSkills() {
-    var st = document.getElementById('knownSkillList');
-    if (st.style.display == 'none') {
-      st.style.display = '';
-    } else {
-     st.style.display = 'none';
-   }
-  }
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#toggleKnownSkillList").click(function() {
+      $('#knownSkillList').toggle('fast');
+    });
 
-  function toggleCerts() {
-    var ct = document.getElementById('certificatesList');
-    if (ct.style.display == 'none') {
-      ct.style.display = '';
-    } else {
-     ct.style.display = 'none';
-   }
-  }
+    $("#toggleCertificatesList").click(function() {
+      $('#certificatesList').toggle('fast');
+    });
+  });
 </script>
-{/literal}
