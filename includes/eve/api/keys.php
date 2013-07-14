@@ -17,7 +17,11 @@ class eveKeyManager {
     }
     
     static function getKey($reference) {
-        return self::getInstance()->keys[$reference];
+        $result = null;
+        if (array_key_exists($reference, self::getInstance()->keys)) {
+            $result = self::getInstance()->keys[$reference];
+        }
+        return $result;
     }
 
     static function getCharacterKeys() {

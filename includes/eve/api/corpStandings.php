@@ -24,15 +24,13 @@ class eveCorporationStandingsList {
                         } else if ($standing['NPCCorporations'] == 'agents') {
                             $this->factions[] = $newStanding;
                         } else if ($standing['NPCCorporations'] == 'agents') {
-                            $this->$factions[] = $newStanding;
+                            $this->factions[] = $newStanding;
                         }
-                        $this->wallets[] = new eveCorporationWallet($wallet, $walletDivisions);
                     }
                 }
             }
         }
     }
-
 }
 
 class eveCorporationStanding {
@@ -46,7 +44,6 @@ class eveCorporationStanding {
         $this->fromName = (int) $standing['fromName'];
         $this->standing = (double) $standing['fromID'];
     }
-
 }
 
 ?>
