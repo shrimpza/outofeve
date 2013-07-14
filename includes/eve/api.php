@@ -20,10 +20,6 @@ require_once('apidb.php');
 require_once('apimarket.php');
 require_once('apiConstants.php');
 
-$cacheDelays = array(
-    101, 103, 115, 116, 117, 119
-);
-
 $GLOBALS['EVEAPI_ERRORS'] = array();
 
 class eveTimeOffset {
