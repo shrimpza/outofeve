@@ -19,11 +19,11 @@ class eveCorporationStandingsList {
                 foreach ($data->data->result->corporationNPCStandings->rowset as $standingGroup) {
                     foreach ($standingGroup->row as $standing) {
                         $newStanding = new eveCorporationStanding($standing);
-                        if ($standing['name'] == 'agents') {
+                        if ($standingGroup['name'] == 'agents') {
                             $this->agents[] = $newStanding;
-                        } else if ($standing['NPCCorporations'] == 'agents') {
-                            $this->factions[] = $newStanding;
-                        } else if ($standing['NPCCorporations'] == 'agents') {
+                        } else if ($standingGroup['name'] == 'NPCCorporations') {
+                            $this->npcCorps[] = $newStanding;
+                        } else if ($standingGroup['name'] == 'factions') {
                             $this->factions[] = $newStanding;
                         }
                     }
@@ -31,6 +31,7 @@ class eveCorporationStandingsList {
             }
         }
     }
+
 }
 
 class eveCorporationStanding {
@@ -41,9 +42,10 @@ class eveCorporationStanding {
 
     function eveCorporationStanding($standing) {
         $this->fromID = (int) $standing['fromID'];
-        $this->fromName = (int) $standing['fromName'];
-        $this->standing = (double) $standing['fromID'];
+        $this->fromName = (string) $standing['fromName'];
+        $this->standing = (double) $standing['standing'];
     }
+
 }
 
 ?>

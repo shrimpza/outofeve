@@ -90,7 +90,7 @@ class corporation extends Plugin {
                         }
                     }
 
-                    $n = array_push($members, $member);
+                    array_push($members, $member);
                     if (($_POST['title'] <> '') && ($member->title != $_POST['title'])) {
                         array_pop($members);
                     } else if (($_POST['system'] > 0) && ($sys->solarsystemid != $_POST['system'])) {
@@ -100,13 +100,21 @@ class corporation extends Plugin {
                     }
                 }
 
-                $members = objectToArray($members, array('DBManager', 'eveDB', 'eveCharacter'));
+                $members = objectToArray($members);
+            }
+            
+            if ($corpKey->hasAccess(CORP_Standings)) {
+                $standingList = new eveCorporationStandingsList($corpKey);
+                $standingList->load();
+                
+                $standings = objectToArray($standingList);
             }
 
             return $this->render('corporation', array(
                         'corp' => $corp,
                         'balances' => $bals,
                         'members' => $members,
+                        'standings' => $members,
                         'systems' => $systems,
                         'titles' => $titles,
                         'active' => $active,
