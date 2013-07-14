@@ -12,9 +12,9 @@ Requirements:
 
 Prerequesits:
   MySQL Eve static data dump 
-    (https://forums.eveonline.com/default.aspx?g=posts&t=205274)
+    (https://forums.eveonline.com/default.aspx?g=posts&t=252031)
   Icons and Types images from the Eve Community Toolkit 
-    (http://community.eveonline.com/community/toolkit.asp)
+    (http://community.eveonline.com/community/fansites/toolkit/)
 
 *******************************************************************************
 

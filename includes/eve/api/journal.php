@@ -7,7 +7,7 @@ function journalSort($a, $b) {
 function lowestJournalRef($journalItems) {
     $res = 0;
     for ($i = 0; $i < count($journalItems); $i++) {
-        if (($res == 0) || ($journalItems[$i]->journalID < $ref)) {
+        if (($res == 0) || ($journalItems[$i]->journalID < $res)) {
             $res = $journalItems[$i]->journalID;
         }
     }
@@ -19,6 +19,7 @@ class eveJournal {
     var $journal = array();
     var $key = null;
     var $accountKey = 0;
+    static $refTypes = array();
 
     function eveJournal($key, $accountKey = 0) {
         $this->key = $key;
@@ -61,6 +62,17 @@ class eveJournal {
         }
     }
 
+    static function refType($refTypeId) {
+        $refTypeId = (string) $refTypeId;
+        if (!isset(eveJournal::$refTypes[$refTypeId])) {
+            $eveRefTypes = new apiRequest('eve/RefTypes.xml.aspx');
+            foreach ($eveRefTypes->data->result->rowset->row as $refType) {
+                eveJournal::$refTypes[(string) $refType['refTypeID']] = (string) $refType['refTypeName'];
+            }
+        }
+        return eveJournal::$refTypes[$refTypeId];
+    }
+
 }
 
 class eveJournalItem {
@@ -97,7 +109,7 @@ class eveJournalItem {
         $this->taxReceiverID = (string) $item['taxReceiverID'];
         $this->taxAmount = (float) $item['taxAmount'];
 
-        $this->refType = eveDB::getInstance()->refType($this->refTypeID);
+        $this->refType = eveJournal::refType($this->refTypeID);
     }
 
 }
