@@ -114,7 +114,7 @@ class corporation extends Plugin {
                         'corp' => $corp,
                         'balances' => $bals,
                         'members' => $members,
-                        'standings' => $members,
+                        'standings' => $standings,
                         'systems' => $systems,
                         'titles' => $titles,
                         'active' => $active,

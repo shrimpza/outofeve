@@ -1,0 +1,25 @@
+<div>
+  <div id="standingsFactionDiv">
+    {include file="standings_list.html" standingGroup=$standings.factions min=0 max=9999}
+    {include file="standings_list.html" standingGroup=$standings.factions min=-9999 max=0}
+  </div>
+
+  <div id="standingsCorpsDiv">
+    {include file="standings_list.html" standingGroup=$standings.npcCorps min=0 max=9999}
+    {include file="standings_list.html" standingGroup=$standings.npcCorps min=-9999 max=0}
+  </div>
+
+  <div id="standingsAgentsDiv">
+    {include file="standings_list.html" standingGroup=$standings.agents min=0 max=9999}
+    {include file="standings_list.html" standingGroup=$standings.agents min=-9999 max=0}
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#toggleStandingsFaction').css('cursor', 'pointer').click(function() {
+      $('#standingsFactionDiv').toggle('fast');
+    });
+
+  });
+</script>

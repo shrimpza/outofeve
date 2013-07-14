@@ -1,5 +1,9 @@
 <?php
 
+function standingSort($a, $b) {
+    return ($a->standing > $b->standing) ? -1 : 1;
+}
+
 class eveCorporationStandingsList {
 
     var $agents = array();
@@ -29,6 +33,10 @@ class eveCorporationStandingsList {
                     }
                 }
             }
+            
+            usort($this->agents, 'standingSort');
+            usort($this->npcCorps, 'standingSort');
+            usort($this->factions, 'standingSort');
         }
     }
 
