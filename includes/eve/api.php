@@ -159,7 +159,7 @@ class apiRequest {
                         /**
                          * Everything went well, save the result to cache if needed.
                          */
-                        if (array_key_exists($method, $GLOBALS['config']['eve']['cache_override'])) {
+                        if ($GLOBALS['config']['eve']['cache_override'] && array_key_exists($method, $GLOBALS['config']['eve']['cache_override'])) {
                             $this->saveCache($cacheFile, $apiResponse, time() + $GLOBALS['config']['eve']['cache_override'][$method]);
                         } else if (isset($result->cachedUntil)) {
                             $this->saveCache($cacheFile, $apiResponse, strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd);
