@@ -29,77 +29,77 @@ class itemGraphic {
         }
 
         if (isset($typeId) && $typeId) {
-            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 16);
-            if (file_exists($basePath . $name)) {
-                $this->icon16 = $name;
-                $this->icon32 = $name;
-                $this->icon64 = $name;
-                $this->icon128 = $name;
+            $name16 = sprintf($GLOBALS['config']['images']['types'], $typeId, 16);
+            if (file_exists($basePath . $name16)) {
+                $this->icon16 = $name16;
+                $this->icon32 = $name16;
+                $this->icon64 = $name16;
+                $this->icon128 = $name16;
             }
 
-            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 32);
-            if (file_exists($basePath . $name)) {
-                $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
-                $this->icon32 = $name;
-                $this->icon64 = $name;
-                $this->icon128 = $name;
+            $name32 = sprintf($GLOBALS['config']['images']['types'], $typeId, 32);
+            if (file_exists($basePath . $name32)) {
+                $this->icon16 = empty($this->icon16) ? $name32 : $this->icon16;
+                $this->icon32 = $name32;
+                $this->icon64 = $name32;
+                $this->icon128 = $name32;
             }
 
-            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 64);
-            if (file_exists($basePath . $name)) {
-                $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
-                $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
-                $this->icon64 = $name;
-                $this->icon128 = $name;
+            $name64 = sprintf($GLOBALS['config']['images']['types'], $typeId, 64);
+            if (file_exists($basePath . $name64)) {
+                $this->icon16 = empty($this->icon16) ? $name64 : $this->icon16;
+                $this->icon32 = empty($this->icon32) ? $name64 : $this->icon32;
+                $this->icon64 = $name64;
+                $this->icon128 = $name64;
             }
 
-            $name = sprintf($GLOBALS['config']['images']['types'], $typeId, 128);
-            if (file_exists($basePath . $name)) {
-                $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
-                $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
-                $this->icon64 = empty($this->icon64) ? $name : $this->icon64;
-                $this->icon128 = $name;
+            $name128 = sprintf($GLOBALS['config']['images']['types'], $typeId, 128);
+            if (file_exists($basePath . $name128)) {
+                $this->icon16 = empty($this->icon16) ? $name128 : $this->icon16;
+                $this->icon32 = empty($this->icon32) ? $name128 : $this->icon32;
+                $this->icon64 = empty($this->icon64) ? $name128 : $this->icon64;
+                $this->icon128 = $name128;
             }
         }
 
         if ($iconParts) {
             if (!isset($this->icon16)) {
-                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 16);
-                if (file_exists($basePath . $name)) {
-                    $this->icon16 = $name;
-                    $this->icon32 = $name;
-                    $this->icon64 = $name;
-                    $this->icon128 = $name;
+                $name16 = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 16);
+                if (file_exists($basePath . $name16)) {
+                    $this->icon16 = $name16;
+                    $this->icon32 = $name16;
+                    $this->icon64 = $name16;
+                    $this->icon128 = $name16;
                 }
             }
 
             if (!isset($this->icon32)) {
-                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 32);
-                if (file_exists($basePath . $name)) {
-                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
-                    $this->icon32 = $name;
-                    $this->icon64 = $name;
-                    $this->icon128 = $name;
+                $name32 = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 32);
+                if (file_exists($basePath . $name32)) {
+                    $this->icon16 = empty($this->icon16) ? $name32 : $this->icon16;
+                    $this->icon32 = $name32;
+                    $this->icon64 = $name32;
+                    $this->icon128 = $name32;
                 }
             }
 
             if (!isset($this->icon64)) {
-                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 64);
-                if (file_exists($basePath . $name)) {
-                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
-                    $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
-                    $this->icon64 = $name;
-                    $this->icon128 = $name;
+                $name64 = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 64);
+                if (file_exists($basePath . $name64)) {
+                    $this->icon16 = empty($this->icon16) ? $name64 : $this->icon16;
+                    $this->icon32 = empty($this->icon32) ? $name64 : $this->icon32;
+                    $this->icon64 = $name64;
+                    $this->icon128 = $name64;
                 }
             }
 
             if (!isset($this->icon128)) {
-                $name = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 128);
-                if (file_exists($basePath . $name)) {
-                    $this->icon16 = empty($this->icon16) ? $name : $this->icon16;
-                    $this->icon32 = empty($this->icon32) ? $name : $this->icon32;
-                    $this->icon64 = empty($this->icon64) ? $name : $this->icon64;
-                    $this->icon128 = $name;
+                $name128 = sprintf($GLOBALS['config']['images']['icons'], $iconParts[0], $iconParts[1], 128);
+                if (file_exists($basePath . $name128)) {
+                    $this->icon16 = empty($this->icon16) ? $name128 : $this->icon16;
+                    $this->icon32 = empty($this->icon32) ? $name128 : $this->icon32;
+                    $this->icon64 = empty($this->icon64) ? $name128 : $this->icon64;
+                    $this->icon128 = $name128;
                 }
             }
         }
@@ -110,23 +110,6 @@ class itemGraphic {
 class eveDB {
 
     var $cache = array();
-    var $typeNameCache = array();
-    var $itemCache = array();
-    var $itemGroupCache = array();
-    var $itemCategoryCache = array();
-    var $itemFlagCache = array();
-    var $blueprintCache = array();
-    var $activityCache = array();
-    var $stationCache = array();
-    var $solarSystemCache = array();
-    var $regionCache = array();
-    var $celestialCache = array();
-    var $flagTextCache = array();
-    var $industryCompleteTextCache = array();
-    var $certificateCache = array();
-    var $towerFuelCache = array();
-    var $outpostList = null;
-    var $corpRoleList = array();
     var $db = null;
     static $instance = null;
 
@@ -312,11 +295,7 @@ class eveDB {
         $station = $this->getCache(__FUNCTION__, $id, 'eveStation');
 
         if ($station == null || $station->stationid == 0) {
-            if ($this->outpostList == null) {
-                $this->loadOutpostList();
-            }
-
-            $outpost = $this->outpostList->getOutpost($id);
+            $outpost = eveOutpostList::getOutpost($stationId);
             if ($outpost) {
                 $this->putCache(__FUNCTION__, $id, $outpost);
                 $station = $this->getCache(__FUNCTION__, $id);
@@ -436,17 +415,6 @@ class eveDB {
         return $result;
     }
 
-    function loadOutpostList() {
-        if ($this->outpostList == null) {
-            $outpostData = new apiRequest('eve/ConquerableStationList.xml.aspx');
-            if ($outpostData->data) {
-                if (!$outpostData->data->error) {
-                    $this->outpostList = new eveOutpostList($outpostData->data->result);
-                }
-            }
-        }
-    }
-
     function eveFuelRequirements($towerId) {
         $towerId = (string) $towerId;
 
@@ -466,11 +434,11 @@ class eveDB {
     }
 
     function corpRoleList() {
-        if (count($this->corpRoleList) == 0) {
-            $this->corpRoleList = $this->db->QueryA('select roleBit, roleName from crpRoles order by roleBit', array());
+        if ($this->getCache(__FUNCTION__, 0) == null) {
+            $this->putCache(__FUNCTION__, 0, $this->db->QueryA('select roleBit, roleName from crpRoles order by roleBit', array()));
         }
 
-        return $this->corpRoleList;
+        return $this->getCache(__FUNCTION__, 0);
     }
 
     function eveNpcCorp($id) {
