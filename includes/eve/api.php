@@ -16,6 +16,7 @@ require_once('api/character.php');
 require_once('api/corporation.php');
 require_once('api/corpStandings.php');
 require_once('api/starbase.php');
+require_once('api/outpost.php');
 require_once('apidb.php');
 require_once('apidbClasses.php');
 require_once('apimarket.php');
