@@ -465,7 +465,7 @@ class eveAgent {
     var $station = null;
     var $agentName = '';
 
-    function eveFaction($id) {
+    function eveAgent($id) {
         $res = eveDB::getInstance()->db->QueryA('select agentid, divisionid, corporationid, locationid, level, agenttypeid, islocator
                                              from agtAgents
                                              where agentid = ?', array($id));
@@ -476,10 +476,29 @@ class eveAgent {
         }
 
         $this->station = eveDB::getInstance()->eveStation($this->locationid);
-
         $this->agentName = getCharacterName($id);
-        
-        // TODO load up division and agent type
+        $this->division = eveDB::getInstance()->eveNpcDivision($this->divisionid);
+        $this->agentType = eveDB::getInstance()->agentTypeText($this->agenttypeid);
+    }
+
+}
+
+class eveNpcDivision {
+
+    var $divisionid = 0;
+    var $divisionname = '';
+    var $description = '';
+    var $leadertype = '';
+
+    function eveNpcDivision($id) {
+        $res = eveDB::getInstance()->db->QueryA('select divisionid, divisionname, description, leadertype
+                                             from crpNPCDivisions
+                                             where divisionID = ?', array($id));
+        if ($res) {
+            foreach ($res[0] as $var => $val) {
+                $this->$var = $val;
+            }
+        }
     }
 
 }

@@ -452,7 +452,24 @@ class eveDB {
     function eveAgent($id) {
         return $this->getCache(__FUNCTION__, $id, 'eveAgent');
     }
+    
+    function eveNpcDivision($id) {
+        return $this->getCache(__FUNCTION__, $id, 'eveNpcDivision');
+    }
 
+    function agentTypeText($id) {
+        $id = (string) $id;
+
+        if ($this->getCache(__FUNCTION__, $id) == null) {
+            $res = $this->db->QueryA('select agenttype from agtAgentTypes where agentTypeId = ?', array($id));
+            if ($res) {
+                $this->putCache(__FUNCTION__, $id, $res[0]['agenttype']);
+            }
+        }
+
+        return $this->getCache(__FUNCTION__, $id);
+    }
+    
 }
 
 ?>
