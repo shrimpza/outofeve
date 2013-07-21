@@ -155,17 +155,6 @@
 
     </td>
   </tr>
-
-  <tr id="toggleStandings">
-    <th colspan="2">Standings</th>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <div id="standingsDiv">
-        {include file="standings.html" standings=$standings}
-      </div>
-    </td>
-  </tr>
 </table>
 
 <script>
@@ -176,10 +165,5 @@
         $('#' + $(this).data('memberid')).toggle('fast');
       });
     });
-
-    $('#toggleStandings').css('cursor', 'pointer').click(function() {
-      $('#standingsDiv').toggle('fast');
-    });
-
   });
 </script>

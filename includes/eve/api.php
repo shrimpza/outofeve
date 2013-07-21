@@ -133,7 +133,7 @@ class apiRequest {
                     $result = new SimpleXMLElement($apiResponse);
                 } catch (Exception $e) {
                     $result = false;
-                    $this->error = new apiError($e->getCode(), $e->getMessage(), $method);
+                    $this->error = new apiError($e->getCode(), 'XML Error: ' . $e->getMessage(), $method);
                 }
 
                 /**
@@ -144,7 +144,7 @@ class apiRequest {
                      * Received an error from the API, try to fall back to cached data which may work...
                      */
                     if (isset($result->error) && !isset($cacheResult->error)) {
-                        $this->error = new apiError((int) $result->error['code'], (string) $result->error, $method);
+                        $this->error = new apiError((int) $result->error['code'], 'API Error: ' . (string) $result->error, $method);
                         $cacheResult = $this->checkCache($cacheFile, true);
                         if ($cacheResult) {
                             if (in_array($this->error->errorCode, $GLOBALS['cacheDelays'])) {
@@ -165,7 +165,7 @@ class apiRequest {
                     }
                 }
             } else {
-                $this->error = new apiError(1, 'HTTP error: ' + $httpResponse['http_code'], $method);
+                $this->error = new apiError(1, 'HTTP error: ' . $httpResponse['http_code'], $method);
             }
         } else {
             $result = $cacheResult;

@@ -1,24 +1,35 @@
 <div>
-  <div id="standingsFactionDiv">
+  <div class="groupHead shadeDark borderDark textLight" id="standingsFactionToggle">Factions</div>
+  <div id="standingsFaction" style="display:none">
     {include file="standings_list.html" standingGroup=$standings.factions min=0 max=9999}
     {include file="standings_list.html" standingGroup=$standings.factions min=-9999 max=0}
   </div>
 
-  <div id="standingsCorpsDiv">
+  <div class="groupHead shadeDark borderDark textLight" id="standingsCorpToggle">Corporations</div>
+  <div id="standingsCorp" style="display:none">
     {include file="standings_list.html" standingGroup=$standings.npcCorps min=0 max=9999}
     {include file="standings_list.html" standingGroup=$standings.npcCorps min=-9999 max=0}
   </div>
 
-  <div id="standingsAgentsDiv">
-    {include file="standings_list.html" standingGroup=$standings.agents min=0 max=9999}
-    {include file="standings_list.html" standingGroup=$standings.agents min=-9999 max=0}
+  <div class="groupHead shadeDark borderDark textLight" id="standingsAgentsToggle">Agents</div>
+  <div id="standingsAgents" style="display:none">
+    {include file="standings_agents.html" standingGroup=$standings.agents min=0 max=9999}
+    {include file="standings_agents.html" standingGroup=$standings.agents min=-9999 max=0}
   </div>
 </div>
 
 <script>
   $(document).ready(function() {
-    $('#toggleStandingsFaction').css('cursor', 'pointer').click(function() {
-      $('#standingsFactionDiv').toggle('fast');
+    $('#standingsFactionToggle').css('cursor', 'pointer').click(function() {
+      $('#standingsFaction').toggle('fast');
+    });
+
+    $('#standingsCorpToggle').css('cursor', 'pointer').click(function() {
+      $('#standingsCorp').toggle('fast');
+    });
+
+    $('#standingsAgentsToggle').css('cursor', 'pointer').click(function() {
+      $('#standingsAgents').toggle('fast');
     });
 
   });

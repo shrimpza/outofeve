@@ -1,7 +1,7 @@
 <?php
 
 function getCharacterName($id) {
-    $charData = new apiRequest('eve/CharacterName.xml.aspx', array(), array('ids' => $id));
+    $charData = new apiRequest('eve/CharacterName.xml.aspx', null, false, array('ids' => $id));
     if (!$charData->data) {
         return 'Lookup Error';
     }

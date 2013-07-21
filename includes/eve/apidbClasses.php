@@ -404,6 +404,7 @@ class eveNpcCorp {
     var $description = '';
     var $corporationName = '';
     var $icon = null;
+    var $faction = null;
     var $solarSystem = null;
 
     function eveNpcCorp($id) {
@@ -416,10 +417,11 @@ class eveNpcCorp {
             }
         }
 
-        $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
-        $this->solarSystem = eveDB::getInstance()->eveSolarSystem($this->solarsystemid);
-
         $this->corporationName = getCharacterName($id);
+
+        $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
+        $this->faction = eveDB::getInstance()->eveFaction($this->factionid);
+        $this->solarSystem = eveDB::getInstance()->eveSolarSystem($this->solarsystemid);
     }
 
 }
@@ -460,6 +462,7 @@ class eveAgent {
     var $level = 0;
     var $agenttypeid = 0;
     var $islocator = 0;
+    var $corporation = null;
     var $division = null;
     var $agentType = null;
     var $station = null;
@@ -476,11 +479,15 @@ class eveAgent {
         }
 
         $this->station = eveDB::getInstance()->eveStation($this->locationid);
-        $this->agentName = getCharacterName($id);
+        $this->corporation = eveDB::getInstance()->eveNpcCorp($this->corporationid);
         $this->division = eveDB::getInstance()->eveNpcDivision($this->divisionid);
         $this->agentType = eveDB::getInstance()->agentTypeText($this->agenttypeid);
     }
 
+    function getName() {
+        $this->agentName = getCharacterName($id);
+        return $this->agentName;
+    }
 }
 
 class eveNpcDivision {
