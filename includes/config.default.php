@@ -79,6 +79,7 @@
                                         'showinfo',
                                         'character',
                                         'corporation',
+                                        'standings',
                                         'mail',
                                         'assets',
                                         'transactions',

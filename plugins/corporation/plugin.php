@@ -11,10 +11,6 @@ class corporation extends Plugin {
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id) && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_CorporationSheet)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Corporation', '?module=corporation', 'corp');
         }
-
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_Standings)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Standings', '?module=corporation&standings=1', 'standings');
-        }
     }
 
     function getContent() {
@@ -23,11 +19,7 @@ class corporation extends Plugin {
             $corporation = new eveCorporation($corpKey);
             $corporation->load();
 
-            if (isset($_GET['standings'])) {
-                return $this->standings($corporation, $corpKey);
-            } else {
-                return $this->corpSheet($corporation, $corpKey);
-            }
+            return $this->corpSheet($corporation, $corpKey);
         } else {
             return '<h1>No corporation!</h1>';
         }
@@ -121,31 +113,6 @@ class corporation extends Plugin {
                     'titles' => $titles,
                     'active' => $active,
                     'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
-    }
-
-    function standings($corporation, $corpKey) {
-        if ($corpKey->hasAccess(CORP_Standings)) {
-            $standingList = new eveCorporationStandingsList($corpKey);
-            $standingList->load();
-
-            for ($i = 0; $i < count($standingList->factions); $i++) {
-                $standingList->factions[$i]->faction = eveDB::getInstance()->eveFaction($standingList->factions[$i]->fromID);
-            }
-
-            for ($i = 0; $i < count($standingList->agents); $i++) {
-                $standingList->agents[$i]->agent = eveDB::getInstance()->eveAgent($standingList->agents[$i]->fromID);
-            }
-
-            for ($i = 0; $i < count($standingList->npcCorps); $i++) {
-                $standingList->npcCorps[$i]->corp = eveDB::getInstance()->eveNpcCorp($standingList->npcCorps[$i]->fromID);
-            }
-
-            $standings = objectToArray($standingList);
-        }
-        return $this->render('standings', array(
-                    'corp' => objectToArray($corporation),
-                    'standings' => $standings,
-        ));
     }
 
 }
