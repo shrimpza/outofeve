@@ -1,7 +1,11 @@
 .groupHead {
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1.1em;
-    padding: 6px;    
-    margin: 2px 0 2px 0;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 6px;    
+  margin: 2px 0 2px 0;
+}
+
+.sub {
+  font-size: 1em;
 }
