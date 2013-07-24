@@ -11,7 +11,7 @@
   {if $s.standing >= $min && $s.standing < $max}
   <tr>
     <td><img src="http://image.eveonline.com/Corporation/{$s.corp.corporationid}_32.png" class="i32" alt="{$s.fromName}" align="absmiddle" /> {$s.fromName}</td>
-    <td><img src="http://image.eveonline.com/Alliance/{$s.corp.faction.factionid}_32.png" class="i32" align="absmiddle" alt="{$s.corp.faction.factionname}" /> {$s.corp.faction.factionname}</td>
+    <td><img src="http://image.eveonline.com/Alliance/{$s.corp.faction.factionid}_32.png" class="i32" align="absmiddle" alt="{$s.corp.faction.factionname}" /> <span class="sFaction">{$s.corp.faction.factionname}</span></td>
     <td class="{if $s.standing > 0}good{else}bad{/if}" align="right">{$s.standing|eveNum}</td>
   </tr>
   {/if}

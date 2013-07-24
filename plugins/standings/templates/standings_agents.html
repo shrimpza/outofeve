@@ -12,9 +12,18 @@
   {foreach from=$standingGroup item=s}
   {if $s.standing >= $min && $s.standing < $max}
   <tr>
-    <td><img src="http://image.eveonline.com/Character/{$s.fromID}_32.jpg" class="i32" align="absmiddle" alt="{$s.fromName}" /> {$s.fromName}</td>
-    <td><img src="http://image.eveonline.com/Corporation/{$s.agent.corporation.corporationid}_32.png" class="i32" alt="{$s.agent.corporation.corporationName}" align="absmiddle" /> {$s.agent.corporation.corporationName}</td>
-    <td><img src="http://image.eveonline.com/Alliance/{$s.agent.corporation.faction.factionid}_32.png" class="i32" alt="{$s.agent.corporation.faction.factionname}" align="absmiddle" /> {$s.agent.corporation.faction.factionname}</td>
+    <td>
+      <img src="http://image.eveonline.com/Character/{$s.fromID}_32.jpg" class="i32" align="absmiddle" alt="{$s.fromName}" /> 
+      {$s.fromName}
+    </td>
+    <td>
+      <img src="http://image.eveonline.com/Corporation/{$s.agent.corporation.corporationid}_32.png" class="i32" alt="{$s.agent.corporation.corporationName}" align="absmiddle" /> 
+      {$s.agent.corporation.corporationName}
+    </td>
+    <td>
+      <img src="http://image.eveonline.com/Alliance/{$s.agent.corporation.faction.factionid}_32.png" class="i32" alt="{$s.agent.corporation.faction.factionname}" align="absmiddle" /> 
+      <span class="sFaction">{$s.agent.corporation.faction.factionname}</span>
+    </td>
     <td align="center">{$s.agent.level}</td>
     <td class="{if $s.standing > 0}good{else}bad{/if}" align="right">{$s.standing|eveNum}</td>
   </tr>

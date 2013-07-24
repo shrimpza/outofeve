@@ -1,3 +1,11 @@
+<div class="listOptions">
+  <span>Faction: 
+    <select id="factionFilter">
+      <option value="0">All</option>
+    </select>
+  </span>
+</div>
+
 <div>
   <div class="groupHead shadeDark borderDark textLight" id="standingsFactionToggle">Factions</div>
   <div id="standingsFaction" style="display:none">
@@ -32,5 +40,27 @@
       $('#standingsAgents').toggle('fast');
     });
 
+    buildFactionList();
   });
+
+  function buildFactionList() {
+    var factions = new Array();
+
+    $('.sFaction').each(function() {
+      if (jQuery.inArray($(this).text(), factions) < 0) {
+        factions.push($(this).text());
+      }
+    });
+    
+    factions.sort();
+    
+    var factionOptions = new Array();
+    factionOptions.push($('<option/>').val('').text('All'));
+
+    for (var i = 0; i < factions.length; i++) {
+      factionOptions.push($('<option/>').val(factions[i]).text(factions[i]));
+    }
+    
+    $('#factionFilter').append(factionOptions);
+  }
 </script>
