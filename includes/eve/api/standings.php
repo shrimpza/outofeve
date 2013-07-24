@@ -4,25 +4,31 @@ function standingSort($a, $b) {
     return ($a->standing > $b->standing) ? -1 : 1;
 }
 
-class eveCorporationStandingsList {
+class eveStandingsList {
 
     var $agents = array();
     var $npcCorps = array();
     var $factions = array();
     var $key;
 
-    function eveCorporationStandingsList($key) {
+    function eveStandingsList($key) {
         $this->key = $key;
     }
 
     function load() {
-        if ($this->key->hasAccess(CORP_Standings)) {
-            $data = new apiRequest('corp/Standings.xml.aspx', $this->key, $this->key->getCharacter());
+        if (count($this->factions) == 0) {
+            if ($this->key->isCorpKey() && $this->key->hasAccess(CORP_Standings)) {
+                $resultKey = 'corporationNPCStandings';
+                $data = new apiRequest('corp/Standings.xml.aspx', $this->key, $this->key->getCharacter());
+            } else if ($this->key->hasAccess(CHAR_Standings)) {
+                $resultKey = 'characterNPCStandings';
+                $data = new apiRequest('char/Standings.xml.aspx', $this->key, $this->key->getCharacter());
+            }
 
             if ((!$data->error) && ($data->data)) {
-                foreach ($data->data->result->corporationNPCStandings->rowset as $standingGroup) {
+                foreach ($data->data->result->$resultKey->rowset as $standingGroup) {
                     foreach ($standingGroup->row as $standing) {
-                        $newStanding = new eveCorporationStanding($standing);
+                        $newStanding = new eveStanding($standing);
                         if ($standingGroup['name'] == 'agents') {
                             $this->agents[] = $newStanding;
                         } else if ($standingGroup['name'] == 'NPCCorporations') {
@@ -42,13 +48,13 @@ class eveCorporationStandingsList {
 
 }
 
-class eveCorporationStanding {
+class eveStanding {
 
     var $fromID = 0;
     var $fromName = '';
     var $standing = 0;
 
-    function eveCorporationStanding($standing) {
+    function eveStanding($standing) {
         $this->fromID = (int) $standing['fromID'];
         $this->fromName = (string) $standing['fromName'];
         $this->standing = (double) $standing['standing'];

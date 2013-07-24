@@ -8,7 +8,8 @@ class corporation extends Plugin {
     function corporation($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_CorporationSheet)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) 
+                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_CorporationSheet)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Corporation', '?module=corporation', 'corp');
         }
     }
