@@ -40,6 +40,10 @@
       $('#standingsAgents').toggle('fast');
     });
 
+    $('#factionFilter').change(function() {
+      filterFactions($(this).val());
+    });
+
     buildFactionList();
   });
 
@@ -62,5 +66,15 @@
     }
     
     $('#factionFilter').append(factionOptions);
+  }
+
+  function filterFactions(faction) {
+    $('.sFaction').each(function() {
+      if (faction == '' || $(this).text() == faction) {
+        $(this).parents('tr').first().show('fast');
+      } else {
+        $(this).parents('tr').first().hide('fast');
+      }
+    });
   }
 </script>
