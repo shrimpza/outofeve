@@ -8,13 +8,11 @@ class journal extends Plugin {
     function journal($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletJournal)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id) && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletJournal)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Journal', '?module=journal', 'journal');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletJournal)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletJournal)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Journal', '?module=journal&corp=1', 'journal');
         }
     }
@@ -41,7 +39,7 @@ class journal extends Plugin {
             }
         }
 
-        $journal = objectToArray($j->journal, array('DBManager', 'eveDB'));
+        $journal = objectToArray($j->journal);
 
         if (!isset($_GET['daycount'])) {
             $dayCount = 7;
@@ -153,6 +151,10 @@ class journal extends Plugin {
                 $prevPage = 0;
             }
 
+            foreach ($journal as $k => $j) {
+                $journal[$k]['reason'] = $this->getJornalReason($j);
+            }
+
             $vars = array('journal' => $journal, 'pageCount' => $pageCount,
                 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
                 'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
@@ -170,12 +172,66 @@ class journal extends Plugin {
         }
     }
 
+    function getJornalReason($j) {
+        $reason = $j['reason'];
+
+        switch ($j['refTypeID']) {
+            case 1:
+                // player trading, station of trade
+                $station = eveDB::getInstance()->eveStation($j['argID1']);
+                $reason = 'Station: ' . $station->stationname . ' in ' . $station->solarSystem->solarsystemname;
+                break;
+            case 10:
+                // donation, user text
+                $reason = 'Donation reason: ' . $j['reason'];
+                break;
+            case 19:
+                // insurance, ship destroyed
+                $ship = eveDB::getInstance()->eveItem($j['argID1']);
+                $reason = 'Ship: ' . $ship->typename;
+                break;
+            case 35:
+                // contact fee
+                $reason = 'Contacted: ' . $j['argName1'];
+                break;
+            case 37:
+                // corp withdrawel
+                $reason = 'Withdrawel reason: ' . $j['reason'];
+                break;
+            case 46:
+                // broker fee
+                $reason = 'System: ' . $j['argName1'];
+                break;
+            case 56:
+                // manufacturing
+                $reason = 'Job: ' . $j['argName1']; // TODO maybe get description of job via eveIndustryJobList
+                break;
+            case 85:
+                // rat kills
+                $kills = explode(',', $j['reason']);
+                $reason = '';
+                foreach ($kills as $k) {
+                    if (empty($k)) {
+                    } else if ($k == '...') {
+                        $reason .= '...';
+                    } else {
+                        $kill = explode(':', $k);
+                        $npc = eveDB::getInstance()->eveItem($kill[0]);
+                        $reason .= $kill[1] . ' x ' . $npc->typename . ' &#10;';
+                    }
+                }
+                break;
+            default:
+                $reason = $j['reason'];
+        }
+
+        return $reason;
+    }
+
 }
 
 function journalTimeRevSort($a, $b) {
-    if ($a['date'] == $b['date'])
-        return 0;
-    return ($a['date'] < $b['date']) ? -1 : 1;
+    return ($a['date'] == $b['date']) ? 0 : ($a['date'] < $b['date']) ? -1 : 1;
 }
 
 ?>

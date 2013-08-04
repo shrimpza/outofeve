@@ -15,7 +15,7 @@ class eveMailingList {
 
     function load() {
         if ($this->key->hasAccess(CHAR_MailingLists)) {
-            if (count($this->mail) == 0) {
+            if (count($this->lists) == 0) {
                 $data = new apiRequest('char/MailingLists.xml.aspx', $this->key, $this->key->getCharacter());
                 if ((!$data->error) && ($data->data)) {
                     foreach ($data->data->result->rowset->row as $list) {
