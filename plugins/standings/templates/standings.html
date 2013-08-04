@@ -6,37 +6,38 @@
 </div>
 
 <div>
-  <div class="groupHead shadeDark borderDark textLight" id="standingsFactionToggle">Factions</div>
-  <div id="standingsFaction" style="display:none">
-    {include file="standings_factions.html" standingGroup=$standings.factions min=0 max=100 title="Liked By"}
-    {include file="standings_factions.html" standingGroup=$standings.factions min=-100 max=0 title="Disliked By"}
+  <div class="standingGroup">
+    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsFaction">Factions</div>
+    <div id="standingsFaction" style="display:none">
+      {include file="standings_factions.html" standingGroup=$standings.factions min=0 max=100 title="Liked By"}
+      {include file="standings_factions.html" standingGroup=$standings.factions min=-100 max=0 title="Disliked By"}
+    </div>
   </div>
 
-  <div class="groupHead shadeDark borderDark textLight" id="standingsCorpToggle">Corporations</div>
-  <div id="standingsCorp" style="display:none">
-    {include file="standings_corps.html" standingGroup=$standings.npcCorps min=0 max=100 title="Liked By"}
-    {include file="standings_corps.html" standingGroup=$standings.npcCorps min=-100 max=0 title="Disliked By"}
+  <div class="standingGroup">
+    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsCorp">Corporations</div>
+    <div id="standingsCorp" style="display:none">
+      {include file="standings_corps.html" standingGroup=$standings.npcCorps min=0 max=100 title="Liked By"}
+      {include file="standings_corps.html" standingGroup=$standings.npcCorps min=-100 max=0 title="Disliked By"}
+    </div>
   </div>
 
-  <div class="groupHead shadeDark borderDark textLight" id="standingsAgentsToggle">Agents</div>
-  <div id="standingsAgents" style="display:none">
-    {include file="standings_agents.html" standingGroup=$standings.agents min=0 max=100 title="Liked By"}
-    {include file="standings_agents.html" standingGroup=$standings.agents min=-100 max=0 title="Disliked By"}
+  <div class="standingGroup">
+    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsAgents">Agents</div>
+    <div id="standingsAgents" style="display:none">
+      {include file="standings_agents.html" standingGroup=$standings.agents min=0 max=100 title="Liked By"}
+      {include file="standings_agents.html" standingGroup=$standings.agents min=-100 max=0 title="Disliked By"}
+    </div>
   </div>
 </div>
 
 <script>
   $(document).ready(function() {
-    $('#standingsFactionToggle').css('cursor', 'pointer').click(function() {
-      $('#standingsFaction').toggle('fast');
-    });
 
-    $('#standingsCorpToggle').css('cursor', 'pointer').click(function() {
-      $('#standingsCorp').toggle('fast');
-    });
-
-    $('#standingsAgentsToggle').css('cursor', 'pointer').click(function() {
-      $('#standingsAgents').toggle('fast');
+    $('.groupHead').each(function() {
+      $(this).click(function() {
+        $('#' + $(this).data('toggle')).toggle('fast');
+      });
     });
 
     $('#factionFilter').change(function() {
@@ -44,6 +45,7 @@
     });
 
     buildFactionList();
+    hideEmptyGroups();
   });
 
   function buildFactionList() {
@@ -54,25 +56,37 @@
         factions.push($(this).text());
       }
     });
-    
+
     factions.sort();
-    
+
     var factionOptions = new Array();
     factionOptions.push($('<option/>').val('').text('All'));
 
     for (var i = 0; i < factions.length; i++) {
       factionOptions.push($('<option/>').val(factions[i]).text(factions[i]));
     }
-    
+
     $('#factionFilter').append(factionOptions);
   }
 
   function filterFactions(faction) {
     $('.sFaction').each(function() {
       if (faction == '' || $(this).text() == faction) {
-        $(this).parents('tr').first().show('fast');
+        $(this).parents('tr').first().removeClass('hideStanding').show('fast');
       } else {
-        $(this).parents('tr').first().hide('fast');
+        $(this).parents('tr').first().addClass('hideStanding').hide('fast');
+      }
+    });
+
+    hideEmptyGroups();
+  }
+
+  function hideEmptyGroups() {
+    $('.standingGroup').each(function() {
+      if ($(this).find('tbody tr:not(.hideStanding)').length === 0) {
+        $(this).hide();
+      } else {
+        $(this).show();
       }
     });
   }

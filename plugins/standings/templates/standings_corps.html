@@ -1,19 +1,23 @@
-<table width="100%" border="0">
-  <tr>
-    <th colspan="3">{$title}</th>
-  </tr>
-  <tr>
-    <th class="sub" width="40%">Corporation</th>
-    <th class="sub" width="40%">Faction</th>
-    <th class="sub" width="10%">Standing</th>
-  </tr>
-  {foreach from=$standingGroup item=s}
-  {if $s.standing >= $min && $s.standing < $max}
-  <tr>
-    <td><img src="http://image.eveonline.com/Corporation/{$s.corp.corporationid}_32.png" class="i32" alt="{$s.fromName}" align="absmiddle" /> {$s.fromName}</td>
-    <td><img src="http://image.eveonline.com/Alliance/{$s.corp.faction.factionid}_32.png" class="i32" align="absmiddle" alt="{$s.corp.faction.factionname}" /> <span class="sFaction">{$s.corp.faction.factionname}</span></td>
-    <td class="{if $s.standing > 0}good{else}bad{/if}" align="right">{$s.standing|eveNum}</td>
-  </tr>
-  {/if}
-  {/foreach}
+<table width="100%" border="0" class="standingGroup">
+  <thead>
+    <tr>
+      <th colspan="3">{$title}</th>
+    </tr>
+    <tr>
+      <th class="sub" width="40%">Corporation</th>
+      <th class="sub" width="40%">Faction</th>
+      <th class="sub" width="10%">Standing</th>
+    </tr>
+  </thead>
+  <tbody>
+    {foreach from=$standingGroup item=s}
+    {if $s.standing >= $min && $s.standing < $max}
+    <tr>
+      <td><img src="http://image.eveonline.com/Corporation/{$s.corp.corporationid}_32.png" class="i32" alt="{$s.fromName}" align="absmiddle" /> {$s.fromName}</td>
+      <td><img src="http://image.eveonline.com/Alliance/{$s.corp.faction.factionid}_32.png" class="i32" align="absmiddle" alt="{$s.corp.faction.factionname}" /> <span class="sFaction">{$s.corp.faction.factionname}</span></td>
+      <td class="{if $s.standing > 0}good{else}bad{/if}" align="right">{$s.standing|eveNum}</td>
+    </tr>
+    {/if}
+    {/foreach}
+  </tbody>
 </table>
