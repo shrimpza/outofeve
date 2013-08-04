@@ -183,7 +183,6 @@ class journal extends Plugin {
                 break;
             case 10:
                 // donation, user text
-                $reason = 'Donation reason: ' . $j['reason'];
                 break;
             case 19:
                 // insurance, ship destroyed
@@ -195,8 +194,7 @@ class journal extends Plugin {
                 $reason = 'Contacted: ' . $j['argName1'];
                 break;
             case 37:
-                // corp withdrawel
-                $reason = 'Withdrawel reason: ' . $j['reason'];
+                // corp withdrawel, user text
                 break;
             case 46:
                 // broker fee
