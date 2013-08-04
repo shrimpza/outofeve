@@ -1,0 +1,24 @@
+<table width="100%" border="0" class="standingGroup">
+  <thead>
+    <tr>
+      <th colspan="2">{$title}</th>
+    </tr>
+    <tr>
+      <th class="sub">Faction</th>
+      <th class="sub" width="10%">Standing</th>
+    </tr>
+  </thead>
+  <tbody>
+    {foreach from=$standingGroup item=s}
+    {if $s.standing >= $min && $s.standing < $max}
+    <tr>
+      <td>
+        <img src="http://image.eveonline.com/Alliance/{$s.faction.factionid}_32.png" class="i32" align="absmiddle" alt="{$s.fromName}" /> 
+        <span class="sFaction">{$s.fromName}</span>
+      </td>
+      <td class="{if $s.standing > 0}good{else}bad{/if}" align="right">{$s.standing|eveNum}</td>
+    </tr>
+    {/if}
+    {/foreach}
+  </tbody>
+</table>

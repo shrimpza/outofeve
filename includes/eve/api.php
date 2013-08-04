@@ -14,14 +14,13 @@ require_once('api/certificates.php');
 require_once('api/mail.php');
 require_once('api/character.php');
 require_once('api/corporation.php');
+require_once('api/standings.php');
 require_once('api/starbase.php');
+require_once('api/outpost.php');
 require_once('apidb.php');
+require_once('apidbClasses.php');
 require_once('apimarket.php');
 require_once('apiConstants.php');
-
-$cacheDelays = array(
-    101, 103, 115, 116, 117, 119
-);
 
 $GLOBALS['EVEAPI_ERRORS'] = array();
 
@@ -134,7 +133,7 @@ class apiRequest {
                     $result = new SimpleXMLElement($apiResponse);
                 } catch (Exception $e) {
                     $result = false;
-                    $this->error = new apiError($e->getCode(), $e->getMessage(), $method);
+                    $this->error = new apiError($e->getCode(), 'XML Error: ' . $e->getMessage(), $method);
                 }
 
                 /**
@@ -145,7 +144,7 @@ class apiRequest {
                      * Received an error from the API, try to fall back to cached data which may work...
                      */
                     if (isset($result->error) && !isset($cacheResult->error)) {
-                        $this->error = new apiError((int) $result->error['code'], (string) $result->error, $method);
+                        $this->error = new apiError((int) $result->error['code'], 'API Error: ' . (string) $result->error, $method);
                         $cacheResult = $this->checkCache($cacheFile, true);
                         if ($cacheResult) {
                             if (in_array($this->error->errorCode, $GLOBALS['cacheDelays'])) {
@@ -158,7 +157,7 @@ class apiRequest {
                         /**
                          * Everything went well, save the result to cache if needed.
                          */
-                        if (array_key_exists($method, $GLOBALS['config']['eve']['cache_override'])) {
+                        if ($GLOBALS['config']['eve']['cache_override'] && array_key_exists($method, $GLOBALS['config']['eve']['cache_override'])) {
                             $this->saveCache($cacheFile, $apiResponse, time() + $GLOBALS['config']['eve']['cache_override'][$method]);
                         } else if (isset($result->cachedUntil)) {
                             $this->saveCache($cacheFile, $apiResponse, strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd);
@@ -166,7 +165,7 @@ class apiRequest {
                     }
                 }
             } else {
-                $this->error = new apiError(1, 'HTTP error: ' + $httpResponse['http_code'], $method);
+                $this->error = new apiError(1, 'HTTP error: ' . $httpResponse['http_code'], $method);
             }
         } else {
             $result = $cacheResult;

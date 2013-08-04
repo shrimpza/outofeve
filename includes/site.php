@@ -80,7 +80,10 @@ class Site {
         $this->tplVars['theme'] = $GLOBALS['config']['templates']['theme'];
         if (!empty(apiStats::$errors)) {
             $this->tplVars['errors'] = objectToArray(apiStats::$errors);
+        } else {
+            $this->tplVars['errors'] = false;
         }
+            
 
         foreach ($this->tplVars as $var => $val) {
             $smarty->assign($var, $val);

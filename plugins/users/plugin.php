@@ -108,6 +108,11 @@ class users extends Plugin {
 
             $this->site->user->activetime = date('Y-m-d H:i:s');
             $this->site->user->save();
+        } else {
+            $this->site->tplVars['charKeys'] = false;
+            $this->site->tplVars['corpKeys'] = false;
+            $this->site->tplVars['currentCharKey'] = false;
+            $this->site->tplVars['currentCorpKey'] = false;
         }
     }
 
