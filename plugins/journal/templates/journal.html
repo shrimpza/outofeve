@@ -38,7 +38,11 @@
     {foreach from=$journal item=j}
     <tr class="{cycle values='row,rowAlt'}">
       <td>{$j.date|date_format:"%d/%m/%Y %H:%M"}</td>
-      <td>{$j.refType}</td>
+      <td>{$j.refType}
+        {if $j.reason != ''}
+        <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" style="float:right" title="{$j.reason}" />
+        {/if}
+      </td>
       <td>{$j.fromName}</td>
       <td>{$j.toName}</td>
       <td align="right" class="moneyOut">{if $j.amount < 0}{$j.amount|eveNum}{/if}</td>

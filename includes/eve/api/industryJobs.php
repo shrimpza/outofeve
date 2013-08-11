@@ -16,19 +16,30 @@ class eveIndustryJobList {
     function load() {
         if (count($this->industryJobs) == 0) {
 
+            $data = null;
+
             if ($this->key->isCorpKey() && $this->key->hasAccess(CORP_IndustryJobs)) {
                 $data = new apiRequest('corp/IndustryJobs.xml.aspx', $this->key, $this->key->getCharacter());
             } else if ($this->key->hasAccess(CHAR_IndustryJobs)) {
                 $data = new apiRequest('char/IndustryJobs.xml.aspx', $this->key, $this->key->getCharacter());
             }
 
-            if ((!$data->error) && ($data->data)) {
+            if ($data != null && !$data->error && $data->data) {
                 foreach ($data->data->result->rowset->row as $job) {
                     $this->industryJobs[] = new eveIndustryJob($job);
                 }
             }
             usort($this->industryJobs, 'jobSort');
         }
+    }
+
+    function getJob($jobID) {
+        foreach ($this->industryJobs as $k => $j) {
+            if ($j->jobID == $jobID) {
+                return $j;
+            }
+        }
+        return null;
     }
 
 }
