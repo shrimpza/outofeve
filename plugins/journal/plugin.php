@@ -198,11 +198,11 @@ class journal extends Plugin {
                 break;
             case 46:
                 // broker fee
-                $reason = 'System: ' . $j['argName1'];
+                $reason = $j['argName1'];
                 break;
             case 56:
                 // manufacturing
-                $reason = 'Job: ' . $j['argName1']; // TODO maybe get description of job via eveIndustryJobList
+                $reason = $this->getIndustryJobName($j['argName1']);
                 break;
             case 85:
                 // rat kills
@@ -210,12 +210,13 @@ class journal extends Plugin {
                 $reason = '';
                 foreach ($kills as $k) {
                     if (empty($k)) {
+                        
                     } else if ($k == '...') {
                         $reason .= '...';
                     } else {
                         $kill = explode(':', $k);
                         $npc = eveDB::getInstance()->eveItem($kill[0]);
-                        $reason .= $kill[1] . ' x ' . $npc->typename . ' &#10;';
+                        $reason .= $kill[1] . ' x ' . $npc->typename . ' (' . $npc->getGroup()->groupname . ') &#10;';
                     }
                 }
                 break;
@@ -224,6 +225,24 @@ class journal extends Plugin {
         }
 
         return $reason;
+    }
+
+    function getIndustryJobName($jobID) {
+        $il = null;
+        if (isset($_GET['corp'])) {
+            $il = new eveIndustryJobList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+            $il->load();
+        } else {
+            $il = new eveIndustryJobList(eveKeyManager::getKey($this->site->user->char_apikey_id));
+            $il->load();
+        }
+
+        $job = $il->getJob($jobID);
+        if ($job != null) {
+            return $job->activity->activityname . ': ' . $job->outItem->typename;
+        } else {
+            return null;
+        }
     }
 
 }
