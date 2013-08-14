@@ -3,6 +3,7 @@
     <span><a href="{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}">Transaction listing</a></span>
     <span><a href="{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days">Group by day</a></span>
     {if $corp}
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=tax">Member Taxes</a></span>
     <span>Account: 
       <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&accountKey='+this.value">
         {foreach from=$accounts item=acc}
