@@ -45,8 +45,6 @@ class journal extends Plugin {
             }
         }
 
-        $journal = objectToArray($j->journal);
-
         if (!isset($_GET['daycount'])) {
             $dayCount = 7;
         } else {
@@ -54,15 +52,17 @@ class journal extends Plugin {
         }
 
         if (isset($_GET['type']) && ($_GET['type'] == 'days')) {
-            return $this->getJorunalByDay($journal, $dayCount);
-        } else if (isset($_GET['type']) && ($_GET['type'] == 'tax')) {
-            // TODO show only tax items
+            return $this->getJournalByDay($j->journal, $dayCount);
+        } else if (isset($_GET['corp']) && isset($_GET['type']) && ($_GET['type'] == 'tax')) {
+            return $this->getJournalTaxes($j->journal);
         } else {
-            return $this->getJournalAsList($journal);
+            return $this->getJournalAsList($j->journal);
         }
     }
 
-    function getJorunalByDay($journal, $dayCount) {
+    function getJournalByDay($journal, $dayCount) {
+        // TODO refactor to actually group things by dayCount, rather than limiting number of days to dayCount which is a bit useless
+        
         $days = array();
 
         $refs = array();
@@ -74,15 +74,15 @@ class journal extends Plugin {
         }
 
         for ($i = 0; $i < count($journal); $i++) {
-            if (!isset($refs[$journal[$i]['refTypeID']])) {
-                $refs[$journal[$i]['refTypeID']] = $journal[$i]['refType'];
+            if (!isset($refs[$journal[$i]->refTypeID])) {
+                $refs[$journal[$i]->refTypeID] = $journal[$i]->refType;
             }
 
-            if (($filter <= 0) || ($journal[$i]['refTypeID'] == $filter)) {
-                $jDate = date('Y-m-d', $journal[$i]['date']);
+            if (($filter <= 0) || ($journal[$i]->refTypeID == $filter)) {
+                $jDate = date('Y-m-d', $journal[$i]->date);
                 if (!isset($days[$jDate])) {
                     $days[$jDate] = array(
-                        'date' => $journal[$i]['date'],
+                        'date' => $journal[$i]->date,
                         'dr' => 0,
                         'cr' => 0,
                         'journal' => array(),
@@ -90,29 +90,29 @@ class journal extends Plugin {
                 }
 
                 if ($filter == -1) {
-                    if (!isset($days[$jDate]['journal'][$journal[$i]['refTypeID']])) {
-                        $days[$jDate]['journal'][$journal[$i]['refTypeID']] = array(
-                            'refType' => $journal[$i]['refType'],
+                    if (!isset($days[$jDate]['journal'][$journal[$i]->refTypeID])) {
+                        $days[$jDate]['journal'][$journal[$i]->refTypeID] = array(
+                            'refType' => $journal[$i]->refType,
                             'amount' => 0,
                             'dr' => 0,
                             'cr' => 0,
                         );
                     }
-                    $days[$jDate]['journal'][$journal[$i]['refTypeID']]['amount'] += $journal[$i]['amount'];
+                    $days[$jDate]['journal'][$journal[$i]->refTypeID]['amount'] += $journal[$i]->amount;
 
-                    if ($journal[$i]['amount'] < 0) {
-                        $days[$jDate]['journal'][$journal[$i]['refTypeID']]['dr'] += $journal[$i]['amount'];
+                    if ($journal[$i]->amount < 0) {
+                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['dr'] += $journal[$i]->amount;
                     } else {
-                        $days[$jDate]['journal'][$journal[$i]['refTypeID']]['cr'] += $journal[$i]['amount'];
+                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['cr'] += $journal[$i]->amount;
                     }
                 } else {
-                    $days[$jDate]['journal'][] = $journal[$i];
+                    $days[$jDate]['journal'][] = objectToArray($journal[$i]);
                 }
 
-                if ($journal[$i]['amount'] < 0) {
-                    $days[$jDate]['dr'] += $journal[$i]['amount'];
+                if ($journal[$i]->amount < 0) {
+                    $days[$jDate]['dr'] += $journal[$i]->amount;
                 } else {
-                    $days[$jDate]['cr'] += $journal[$i]['amount'];
+                    $days[$jDate]['cr'] += $journal[$i]->amount;
                 }
             }
         }
@@ -150,6 +150,29 @@ class journal extends Plugin {
 
         return $this->render('days', $vars);
     }
+    
+    function getJournalTaxes($journal) {
+//        $members = array();
+//
+//        $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+//        if ($corpKey->hasAccess(CORP_MemberTrackingExtended)) {
+//            $memberList = new eveCorporationMemberList($corpKey);
+//            $memberList->load();
+//
+//            foreach ($memberList->members as $member) {
+//                $members[$member->characterID] = $member;
+//            }
+//        }
+
+        $filterJournal = array();
+        foreach ($journal as $k => $j) {
+            if (in_array($j->refTypeID, $this->taxableRefs)) {
+                $filterJournal[$k] = $j;
+            }
+        }
+
+        return $this->getJournalAsList($filterJournal);
+    }
 
     function getJournalAsList($journal) {
         if (count($journal) > 50) {
@@ -169,10 +192,10 @@ class journal extends Plugin {
         }
 
         foreach ($journal as $k => $j) {
-            $journal[$k]['reason'] = $this->getJornalReason($j);
+            $journal[$k]->reason = $this->getJornalReason($j);
         }
 
-        $vars = array('journal' => $journal, 'pageCount' => $pageCount,
+        $vars = array('journal' => objectToArray($journal), 'pageCount' => $pageCount,
             'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
@@ -189,12 +212,12 @@ class journal extends Plugin {
     }
 
     function getJornalReason($j) {
-        $reason = $j['reason'];
+        $reason = $j->reason;
 
-        switch ($j['refTypeID']) {
+        switch ($j->refTypeID) {
             case 1:
                 // player trading, station of trade
-                $station = eveDB::getInstance()->eveStation($j['argID1']);
+                $station = eveDB::getInstance()->eveStation($j->argID1);
                 $reason = 'Station: ' . $station->stationname . ' in ' . $station->solarSystem->solarsystemname;
                 break;
             case 10:
@@ -202,27 +225,27 @@ class journal extends Plugin {
                 break;
             case 19:
                 // insurance, ship destroyed
-                $ship = eveDB::getInstance()->eveItem($j['argID1']);
+                $ship = eveDB::getInstance()->eveItem($j->argID1);
                 $reason = 'Ship: ' . $ship->typename;
                 break;
             case 35:
                 // contact fee
-                $reason = 'Contacted: ' . $j['argName1'];
+                $reason = 'Contacted: ' . $j->argName1;
                 break;
             case 37:
                 // corp withdrawel, user text
                 break;
             case 46:
                 // broker fee
-                $reason = $j['argName1'];
+                $reason = $j->argName1;
                 break;
             case 56:
                 // manufacturing
-                $reason = $this->getIndustryJobName($j['argName1']);
+                $reason = $this->getIndustryJobName($j->argName1);
                 break;
             case 85:
                 // rat kills
-                $kills = explode(',', $j['reason']);
+                $kills = explode(',', $j->reason);
                 $reason = '';
                 foreach ($kills as $k) {
                     if (empty($k)) {
@@ -237,7 +260,7 @@ class journal extends Plugin {
                 }
                 break;
             default:
-                $reason = $j['reason'];
+                $reason = $j->reason;
         }
 
         return $reason;
