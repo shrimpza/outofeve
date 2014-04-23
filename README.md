@@ -51,13 +51,13 @@ If you want to encrypt your Eve API keys (**highly recommended!**), you will nee
 
 You can then configure `$config['site']['keypass']` as follows:
 
-```
+```php
 $config['site']['keypass'] = '/root/ooekeypass';
 ```
 
 If you do not want to encrypt API keys (**not recommended!**), leave the keypass option empty:
 
-```
+```php
 $config['site']['keypass'] = '';
 ```
 
@@ -65,7 +65,7 @@ $config['site']['keypass'] = '';
 
 Another option you may wish to change would be `$config['eve']['cache_dir']`. This option controls where cached API XML files are stored. I'd recommend you store these outside of any www-available paths, for example:
 
-```
+```php
 $config['eve']['cache_dir'] = '/var/cache/outofeve/'
 ```
 
