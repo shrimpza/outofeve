@@ -43,7 +43,7 @@ Whip open your new `includes/config.php`, and make sure the settings are all sui
 Then `$config['site']['url']` should be set to `/outofeve`.
 
 
-## API Key Security
+### API Key Security
 
 If you want to encrypt your Eve API keys (**highly recommended!**), you will need to create an encryption key file. This is a simple plain text file containing nothing but a keyword which will be used to encrypt API keys stored in the Out of Eve accounts database. This file should be kept well away from any www-published paths. An example for creating a key file on *nix:
 
