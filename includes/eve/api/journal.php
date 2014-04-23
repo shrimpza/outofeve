@@ -1,19 +1,5 @@
 <?php
 
-function journalSort($a, $b) {
-    return ($a->date > $b->date) ? -1 : 1;
-}
-
-function lowestJournalRef($journalItems) {
-    $res = 0;
-    for ($i = 0; $i < count($journalItems); $i++) {
-        if (($res == 0) || ($journalItems[$i]->journalID < $res)) {
-            $res = $journalItems[$i]->journalID;
-        }
-    }
-    return $res;
-}
-
 class eveJournal {
 
     var $journal = array();
@@ -51,12 +37,14 @@ class eveJournal {
                 }
 
                 // keep looping journal requests until we receive no more results
-                $lowest = lowestJournalRef($this->journal);
+                $lowest = eveJournal::lowestJournalRef($this->journal);
                 if (($lowest != $fromID) && ($gotRows == $params['rowCount'])) {
                     $this->load($lowest);
                 } else {
                     // if this is the last run, sort all the items we have
-                    usort($this->journal, 'journalSort');
+                    usort($this->journal, function ($a, $b) {
+                        return ($a->date > $b->date) ? -1 : 1;
+                    });
                 }
             }
         }
@@ -71,6 +59,17 @@ class eveJournal {
             }
         }
         return eveJournal::$refTypes[$refTypeId];
+    }
+    
+    
+    static function lowestJournalRef($journalItems) {
+        $res = 0;
+        for ($i = 0; $i < count($journalItems); $i++) {
+            if (($res == 0) || ($journalItems[$i]->journalID < $res)) {
+                $res = $journalItems[$i]->journalID;
+            }
+        }
+        return $res;
     }
 
 }
