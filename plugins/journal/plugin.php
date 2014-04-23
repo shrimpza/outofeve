@@ -58,7 +58,7 @@ class journal extends Plugin {
         } else if (isset($_GET['type']) && ($_GET['type'] == 'tax')) {
             return $this->getJournalCharTaxes($j->journal);
         } else {
-            return $this->getJournalAsList($j->journal);
+            return $this->getJournalAsList($j->journal, 'journal');
         }
     }
 
@@ -100,21 +100,21 @@ class journal extends Plugin {
                             'cr' => 0,
                         );
                     }
-                    $days[$jDate]['journal'][$journal[$i]->refTypeID]['amount'] += $journal[$i]->amount;
+                    $days[$jDate]['journal'][$journal[$i]->refTypeID]['amount'] += $journal[$i]->amount - $journal[$i]->taxAmount;
 
                     if ($journal[$i]->amount < 0) {
-                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['dr'] += $journal[$i]->amount;
+                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
                     } else {
-                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['cr'] += $journal[$i]->amount;
+                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
                     }
                 } else {
                     $days[$jDate]['journal'][] = objectToArray($journal[$i]);
                 }
 
                 if ($journal[$i]->amount < 0) {
-                    $days[$jDate]['dr'] += $journal[$i]->amount;
+                    $days[$jDate]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
                 } else {
-                    $days[$jDate]['cr'] += $journal[$i]->amount;
+                    $days[$jDate]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
                 }
             }
         }
@@ -179,15 +179,15 @@ class journal extends Plugin {
     function getJournalCharTaxes($journal) {
         $filterJournal = array();
         foreach ($journal as $k => $j) {
-            if (in_array($j->refTypeID, $this->taxableRefs)) {
+            if (in_array($j->refTypeID, $this->taxableRefs) && $j->taxAmount > 0) {
                 $filterJournal[$k] = $j;
             }
         }
 
-        return $this->getJournalAsList($filterJournal);
+        return $this->getJournalAsList($filterJournal, 'tax_char');
     }
 
-    function getJournalAsList($journal) {
+    function getJournalAsList($journal, $template = 'journal') {
         if (count($journal) > 50) {
             $journal = array_chunk($journal, 50);
 
@@ -222,7 +222,7 @@ class journal extends Plugin {
             $vars['accounts'] = objectToArray($corporation->walletDivisions);
         }
 
-        return $this->render('journal', $vars);
+        return $this->render($template, $vars);
     }
 
     function getJornalReason($j) {
@@ -298,10 +298,6 @@ class journal extends Plugin {
         }
     }
 
-}
-
-function journalTimeRevSort($a, $b) {
-    return ($a['date'] == $b['date']) ? 0 : ($a['date'] < $b['date']) ? -1 : 1;
 }
 
 ?>

@@ -32,11 +32,9 @@
     <tr>
       <th>Time</th>
       <th>Type</th>
-      <th>Paid By</th>
-      <th>Paid To</th>
-      <th>Expense</th>
       <th>Income</th>
-      <th>Balance</th>
+      <th>Tax</th>
+      <th>Received</th>
     </tr>
     {foreach from=$journal item=j}
     <tr class="{cycle values='row,rowAlt'}">
@@ -46,11 +44,9 @@
         <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" style="float:right" title="{$j.reason}" />
         {/if}
       </td>
-      <td>{$j.fromName}</td>
-      <td>{$j.toName}</td>
-      <td align="right" class="moneyOut">{if $j.amount < 0}{$j.amount|eveNum}{/if}</td>
-      <td align="right" class="moneyIn">{if ($j.amount-$j.taxAmount) > 0}{($j.amount-$j.taxAmount)|eveNum}{/if}</td>
-      <td align="right">{$j.balance|eveNum}</td>
+      <td align="right" class="moneyIn">{$j.amount|eveNum}</td>
+      <td align="right" class="moneyOut">{$j.taxAmount|eveNum}</td>
+      <td align="right">{($j.amount-$j.taxAmount)|eveNum}</td>
     </tr>
     {/foreach}
   </table>
