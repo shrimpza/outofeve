@@ -54,7 +54,9 @@ class journal extends Plugin {
         if (isset($_GET['type']) && ($_GET['type'] == 'days')) {
             return $this->getJournalByDay($j->journal, $dayCount);
         } else if (isset($_GET['corp']) && isset($_GET['type']) && ($_GET['type'] == 'tax')) {
-            return $this->getJournalTaxes($j->journal);
+            return $this->getJournalCorpTaxes($j->journal);
+        } else if (isset($_GET['type']) && ($_GET['type'] == 'tax')) {
+            return $this->getJournalCharTaxes($j->journal);
         } else {
             return $this->getJournalAsList($j->journal);
         }
@@ -151,7 +153,7 @@ class journal extends Plugin {
         return $this->render('days', $vars);
     }
     
-    function getJournalTaxes($journal) {
+    function getJournalCorpTaxes($journal) {
 //        $members = array();
 //
 //        $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
@@ -164,6 +166,17 @@ class journal extends Plugin {
 //            }
 //        }
 
+        $filterJournal = array();
+        foreach ($journal as $k => $j) {
+            if (in_array($j->refTypeID, $this->taxableRefs)) {
+                $filterJournal[$k] = $j;
+            }
+        }
+
+        return $this->getJournalAsList($filterJournal);
+    }
+
+    function getJournalCharTaxes($journal) {
         $filterJournal = array();
         foreach ($journal as $k => $j) {
             if (in_array($j->refTypeID, $this->taxableRefs)) {
@@ -196,7 +209,8 @@ class journal extends Plugin {
         }
 
         $vars = array('journal' => objectToArray($journal), 'pageCount' => $pageCount,
-            'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
+            'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 
+            'tax' => isset($_GET['type']) && $_GET['type'] == 'tax',
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
         if (isset($_GET['corp'])) {

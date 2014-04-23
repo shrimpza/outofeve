@@ -19,11 +19,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}{if $tax}&type=tax{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}{if $tax}&type=tax{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
     {/if}
   </div>
   {/if}
