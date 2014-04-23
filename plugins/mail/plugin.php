@@ -8,8 +8,7 @@ class mail extends Plugin {
     function mail($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MailMessages)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id) && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_MailMessages)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Mail', '?module=mail', 'mail');
         }
     }
@@ -74,58 +73,58 @@ class mail extends Plugin {
     }
 
     function spiffyNotificationText($text) {
-        $lines = explode("\n", $text);
-        $db = eveDB::getInstance();
+        if (empty($text)) {
+            return 'No message content.';
+        } else {
+            $lines = explode("\n", $text);
+            $db = eveDB::getInstance();
 
-        $newLines = array();
+            $newLines = array();
 
-        for ($i = 0; $i < count($lines); $i++) {
-            $useLine = true;
-            $usePrefix = true;
+            for ($i = 0; $i < count($lines); $i++) {
+                $useLine = true;
+                $usePrefix = true;
 
-            $str = $lines[$i];
-            $pts = explode(": ", $str);
+                $str = $lines[$i];
+                $pts = explode(": ", $str);
 
-            if (strpos($pts[0], 'should') !== false) {
-                if (in_array($pts[1], array('null', '0', 'no', 'false'))) {
-                    $pts[1] = 'No';
-                } else if (in_array($pts[1], array('1', 'yes', 'true'))) {
-                    $pts[1] = 'Yes';
-                }
-            } else if (strpos($pts[0], 'Date') !== false) {
-                // doesn't work... wtf are these date stamps
-                //$pts[1] = date('d M Y H:i', substr($pts[1], 0, 10));
-                $pts[1] = date('d M Y H:i', $pts[1]);
-                //echo $pts[1] . "\n";
-            } else if ($pts[0] == 'header') {
-                $useLine = false;
-            } else if ($pts[0] == 'body') {
-                $usePrefix = false;
-            }
-
-            if (substr($pts[0], strlen($pts[0]) - 2) != 'ID') {
-                $pts[0] = ucwords(ereg_replace("([A-Z]|[0-9]+)", " \\0", $pts[0]));
-            } else {
-                // based on the type of ID we can look up a proper name, icon, etc
-                if ($pts[0] == 'itemID') {
+                if (strpos($pts[0], 'should') !== false) {
+                    if (in_array($pts[1], array('null', '0', 'no', 'false'))) {
+                        $pts[1] = 'No';
+                    } else if (in_array($pts[1], array('1', 'yes', 'true'))) {
+                        $pts[1] = 'Yes';
+                    }
+                } else if (strpos($pts[0], 'Date') !== false) {
+                    $pts[1] = date('d M Y H:i', ($pts[1] / 10000000) - 11644473600);
+                } else if ($pts[0] == 'header') {
                     $useLine = false;
-                } else if ($pts[0] == 'typeID') {
-                    $pts[1] = $db->typeName($pts[1]);
-                } else if ($pts[0] == 'solarSystemID') {
-                    $pts[1] = $db->eveSolarSystem($pts[1])->solarsystemname;
-                } else if ($pts[0] == 'charID' || $pts[0] == 'characterID'
-                        || $pts[0] == 'corpID' || $pts[0] == 'corporationID') {
-                    $pts[1] = getCharacterName($pts[1]);
+                } else if ($pts[0] == 'body') {
+                    $usePrefix = false;
                 }
-                $pts[0] = ucwords(ereg_replace("([A-Z]|[0-9]+)", " \\0", substr($pts[0], 0, strlen($pts[0]) - 2)));
+
+                if (substr($pts[0], strlen($pts[0]) - 2) != 'ID') {
+                    $pts[0] = ucwords(preg_replace("([A-Z]|[0-9]+)", " \\1", $pts[0]));
+                } else {
+                    // based on the type of ID we can look up a proper name, icon, etc
+                    if ($pts[0] == 'itemID') {
+                        $useLine = false;
+                    } else if ($pts[0] == 'typeID') {
+                        $pts[1] = $db->typeName($pts[1]);
+                    } else if ($pts[0] == 'solarSystemID') {
+                        $pts[1] = $db->eveSolarSystem($pts[1])->solarsystemname;
+                    } else if ($pts[0] == 'charID' || $pts[0] == 'characterID' || $pts[0] == 'corpID' || $pts[0] == 'corporationID') {
+                        $pts[1] = getCharacterName($pts[1]);
+                    }
+                    $pts[0] = ucwords(preg_replace("([A-Z]|[0-9]+)", " \\1", substr($pts[0], 0, strlen($pts[0]) - 2)));
+                }
+
+                if ($useLine) {
+                    $newLines[] = $usePrefix ? implode(": ", $pts) : $pts[1];
+                }
             }
 
-            if ($useLine) {
-                $newLines[] = $usePrefix ? implode(": ", $pts) : $pts[1];
-            }
+            return implode("<br />", $newLines);
         }
-
-        return implode("<br />", $newLines);
     }
 
 }
