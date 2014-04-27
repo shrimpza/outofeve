@@ -62,67 +62,46 @@ class journal extends Plugin {
         }
     }
 
-    function getJournalByDay($journal, $dayCount) {
-        // TODO refactor to actually group things by dayCount, rather than limiting number of days to dayCount which is a bit useless
-        
+    function getJournalByDay($journal) {
         $days = array();
 
-        $refs = array();
-
-        if (!isset($_GET['filter'])) {
-            $filter = -1;
-        } else {
-            $filter = $_GET['filter'];
-        }
-
         for ($i = 0; $i < count($journal); $i++) {
-            if (!isset($refs[$journal[$i]->refTypeID])) {
-                $refs[$journal[$i]->refTypeID] = $journal[$i]->refType;
+
+            $jDate = date('Y-m-d', $journal[$i]->date);
+            if (!isset($days[$jDate])) {
+                $days[$jDate] = array(
+                    'date' => $journal[$i]->date,
+                    'dr' => 0,
+                    'cr' => 0,
+                    'journal' => array(),
+                );
             }
 
-            if (($filter <= 0) || ($journal[$i]->refTypeID == $filter)) {
-                $jDate = date('Y-m-d', $journal[$i]->date);
-                if (!isset($days[$jDate])) {
-                    $days[$jDate] = array(
-                        'date' => $journal[$i]->date,
-                        'dr' => 0,
-                        'cr' => 0,
-                        'journal' => array(),
-                    );
-                }
+            if (!isset($days[$jDate]['journal'][$journal[$i]->refTypeID])) {
+                $days[$jDate]['journal'][$journal[$i]->refTypeID] = array(
+                    'refType' => $journal[$i]->refType,
+                    'amount' => 0,
+                    'dr' => 0,
+                    'cr' => 0,
+                );
+            }
+            $days[$jDate]['journal'][$journal[$i]->refTypeID]['amount'] += $journal[$i]->amount - $journal[$i]->taxAmount;
 
-                if ($filter == -1) {
-                    if (!isset($days[$jDate]['journal'][$journal[$i]->refTypeID])) {
-                        $days[$jDate]['journal'][$journal[$i]->refTypeID] = array(
-                            'refType' => $journal[$i]->refType,
-                            'amount' => 0,
-                            'dr' => 0,
-                            'cr' => 0,
-                        );
-                    }
-                    $days[$jDate]['journal'][$journal[$i]->refTypeID]['amount'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+            if ($journal[$i]->amount < 0) {
+                $days[$jDate]['journal'][$journal[$i]->refTypeID]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+            } else {
+                $days[$jDate]['journal'][$journal[$i]->refTypeID]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+            }
 
-                    if ($journal[$i]->amount < 0) {
-                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
-                    } else {
-                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
-                    }
-                } else {
-                    $days[$jDate]['journal'][] = objectToArray($journal[$i]);
-                }
-
-                if ($journal[$i]->amount < 0) {
-                    $days[$jDate]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
-                } else {
-                    $days[$jDate]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
-                }
+            if ($journal[$i]->amount < 0) {
+                $days[$jDate]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+            } else {
+                $days[$jDate]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
             }
         }
 
-        asort($refs);
-
-        if (count($days) > $dayCount) {
-            $days = array_chunk($days, $dayCount);
+        if (count($days) > 10) {
+            $days = array_chunk($days, 10);
 
             $pageCount = count($days);
             $pageNum = max((int) $_GET['p'], 0);
@@ -137,7 +116,7 @@ class journal extends Plugin {
             $prevPage = 0;
         }
 
-        $vars = array('days' => $days, 'dayCount' => $dayCount, 'filter' => $filter, 'refTypes' => $refs,
+        $vars = array('days' => $days,
             'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
@@ -152,7 +131,98 @@ class journal extends Plugin {
 
         return $this->render('days', $vars);
     }
-    
+
+//    function getJournalByDay($journal, $dayCount) {
+//        // TODO refactor to actually group things by dayCount, rather than limiting number of days to dayCount which is a bit useless
+//        
+//        $days = array();
+//
+//        $refs = array();
+//
+//        if (!isset($_GET['filter'])) {
+//            $filter = -1;
+//        } else {
+//            $filter = $_GET['filter'];
+//        }
+//
+//        for ($i = 0; $i < count($journal); $i++) {
+//            if (!isset($refs[$journal[$i]->refTypeID])) {
+//                $refs[$journal[$i]->refTypeID] = $journal[$i]->refType;
+//            }
+//
+//            if (($filter <= 0) || ($journal[$i]->refTypeID == $filter)) {
+//                $jDate = date('Y-m-d', $journal[$i]->date);
+//                if (!isset($days[$jDate])) {
+//                    $days[$jDate] = array(
+//                        'date' => $journal[$i]->date,
+//                        'dr' => 0,
+//                        'cr' => 0,
+//                        'journal' => array(),
+//                    );
+//                }
+//
+//                if ($filter == -1) {
+//                    if (!isset($days[$jDate]['journal'][$journal[$i]->refTypeID])) {
+//                        $days[$jDate]['journal'][$journal[$i]->refTypeID] = array(
+//                            'refType' => $journal[$i]->refType,
+//                            'amount' => 0,
+//                            'dr' => 0,
+//                            'cr' => 0,
+//                        );
+//                    }
+//                    $days[$jDate]['journal'][$journal[$i]->refTypeID]['amount'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+//
+//                    if ($journal[$i]->amount < 0) {
+//                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+//                    } else {
+//                        $days[$jDate]['journal'][$journal[$i]->refTypeID]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+//                    }
+//                } else {
+//                    $days[$jDate]['journal'][] = objectToArray($journal[$i]);
+//                }
+//
+//                if ($journal[$i]->amount < 0) {
+//                    $days[$jDate]['dr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+//                } else {
+//                    $days[$jDate]['cr'] += $journal[$i]->amount - $journal[$i]->taxAmount;
+//                }
+//            }
+//        }
+//
+//        asort($refs);
+//
+//        if (count($days) > $dayCount) {
+//            $days = array_chunk($days, $dayCount);
+//
+//            $pageCount = count($days);
+//            $pageNum = max((int) $_GET['p'], 0);
+//            $nextPage = min($pageNum + 1, $pageCount);
+//            $prevPage = max($pageNum - 1, 0);
+//
+//            $days = $days[$pageNum];
+//        } else {
+//            $pageCount = 0;
+//            $pageNum = 0;
+//            $nextPage = 0;
+//            $prevPage = 0;
+//        }
+//
+//        $vars = array('days' => $days, 'dayCount' => $dayCount, 'filter' => $filter, 'refTypes' => $refs,
+//            'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
+//            'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
+//
+//        if (isset($_GET['corp'])) {
+//            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+//                $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+//                $corporation = new eveCorporation($corpKey);
+//                $corporation->load();
+//            }
+//            $vars['accounts'] = objectToArray($corporation->walletDivisions);
+//        }
+//
+//        return $this->render('days', $vars);
+//    }
+
     function getJournalCorpTaxes($journal) {
 //        $members = array();
 //
@@ -209,7 +279,7 @@ class journal extends Plugin {
         }
 
         $vars = array('journal' => objectToArray($journal), 'pageCount' => $pageCount,
-            'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 
+            'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
             'tax' => isset($_GET['type']) && $_GET['type'] == 'tax',
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
