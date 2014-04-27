@@ -1,0 +1,38 @@
+<div id="journalList">
+  {if $corp}
+    {include file="days_nav_corp.html"}
+  {else}
+    {include file="days_nav_char.html"}
+  {/if}
+
+  <table width="100%" border="0">
+    <tr>
+      <th>Type</th>
+      <th>Income</th>
+      <th>Tax</th>
+      <th>Received</th>
+    </tr>
+    {foreach from=$days item=d}
+    <tr class="sub shadeLight textLight">
+      <td>{$d.date|date_format:"%A %d %B %Y"}</td>
+      <td><div class="moneyIn" style="text-align: right">{$d.cr|eveNum}</div></td>
+      <td><div class="moneyOut" style="text-align: right">{$d.tax|eveNum}</div></td>
+      <td><div style="text-align: right">{$d.cr+$d.tax|eveNum}</div></td>
+    </tr>
+    {foreach from=$d.journal item=j}
+    <tr class="{cycle values='row,rowAlt'}">
+      <td>{$j.refType}</td>
+      <td align="right" class="moneyIn">{if $j.cr > 0}{$j.cr|eveNum}{/if}</td>
+      <td align="right" class="moneyOut">{$j.tax|eveNum}</td>
+      <td><div style="text-align: right">{$j.cr+$j.tax|eveNum}</div></td>
+    </tr>
+    {/foreach}
+    <tr><td colspan="4">&nbsp;</td></tr>
+    {/foreach}
+  </table>
+
+  {if !$days}
+  <h3>No journal entries found!</h3>
+  {/if}
+
+</div>
