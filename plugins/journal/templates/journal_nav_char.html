@@ -1,0 +1,17 @@
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=journal">Transaction listing</a></span>
+    <span><a href="{$site_url}/?module=journal&type=days">Group by day</a></span>
+    <span><a href="{$site_url}/?module=journal&type=tax">Corporation Taxes</a></span>
+  </div>
+
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+    <button onclick="window.location='{$site_url}/?module=journal{if $tax}&type=tax{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+    <button onclick="window.location='{$site_url}/?module=journal{if $tax}&type=tax{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}

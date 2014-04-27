@@ -1,0 +1,24 @@
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}">Transaction listing</a></span>
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days">Group by day</a></span>
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=tax">Member Taxes</a></span>
+    <span>Account: 
+      <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&accountKey='+this.value">
+        {foreach from=$accounts item=acc}
+        <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
+        {/foreach}
+      </select>
+    </span>
+  </div>
+
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+    <button onclick="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}{if $tax}&type=tax{/if}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+    <button onclick="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}{if $tax}&type=tax{/if}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    {/if}
+  </div>
+  {/if}
