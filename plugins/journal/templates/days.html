@@ -1,29 +1,8 @@
 <div id="journalList">
-  <div class="listOptions">
-    <span><a href="{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}">Transaction listing</a></span>
-    <span><a href="{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days">Group by day</a></span>
-    {if $corp}
-    <span>Account: 
-      <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&type=days&filter={$filter}&accountKey='+this.value">
-        <option value="0">All</option>
-        {foreach from=$accounts item=acc}
-        <option value="{$acc.key}" {if $accountKey == $acc.key}selected="selected"{/if}>{$acc.description}</option>
-        {/foreach}
-      </select>
-    </span>
-    {/if}
-  </div>
-
-  {if $pageCount > 0}
-  <div align="right">
-    {if $prevPage < $pageNum}
-    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&filter={$filter}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
-    {/if}
-    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
-    {if $nextPage < $pageCount}
-    <button onclick="window.location='{$site_url}/?module=journal{if $corp}&corp=1&accountKey={$accountKey}{/if}&type=days&filter={$filter}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
-    {/if}
-  </div>
+  {if $corp}
+    {include file="days_nav_corp.html"}
+  {else}
+    {include file="days_nav_char.html"}
   {/if}
 
   <table width="100%" border="0">
