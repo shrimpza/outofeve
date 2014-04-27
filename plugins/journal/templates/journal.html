@@ -13,7 +13,7 @@
       <th>Paid To</th>
       <th>Expense</th>
       <th>Income</th>
-      <th>Balance</th>
+      {if $filter < 0}<th>Balance</th>{/if}
     </tr>
     {foreach from=$journal item=j}
     <tr class="{cycle values='row,rowAlt'}">
@@ -27,7 +27,7 @@
       <td>{$j.toName}</td>
       <td align="right" class="moneyOut">{if $j.amount < 0}{$j.amount|eveNum}{/if}</td>
       <td align="right" class="moneyIn">{if ($j.amount-$j.taxAmount) > 0}{($j.amount-$j.taxAmount)|eveNum}{/if}</td>
-      <td align="right">{$j.balance|eveNum}</td>
+      {if $filter < 0}<td align="right">{$j.balance|eveNum}</td>{/if}
     </tr>
     {/foreach}
   </table>
