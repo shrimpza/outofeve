@@ -51,21 +51,28 @@ class journal extends Plugin {
                 $refs[$j->refTypeID] = $j->refType;
             }
 
-            if ($_GET['filter'] == -1 || ($_GET['filter'] == 'tax' && in_array($j->refTypeID, $this->taxableRefs) && $j->taxAmount > 0) || $j->refTypeID == $_GET['filter']) {
+            if (!$_GET['corp'] && ($_GET['filter'] == -1 || ($_GET['filter'] == 'tax' && in_array($j->refTypeID, $this->taxableRefs) && $j->taxAmount > 0) || $j->refTypeID == $_GET['filter'])) {
+                $filterJournal[$k] = $j;
+            } else if ($_GET['corp'] && ($_GET['filter'] == -1 || ($_GET['filter'] == 'tax' && in_array($j->refTypeID, $this->taxableRefs)) || $j->refTypeID == $_GET['filter'])) {
                 $filterJournal[$k] = $j;
             }
         }
         asort($refs);
 
         if (!$_GET['corp'] && $_GET['type'] == 'days' && $_GET['filter'] == 'tax') {
+            // character taxable transactions grouped by day
             return $this->getJournalByDay($filterJournal, $refs, 'days_tax');
-        } else if (!$_GET['corp'] && $_GET['type'] == 'days') {
+        } else if ($_GET['type'] == 'days') {
+            // character or corporation transactions grouped by day
             return $this->getJournalByDay($filterJournal, $refs, 'days');
-        } else if ($_GET['corp'] && ($_GET['type'] == 'tax')) {
-            return $this->getJournalCorpTaxes($filterJournal, $refs);
-        } else if ($_GET['filter'] == 'tax') {
+        } else if ($_GET['corp'] && $_GET['filter'] == 'tax') {
+            // corporation taxable transactions from members
+            return $this->getJournalAsList($filterJournal, $refs, 'journal');
+        } else if (!$_GET['corp'] && $_GET['filter'] == 'tax') {
+            // character taxable transactions to corporation
             return $this->getJournalAsList($filterJournal, $refs, 'journal_tax');
         } else {
+            // character or corporation transactions
             return $this->getJournalAsList($filterJournal, $refs, 'journal');
         }
     }
