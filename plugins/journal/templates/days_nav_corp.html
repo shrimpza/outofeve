@@ -22,11 +22,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-    <button onclick="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days&filter={$filter}&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days&filter={$filter}&p={$prevPage}'" class="pageNav prev"></button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-    <button onclick="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days&filter={$filter}&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days&filter={$filter}&p={$nextPage}'" class="pageNav next"></button>
     {/if}
   </div>
   {/if}
