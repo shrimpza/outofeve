@@ -2,7 +2,7 @@
     <span><a href="{$site_url}/?module=journal">Transaction List</a></span>
     <span><a href="{$site_url}/?module=journal&filter=tax">Corporation Taxes</a></span>
     <span>Type:
-      <select onchange="window.location='{$site_url}/?module=journal&filter='+this.value">
+      <select id="filter" onchange="window.location='{$site_url}/?module=journal&filter='+this.value">
         <option value="-1" {if $filter < 0}selected="true"{/if}>All</option>
         {foreach from=$refTypes key=r item=rName}
         <option value="{$r}" {if $filter == $r}selected="true"{/if}>{$rName}</option>

@@ -1,14 +1,22 @@
   <div class="listOptions">
-    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}">Transaction listing</a></span>
-    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days">Group by day</a></span>
-    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=tax">Member Taxes</a></span>
     <span>Account: 
-      <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&accountKey='+this.value">
+      <select id="accountKey" onchange="window.location='{$site_url}/?module=journal&corp=1&filter={$filter}&accountKey='+this.value">
         {foreach from=$accounts item=acc}
         <option value="{$acc.accountKey}" {if $accountKey == $acc.accountKey}selected="selected"{/if}>{$acc.description}</option>
         {/foreach}
       </select>
     </span>
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}">Transaction List</a></span>
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&filter=tax">Member Taxes</a></span>
+    <span>Type:
+      <select id="filter" onchange="window.location='{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&filter='+this.value">
+        <option value="-1" {if $filter < 0}selected="true"{/if}>All</option>
+        {foreach from=$refTypes key=r item=rName}
+        <option value="{$r}" {if $filter == $r}selected="true"{/if}>{$rName}</option>
+        {/foreach}
+      </select>
+    </span>
+    <span><a href="{$site_url}/?module=journal&corp=1&accountKey={$accountKey}&type=days&filter={$filter}">Group by day</a></span>
   </div>
 
   {if $pageCount > 0}
