@@ -45,4 +45,31 @@ class Plugin {
 //      } 
 }
 
+class Paginator {
+
+    var $source;
+    var $pageData;
+    var $pageCount = 0;
+    var $pageNum = 0;
+    var $nextPage = 0;
+    var $prevPage = 0;
+
+    function Paginator($source, $pageSize, $currentPage) {
+        $this->source = $source;
+        $this->pageData = $source;
+
+        if (count($this->pageData) > $pageSize) {
+            $pages = array_chunk($this->pageData, $pageSize);
+
+            $this->pageCount = count($pages);
+            $this->pageNum = max((int) $currentPage, 0);
+            $this->nextPage = min($this->pageNum + 1, $this->pageCount);
+            $this->prevPage = max($this->pageNum - 1, 0);
+
+            $this->pageData = $pages[$this->pageNum];
+        }
+    }
+
+}
+
 ?>
