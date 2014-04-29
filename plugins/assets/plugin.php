@@ -8,26 +8,24 @@ class assets extends Plugin {
     function assets($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_AssetList)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id) && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_AssetList)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Assets', '?module=assets', 'assets');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_AssetList)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_AssetList)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Assets', '?module=assets&corp=1', 'assets');
         }
     }
 
     function getContent() {
-        if (!isset($_GET['p'])) {
-            $_GET['p'] = 0;
-        }
-        if (!isset($_GET['group'])) {
-            $_GET['group'] = 0;
-        }
+        $_GET['p'] = isset($_GET['p']) ? $_GET['p'] : 0;
+        $_GET['group'] = isset($_GET['group']) ? $_GET['group'] : 0;
+        $_GET['corp'] = isset($_GET['corp']) ? true : false;
 
-        if (isset($_GET['corp'])) {
+        $_GET['type'] = isset($_GET['type']) ? $_GET['type'] : 'list';
+        $_GET['item'] = isset($_GET['item']) ? trim($_GET['item']) : '';
+
+        if ($_GET['corp']) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
                 $al = new eveAssetList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
                 $al->load(true);
@@ -41,25 +39,22 @@ class assets extends Plugin {
             }
         }
 
-        if (isset($_GET['type']) && ($_GET['type'] == 'find')) {
-            $_GET['item'] = trim($_GET['item']);
-
+        if ($_GET['type'] == 'find') {
             $assets = $this->searchAsset($fullAssetList, $_GET['item']);
-            usort($assets, 'assetNameSort');
+            usort($assets, array('assets', 'assetNameSort'));
 
-            $assetList = objectToArray($assets, array('DBManager', 'eveDB'));
+            $assetList = objectToArray($assets);
 
-            return $this->render('find', array('assets' => $assetList, 'search' => $_GET['item'], 'corp' => isset($_GET['corp'])));
-        } else if (isset($_GET['type']) && ($_GET['type'] == 'ships')) {
+            return $this->render('find', array('assets' => $assetList, 'search' => $_GET['item'], 'corp' => $_GET['corp']));
+        } else if ($_GET['type'] == 'ships') {
             $this->name .= ': My Ships';
             $ships = $this->searchAssetCategory($fullAssetList, 6);
-            usort($ships, 'assetNameSort');
+            usort($ships, array('assets', 'assetNameSort'));
             for ($i = 0; $i < count($ships); $i++) {
                 if ($ships[$i]->contents) {
-                    usort($ships[$i]->contents, 'assetSlotSort');
+                    usort($ships[$i]->contents, array('assets', 'assetSlotSort'));
                 }
             }
-
 
             if (count($ships) > 10) {
                 $ships = array_chunk($ships, 10);
@@ -77,10 +72,10 @@ class assets extends Plugin {
                 $prevPage = 0;
             }
 
-            $shipList = objectToArray($ships, array('DBManager', 'eveDB'));
+            $shipList = objectToArray($ships);
 
             return $this->render('ships', array('ships' => $shipList, 'pageCount' => $pageCount,
-                        'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 'corp' => isset($_GET['corp'])));
+                        'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 'corp' => $_GET['corp']));
         } else {
             $assets = array();
 
@@ -91,7 +86,9 @@ class assets extends Plugin {
                     $groups[] = $g;
                 }
             }
-            usort($groups, 'groupNameSort');
+            usort($groups, function ($a, $b) {
+                return ($a->groupname == $b->groupname) ? 0 : ($a->groupname < $b->groupname) ? -1 : 1;
+            });
 
             if ($_GET['group'] > 0) {
                 $this->filterAssetGroup($fullAssetList, $_GET['group']);
@@ -100,23 +97,26 @@ class assets extends Plugin {
             foreach ($fullAssetList as $asset) {
                 if (!$asset->hide) {
                     if (!empty($asset->locationID)) {
-                        if (!isset($assets[(string) $asset->locationID])) {
-                            $assets[(string) $asset->locationID] = array();
-                            $assets[(string) $asset->locationID]['location'] = $asset->location;
-                            $assets[(string) $asset->locationID]['locationId'] = $asset->locationID;
-                            $assets[(string) $asset->locationID]['locationName'] = $asset->locationName;
-                            $assets[(string) $asset->locationID]['assets'] = array();
+                        $locationKey = (string) $asset->locationID;
+                        if (!isset($assets[$locationKey])) {
+                            $assets[$locationKey] = array();
+                            $assets[$locationKey]['location'] = $asset->location;
+                            $assets[$locationKey]['locationId'] = $asset->locationID;
+                            $assets[$locationKey]['locationName'] = $asset->locationName;
+                            $assets[$locationKey]['assets'] = array();
                         }
                         if ($asset->contents) {
-                            usort($asset->contents, 'assetSlotSort');
+                            usort($asset->contents, array('assets', 'assetSlotSort'));
                         }
-                        $assets[(string) $asset->locationID]['assets'][] = $asset;
+                        $assets[$locationKey]['assets'][] = $asset;
 
-                        usort($assets[(string) $asset->locationID]['assets'], 'assetSlotSort');
+                        usort($assets[$locationKey]['assets'], array('assets', 'assetSlotSort'));
                     }
                 }
             }
-            usort($assets, 'assetStationSort');
+            usort($assets, function ($a, $b) {
+                return ($a['locationName'] == $b['locationName']) ? 0 : ($a['locationName'] < $b['locationName']) ? -1 : 1;
+            });
 
             foreach ($assets as $k => $v) {
                 $ships = array();
@@ -124,18 +124,18 @@ class assets extends Plugin {
                 $shuttles = array();
                 $items = array();
 
-                usort($v['assets'], 'assetNameSort');
+                usort($v['assets'], array('assets', 'assetNameSort'));
 
                 foreach ($v['assets'] as $ass) {
                     if ($ass->item->groupid == 31) {
                         $shuttles[] = $ass;
                     } else if (($ass->item->group) && ($ass->item->group->category) && ($ass->item->group->category->categoryid == 6)) {
                         if ($ass->contents) {
-                            usort($ass->contents, 'assetSlotSort');
+                            usort($ass->contents, array('assets', 'assetSlotSort'));
                         }
                         $ships[] = $ass;
                     } else if ($ass->contents) {
-                        usort($ass->contents, 'assetNameSort');
+                        usort($ass->contents, array('assets', 'assetNameSort'));
                         $containers[] = $ass;
                     } else {
                         $items[] = $ass;
@@ -161,12 +161,12 @@ class assets extends Plugin {
                 $prevPage = 0;
             }
 
-            $assetList = objectToArray($assets, array('DBManager', 'eveDB'));
+            $assetList = objectToArray($assets);
             $groups = objectToArray($groups);
 
             return $this->render('assets', array('assets' => $assetList, 'groups' => $groups, 'group' => $_GET['group'],
                         'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
-                        'corp' => isset($_GET['corp'])));
+                        'corp' => $_GET['corp']));
         }
     }
 
@@ -235,34 +235,14 @@ class assets extends Plugin {
         return $result;
     }
 
-}
-
-function assetStationSort($a, $b) {
-    if ($a['locationName'] == $b['locationName']) {
-        return 0;
+    static function assetSlotSort($a, $b) {
+        return ($a->flagText == $b->flagText) ? 0 : ($a->flagText < $b->flagText) ? -1 : 1;
     }
-    return ($a['locationName'] < $b['locationName']) ? -1 : 1;
-}
 
-function assetSlotSort($a, $b) {
-    if ($a->flagText == $b->flagText) {
-        return 0;
+    static function assetNameSort($a, $b) {
+        return ($a->item->typename == $b->item->typename) ? 0 : ($a->item->typename < $b->item->typename) ? -1 : 1;
     }
-    return ($a->flagText < $b->flagText) ? -1 : 1;
-}
 
-function assetNameSort($a, $b) {
-    if ($a->item->typename == $b->item->typename) {
-        return 0;
-    }
-    return ($a->item->typename < $b->item->typename) ? -1 : 1;
-}
-
-function groupNameSort($a, $b) {
-    if ($a->groupname == $b->groupname) {
-        return 0;
-    }
-    return ($a->groupname < $b->groupname) ? -1 : 1;
 }
 
 ?>
