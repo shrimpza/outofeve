@@ -58,26 +58,12 @@ class starbases extends Plugin {
                 $starbases[$i]->fuelGroups = $fuelGroups;
             }
 
-            if (count($starbases) > 10) {
-                $starbases = array_chunk($starbases, 10);
-
-                $pageCount = count($starbases);
-                $pageNum = max((int) $_GET['p'], 0);
-                $nextPage = min($pageNum + 1, $pageCount);
-                $prevPage = max($pageNum - 1, 0);
-
-                $starbases = $starbases[$pageNum];
-            } else {
-                $pageCount = 0;
-                $pageNum = 0;
-                $nextPage = 0;
-                $prevPage = 0;
-            }
+            $p = new Paginator($starbases, 10, $_GET['p']);
 
             $starbases = objectToArray($starbases, array('DBManager', 'eveDB'));
 
-            return $this->render('starbases', array('starbases' => $starbases,
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
+            return $this->render('starbases', array('starbases' => $p->pageData,
+                        'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
         } else {
             return '<h1>No corporation!</h1>';
         }

@@ -128,25 +128,10 @@ class util_prodprofit extends Plugin {
             }
         }
 
-        if (count($blueprints) > 20) {
-            $blueprints = array_chunk($blueprints, 20);
+        $p = new Paginator($blueprints, 20, $_GET['p']);
 
-            $pageCount = count($blueprints);
-            $pageNum = max((int) $_GET['p'], 0);
-            $nextPage = min($pageNum + 1, $pageCount);
-            $prevPage = max($pageNum - 1, 0);
-
-            $blueprints = $blueprints[$pageNum];
-        } else {
-            $pageCount = 0;
-            $pageNum = 0;
-            $nextPage = 0;
-            $prevPage = 0;
-        }
-
-
-        for ($i = 0; $i < count($blueprints); $i++) {
-            $item = eveDB::getInstance()->eveItemFromBlueprintType($blueprints[$i]->item->typeid);
+        for ($i = 0; $i < count($p->pageData); $i++) {
+            $item = eveDB::getInstance()->eveItemFromBlueprintType($p->pageData[$i]->item->typeid);
             $item->getPricing($region);
             $prod = $this->productionCost($item, $meLevel, $region, $peLevel);
 
@@ -163,8 +148,8 @@ class util_prodprofit extends Plugin {
                     'customprice' => $_GET['customprice'],
                     'meLevel' => $meLevel,
                     'hasCorp' => $this->site->plugins['mainmenu']->hasLink('corp', 'Assets'), 'corp' => $_GET['corp'],
-                    'pageCount' => $pageCount, 'pageNum' => $pageNum,
-                    'nextPage' => $nextPage, 'prevPage' => $prevPage));
+                    'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum,
+                    'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
     }
 
     function blueprintAssets($ass, $categoryid) {

@@ -118,25 +118,11 @@ class journal extends Plugin {
             $days[$jDate]['journal'][$j->refTypeID]['tax'] += $j->taxAmount;
             $days[$jDate]['tax'] += $j->taxAmount;
         }
+        
+        $p = new Paginator($days, 10, $_GET['p']);
 
-        if (count($days) > 10) {
-            $days = array_chunk($days, 10);
-
-            $pageCount = count($days);
-            $pageNum = max((int) $_GET['p'], 0);
-            $nextPage = min($pageNum + 1, $pageCount);
-            $prevPage = max($pageNum - 1, 0);
-
-            $days = $days[$pageNum];
-        } else {
-            $pageCount = 0;
-            $pageNum = 0;
-            $nextPage = 0;
-            $prevPage = 0;
-        }
-
-        $vars = array('days' => $days, 'refTypes' => $refs, 'filter' => $_GET['filter'],
-            'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
+        $vars = array('days' => $p->pageData, 'refTypes' => $refs, 'filter' => $_GET['filter'],
+            'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
             'corp' => $_GET['corp'], 'accountKey' => $_GET['accountKey']);
 
         if ($_GET['corp']) {
@@ -152,18 +138,6 @@ class journal extends Plugin {
     }
 
     function getJournalCorpTaxes($journal, $refs) {
-//        $members = array();
-//
-//        $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
-//        if ($corpKey->hasAccess(CORP_MemberTrackingExtended)) {
-//            $memberList = new eveCorporationMemberList($corpKey);
-//            $memberList->load();
-//
-//            foreach ($memberList->members as $member) {
-//                $members[$member->characterID] = $member;
-//            }
-//        }
-
         $filterJournal = array();
         foreach ($journal as $k => $j) {
             if (in_array($j->refTypeID, $this->taxableRefs)) {
@@ -175,28 +149,14 @@ class journal extends Plugin {
     }
 
     function getJournalAsList($journal, $refs, $template = 'journal') {
-        if (count($journal) > 50) {
-            $journal = array_chunk($journal, 50);
+        $p = new Paginator($journal, 50, $_GET['p']);
 
-            $pageCount = count($journal);
-            $pageNum = max((int) $_GET['p'], 0);
-            $nextPage = min($pageNum + 1, $pageCount);
-            $prevPage = max($pageNum - 1, 0);
-
-            $journal = $journal[$pageNum];
-        } else {
-            $pageCount = 0;
-            $pageNum = 0;
-            $nextPage = 0;
-            $prevPage = 0;
+        foreach ($p->pageData as $k => $j) {
+            $j->reason = $this->getJornalReason($j);
         }
 
-        foreach ($journal as $k => $j) {
-            $journal[$k]->reason = $this->getJornalReason($j);
-        }
-
-        $vars = array('journal' => objectToArray($journal), 'pageCount' => $pageCount,
-            'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
+        $vars = array('journal' => objectToArray($p->pageData), 'pageCount' => $p->pageCount,
+            'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
             'filter' => $_GET['filter'], 'refTypes' => $refs,
             'corp' => $_GET['corp'], 'accountKey' => $_GET['accountKey']);
 
