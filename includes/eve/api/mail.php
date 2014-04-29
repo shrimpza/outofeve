@@ -189,12 +189,10 @@ class eveNotificationsList {
     function getNotification($notificationId) {
         $result = false;
         if ($this->key->hasAccess(CHAR_NotificationTexts)) {
-
             foreach ($this->notifications as $m) {
                 if ($m->notificationID == $notificationId) {
                     $data = new apiRequest('char/NotificationTexts.xml.aspx', $this->key, $this->key->getCharacter(), array('ids' => $m->notificationID));
                     if ((!$data->error) && ($data->data)) {
-                        print_r($text);
                         foreach ($data->data->result->rowset->row as $text) {
                             if ((int) $text['notificationID'] == $m->notificationID) {
                                 $result = new eveNotificationText($text);
@@ -256,7 +254,10 @@ class eveMailMessageBody {
 
     function eveMailMessageBody($mail) {
         $this->messageID = (int) $mail['messageID'];
-        $this->message = (string) $mail;
+        $this->message = trim((string) $mail);
+        if ($this->message == '{}') {
+            $this->message = '';
+        }
     }
 
 }
@@ -298,7 +299,10 @@ class eveNotificationText {
 
     function eveNotificationText($notification) {
         $this->notificationID = (int) $notification['notificationID'];
-        $this->text = (string) $notification;
+        $this->text = trim((string) $notification);
+        if ($this->text == '{}') {
+            $this->text = '';
+        }
     }
 
 }

@@ -1,19 +1,13 @@
 <div id="journalList">
-  {if $corp}
-    {include file="journal_nav_corp.html"}
-  {else}
-    {include file="journal_nav_char.html"}
-  {/if}
+  {include file="journal_nav_char.html"}
 
   <table width="100%" border="0">
     <tr>
       <th>Time</th>
       <th>Type</th>
-      <th>Paid By</th>
-      <th>Paid To</th>
-      <th>Expense</th>
       <th>Income</th>
-      {if $filter < 0}<th>Balance</th>{/if}
+      <th>Tax</th>
+      <th>Received</th>
     </tr>
     {foreach from=$journal item=j}
     <tr class="{cycle values='row,rowAlt'}">
@@ -23,11 +17,9 @@
         <img src="{$site_url}/templates/{$theme}/images/info_small.png" align="absmiddle" style="float:right" title="{$j.reason}" />
         {/if}
       </td>
-      <td>{$j.fromName}</td>
-      <td>{$j.toName}</td>
-      <td align="right" class="moneyOut">{if $j.amount < 0}{$j.amount|eveNum}{/if}</td>
-      <td align="right" class="moneyIn">{if ($j.amount-$j.taxAmount) > 0}{($j.amount-$j.taxAmount)|eveNum}{/if}</td>
-      {if $filter < 0}<td align="right">{$j.balance|eveNum}</td>{/if}
+      <td align="right" class="moneyIn">{$j.amount|eveNum}</td>
+      <td align="right" class="moneyOut">{$j.taxAmount|eveNum}</td>
+      <td align="right">{($j.amount-$j.taxAmount)|eveNum}</td>
     </tr>
     {/foreach}
   </table>

@@ -414,10 +414,16 @@ th {
 /* =================================== */
 
 .pageNav {
-    border: 1px solid #b5b8b6;
-    text-align: center;
-    background-color: #444;
-    color: orange;
-    font-weight: bold;
-    margin: 2px;
+    border: 0;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+}
+
+.pageNav.prev {
+    background: url('images/nav_prev_small.png') no-repeat center center;
+}
+
+.pageNav.next {
+    background: url('images/nav_next_small.png') no-repeat center center;
 }

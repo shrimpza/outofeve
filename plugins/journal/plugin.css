@@ -9,3 +9,11 @@
     font-weight: bold;
     font-size: 1.1em;
 }
+
+.listOptions #accountKey {
+    max-width: 140px;
+}
+
+.listOptions #filter {
+    max-width: 200px;
+}

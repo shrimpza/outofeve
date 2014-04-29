@@ -1,0 +1,23 @@
+  <div class="listOptions">
+    <span><a href="{$site_url}/?module=journal">Transaction List</a></span>
+    <span><a href="{$site_url}/?module=journal&filter=tax">Corporation Taxes</a></span>
+    <span>Type: <select id="filter" onchange="window.location='{$site_url}/?module=journal&filter='+this.value">
+        <option value="-1" {if $filter < 0}selected="true"{/if}>All</option>
+        {foreach from=$refTypes key=r item=rName}
+        <option value="{$r}" {if $filter == $r}selected="true"{/if}>{$rName}</option>
+        {/foreach}
+      </select></span>
+    <span><a href="{$site_url}/?module=journal&type=days&filter={$filter}">Group by day</a></span>
+  </div>
+
+  {if $pageCount > 0}
+  <div align="right">
+    {if $prevPage < $pageNum}
+    <button onclick="window.location='{$site_url}/?module=journal&filter={$filter}&p={$prevPage}'" class="pageNav prev"></button>
+    {/if}
+    &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
+    {if $nextPage < $pageCount}
+    <button onclick="window.location='{$site_url}/?module=journal&filter={$filter}&p={$nextPage}'" class="pageNav next"></button>
+    {/if}
+  </div>
+  {/if}
