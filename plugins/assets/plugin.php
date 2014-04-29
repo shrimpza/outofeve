@@ -77,10 +77,10 @@ class assets extends Plugin {
     function assetList($fullAssetList) {
         $assets = array();
 
-        $allGroups = $this->getAssetGroups($fullAssetList);
+        $allGroups = $this->getAssetGroups($fullAssetList);        
         $groups = array();
         foreach ($allGroups as $g) {
-            if (!in_array($g, $groups, true)) {
+            if (!in_array($g, $groups) && !empty($g->groupname)) {
                 $groups[] = $g;
             }
         }
