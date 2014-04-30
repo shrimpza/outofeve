@@ -38,6 +38,8 @@
       <td colspan="3">
         {if $lol.location.stationid}
         <img src="{$site_url}/{$lol.location.icon.icon32}" class="i32" alt="{$lol.location.stationname}" align="absmiddle" />
+        {else}
+        <img src="templates/{$theme}/images/menu/map_32.png" alt="{$lol.locationName}" align="absmiddle" />
         {/if}
         {$lol.locationName}
       </td>
