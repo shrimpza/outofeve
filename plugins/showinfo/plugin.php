@@ -59,6 +59,12 @@
                         $attr[$i]['valuestring'] = $type->typename;
                         $attr[$i]['icon'] = $type->icon;
                         $attr[$i]['unitname'] = '';
+                    } else if (isset($attr[$i]['unitname']) && ($attr[$i]['unitname'] == 'attributeID')) {
+                        $attrName = eveDB::getInstance()->db->QueryA('select displayName, attributeName from dgmAttributeTypes where attributeId = ?', array($attr[$i]['valueint']));
+                        if (!empty($attrName)) {
+                            $attr[$i]['valuestring'] = $attrName[0]['displayname'];
+                            $attr[$i]['unitname'] = '';
+                        }
                     } else if (isset($attr[$i]['unitid']) && ($attr[$i]['unitid'] == 117)) {
                         $attr[$i]['valueint'] = empty($attr[$i]['valueint']) ? $attr[$i]['valuefloat'] : $attr[$i]['valueint'];
                         if ($attr[$i]['valueint'] == 1) {
