@@ -202,11 +202,11 @@ class eveCorporationMember {
     }
 
     function setRoles() {
-        $corpRoles = eveDB::getInstance()->corpRoleList();
+        global $corpRoles;
 
-        for ($i = 0; $i < count($corpRoles); $i++) {
-            if ($this->roles & (int) $corpRoles[$i]['rolebit']) {
-                $this->roleList[$corpRoles[$i]['rolename']] = $corpRoles[$i];
+        foreach ($corpRoles as $role => $mask) {
+            if ($this->roles & $mask) {
+                $this->roleList[$corpRoles[$i]['rolename']] = $role;
             }
         }
     }

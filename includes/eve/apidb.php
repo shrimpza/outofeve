@@ -420,14 +420,6 @@ class eveDB {
         return $this->getCache(__FUNCTION__, $towerId);
     }
 
-    function corpRoleList() {
-        if ($this->getCache(__FUNCTION__, 0) == null) {
-            $this->putCache(__FUNCTION__, 0, $this->db->QueryA('select roleBit, roleName from crpRoles order by roleBit', array()));
-        }
-
-        return $this->getCache(__FUNCTION__, 0);
-    }
-
     function eveNpcCorp($id) {
         return $this->getCache(__FUNCTION__, $id, 'eveNpcCorp');
     }
