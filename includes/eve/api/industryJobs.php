@@ -74,6 +74,8 @@ class eveIndustryJob {
     var $outLocation = null;
 
     function eveIndustryJob($job) {
+        global $ramCompletedStatuses;
+        
         $this->outputTypeID = (int) $job['outputTypeID'];
         $this->inputTypeID = (int) $job['installedItemTypeID'];
         $this->jobID = (int) $job['jobID'];
@@ -85,7 +87,7 @@ class eveIndustryJob {
         $this->materialMultiplier = (int) $job['charMaterialMultiplier'];
         $this->completed = (int) $job['completed'];
         $this->completedStatusID = (int) $job['completedStatus'];
-        $this->completedStatus = eveDB::getInstance()->industryCompleteText($this->completedStatusID);
+        $this->completedStatus = $ramCompletedStatuses[$this->completedStatusID];
         $this->activityID = (int) $job['activityID'];
         $this->activity = eveDB::getInstance()->eveIndustryActivity($this->activityID);
         $this->installTime = eveTimeOffset::getOffsetTime($job['installTime']);

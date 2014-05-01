@@ -196,19 +196,6 @@ class eveDB {
         return $this->getCache(__FUNCTION__, $id);
     }
 
-    function industryCompleteText($id) {
-        $id = (string) $id;
-
-        if ($this->getCache(__FUNCTION__, $id) == null) {
-            $res = $this->db->QueryA('select completedStatusText from ramCompletedStatuses where completedStatus = ?', array($id));
-            if ($res) {
-                $this->putCache(__FUNCTION__, $id, $res[0]['completedstatustext']);
-            }
-        }
-
-        return $this->getCache(__FUNCTION__, $id);
-    }
-
     function getTypeId($name) {
         $id = 0;
         $res = $this->db->QueryA('select typeID from invTypes where UCASE(typeName) = UCASE(?)', array($name));

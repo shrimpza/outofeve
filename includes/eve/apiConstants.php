@@ -90,6 +90,15 @@ $attributeMods = array(
     'willpower' => $_attrWillpower,
 );
 
+$ramCompletedStatuses = array(
+    0 => 'Failed',
+    1 => 'Delivered',
+    2 => 'Aborted',
+    3 => 'GM aborted',
+    4 => 'Unanchored',
+    5 => 'Destroyed'
+);
+
 $notificationTitles = array(
     1 => "Legacy",
     2 => "Character deleted",

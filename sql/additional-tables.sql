@@ -1,18 +1,3 @@
-DROP TABLE IF EXISTS ramCompletedStatuses;
-CREATE TABLE ramCompletedStatuses (
-  completedStatus int(11) NOT NULL default '0',
-  completedStatusText char(100) default NULL,
-  description varchar(1000) default NULL,
-  PRIMARY KEY  (completedStatus)
-);
-
-INSERT INTO ramCompletedStatuses (completedStatus, completedStatusText, description) VALUES(0, 'Failed', '');
-INSERT INTO ramCompletedStatuses (completedStatus, completedStatusText, description) VALUES(1, 'Delivered', '');
-INSERT INTO ramCompletedStatuses (completedStatus, completedStatusText, description) VALUES(2, 'Aborted', '');
-INSERT INTO ramCompletedStatuses (completedStatus, completedStatusText, description) VALUES(3, 'GM aborted', '');
-INSERT INTO ramCompletedStatuses (completedStatus, completedStatusText, description) VALUES(4, 'Unanchored', '');
-INSERT INTO ramCompletedStatuses (completedStatus, completedStatusText, description) VALUES(5, 'Destroyed', '');
-
 DROP TABLE IF EXISTS crpRoles;
 CREATE TABLE crpRoles (
   roleBit int(11) default NULL,
