@@ -14,7 +14,7 @@ Installation
 * MySQL
 
 ### Prerequesits
-* [MySQL Eve static data dump](https://forums.eveonline.com/default.aspx?g=posts&t=252031)
+* [MySQL Eve static data dump](https://forums.eveonline.com/default.aspx?g=posts&m=4329249#post4329249)
 * [Icons and Types images from the Eve Community Toolkit](http://community.eveonline.com/community/fansites/toolkit/)
 
 
@@ -26,8 +26,6 @@ Extract the `ExpansionName_x.x_Types` and `ExpansionName_x.x_Icons` packages fro
 
 
 ### Database
-
-When you have the MySQL database dump imported, you will need to run the included `sql/additional-tables.sql` SQL script on that database, which will create tables for the missing Manufacturing completion status descriptions, corporation roles and icons converted from YAML format.
 
 In addition to importing CCP's database dump, you will need to create an additional database for Out of Eve's users and Eve account details. Once you have a database created and ready, execute the contents of `sql/install-db.sql` on that database to create the required tables.
 
