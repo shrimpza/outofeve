@@ -26,6 +26,8 @@
         <td>
         {if $a.icon}
           <img src="{$site_url}/{$a.icon.icon16}" align="absmiddle" class="i16"/>
+        {else}
+          <span class="spacer16"></span>
         {/if}
         {$a.displayname}</td>
         <td align="right">

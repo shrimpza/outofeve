@@ -24,3 +24,8 @@
     height: 100px;
     overflow: auto;
 }
+
+#showInfo .spacer16 {
+    min-width: 16px;
+    display: inline-block;
+}
