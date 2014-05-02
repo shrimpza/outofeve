@@ -17,7 +17,11 @@
     <tr>
       <td>
         <img src="http://image.eveonline.com/Character/{$s.fromID}_32.jpg" class="i32" align="absmiddle" alt="{$s.fromName}" /> 
+        {if $s.agent.station.stationid}
         <img src="{$site_url}/{$s.agent.station.icon.icon32}" class="i32" title="{$s.agent.station.solarSystem.solarsystemname}" align="absmiddle" />
+        {else}
+        <img src="templates/{$theme}/images/menu/map_32.png" class="i32" alt="In space" align="absmiddle" />
+        {/if}
         {$s.fromName}
       </td>
       <td>
