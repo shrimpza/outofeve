@@ -5,13 +5,16 @@ Out of Eve
 
 Out of Eve supports multiple characters across as many Eve accounts as you'd like, supports a full range of Eve personal and corporate API data, full item and ship reference, as well as a number of useful out-of-game utilities.
 
+Last updated for: *Rubicon*
+
 
 Installation
 ============
 
 ### System Requirements
-* PHP 5 with curl module enabled
+* Web server with PHP 5 (with curl module enabled)
 * MySQL
+
 
 ### Prerequesits
 * [MySQL Eve static data dump](https://forums.eveonline.com/default.aspx?g=posts&m=4329249#post4329249)
@@ -22,7 +25,7 @@ Installation
 
 Installation is quite straight-forward. Extract and upload the entire contents of the `outofeve-x.x` source package to your web server.
 
-Extract the `ExpansionName_x.x_Types` and `ExpansionName_x.x_Icons` packages from the community toolkit into the "`eveimages`" directory.
+Extract the `ExpansionName_x.x_Types` and `ExpansionName_x.x_Icons` packages from the community toolkit into the `eveimages` directory.
 
 
 ### Database
@@ -79,4 +82,4 @@ Once you are happy with `config.php`, the Eve data has been imported, your Out o
 
 --
 
-Should you be feeling generous, ISK donations to "Azazel Mordred" are greatly appreciated!
+If you find Out of Eve useful, in-game ISK donations to "Azazel Mordred" are greatly appreciated!
