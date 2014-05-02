@@ -57,25 +57,11 @@ class kills extends Plugin {
                     $deaths[] = objectToArray($deathList[$i], array('DBManager', 'eveDB'));
                 }
             }
+            
+            $p = new Paginator($deaths, 10, $_GET['p']);
 
-            if (count($deaths) > 10) {
-                $deaths = array_chunk($deaths, 10);
-
-                $pageCount = count($deaths);
-                $pageNum = max((int) $_GET['p'], 0);
-                $nextPage = min($pageNum + 1, $pageCount);
-                $prevPage = max($pageNum - 1, 0);
-
-                $deaths = $deaths[$pageNum];
-            } else {
-                $pageCount = 0;
-                $pageNum = 0;
-                $nextPage = 0;
-                $prevPage = 0;
-            }
-
-            return $this->render('deaths', array('deaths' => $deaths, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp']),
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
+            return $this->render('deaths', array('deaths' => $p->pageData, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp']),
+                        'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
         } else {
             $kills = array();
             for ($i = 0; $i < count($killList); $i++) {
@@ -85,24 +71,10 @@ class kills extends Plugin {
                 $kills[] = objectToArray($killList[$i], array('DBManager', 'eveDB'));
             }
 
-            if (count($kills) > 10) {
-                $kills = array_chunk($kills, 10);
+            $p = new Paginator($kils, 10, $_GET['p']);
 
-                $pageCount = count($kills);
-                $pageNum = max((int) $_GET['p'], 0);
-                $nextPage = min($pageNum + 1, $pageCount);
-                $prevPage = max($pageNum - 1, 0);
-
-                $kills = $kills[$pageNum];
-            } else {
-                $pageCount = 0;
-                $pageNum = 0;
-                $nextPage = 0;
-                $prevPage = 0;
-            }
-
-            return $this->render('kills', array('kills' => $kills, 'find' => $_GET['find'], 'corp' => isset($_GET['corp']),
-                        'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage));
+            return $this->render('kills', array('kills' => $p->pageData, 'find' => $_GET['find'], 'corp' => isset($_GET['corp']),
+                        'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
         }
     }
 

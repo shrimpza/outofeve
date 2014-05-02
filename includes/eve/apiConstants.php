@@ -1,5 +1,8 @@
 <?php
 
+/**
+ *  API access masks
+ */
 define('CHAR_Locations', 134217728); // Allows the fetching of coordinate and name data for items owned by the character.
 define('CHAR_Contracts', 67108864); // List of all Contracts the character is involved in.
 define('CHAR_AccountStatus', 33554432); // EVE player account status.
@@ -56,40 +59,21 @@ define('CORP_MemberMedals', 4); // List of medals awarded to corporation members
 define('CORP_AssetList', 2); // List of all corporation assets.
 define('CORP_AccountBalance', 1); // Current balance of all corporation accounts.
 
-
-$_attrIntelligence = array(
-    array('skill' => 3377, 'bonus' => 1), // Analytical Mind
-    array('skill' => 12376, 'bonus' => 1), // Logic
+/**
+ * Industry job completion status text
+ */
+$ramCompletedStatuses = array(
+    0 => 'Failed',
+    1 => 'Delivered',
+    2 => 'Aborted',
+    3 => 'GM aborted',
+    4 => 'Unanchored',
+    5 => 'Destroyed'
 );
 
-$_attrMemory = array(
-    array('skill' => 3378, 'bonus' => 1), // Instant Recall
-    array('skill' => 12385, 'bonus' => 1), // Eidetic Memory
-);
-
-$_attrCharisma = array(
-    array('skill' => 3376, 'bonus' => 1), // Empathy
-    array('skill' => 12383, 'bonus' => 1), // Presence
-);
-
-$_attrPerception = array(
-    array('skill' => 3379, 'bonus' => 1), // Spatial Awareness
-    array('skill' => 12387, 'bonus' => 1), // Clarity
-);
-
-$_attrWillpower = array(
-    array('skill' => 3375, 'bonus' => 1), // Iron Will
-    array('skill' => 12386, 'bonus' => 1), // Focus
-);
-
-$attributeMods = array(
-    'intelligence' => $_attrIntelligence,
-    'memory' => $_attrMemory,
-    'charisma' => $_attrCharisma,
-    'perception' => $_attrPerception,
-    'willpower' => $_attrWillpower,
-);
-
+/**
+ * Notification titles
+ */
 $notificationTitles = array(
     1 => "Legacy",
     2 => "Character deleted",
@@ -221,5 +205,65 @@ $notificationTitles = array(
     128 => "Character Application Accepted",
     129 => "Character Application Rejeced",
     130 => "Character Application Withdrawn"
+);
+
+/**
+ * Corporation roles
+ */
+$corpRoles = array(
+    'corpRoleDirector' => 1,
+    'corpRolePersonnelManager' => 128,
+    'corpRoleAccountant' => 256,
+    'corpRoleSecurityOfficer' => 512,
+    'corpRoleFactoryManager' => 1024,
+    'corpRoleStationManager' => 2048,
+    'corpRoleAuditor' => 4096,
+    'corpRoleHangarCanTake1' => 8192,
+    'corpRoleHangarCanTake2' => 16384,
+    'corpRoleHangarCanTake3' => 32768,
+    'corpRoleHangarCanTake4' => 65536,
+    'corpRoleHangarCanTake5' => 131072,
+    'corpRoleHangarCanTake6' => 262144,
+    'corpRoleHangarCanTake7' => 524288,
+    'corpRoleHangarCanQuery1' => 1048576,
+    'corpRoleHangarCanQuery2' => 2097152,
+    'corpRoleHangarCanQuery3' => 4194304,
+    'corpRoleHangarCanQuery4' => 8388608,
+    'corpRoleHangarCanQuery5' => 16777216,
+    'corpRoleHangarCanQuery6' => 33554432,
+    'corpRoleHangarCanQuery7' => 67108864,
+    'corpRoleAccountCanTake1' => 134217728,
+    'corpRoleAccountCanTake2' => 268435456,
+    'corpRoleAccountCanTake3' => 536870912,
+    'corpRoleAccountCanTake4' => 1073741824,
+    'corpRoleAccountCanTake5' => 2147483648,
+    'corpRoleAccountCanTake6' => 4294967296,
+    'corpRoleAccountCanTake7' => 8589934592,
+    'corpRoleAccountCanQuery1' => 17179869184,
+    'corpRoleAccountCanQuery2' => 34359738368,
+    'corpRoleAccountCanQuery3' => 68719476736,
+    'corpRoleAccountCanQuery4' => 137438953472,
+    'corpRoleAccountCanQuery5' => 274877906944,
+    'corpRoleAccountCanQuery6' => 549755813888,
+    'corpRoleAccountCanQuery7' => 1099511627776,
+    'corpRoleEquipmentConfig' => 2199023255552,
+    'corpRoleContainerCanTake1' => 4398046511104,
+    'corpRoleContainerCanTake2' => 8796093022208,
+    'corpRoleContainerCanTake3' => 17592186044416,
+    'corpRoleContainerCanTake4' => 35184372088832,
+    'corpRoleContainerCanTake5' => 70368744177664,
+    'corpRoleContainerCanTake6' => 140737488355328,
+    'corpRoleContainerCanTake7' => 281474976710656,
+    'corpRoleCanRentOffice' => 562949953421312,
+    'corpRoleCanRentFactorySlot' => 1125899906842624,
+    'corpRoleCanRentResearchSlot' => 2251799813685248,
+    'corpRoleJuniorAccountant' => 4503599627370496,
+    'corpRoleStarbaseConfig' => 9007199254740992,
+    'corpRoleTrader' => 18014398509481984,
+    'corpRoleChatManager' => 36028797018963968,
+    'corpRoleContractManager' => 72057594037927936,
+    'corpRoleInfrastructureTacticalOfficer' => 144115188075855872,
+    'corpRoleStarbaseCaretaker' => 288230376151711744,
+    'corpRoleFittingManager' => 576460752303423488
 );
 ?>

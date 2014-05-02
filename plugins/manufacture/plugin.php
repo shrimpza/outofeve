@@ -58,25 +58,11 @@ class manufacture extends Plugin {
             }
         }
         asort($activities);
+        
+        $p = new Paginator($jobs, 50, $_GET['p']);
 
-        if (count($jobs) > 50) {
-            $jobs = array_chunk($jobs, 50);
-
-            $pageCount = count($jobs);
-            $pageNum = max((int) $_GET['p'], 0);
-            $nextPage = min($pageNum + 1, $pageCount);
-            $prevPage = max($pageNum - 1, 0);
-
-            $jobs = $jobs[$pageNum];
-        } else {
-            $pageCount = 0;
-            $pageNum = 0;
-            $nextPage = 0;
-            $prevPage = 0;
-        }
-
-        return $this->render('jobs', array('jobs' => $jobs, 'activities' => $activities, 'activity' => $_GET['activity'], 'complete' => $_GET['complete'],
-                    'pageCount' => $pageCount, 'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage, 'corp' => isset($_GET['corp'])));
+        return $this->render('jobs', array('jobs' => $p->pageData, 'activities' => $activities, 'activity' => $_GET['activity'], 'complete' => $_GET['complete'],
+                    'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage, 'corp' => isset($_GET['corp'])));
     }
 
 }

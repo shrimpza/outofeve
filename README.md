@@ -5,16 +5,19 @@ Out of Eve
 
 Out of Eve supports multiple characters across as many Eve accounts as you'd like, supports a full range of Eve personal and corporate API data, full item and ship reference, as well as a number of useful out-of-game utilities.
 
+Last updated for: *Rubicon*
+
 
 Installation
 ============
 
 ### System Requirements
-* PHP 5 with curl module enabled
+* Web server with PHP 5 (with curl module enabled)
 * MySQL
 
+
 ### Prerequesits
-* [MySQL Eve static data dump](https://forums.eveonline.com/default.aspx?g=posts&t=252031)
+* [MySQL Eve static data dump](https://forums.eveonline.com/default.aspx?g=posts&m=4329249#post4329249)
 * [Icons and Types images from the Eve Community Toolkit](http://community.eveonline.com/community/fansites/toolkit/)
 
 
@@ -22,12 +25,10 @@ Installation
 
 Installation is quite straight-forward. Extract and upload the entire contents of the `outofeve-x.x` source package to your web server.
 
-Extract the `ExpansionName_x.x_Types` and `ExpansionName_x.x_Icons` packages from the community toolkit into the "`eveimages`" directory.
+Extract the `ExpansionName_x.x_Types` and `ExpansionName_x.x_Icons` packages from the community toolkit into the `eveimages` directory.
 
 
 ### Database
-
-When you have the MySQL database dump imported, you will need to run the included `sql/additional-tables.sql` SQL script on that database, which will create tables for the missing Manufacturing completion status descriptions, corporation roles and icons converted from YAML format.
 
 In addition to importing CCP's database dump, you will need to create an additional database for Out of Eve's users and Eve account details. Once you have a database created and ready, execute the contents of `sql/install-db.sql` on that database to create the required tables.
 
@@ -81,4 +82,4 @@ Once you are happy with `config.php`, the Eve data has been imported, your Out o
 
 --
 
-Should you be feeling generous, ISK donations to "Azazel Mordred" are greatly appreciated!
+If you find Out of Eve useful, in-game ISK donations to "Azazel Mordred" are greatly appreciated!

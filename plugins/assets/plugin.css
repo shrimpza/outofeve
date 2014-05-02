@@ -2,22 +2,23 @@
 }
 
 #assetList .groupHead td {
-    /*background: #f3f3f3;
-    color: #555;*/
     font-weight: bold;
     cursor: pointer;
     font-size: 1.1em;
 }
 
 #assetList .contents {
-    /*border-left: 15px solid #fff; */
     margin: 2px;
     padding: 0px;
     padding-left: 16px;
 }
 
-#assetList .row td {
-    /*border-bottom: 1px solid #f3f3f3;*/
+.listOptions #group {
+    max-width: 200px;
+}
+
+.listOptions #assetFind {
+    max-width: 150px;
 }
 
 /* ************************************************************************* */

@@ -58,24 +58,10 @@ class transactions extends Plugin {
 
         $trans = objectToArray($transList, array('DBManager', 'eveDB'));
 
-        if (count($trans) > 50) {
-            $trans = array_chunk($trans, 50);
+        $p = new Paginator($trans, 50, $_GET['p']);
 
-            $pageCount = count($trans);
-            $pageNum = max((int) $_GET['p'], 0);
-            $nextPage = min($pageNum + 1, $pageCount);
-            $prevPage = max($pageNum - 1, 0);
-
-            $trans = $trans[$pageNum];
-        } else {
-            $pageCount = 0;
-            $pageNum = 0;
-            $nextPage = 0;
-            $prevPage = 0;
-        }
-
-        $vars = array('trans' => $trans, 'transType' => $_GET['transType'], 'pageCount' => $pageCount,
-            'pageNum' => $pageNum, 'nextPage' => $nextPage, 'prevPage' => $prevPage,
+        $vars = array('trans' => $p->pageData, 'transType' => $_GET['transType'], 
+            'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
             'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
 
         if (isset($_GET['corp'])) {

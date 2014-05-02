@@ -77,7 +77,7 @@ class eveCharacterDetail {
                 }
 
                 $this->attributes = new eveAttributeList();
-                $this->attributes->load($this, $result->attributes, $result->attributeEnhancers);
+                $this->attributes->load($result->attributes, $result->attributeEnhancers);
             }
         }
 
@@ -190,10 +190,10 @@ class eveAttributeList {
 
     var $attributes = array();
 
-    function load($character, $attributes, $implants) {
+    function load($attributes, $implants) {
         foreach (get_object_vars($attributes) as $var => $val) {
             $implantName = $var . 'Bonus';
-            $this->attributes[] = new eveAttribute($var, (float) $val, $implants->$implantName, $character);
+            $this->attributes[] = new eveAttribute($var, (float) $val, $implants->$implantName);
         }
     }
 
@@ -219,24 +219,13 @@ class eveAttribute {
     var $implant = '';
     var $bonus = 0;
 
-    function eveAttribute($name, $value, $implant, $character) {
-        global $attributeMods;
-
+    function eveAttribute($name, $value, $implant) {
         $this->name = $name;
         $this->value = $value;
         if (isset($implant)) {
             $this->implant = (string) $implant->augmentatorName;
             $this->bonus = (float) $implant->augmentatorValue;
             $this->value += $this->bonus;
-        }
-
-        // apply bonuses from trained learning skills
-        if ($attributeMods[$this->name]) {
-            foreach ($attributeMods[$this->name] as $mod) {
-                if ($character->skills->getSkill($mod['skill'])) {
-                    $this->value += $character->skills->getSkill($mod['skill'])->level * $mod['bonus'];
-                }
-            }
         }
     }
 
