@@ -42,12 +42,14 @@ class eveJournal {
                     $this->load($lowest);
                 } else {
                     // if this is the last run, sort all the items we have
-                    usort($this->journal, function ($a, $b) {
-                        return ($a->date > $b->date) ? -1 : 1;
-                    });
+                    usort($this->journal, array('eveJournal', 'sortJorunal'));
                 }
             }
         }
+    }
+
+    static function sortJorunal($a, $b) {
+        return ($a->date > $b->date) ? -1 : 1;
     }
 
     static function refType($refTypeId) {
@@ -60,8 +62,7 @@ class eveJournal {
         }
         return eveJournal::$refTypes[$refTypeId];
     }
-    
-    
+
     static function lowestJournalRef($journalItems) {
         $res = 0;
         for ($i = 0; $i < count($journalItems); $i++) {
