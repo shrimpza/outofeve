@@ -9,7 +9,7 @@ class journal extends Plugin {
      * Taxable refTypeIDs - to be used when a member list is not available. 
      * Likely less accurate but will work for API keys which don't have access to corp member lists.
      */
-    var $taxableRefs = [33, 34, 85];
+    var $taxableRefs = array(33, 34, 85);
 
     function journal($db, $site) {
         $this->Plugin($db, $site);
