@@ -77,16 +77,14 @@ class assets extends Plugin {
     function assetList($fullAssetList) {
         $assets = array();
 
-        $allGroups = $this->getAssetGroups($fullAssetList);        
+        $allGroups = $this->getAssetGroups($fullAssetList);
         $groups = array();
         foreach ($allGroups as $g) {
             if (!in_array($g, $groups) && !empty($g->groupname)) {
                 $groups[] = $g;
             }
         }
-        usort($groups, function ($a, $b) {
-            return ($a->groupname == $b->groupname) ? 0 : ($a->groupname < $b->groupname) ? -1 : 1;
-        });
+        usort($groups, array('assets', 'assetGroupSort'));
 
         if ($_GET['group'] > 0) {
             $this->filterAssetGroup($fullAssetList, $_GET['group']);
@@ -112,9 +110,7 @@ class assets extends Plugin {
                 }
             }
         }
-        usort($assets, function ($a, $b) {
-            return ($a['locationName'] == $b['locationName']) ? 0 : ($a['locationName'] < $b['locationName']) ? -1 : 1;
-        });
+        usort($assets, array('assets', 'assetLocationSort'));
 
         foreach ($assets as $k => $v) {
             $ships = array();
@@ -225,6 +221,14 @@ class assets extends Plugin {
 
     static function assetNameSort($a, $b) {
         return ($a->item->typename == $b->item->typename) ? 0 : ($a->item->typename < $b->item->typename) ? -1 : 1;
+    }
+
+    static function assetGroupSort($a, $b) {
+        return ($a->groupname == $b->groupname) ? 0 : ($a->groupname < $b->groupname) ? -1 : 1;
+    }
+
+    static function assetLocationSort($a, $b) {
+        return ($a['locationName'] == $b['locationName']) ? 0 : ($a['locationName'] < $b['locationName']) ? -1 : 1;
     }
 
 }
