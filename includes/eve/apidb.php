@@ -26,6 +26,7 @@ class itemGraphic {
         $iconParts = false;
         if (isset($icon) && !empty($icon)) {
             $iconParts = explode('_', $icon);
+            if (count($iconParts) != 2) $iconParts = false;
         }
 
         if (isset($typeId) && $typeId) {
@@ -128,7 +129,7 @@ class eveDB {
 
     function bloodlineInfo($bloodlineName) {
         $res = $this->db->QueryA("select b.bloodlineName, r.raceName, ib.iconFile as bicon, ir.iconFile as ricon
-                                        from chrBloodlines b 
+                                        from chrBloodlines b
                                         inner join chrRaces r on r.raceId = b.raceId
                                         inner join eveIcons ib on ib.iconId = b.iconId
                                         inner join eveIcons ir on ir.iconId = r.iconId
@@ -251,7 +252,7 @@ class eveDB {
     }
 
     /**
-     * retrieves the item a blueprint produces, based on a blueprint type from 
+     * retrieves the item a blueprint produces, based on a blueprint type from
      * invTypes, NOT invBlueprintTypes.
      */
     function eveItemFromBlueprintType($typeId) {
@@ -282,7 +283,7 @@ class eveDB {
         $station = $this->getCache(__FUNCTION__, $id, 'eveStation');
 
         if ($station == null || $station->stationid == 0) {
-            $outpost = eveOutpostList::getOutpost($stationId);
+            $outpost = eveOutpostList::getOutpost($id);
             if ($outpost) {
                 $this->putCache(__FUNCTION__, $id, $outpost);
                 $station = $this->getCache(__FUNCTION__, $id);
@@ -320,7 +321,7 @@ class eveDB {
             $regionLimit = ' where regionID = ' . $regionID;
         }
 
-        $sysList = $this->db->QueryA('select solarsystemid, regionid, solarsystemname, security, x, z, factionid 
+        $sysList = $this->db->QueryA('select solarsystemid, regionid, solarsystemname, security, x, z, factionid
                                           from mapSolarSystems ' . $regionLimit . '
                                           order by solarSystemName', array());
         for ($i = 0; $i < count($sysList); $i++) {
@@ -431,7 +432,7 @@ class eveDB {
     function eveAgent($id) {
         return $this->getCache(__FUNCTION__, $id, 'eveAgent');
     }
-    
+
     function eveNpcDivision($id) {
         return $this->getCache(__FUNCTION__, $id, 'eveNpcDivision');
     }
@@ -448,7 +449,7 @@ class eveDB {
 
         return $this->getCache(__FUNCTION__, $id);
     }
-    
+
 }
 
 ?>

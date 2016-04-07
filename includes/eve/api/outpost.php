@@ -6,7 +6,7 @@ class eveOutpostList {
     static $instance = null;
 
     function load() {
-        if ($this->outpostList == null) {
+        if ($this->outposts == null || count($this->outposts) == 0) {
             $outpostData = new apiRequest('eve/ConquerableStationList.xml.aspx');
             if ($outpostData->data && !$outpostData->data->error) {
                 foreach ($outpostData->data->result->rowset->row as $outpost) {

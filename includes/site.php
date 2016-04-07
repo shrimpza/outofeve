@@ -83,7 +83,7 @@ class Site {
         } else {
             $this->tplVars['errors'] = false;
         }
-            
+
 
         foreach ($this->tplVars as $var => $val) {
             $smarty->assign($var, $val);

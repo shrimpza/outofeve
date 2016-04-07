@@ -57,7 +57,7 @@ class kills extends Plugin {
                     $deaths[] = objectToArray($deathList[$i], array('DBManager', 'eveDB'));
                 }
             }
-            
+
             $p = new Paginator($deaths, 10, $_GET['p']);
 
             return $this->render('deaths', array('deaths' => $p->pageData, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp']),
@@ -71,7 +71,7 @@ class kills extends Plugin {
                 $kills[] = objectToArray($killList[$i], array('DBManager', 'eveDB'));
             }
 
-            $p = new Paginator($kils, 10, $_GET['p']);
+            $p = new Paginator($kills, 10, $_GET['p']);
 
             return $this->render('kills', array('kills' => $p->pageData, 'find' => $_GET['find'], 'corp' => isset($_GET['corp']),
                         'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
