@@ -71,7 +71,7 @@ class assets extends Plugin {
 
         return $this->render('ships', array('ships' => objectToArray($p->pageData),
                     'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
-                    'corp' => $_GET['corp']));
+                    'corp' => $_GET['corp'], 'search' => ''));
     }
 
     function assetList($fullAssetList) {
@@ -91,7 +91,7 @@ class assets extends Plugin {
         }
 
         foreach ($fullAssetList as $asset) {
-            if (!$asset->hide) {
+            if (!isset($asset->hide) || !$asset->hide) {
                 if (!empty($asset->locationID)) {
                     $locationKey = (string) $asset->locationID;
                     if (!isset($assets[$locationKey])) {
@@ -145,7 +145,7 @@ class assets extends Plugin {
 
         return $this->render('assets', array('assets' => objectToArray($p->pageData), 'groups' => $groups, 'group' => $_GET['group'],
                     'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
-                    'corp' => $_GET['corp']));
+                    'corp' => $_GET['corp'], 'search' => ''));
     }
 
     // --- utility, sort and filtering methods follow

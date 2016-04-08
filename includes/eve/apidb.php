@@ -2,22 +2,24 @@
 
 class itemGraphic {
 
+    private static $iconCache = null;
+
     var $icon16;
     var $icon32;
     var $icon64;
     var $icon128;
-    private static $iconCache = null;
 
     static function getItemGraphic($typeId, $icon) {
         if (self::$iconCache == null) {
             self::$iconCache = array();
         }
 
-        if (in_array($typeId, array_keys(self::$iconCache))) {
-            return self::$iconCache[$typeId . '.' . $icon];
+        $k = $typeId . '.' . $icon;
+        if (in_array($k, array_keys(self::$iconCache))) {
+            return self::$iconCache[$k];
         } else {
-            self::$iconCache[$typeId . '.' . $icon] = new itemGraphic($typeId, $icon);
-            return self::$iconCache[$typeId . '.' . $icon];
+            self::$iconCache[$k] = new itemGraphic($typeId, $icon);
+            return self::$iconCache[$k];
         }
     }
 
