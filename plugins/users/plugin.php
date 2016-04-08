@@ -257,6 +257,7 @@ class users extends Plugin {
         $res = eveDB::getInstance()->db->QueryA('select typeid from invTypes where groupid = 18 order by typeid', array());
         for ($i = 0; $i < count($res); $i++) {
             $newMin = eveDB::getInstance()->eveItem($res[$i]['typeid']);
+            $newMin->customPrice = 0;
             if ($myMins) {
                 for ($j = 0; $j < count($myMins); $j++) {
                     if ($myMins[$j]->typeid == $newMin->typeid) {
@@ -349,6 +350,7 @@ class users extends Plugin {
         for ($i = 0; $i < count($keys); $i++) {
             $eveAcc = new eveAccountStatus(eveKeyManager::getKey($keys[$i]['row']['id']));
             $eveAcc->load();
+            if (!isset($eveAcc->error)) $eveAcc -> error = false;
             $keys[$i]['account'] = objectToArray($eveAcc);
         }
 

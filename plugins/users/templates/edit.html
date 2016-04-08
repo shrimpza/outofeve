@@ -30,7 +30,9 @@
     <hr />
     <label>&nbsp;</label><b>Custom mineral prices:</b><br />
     {section name=m loop=$custommins}
-      <label>{$custommins[m].typename}</label><img src="{$site_url}/{$custommins[m].icon.icon32}" align="left" height="22" /><input type="text" name="min_{$custommins[m].typeid}" value="{$custommins[m].customPrice|eveNum}" style="width:60px;" /><br />
+      <label>{$custommins[m].typename}</label>
+      <img src="{$site_url}/{$custommins[m].icon.icon32}" align="left" height="22" />
+      <input type="text" name="min_{$custommins[m].typeid}" value="{$custommins[m].customPrice|eveNum}" style="width:60px;" /><br />
     {/section}
   {/if}
 
