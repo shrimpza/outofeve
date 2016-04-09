@@ -3,61 +3,61 @@
 /**
  *  API access masks
  */
-define('CHAR_Locations', 134217728); // Allows the fetching of coordinate and name data for items owned by the character.
-define('CHAR_Contracts', 67108864); // List of all Contracts the character is involved in.
-define('CHAR_AccountStatus', 33554432); // EVE player account status.
-define('CHAR_CharacterInfo_FULL', 16777216); // Sensitive Character Information, exposes account balance and last known location on top of the other Character Information call.
-define('CHAR_CharacterInfo', 8388608); // Character information, exposes skill points and current ship information on top of'Show Info'information.
-define('CHAR_WalletTransactions', 4194304); // Market transaction journal of character.
-define('CHAR_WalletJournal', 2097152); // Wallet journal of character.
-define('CHAR_UpcomingCalendarEvents', 1048576); // Upcoming events on characters calendar.
-define('CHAR_Standings', 524288); // NPC Standings towards the character.
-define('CHAR_SkillQueue', 262144); // Entire skill queue of character.
-define('CHAR_SkillInTraining', 131072); // Skill currently in training on the character. Subset of entire Skill Queue.
-define('CHAR_Research', 65536); // List of all Research agents working for the character and the progress of the research.
-define('CHAR_NotificationTexts', 32768); // Actual body of notifications sent to the character. Requires Notification access to function.
-define('CHAR_Notifications', 16384); // List of recent notifications sent to the character.
-define('CHAR_Medals', 8192); // Medals awarded to the character.
-define('CHAR_MarketOrders', 4096); // List of all Market Orders the character has made.
-define('CHAR_MailMessages', 2048); // List of all messages in the characters EVE Mail Inbox.
-define('CHAR_MailingLists', 1024); // List of all Mailing Lists the character subscribes to.
-define('CHAR_MailBodies', 512); // EVE Mail bodies. Requires MailMessages as well to function.
-define('CHAR_KillLog', 256); // Characters kill log.
-define('CHAR_IndustryJobs', 128); // Character jobs, completed and active.
-define('CHAR_FacWarStats', 64); // Characters Factional Warfare Statistics.
-define('CHAR_ContactNotifications', 32); // Most recent contact notifications for the character.
-define('CHAR_ContactList', 16); // List of character contacts and relationship levels.
-define('CHAR_CharacterSheet', 8); // Character Sheet information. Contains basic'Show Info'information along with clones, account balance, implants, attributes, skills, certificates and corporation roles.
-define('CHAR_CalendarEventAttendees', 4); // Event attendee responses. Requires UpcomingCalendarEvents to function.
-define('CHAR_AssetList', 2); // Entire asset list of character.
 define('CHAR_AccountBalance', 1); // Current balance of characters wallet.
+define('CHAR_AssetList', 2); // Entire asset list of character.
+define('CHAR_CalendarEventAttendees', 4); // Event attendee responses. Requires UpcomingCalendarEvents to function.
+define('CHAR_CharacterSheet', 8); // Character Sheet information. Contains basic'Show Info'information along with clones, account balance, implants, attributes, skills, certificates and corporation roles.
+define('CHAR_ContactList', 16); // List of character contacts and relationship levels.
+define('CHAR_ContactNotifications', 32); // Most recent contact notifications for the character.
+define('CHAR_FacWarStats', 64); // Characters Factional Warfare Statistics.
+define('CHAR_IndustryJobs', 128); // Character jobs, completed and active.
+define('CHAR_KillLog', 256); // Characters kill log.
+define('CHAR_MailBodies', 512); // EVE Mail bodies. Requires MailMessages as well to function.
+define('CHAR_MailingLists', 1024); // List of all Mailing Lists the character subscribes to.
+define('CHAR_MailMessages', 2048); // List of all messages in the characters EVE Mail Inbox.
+define('CHAR_MarketOrders', 4096); // List of all Market Orders the character has made.
+define('CHAR_Medals', 8192); // Medals awarded to the character.
+define('CHAR_Notifications', 16384); // List of recent notifications sent to the character.
+define('CHAR_NotificationTexts', 32768); // Actual body of notifications sent to the character. Requires Notification access to function.
+define('CHAR_Research', 65536); // List of all Research agents working for the character and the progress of the research.
+define('CHAR_SkillInTraining', 131072); // Skill currently in training on the character. Subset of entire Skill Queue.
+define('CHAR_SkillQueue', 262144); // Entire skill queue of character.
+define('CHAR_Standings', 524288); // NPC Standings towards the character.
+define('CHAR_UpcomingCalendarEvents', 1048576); // Upcoming events on characters calendar.
+define('CHAR_WalletJournal', 2097152); // Wallet journal of character.
+define('CHAR_WalletTransactions', 4194304); // Market transaction journal of character.
+define('CHAR_CharacterInfo', 8388608); // Character information, exposes skill points and current ship information on top of'Show Info'information.
+define('CHAR_CharacterInfo_FULL', 16777216); // Sensitive Character Information, exposes account balance and last known location on top of the other Character Information call.
+define('CHAR_AccountStatus', 33554432); // EVE player account status.
+define('CHAR_Contracts', 67108864); // List of all Contracts the character is involved in.
+define('CHAR_Locations', 134217728); // Allows the fetching of coordinate and name data for items owned by the character.
 
-define('CORP_MemberTrackingExtended', 33554432); // Extensive Member information. Time of last logoff, last known location and ship.
-define('CORP_Locations', 16777216); // Allows the fetching of coordinate and name data for items owned by the corporation.
-define('CORP_Contracts', 8388608); // List of recent Contracts the corporation is involved in.
-define('CORP_Titles', 4194304); // Titles of corporation and the roles they grant.
-define('CORP_WalletTransactions', 2097152); // Market transactions of all corporate accounts.
-define('CORP_WalletJournal', 1048576); // Wallet journal for all corporate accounts.
-define('CORP_StarbaseList', 524288); // List of all corporate starbases.
-define('CORP_Standings', 262144); // NPC Standings towards corporation.
-define('CORP_StarbaseDetail', 131072); // List of all settings of corporate starbases.
-define('CORP_Shareholders', 65536); // Shareholders of the corporation.
-define('CORP_OutpostServiceDetail', 32768); // List of all service settings of corporate outposts.
-define('CORP_OutpostList', 16384); // List of all outposts controlled by the corporation.
-define('CORP_Medals', 8192); // List of all medals created by the corporation.
-define('CORP_MarketOrders', 4096); // List of all corporate market orders.
-define('CORP_MemberTrackingLimited', 2048); // Limited Member information.
-define('CORP_MemberSecurityLog', 1024); // Member role and title change log.
-define('CORP_MemberSecurity', 512); // Member roles and titles.
-define('CORP_KillLog', 256); // Corporation kill log.
-define('CORP_IndustryJobs', 128); // Corporation jobs, completed and active.
-define('CORP_FacWarStats', 64); // Corporations Factional Warfare Statistics.
-define('CORP_ContainerLog', 32); // Corporate secure container acess log.
-define('CORP_ContactList', 16); // Corporate contact list and relationships.
-define('CORP_CorporationSheet', 8); // Exposes basic'Show Info'information as well as Member Limit and basic division and wallet info.
-define('CORP_MemberMedals', 4); // List of medals awarded to corporation members.
-define('CORP_AssetList', 2); // List of all corporation assets.
 define('CORP_AccountBalance', 1); // Current balance of all corporation accounts.
+define('CORP_AssetList', 2); // List of all corporation assets.
+define('CORP_MemberMedals', 4); // List of medals awarded to corporation members.
+define('CORP_CorporationSheet', 8); // Exposes basic'Show Info'information as well as Member Limit and basic division and wallet info.
+define('CORP_ContactList', 16); // Corporate contact list and relationships.
+define('CORP_ContainerLog', 32); // Corporate secure container acess log.
+define('CORP_FacWarStats', 64); // Corporations Factional Warfare Statistics.
+define('CORP_IndustryJobs', 128); // Corporation jobs, completed and active.
+define('CORP_KillLog', 256); // Corporation kill log.
+define('CORP_MemberSecurity', 512); // Member roles and titles.
+define('CORP_MemberSecurityLog', 1024); // Member role and title change log.
+define('CORP_MemberTrackingLimited', 2048); // Limited Member information.
+define('CORP_MarketOrders', 4096); // List of all corporate market orders.
+define('CORP_Medals', 8192); // List of all medals created by the corporation.
+define('CORP_OutpostList', 16384); // List of all outposts controlled by the corporation.
+define('CORP_OutpostServiceDetail', 32768); // List of all service settings of corporate outposts.
+define('CORP_Shareholders', 65536); // Shareholders of the corporation.
+define('CORP_StarbaseDetail', 131072); // List of all settings of corporate starbases.
+define('CORP_Standings', 262144); // NPC Standings towards corporation.
+define('CORP_StarbaseList', 524288); // List of all corporate starbases.
+define('CORP_WalletJournal', 1048576); // Wallet journal for all corporate accounts.
+define('CORP_WalletTransactions', 2097152); // Market transactions of all corporate accounts.
+define('CORP_Titles', 4194304); // Titles of corporation and the roles they grant.
+define('CORP_Contracts', 8388608); // List of recent Contracts the corporation is involved in.
+define('CORP_Locations', 16777216); // Allows the fetching of coordinate and name data for items owned by the corporation.
+define('CORP_MemberTrackingExtended', 33554432); // Extensive Member information. Time of last logoff, last known location and ship.
 
 /**
  * Industry job completion status text
