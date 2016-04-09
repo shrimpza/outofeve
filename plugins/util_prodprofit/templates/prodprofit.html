@@ -31,23 +31,6 @@
 
     <tr>
       <td align="right">
-        <b>Material Level:</b>
-      </td>
-      <td width="330">
-        <select name="meLevel" style="width: 280px">
-          <option value="0" {if $meLevel == 0}selected="selected"{/if}>ME0</option>
-          <option value="5" {if $meLevel == 5}selected="selected"{/if}>ME5</option>
-          <option value="10" {if $meLevel == 10}selected="selected"{/if}>ME10</option>
-          <option value="20" {if $meLevel == 20}selected="selected"{/if}>ME20</option>
-          <option value="30" {if $meLevel == 30}selected="selected"{/if}>ME30</option>
-          <option value="40" {if $meLevel == 40}selected="selected"{/if}>ME40</option>
-          <option value="50" {if $meLevel == 50}selected="selected"{/if}>ME50</option>
-        </select>
-      </td>
-    </tr>
-
-    <tr>
-      <td align="right">
         <b>Region:</b>
       </td>
       <td width="330">
@@ -112,11 +95,11 @@
       {$i.item.typename}
     </td>
     <td align="right">{$i.item.portionsize|eveNumInt}</td>
-    <td align="right">{$i.production.you/$i.item.portionsize|eveNum}</td>
-    <td align="right" {if $i.item.pricing.maxBuy > $i.production.you/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.maxBuy|eveNum}</td>
+    <td align="right">{($i.cost/$i.item.portionsize)|eveNum}</td>
+    <td align="right" {if $i.item.pricing.maxBuy > $i.cost/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.maxBuy|eveNum}</td>
     <td align="right">{$i.item.pricing.avgBuy|eveNum}</td>
     <td align="right">{$i.item.pricing.qtyBuy|eveNum}</td>
-    <td align="right" {if $i.item.pricing.minSell > $i.production.you/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.minSell|eveNum}</td>
+    <td align="right" {if $i.item.pricing.minSell > $i.cost/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.minSell|eveNum}</td>
     <td align="right">{$i.item.pricing.avgSell|eveNum}</td>
     <td align="right">{$i.item.pricing.qtySell|eveNum}</td>
   </tr>

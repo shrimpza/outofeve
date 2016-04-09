@@ -11,9 +11,8 @@ class util_prodprofit extends Plugin {
         $this->site->plugins['mainmenu']->addLink('util', 'Production Profitability', '?module=util_prodprofit', 'util_prodprofit');
     }
 
-    function productionCost($item, $meLevel, $region, $peLevel) {
-        $tPerfect = 0;
-        $tYou = 0;
+    function productionCost($blueprint, $item, $region) {
+        $total = 0;
 
         $item->getBlueprint(true);
         if ($item->blueprint) {
@@ -32,18 +31,13 @@ class util_prodprofit extends Plugin {
                     $prcAvgSell = $item->blueprint->materials[$i]['item']->pricing->avgSell;
                 }
 
-                $peFactor = 1.25 - (0.05 * $peLevel);
-                $meFactor = $item->blueprint->wastefactor / (1 + $meLevel);
+                $meNow = $blueprint->materialEfficiency;
 
-                $item->blueprint->materials[$i]['waste'] = floor($item->blueprint->materials[$i]['quantity'] * ($meFactor / 100));
-                $item->blueprint->materials[$i]['qty_perfect'] = $item->blueprint->materials[$i]['quantity'] + $item->blueprint->materials[$i]['waste'];
-                $item->blueprint->materials[$i]['qty_you'] = floor($item->blueprint->materials[$i]['qty_perfect'] * $peFactor);
+                $item->blueprint->materials[$i]['qty'] = $item->blueprint->materials[$i]['quantity']
+                                                            + ceil($item->blueprint->materials[$i]['quantity'] * ($meNow / 100));
+                $item->blueprint->materials[$i]['price'] = $item->blueprint->materials[$i]['qty'] * $prcAvgSell;
 
-                $item->blueprint->materials[$i]['price_perfect'] = $item->blueprint->materials[$i]['qty_perfect'] * $prcAvgSell;
-                $item->blueprint->materials[$i]['price_you'] = $item->blueprint->materials[$i]['qty_you'] * $prcAvgSell;
-
-                $tPerfect += $item->blueprint->materials[$i]['price_perfect'];
-                $tYou += $item->blueprint->materials[$i]['price_you'];
+                $total += $item->blueprint->materials[$i]['price'];
             }
 
             for ($i = 0; $i < count($item->blueprint->extraMaterials); $i++) {
@@ -51,12 +45,11 @@ class util_prodprofit extends Plugin {
 
                 $qtyScale = $item->blueprint->extraMaterials[$i]['quantity'] * $item->blueprint->extraMaterials[$i]['damageperjob'];
 
-                $tPerfect += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
-                $tYou += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
+                $total += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
             }
         }
 
-        return array('perfect' => $tPerfect, 'you' => $tYou);
+        return $total;
     }
 
     function getContent() {
@@ -72,9 +65,6 @@ class util_prodprofit extends Plugin {
         if (!isset($_GET['customprice'])) {
             $_GET['customprice'] = 0;
         }
-        if (!isset($_GET['meLevel'])) {
-            $_GET['meLevel'] = 0;
-        }
         if (!isset($_GET['corp'])) {
             $_GET['corp'] = 0;
         }
@@ -83,7 +73,6 @@ class util_prodprofit extends Plugin {
 
         $group = $_GET['group'];
         $region = $_GET['region'];
-        $meLevel = $_GET['meLevel'];
 
         if ($_GET['customprice']) {
             $this->customPrices = $this->site->user->get_mineralprice_list();
@@ -91,31 +80,17 @@ class util_prodprofit extends Plugin {
 
         if ($_GET['corp'] > 0) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
-                $al = new eveAssetList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
-                $al->load(true);
-                $fullAssetList = $al->assets;
+                $bpl = new eveBlueprintList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
+                $bpl->load(true);
+                $allBlueprints = $bpl->blueprints;
             }
         } else {
             if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-                $al = new eveAssetList(eveKeyManager::getKey($this->site->user->char_apikey_id));
-                $al->load(true);
-                $fullAssetList = $al->assets;
+                $bpl = new eveBlueprintList(eveKeyManager::getKey($this->site->user->char_apikey_id));
+                $bpl->load(true);
+                $allBlueprints = $bpl->blueprints;
             }
         }
-        
-        $peLevel = 0;
-
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-            $character = new eveCharacterDetail(eveKeyManager::getKey($this->site->user->char_apikey_id));
-            $character->load();
-
-            $skills = $character->skills;
-            if ($skills->getSkill('3388')) {
-                $peLevel = $skills->getSkill('3388')->level;
-            }
-        }
-
-        $allBlueprints = $this->blueprintAssets($fullAssetList, 9);
 
         $groups = array();
         $blueprints = array();
@@ -130,12 +105,12 @@ class util_prodprofit extends Plugin {
 
         $p = new Paginator($blueprints, 20, $_GET['p']);
 
-        for ($i = 0; $i < count($p->pageData); $i++) {
-            $item = eveDB::getInstance()->eveItemFromBlueprintType($p->pageData[$i]->item->typeid);
+        foreach ($p->pageData as $blueprint) {
+            $item = eveDB::getInstance()->eveItemFromBlueprintType($blueprint->typeID);
             $item->getPricing($region);
-            $prod = $this->productionCost($item, $meLevel, $region, $peLevel);
+            $cost = $this->productionCost($blueprint, $item, $region);
 
-            $bps[] = array('item' => objectToArray($item, array('DBManager', 'eveDB')), 'production' => $prod);
+            $bps[] = array('item' => objectToArray($item, array('DBManager', 'eveDB')), 'cost' => $cost);
         }
 
         $regions = eveDB::getInstance()->regionList();
@@ -146,26 +121,9 @@ class util_prodprofit extends Plugin {
                     'region' => $region,
                     'regions' => $regions,
                     'customprice' => $_GET['customprice'],
-                    'meLevel' => $meLevel,
                     'hasCorp' => $this->site->plugins['mainmenu']->hasLink('corp', 'Assets'), 'corp' => $_GET['corp'],
                     'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum,
                     'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
-    }
-
-    function blueprintAssets($ass, $categoryid) {
-        $result = array();
-
-        for ($i = 0; $i < count($ass); $i++) {
-            if ($ass[$i]->contents) {
-                $result = array_merge($result, $this->blueprintAssets($ass[$i]->contents, $categoryid));
-            }
-            $ass[$i]->item->getGroup();
-            if (($ass[$i]->item->group) && ($ass[$i]->item->group->category) && ($ass[$i]->item->group->category->categoryid == $categoryid)) {
-                $result[] = $ass[$i];
-            }
-        }
-
-        return $result;
     }
 
 }

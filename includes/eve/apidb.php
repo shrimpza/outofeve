@@ -253,12 +253,8 @@ class eveDB {
         return $this->getCache(__FUNCTION__, $id, 'eveIndustryActivity');
     }
 
-    /**
-     * retrieves the item a blueprint produces, based on a blueprint type from
-     * invTypes, NOT invBlueprintTypes.
-     */
     function eveItemFromBlueprintType($typeId) {
-        $res = $this->db->QueryA('select producttypeid from invBlueprintTypes where blueprinttypeid = ?', array($typeId));
+        $res = $this->db->QueryA('select producttypeid from industryActivityProducts where typeId = ?', array($typeId));
         if ($res) {
             return $this->eveItem($res[0]['producttypeid']);
         } else {

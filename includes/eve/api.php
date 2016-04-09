@@ -4,6 +4,7 @@ require_once('curl.class.php');
 require_once('api/keys.php');
 require_once('api/account.php');
 require_once('api/assets.php');
+require_once('api/blueprints.php');
 require_once('api/marketOrders.php');
 require_once('api/marketTransactions.php');
 require_once('api/industryJobs.php');
@@ -169,7 +170,7 @@ class apiRequest {
             $result = $cacheResult;
         }
 
-        apiStats::addRequest($method, microtime(time()) - $start, $result == $cacheResult, 
+        apiStats::addRequest($method, microtime(time()) - $start, $result == $cacheResult,
                 isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0);
 
         if ($this->error) {
