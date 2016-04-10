@@ -78,6 +78,7 @@
 <table width="100%" border="0" style="font-size: 0.9em">
   <tr>
     <th>Item</th>
+    <th>ME</th>
     <th>Run Qty</th>
     <th>Material Unit Cost</th>
     <th>Highest Buy</th>
@@ -94,6 +95,7 @@
       <img src="{$site_url}/{$i.item.icon.icon32}" class="i32 showInfo" data-typeid="{$i.item.typeid}" alt="{$i.item.typename}" align="absmiddle" />
       {$i.item.typename}
     </td>
+    <td align="right">{$i.bp.materialEfficiency|eveNumInt}</td>
     <td align="right">{$i.item.portionsize|eveNumInt}</td>
     <td align="right">{($i.cost/$i.item.portionsize)|eveNum}</td>
     <td align="right" {if $i.item.pricing.maxBuy > $i.cost/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.maxBuy|eveNum}</td>

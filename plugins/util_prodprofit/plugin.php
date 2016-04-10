@@ -34,7 +34,7 @@ class util_prodprofit extends Plugin {
                 $meNow = $blueprint->materialEfficiency;
 
                 $item->blueprint->materials[$i]['qty'] = $item->blueprint->materials[$i]['quantity']
-                                                            + ceil($item->blueprint->materials[$i]['quantity'] * ($meNow / 100));
+                                                            - floor($item->blueprint->materials[$i]['quantity'] * ($meNow / 100));
                 $item->blueprint->materials[$i]['price'] = $item->blueprint->materials[$i]['qty'] * $prcAvgSell;
 
                 $total += $item->blueprint->materials[$i]['price'];
@@ -110,7 +110,10 @@ class util_prodprofit extends Plugin {
             $item->getPricing($region);
             $cost = $this->productionCost($blueprint, $item, $region);
 
-            $bps[] = array('item' => objectToArray($item, array('DBManager', 'eveDB')), 'cost' => $cost);
+            $bps[] = array(
+                    'bp' => objectToArray($blueprint),
+                    'item' => objectToArray($item, array('DBManager', 'eveDB')),
+                    'cost' => $cost);
         }
 
         $regions = eveDB::getInstance()->regionList();
