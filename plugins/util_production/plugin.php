@@ -44,7 +44,7 @@ class util_production extends Plugin {
                 }
             }
 
-            $_POST['item'] = mysql_escape_string(trim(stripslashes($_POST['item'])));
+            $_POST['item'] = trim(stripslashes($_POST['item']));
 
             $item = eveDB::getInstance()->eveItem($_POST['item'], true);
             if ($item) {

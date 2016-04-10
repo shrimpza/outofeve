@@ -31,10 +31,8 @@ class util_prodprofit extends Plugin {
                     $prcAvgSell = $item->blueprint->materials[$i]['item']->pricing->avgSell;
                 }
 
-                $meNow = $blueprint->materialEfficiency;
-
                 $item->blueprint->materials[$i]['qty'] = $item->blueprint->materials[$i]['quantity']
-                                                            - floor($item->blueprint->materials[$i]['quantity'] * ($meNow / 100));
+                                                         - floor($item->blueprint->materials[$i]['quantity'] * ($blueprint->materialEfficiency / 100));
                 $item->blueprint->materials[$i]['price'] = $item->blueprint->materials[$i]['qty'] * $prcAvgSell;
 
                 $total += $item->blueprint->materials[$i]['price'];

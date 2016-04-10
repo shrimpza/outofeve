@@ -33,7 +33,7 @@ class util_prices extends Plugin {
 
         for ($i = 0; $i < count($eft); $i++) {
             $name = explode(',', $eft[$i]);
-            $name = mysql_escape_string(trim(stripslashes($name[0])));
+            $name = trim(stripslashes($name[0]));
             $name = str_replace(array('Drones_Active=', '['), '', $name);
 
             $newItem = eveDB::getInstance()->eveItem($name, true);
