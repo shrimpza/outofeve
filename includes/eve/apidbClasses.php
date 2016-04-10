@@ -147,8 +147,8 @@ class eveItemBlueprint {
     function eveItemBlueprint($typeId) {
 
         $res = eveDB::getInstance()->db->QueryA('select typeid, producttypeid
-                                             from industryActivityProducts
-                                             where producttypeid = ?', array($typeId));
+                                                 from industryActivityProducts
+                                                 where producttypeid = ?', array($typeId));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -160,48 +160,21 @@ class eveItemBlueprint {
              * First, get raw materials required - for manufacture only, maybe support other activityIDs later.
              */
             $this->materials = eveDB::getInstance()->db->QueryA('select materialTypeID, quantity
-                                                             from industryActivityMaterials
-                                                             where typeID = ? and activityID = 1', array($this->typeid));
+                                                                 from industryActivityMaterials
+                                                                 where typeID = ? and activityID = 1', array($this->typeid));
             for ($i = 0; $i < count($this->materials); $i++) {
                 $this->materials[$i]['item'] = eveDB::getInstance()->eveItem($this->materials[$i]['materialtypeid']);
             }
 
-            // TODO investigate whether the following are still required
-
             /*
              * Load skills required
              */
-
-            // /*
-            //  * Load additional parts (RAM bits, T1 base types, etc) and skills
-            //  */
-            // $tmp = eveDB::getInstance()->db->QueryA('select t.typeID, t.typeName, r.quantity, r.damagePerJob, g.categoryID,
-            //                                        coalesce(b.blueprintTypeID, 0) as invBlueprintTypeID
-            //                                      from ramTypeRequirements r
-            //                                        inner join invTypes t on r.requiredTypeID = t.typeID
-            //                                        inner join invGroups g on t.groupID = g.groupID
-            //                                        left join invBlueprintTypes b on b.productTypeID = t.typeID
-            //                                      where r.activityID = 1
-            //                                        and r.typeID = ?', array($this->typeid));
-            // for ($i = 0; $i < count($tmp); $i++) {
-            //     $tmp[$i]['item'] = eveDB::getInstance()->eveItem($tmp[$i]['typeid']);
-            //     if ($tmp[$i]['categoryid'] == 16) {
-            //         /*
-            //          * Skillz go into their own list for better orginisation
-            //          */
-            //         $this->skills[] = $tmp[$i];
-            //     } else {
-            //         $this->extraMaterials[] = $tmp[$i];
-            //         /*
-            //          * If this component has it's own BP, we need to reduce
-            //          * this BP's raw material requirements by the materials
-            //          * required for the componont's construction. *boggle*
-            //          */
-            //         if ($tmp[$i]['invblueprinttypeid'] > 0) {
-            //             $this->reduceMaterials($tmp[$i]['typeid']);
-            //         }
-            //     }
-            // }
+            $skillz = eveDB::getInstance()->db->QueryA('select skillID, level
+                                                        from industryActivitySkills
+                                                        where typeID = ? and activityID = 1', array($this->typeid));
+            foreach ($skillz as $skill) {
+              $this->skills[] = array('item' => eveDB::getInstance()->eveItem($skill['skillid']), 'level' => $skill['level']);
+            }
         }
     }
 
