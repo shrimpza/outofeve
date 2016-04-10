@@ -157,11 +157,11 @@ class eveItemBlueprint {
             $this->blueprintItem = eveDB::getInstance()->eveItem($this->typeid);
 
             /*
-             * First, get raw materials required
+             * First, get raw materials required - for manufacture only, maybe support other activityIDs later.
              */
             $this->materials = eveDB::getInstance()->db->QueryA('select materialTypeID, quantity
                                                              from industryActivityMaterials
-                                                             where typeID = ?', array($this->typeid));
+                                                             where typeID = ? and activityID = 1', array($this->typeid));
             for ($i = 0; $i < count($this->materials); $i++) {
                 $this->materials[$i]['item'] = eveDB::getInstance()->eveItem($this->materials[$i]['materialtypeid']);
             }
