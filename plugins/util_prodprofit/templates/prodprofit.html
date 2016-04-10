@@ -95,7 +95,7 @@
       <img src="{$site_url}/{$i.item.icon.icon32}" class="i32 showInfo" data-typeid="{$i.item.typeid}" alt="{$i.item.typename}" align="absmiddle" />
       {$i.item.typename}
     </td>
-    <td align="right">{$i.bp.materialEfficiency|eveNumInt}</td>
+    <td align="right"{if $i.bp.materialEfficiency > 0}class="good"{/if}>{$i.bp.materialEfficiency|eveNumInt}</td>
     <td align="right">{$i.item.portionsize|eveNumInt}</td>
     <td align="right">{($i.cost/$i.item.portionsize)|eveNum}</td>
     <td align="right" {if $i.item.pricing.maxBuy > $i.cost/$i.item.portionsize}class="good"{/if}>{$i.item.pricing.maxBuy|eveNum}</td>
@@ -116,7 +116,7 @@
 
 <div class="note">
   Note: Items shown are those which you currently own the blueprint for.
-  "Material Unit Cost" is based on regional average selling price, and factors in your current "Production Efficiency" skill level.<br /><br />
+  "Material Unit Cost" is based on regional average selling price, and factors in the blueprint's current Material Efficiency level.<br /><br />
   Highlighted buy and sell values suggest profitability.<br /><br />
   * Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.
 </div>
