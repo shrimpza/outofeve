@@ -33,17 +33,6 @@ class util_production extends Plugin {
 
         if (!empty($_POST['item'])) {
 
-            $peLevel = 0;
-            if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-                $character = new eveCharacterDetail(eveKeyManager::getKey($this->site->user->char_apikey_id));
-                $character->load();
-
-                $skills = $character->skills;
-                if ($skills->getSkill('3388')) {
-                    $peLevel = $skills->getSkill('3388')->level;
-                }
-            }
-
             $_POST['item'] = trim(stripslashes($_POST['item']));
 
             $item = eveDB::getInstance()->eveItem($_POST['item'], true);
@@ -71,28 +60,17 @@ class util_production extends Plugin {
                             $prcAvgSell = $item->blueprint->materials[$i]['item']->pricing->avgSell;
                         }
 
-                        $peFactor = 1.25 - (0.05 * $peLevel);
-                        $meFactor = $item->blueprint->wastefactor / (1 + $meLevel);
 
-                        $item->blueprint->materials[$i]['waste'] = floor($item->blueprint->materials[$i]['quantity'] * ($meFactor / 100));
-                        $item->blueprint->materials[$i]['qty_perfect'] = $item->blueprint->materials[$i]['quantity'] + $item->blueprint->materials[$i]['waste'];
-                        $item->blueprint->materials[$i]['qty_you'] = floor($item->blueprint->materials[$i]['qty_perfect'] * $peFactor);
+                        $item->blueprint->materials[$i]['qty_perfect'] = $item->blueprint->materials[$i]['quantity']
+                                                                 - floor($item->blueprint->materials[$i]['quantity'] * (10 / 100));
+                        $item->blueprint->materials[$i]['qty_you'] = $item->blueprint->materials[$i]['quantity']
+                                                                 - floor($item->blueprint->materials[$i]['quantity'] * ($meLevel / 100));
 
                         $item->blueprint->materials[$i]['price_perfect'] = $item->blueprint->materials[$i]['qty_perfect'] * $prcAvgSell;
                         $item->blueprint->materials[$i]['price_you'] = $item->blueprint->materials[$i]['qty_you'] * $prcAvgSell;
 
                         $tPerfect += $item->blueprint->materials[$i]['price_perfect'];
                         $tYou += $item->blueprint->materials[$i]['price_you'];
-                    }
-
-                    for ($i = 0; $i < count($item->blueprint->extraMaterials); $i++) {
-                        $item->blueprint->extraMaterials[$i]['item']->getPricing($region);
-
-                        $qtyScale = $item->blueprint->extraMaterials[$i]['quantity'] * $item->blueprint->extraMaterials[$i]['damageperjob'];
-                        $item->blueprint->extraMaterials[$i]['qtyscale'] = $qtyScale;
-
-                        $tPerfect += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
-                        $tYou += $item->blueprint->extraMaterials[$i]['item']->pricing->avgSell * $qtyScale;
                     }
                 }
                 $item = objectToArray($item, array('DBManager', 'eveDB'));

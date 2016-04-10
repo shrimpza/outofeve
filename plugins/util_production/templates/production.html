@@ -11,17 +11,13 @@
 
     <tr>
       <td align="right">
-        <b>Material Level:</b>
+        <b>Material Efficiency:</b>
       </td>
       <td width="330">
         <select name="meLevel" style="width: 280px">
-          <option value="0" {if $meLevel == 0}selected="selected"{/if}>ME0</option>
-          <option value="5" {if $meLevel == 5}selected="selected"{/if}>ME5</option>
-          <option value="10" {if $meLevel == 10}selected="selected"{/if}>ME10</option>
-          <option value="20" {if $meLevel == 20}selected="selected"{/if}>ME20</option>
-          <option value="30" {if $meLevel == 30}selected="selected"{/if}>ME30</option>
-          <option value="40" {if $meLevel == 40}selected="selected"{/if}>ME40</option>
-          <option value="50" {if $meLevel == 50}selected="selected"{/if}>ME50</option>
+          {for $me=0 to 10}
+          <option value="{$me}" {if $meLevel == $me}selected="selected"{/if}>{$me}</option>
+          {/for}
         </select>
       </td>
     </tr>
@@ -62,8 +58,8 @@
 <table width="100%" border="0">
   <tr>
     <th rowspan="2">Material</th>
-    <th colspan="2">Perfect</th>
-    <th colspan="2">You</th>
+    <th colspan="2">ME 10</th>
+    <th colspan="2">ME {$meLevel}</th>
   </tr>
   <tr>
     <th width="15%">Qty</th>
@@ -84,24 +80,6 @@
   </tr>
   {/foreach}
 
-  {if $proditem.blueprint.extraMaterials}
-  <tr>
-    <th colspan="5">Components and Extra Materials</th>
-  </tr>
-  {foreach from=$proditem.blueprint.extraMaterials item=m}
-  <tr class="{cycle values='row,rowAlt'}">
-    <td>
-      <img src="{$site_url}/{$m.item.icon.icon32}" class="i32 showInfo" data-typeid="{$m.item.typeid}" alt="{$m.item.typename}" align="absmiddle" />
-      {$m.item.typename}
-    </td>
-    <td align="right">{$m.quantity*$m.damageperjob|eveNum}</td>
-    <td align="right">{$m.item.pricing.avgSell*$m.qtyscale|eveNum}</td>
-    <td align="right">{$m.quantity*$m.damageperjob|eveNum}</td>
-    <td align="right">{$m.item.pricing.avgSell*$m.qtyscale|eveNum}</td>
-  </tr>
-  {/foreach}
-  {/if}
-
   {if $proditem.blueprint.skills}
   <tr>
     <th colspan="5">Required Skills</th>
@@ -110,7 +88,7 @@
   <tr class="{cycle values='row,rowAlt'}">
     <td colspan="5">
       <img src="{$site_url}/{$s.item.icon.icon32}" class="i32 showInfo" data-typeid="{$s.item.typeid}" alt="{$s.item.typename}" align="absmiddle" />
-      {$s.item.typename}
+      {$s.item.typename} {$s.level|eveRoman}
     </td>
   </tr>
   {/foreach}
@@ -179,13 +157,12 @@
   </tr>
 </table>
 
-<div class="note">Note: "Perfect" column factors in a Production Efficiency skill level of 5, "You" uses your current Production Efficiency skill level.<br /><br />
-  * Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
+<div class="note">* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
 
 <script type="text/javascript">
   var runPerfect = {$totals.perfect};
   var runYou     = {$totals.you};
-  
+
   $(document).ready(function() {
     $("#runsInput").on('keyup', function() {
       calcRuns($("#runsInput").val());
