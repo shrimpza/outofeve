@@ -159,18 +159,4 @@ function enc_decrypt($string, $key) {
     return $result;
 }
 
-if (!function_exists('json_encode')) {
-    require_once('json.php');
-
-    function json_encode($value) {
-        $json = new Services_JSON();
-        return $json->encode($value);
-    }
-
-    function json_decode($value) {
-        $json = new Services_JSON();
-        return $json->decode($value);
-    }
-
-}
 ?>
