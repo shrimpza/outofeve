@@ -45,36 +45,3 @@
     margin-bottom: 0px;
     width: auto;
 }
-
-
-#rssFeeds {
-}
-
-#rssFeeds .feed {
-    float: left;
-    width: 47%;
-    margin: 5px;
-}
-
-#rssFeeds .feed h1 {
-    text-align: center;
-    font-size: 1.25em;
-    font-weight: bold;
-    padding: 3px;
-    margin: 0px;
-    margin-bottom: 3px;
-}
-
-#rssFeeds .feed h2 {
-    text-align: center;
-    font-size: 1.15em;
-    font-weight: bold;
-    padding: 3px;
-    margin: 0px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-}
-
-#rssFeeds .item {
-    padding: 15px;
-}

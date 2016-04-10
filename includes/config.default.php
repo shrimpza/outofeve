@@ -7,11 +7,11 @@
     $config['site']['url'] = '/outofeve';
     $config['site']['title'] = 'Out of Eve';
 
-    // Change to false to disable new user registrations 
+    // Change to false to disable new user registrations
     // (useful for personal use)
     $config['site']['registration'] = true;
 
-    // path to API key encryption key file. 
+    // path to API key encryption key file.
     // Set to blank to disable APi key encryption
     $config['site']['keypass'] = '/root/ooekeypass';
 
@@ -43,26 +43,19 @@
     $config['templates']['theme'] = 'clean';
 
     /*************************************************************************
-        URLs for RSS feeds displayed on the home page
-    *************************************************************************/
-    $config['rss'] = array();
-    $config['rss'][] = 'http://myeve.eve-online.com/feed/rdfdevblog.asp';
-    $config['rss'][] = 'http://myeve.eve-online.com/feed/rdfnews.asp?tid=1';
-
-    /*************************************************************************
         EVE API and paths, for caching, themes, etc.
     *************************************************************************/
     $config['eve']['cache_dir'] = dirname(__FILE__).'/../cache/';
     $config['eve']['api_url'] = 'https://api.eveonline.com';
     $config['eve']['method'] = 'POST';
-    
+
     // Add this many seconds to the cachedUntil time
     // May prove useful for potential slight overlaps on some re-requests
     $config['eve']['cache_time_add'] = 120;
 
     $config['eve']['journal_records'] = 2560;
     $config['eve']['transaction_records'] = 2560;
-    
+
     $config['images']['types'] = 'eveimages/Types/%1$d_%2$d.png';
     $config['images']['icons'] = 'eveimages/Icons/items/%1$d_%3$d_%2$d.png';
 

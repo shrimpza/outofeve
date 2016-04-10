@@ -358,17 +358,14 @@ class users extends Plugin {
     }
 
     function welcome() {
-        include_once('magpierss/rss_fetch.inc');
-        define('MAGPIE_CACHE_DIR', $GLOBALS['config']['eve']['cache_dir']);
-
-        $feeds = array();
-        for ($i = 0; $i < count($GLOBALS['config']['rss']); $i++) {
-            $feeds[] = fetch_rss($GLOBALS['config']['rss'][$i]);
+      $characters = array();
+      if ($this->site->user->id > 0) {
+        $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
+        foreach ($key->characters as $char) {
+          $characters[] = objectToArray($char);
         }
-
-        $feeds = objectToArray($feeds);
-
-        return $this->render('rsspage', array('feeds' => $feeds, 'about' => file_exists('about/index.html')));
+      }
+      return $this->render('welcome', array('characters' => $characters));
     }
 
 }
