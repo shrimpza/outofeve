@@ -64,15 +64,20 @@ class eveCharacterDetail {
                 $this->cloneSkillPoints = (int) $result->cloneSkillPoints;
                 $this->balance = (float) $result->balance;
 
+                $implants = array();
                 foreach ($result->rowset as $rowset) {
                     if ($rowset['name'] == 'skills') {
                         $this->skills = new eveSkillList();
                         $this->skills->load($rowset);
+                    } else if ($rowset['name'] == 'implants') {
+                        foreach ($rowset->row as $implant) {
+                            $implants[] = eveDB::getInstance()->attributeBonus((int) $implant['typeID']);
+                        }
                     }
                 }
 
                 $this->attributes = new eveAttributeList();
-                $this->attributes->load($result->attributes, $result->attributeEnhancers);
+                $this->attributes->load($result->attributes, $implants);
             }
         }
 
@@ -154,7 +159,13 @@ class eveAttributeList {
     function load($attributes, $implants) {
         foreach (get_object_vars($attributes) as $var => $val) {
             $implantName = $var . 'Bonus';
-            $this->attributes[] = new eveAttribute($var, (float) $val, $implants->$implantName);
+            $implant = null;
+            foreach ($implants as $i) {
+                if ($i['attributename'] == $implantName) {
+                    $implant = $i;
+                }
+            }
+            $this->attributes[] = new eveAttribute($var, (float) $val, $implant);
         }
     }
 
@@ -184,8 +195,8 @@ class eveAttribute {
         $this->name = $name;
         $this->value = $value;
         if (isset($implant)) {
-            $this->implant = (string) $implant->augmentatorName;
-            $this->bonus = (float) $implant->augmentatorValue;
+            $this->implant = (string) $implant['typename'];
+            $this->bonus = (float) $implant['value'];
             $this->value += $this->bonus;
         }
     }

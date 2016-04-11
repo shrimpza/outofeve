@@ -444,6 +444,24 @@ class eveDB {
         return $this->getCache(__FUNCTION__, $id);
     }
 
+    function attributeBonus($id) {
+        $id = (string) $id;
+
+        if ($this->getCache(__FUNCTION__, $id) == null) {
+            // the 'like' query here seems potentially flakey
+            $bonus = $this->db->QueryA('select i.typeId, i.typeName, t.attributeName, coalesce(a.valueInt, a.valueFloat) as value
+                                        from dgmTypeAttributes a
+                                          inner join dgmAttributeTypes t on t.attributeId = a.attributeId and attributeName like \'%Bonus\'
+                                          inner join invTypes i on i.typeid = a.typeid
+                                        where a.typeid = ? and coalesce(a.valueInt, a.valueFloat) > 0', array($id));
+            if ($bonus) {
+                $this->putCache(__FUNCTION__, $id, $bonus[0]);
+            }
+        }
+
+        return $this->getCache(__FUNCTION__, $id);
+    }
+
 }
 
 ?>
