@@ -67,15 +67,17 @@ class showinfo extends Plugin {
                         $attr[$i]['valuestring'] = $attrName[0]['displayname'];
                         $attr[$i]['unitname'] = '';
                     }
-                } else if (isset($attr[$i]['unitid']) && ($attr[$i]['unitid'] == 117)) {
-                    $attr[$i]['valueint'] = empty($attr[$i]['valueint']) ? $attr[$i]['valuefloat'] : $attr[$i]['valueint'];
-                    if ($attr[$i]['valueint'] == 1) {
-                        $attr[$i]['valuestring'] = 'Small';
-                    } else if ($attr[$i]['valueint'] == 2) {
-                        $attr[$i]['valuestring'] = 'Medium';
-                    } else if ($attr[$i]['valueint'] == 3) {
-                        $attr[$i]['valuestring'] = 'Large';
+                } else if (isset($attr[$i]['unitname']) && (preg_match('/[0-9]=([^ ]+)/', $attr[$i]['unitname']))) {
+                    $attr[$i]['valueint'] = floor(empty($attr[$i]['valueint']) ? $attr[$i]['valuefloat'] : $attr[$i]['valueint']);
+                    $values = explode(' ', $attr[$i]['unitname']);
+                    foreach ($values as $v) {
+                        $val = explode('=', $v);
+                        if ($val[0] == $attr[$i]['valueint']) {
+                            $attr[$i]['valuestring'] = ucfirst($val[1]);
+                            break;
+                        }
                     }
+                    if ($attr[$i]['valuestring'] == 'L') $attr[$i]['valuestring'] = 'Large'; // special case, "Large" is only listed as "l" for some reason
                     $attr[$i]['unitname'] = '';
                 } else if (isset($attr[$i]['unitname']) && (($attr[$i]['unitname'] == '%') && (!empty($attr[$i]['valuefloat'])))) {
                     if (($attr[$i]['unitid'] == 108) || ($attr[$i]['unitid'] == 111)) {
