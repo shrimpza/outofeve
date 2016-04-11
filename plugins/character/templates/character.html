@@ -27,7 +27,7 @@
   <tr>
     <td align="right"><b>Currently Training:</b></td>
     {if $character.training.inTraining}
-    <td>{$character.training.skillItem.typename} to level {$character.training.toLevel|eveRoman}, 
+    <td>{$character.training.skillItem.typename} to level {$character.training.toLevel|eveRoman},
       {if $character.training.remainingTime > 0}
       <span style="font-size: 0.9em">eta {$character.training.remainingTime|formatTime}</span>
       {else}
@@ -58,9 +58,9 @@
             {$queue[qs].skillItem.typename}
             <span style="font-size: 0.9em"> <br />
               {if $queue[qs].position > 0}
-              <b>Start:</b> {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"} - 
+              <b>Start:</b> {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"} -
               {else}
-              <b>Training</b> - 
+              <b>Training</b> -
               {/if}
               <b>ETA:</b> {$queue[qs].remainingTime|formatTime}
             </span>
@@ -175,47 +175,12 @@
   </td>
 </tr>
 
-{if $certificates}
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-  <th colspan="2" style="cursor:pointer" id="toggleCertificatesList">
-    <img src="{$site_url}/templates/{$theme}/images/menu/certs_32.png" align="absmiddle" />
-    <span style="font-size: 1.25em">Certificates</span>
-  </th>
-</tr>
-<tr>
-  <td colspan="2">
-    <table width="100%" border="0" style="display:none;" id="certificatesList">
-      {foreach from=$certificates item=cat}
-      <tr>
-        <td class="sub" colspan="2">{$cat.name}</td>
-      </tr>
-      {foreach from=$cat.classes item=cls}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td width="75%" align="left">
-          {$cls.name}
-        </td>
-        <td width="25%" align="right">
-          <img src="{$site_url}/templates/{$theme}/images/skills/level{$cls.grade}.png" alt="{$cls.name} - Grade {$cls.grade|eveRoman}" title="{$cls.name} - Grade {$cls.grade|eveRoman}" />
-        </td>
-      </tr>
-      {/foreach}
-      {/foreach}
-    </table>
-  </td>
-</tr>
-{/if}
-
 </table>
 
 <script type="text/javascript">
   $(document).ready(function() {
     $("#toggleKnownSkillList").click(function() {
       $('#knownSkillList').toggle('fast');
-    });
-
-    $("#toggleCertificatesList").click(function() {
-      $('#certificatesList').toggle('fast');
     });
   });
 </script>

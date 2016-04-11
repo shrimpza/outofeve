@@ -262,10 +262,6 @@ class eveDB {
         }
     }
 
-    function eveCertificate($id) {
-        return $this->getCache(__FUNCTION__, $id, 'eveCertificate');
-    }
-
     function regionList() {
         return $this->db->QueryA("select regionID, regionName from mapRegions where RegionName <> 'Unknown' order by regionName", array());
     }

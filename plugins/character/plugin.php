@@ -34,7 +34,6 @@ class character extends Plugin {
             $char['raceInfo'] = objectToArray(eveDB::getInstance()->bloodlineInfo($character->bloodLine), array('DBManager', 'eveDB'));
 
             $character->loadSkillTree();
-            $character->loadCertificateTree();
 
             if ($character->skillQueue != null) {
                 $queue = objectToArray($character->skillQueue->queue, array('DBManager', 'eveDB'));
@@ -43,9 +42,8 @@ class character extends Plugin {
             }
 
             $skills = objectToArray($character->knownSkills(), array('DBManager', 'eveDB'));
-            $certificates = $character->knownCertificates();
 
-            return $this->render('character', array('character' => $char, 'skills' => $skills, 'certificates' => $certificates, 'queue' => $queue));
+            return $this->render('character', array('character' => $char, 'skills' => $skills, 'queue' => $queue));
         } else {
             return '<h1>No character!</h1>';
         }

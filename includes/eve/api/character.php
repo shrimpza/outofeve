@@ -35,8 +35,6 @@ class eveCharacterDetail {
     var $trainingSkill = null;
     var $skillQueue = null;
     var $skillTree = null;
-    var $certificates = array();
-    var $certificateTree = null;
     var $outpostList = null;
     var $faction = null;
 
@@ -70,9 +68,6 @@ class eveCharacterDetail {
                     if ($rowset['name'] == 'skills') {
                         $this->skills = new eveSkillList();
                         $this->skills->load($rowset);
-                    } else if ($rowset['name'] == 'certificates') {
-                        $this->certificates = new eveCertificateList();
-                        $this->certificates->load($rowset);
                     }
                 }
 
@@ -113,11 +108,6 @@ class eveCharacterDetail {
         $this->skillTree->load();
     }
 
-    function loadCertificateTree() {
-        $this->certificateTree = new eveCertificateTree();
-        $this->certificateTree->load();
-    }
-
     function getSkill($typeID) {
         $result = $this->skills->getSkill($typeID);
         return $result;
@@ -149,35 +139,6 @@ class eveCharacterDetail {
                         'toLevel' => (int) $knownSkill->toLevel,
                         'skillItem' => $knownSkill->skillItem);
                 }
-            }
-        }
-
-        return $result;
-    }
-
-    function knownCertificates() {
-        $result = array();
-
-        foreach ($this->certificates->certificates as $knownCert) {
-            $cert = $this->certificateTree->getCertificate($knownCert->certificateID);
-            $catId = $cert->cclass->category->categoryID;
-            $clsId = $cert->cclass->classID;
-            if (!isset($result[$catId])) {
-                $result[$catId] = array();
-                $result[$catId]['name'] = $cert->cclass->category->categoryName;
-                $result[$catId]['classes'] = array();
-            }
-
-            if (!isset($result[$catId]['classes'][$clsId])) {
-                $result[$catId]['classes'][$clsId] = array();
-                $result[$catId]['classes'][$clsId]['name'] = $cert->cclass->className;
-                $result[$catId]['classes'][$clsId]['grade'] = $cert->grade;
-                $result[$catId]['classes'][$clsId]['icon'] = $cert->icon;
-            }
-
-            if ($cert->grade > $result[$catId]['classes'][$clsId]['grade']) {
-                $result[$catId]['classes'][$clsId]['grade'] = $cert->grade;
-                $result[$catId]['classes'][$clsId]['icon'] = $cert->icon;
             }
         }
 

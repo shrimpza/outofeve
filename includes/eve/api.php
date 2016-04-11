@@ -11,7 +11,6 @@ require_once('api/industryJobs.php');
 require_once('api/journal.php');
 require_once('api/kills.php');
 require_once('api/skills.php');
-require_once('api/certificates.php');
 require_once('api/mail.php');
 require_once('api/character.php');
 require_once('api/corporation.php');

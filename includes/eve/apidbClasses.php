@@ -215,32 +215,6 @@ class eveIndustryActivity {
 
 }
 
-class eveCertificate {
-
-    var $certificateid = 0;
-    var $categoryid = 0;
-    var $classid = 0;
-    var $corpid = 0;
-    var $icon = 0;
-    var $grade = 0;
-    var $description = '';
-
-    function eveCertificate($certificateId) {
-        $res = eveDB::getInstance()->db->QueryA('select c.certificateid, c.categoryid, c.classid, c.corpid, i.iconFile as icon, c.grade, c.description
-                                       from crtCertificates c
-                                         left outer join eveIcons i on i.iconId = c.iconId
-                                       where c.certificateid = ?', array($certificateId));
-        if ($res) {
-            foreach ($res[0] as $var => $val) {
-                $this->$var = $val;
-            }
-        }
-
-        $this->icon = itemGraphic::getItemGraphic(0, $this->icon);
-    }
-
-}
-
 class eveStation {
 
     var $stationid = 0;
