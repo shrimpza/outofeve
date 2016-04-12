@@ -62,13 +62,13 @@ define('CORP_MemberTrackingExtended', 33554432); // Extensive Member information
 /**
  * Industry job completion status text
  */
-$ramCompletedStatuses = array(
-    0 => 'Failed',
-    1 => 'Delivered',
-    2 => 'Aborted',
-    3 => 'GM aborted',
-    4 => 'Unanchored',
-    5 => 'Destroyed'
+$industryStatuses = array(
+    1 => 'Active',
+    2 => 'Paused',
+    3 => 'Ready',
+    101 => 'Delivered',
+    102 => 'Cancelled',
+    103 => 'Reverted'
 );
 
 /**

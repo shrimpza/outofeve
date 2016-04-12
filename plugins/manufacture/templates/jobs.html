@@ -58,10 +58,10 @@
       </td>
       <td>{$j.outLocation.stationname}</td>
       <td align="right">{$j.runs|eveNumInt}</td>
-      <td align="right">{$j.outQty|eveNumInt}</td>
-      <td align="center">{$j.endTime|date_format:"%d/%m/%Y %H:%M"} {if $j.remainingTime > 0}<br />eta {$j.remainingTime|formatTime}{/if}</td>
-      <td align="center" class="{if (($j.completed == 0) && ($j.completedStatusID == 0))}maybe{elseif $j.completedStatusID == 0}bad{else}good{/if}">
-        {$j.completedStatus}<br />{$j.percentComplete|eveNum}%
+      <td align="right">{if ($j.outQty > 0)}{$j.outQty|eveNumInt}{else}-{/if}</td>
+      <td align="center">{$j.endDate|date_format:"%d/%m/%Y %H:%M"} {if $j.remainingTime > 0}<br />eta {$j.remainingTime|formatTime}{/if}</td>
+      <td align="center" class="{if ($j.remainingTime < 0)}good{else}bad{/if}">
+        {$j.statusName}<br />{$j.percentComplete|eveNum}%
       </td>
     </tr>
     {/foreach}
