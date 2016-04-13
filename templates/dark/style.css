@@ -1,4 +1,4 @@
-/* icon styles to force icon scaling in cases where icons are only available in 
+/* icon styles to force icon scaling in cases where icons are only available in
   the wrong sizes */
 .i16 {
     width: 16px;
@@ -93,17 +93,19 @@
 }
 
 #main {
-    margin-left: 200px;
+    margin-left: 52px;
     background-image: url('images/bg/white_trans_l.png');
     padding: 8px;
+    z-index: 5;
 }
 
 #mainPopup {
 }
 
-#navigation {
-    width: 190px;
+nav {
+    width: 42px;
     float: left;
+    z-index: 10;
     /*    background-color: #ffffff;*/
     /*    padding: 8px;*/
 }
@@ -248,7 +250,7 @@ th {
 /* menus                               */
 /* =================================== */
 
-#navigation .header {
+nav .header {
     text-align: left;
     font-weight: bold;
     padding: 5px;
@@ -256,57 +258,60 @@ th {
     font-size: 1.1em;
 }
 
-#navigation .body {
+nav .body {
     background-image: url('images/bg/white_trans_l.png');
     border-top: 0px;
     margin-bottom: 10px;
 }
 
-.menu {
-    width: 181px;
+nav .menu {
 }
 
-.menu ul {
+nav .menu:hover {
+  width: 200px;
+}
+
+nav .menu ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-.menu li {
+nav .menu li {
     cursor: pointer;
+    position: relative;
 }
 
-.menu a {
+nav .menu a {
     display: block;
     width: 100%;
     padding: 2px 4px 2px 5px;
     text-decoration: none;
     cursor: pointer;
+    white-space: nowrap;
 }
 
-.menu a:link, .menu a:active, .menu a:visited {
+nav .menu a span {
+  /*display: none;*/
+  padding-left: 10px;
+  position: relative;
+  left: -9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
+}
+
+nav .menu a:link, nav .menu a:active, nav .menu a:visited {
     color: #ffffff;
 }
 
-.menu a:hover {
-    background-image: url('images/bg/white_trans_l.png');
+nav .menu a:hover {
+    /*background-image: url('images/bg/white_trans_l.png');*/
+    background-color: black;
 }
 
-#navigation .menuNote {
-    font-size: 1em;
-    color: #ff6400;
-    background-color: #ffffc8;
-    border: 1px double #ff7e28;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    padding: 10px;
-    width: 160px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
+nav .menu a:hover span {
+    /*display: inline-block;*/
+    left: 0; /* Bring back on-screen when needed */
 }
+
 
 /* =================================== */
 /* error messages and displays         */

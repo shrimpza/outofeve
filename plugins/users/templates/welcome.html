@@ -3,4 +3,12 @@
   {foreach from=$characters item=char}
   <img src="http://image.eveonline.com/Character/{$char.characterID}_256.jpg" class="charSelectImg" data-charid="{$char.characterID}" title="{$char.characterName}" />
   {/foreach}
+
+  {if $noKeys}
+  <div class="note">
+    Take a minute to set your Preferences, which among other things, will allow you to specify your time zone. This is useful if you'd rather see times displayed in your local time, rather than EVE time (GMT).
+    <br /><br />
+    Before you can view your character or corporation details, you need to add your EVE API Key(s) using "Manage EVE API Keys". If you have multiple EVE accounts, you may associate them all with your current user, allowing you to access all your accounts and characters quickly and easily.
+  </div>
+  {/if}
 </div>

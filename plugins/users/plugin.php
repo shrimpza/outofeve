@@ -365,7 +365,7 @@ class users extends Plugin {
           $characters[] = objectToArray($char);
         }
       }
-      return $this->render('welcome', array('characters' => $characters));
+      return $this->render('welcome', array('characters' => $characters, 'noKeys' => count(eveKeyManager::getInstance()->keys) == 0));
     }
 
 }

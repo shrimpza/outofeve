@@ -11,12 +11,12 @@
 
     <script type="text/javascript">
       var baseUrl = '{$site_url}';
-            
+
       $(document).ready(function() {
         $("#charKeySelect").change(function() {
           setCurrent('setCharKey', $(this).val());
         });
-        
+
         $("#characterSelect").change(function() {
           setCurrent('setChar', $(this).val());
         });
@@ -35,19 +35,19 @@
             setCurrent('setChar', $(this).data('charid'));
           });
         });
-        
+
         $(".showInfo").each(function() {
           $(this).css("cursor", "pointer");
           $(this).click(function() {
             showInfo($(this).data('typeid'));
           });
         });
-                
+
         $("#errorPopup").find("a").click(function() {
           $("#errorPopup").hide();
           return false;
         });
-        
+
       });
 
       function setCurrent(type, id) {
@@ -135,11 +135,11 @@
 
     <div id="container">
 
-      <div id="navigation">
+      <nav>
         {foreach item=block from=$sideBlocks}
         {include file="sideblock_left.html" title=$block.title content=$block.content}
         {/foreach}
-      </div>
+      </nav>
 
       <div id="main">
         {$content}
@@ -149,7 +149,7 @@
     </div>
 
     <div id="footer-wrapper">
-      <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a> 
+      <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a>
         <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a>
       </div>
     </div>
