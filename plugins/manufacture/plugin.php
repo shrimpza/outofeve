@@ -2,7 +2,7 @@
 
 class manufacture extends Plugin {
 
-    var $name = 'Manufacture & Research';
+    var $name = 'Industry';
     var $level = 1;
 
     function manufacture($db, $site) {
@@ -10,12 +10,12 @@ class manufacture extends Plugin {
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
                 && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_IndustryJobs)) {
-            $this->site->plugins['mainmenu']->addLink('main', 'Manufacture &amp; Research', '?module=manufacture', 'industry');
+            $this->site->plugins['mainmenu']->addLink('main', 'Industry', '?module=manufacture', 'industry');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
                 && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_IndustryJobs)) {
-            $this->site->plugins['mainmenu']->addLink('corp', 'Manufacture &amp; Research', '?module=manufacture&corp=1', 'industry');
+            $this->site->plugins['mainmenu']->addLink('corp', 'Industry', '?module=manufacture&corp=1', 'industry');
         }
     }
 
@@ -58,7 +58,7 @@ class manufacture extends Plugin {
             }
         }
         asort($activities);
-        
+
         $p = new Paginator($jobs, 50, $_GET['p']);
 
         return $this->render('jobs', array('jobs' => $p->pageData, 'activities' => $activities, 'activity' => $_GET['activity'], 'complete' => $_GET['complete'],
