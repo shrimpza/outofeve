@@ -2,8 +2,8 @@
   <div class="listOptions">
     <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}">All assets, by location</a></span>
     <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships">Ships</a></span>
-    <span>Search: 
-      <input type="text" id="assetFind" value="{$search}" /> 
+    <span>Search:
+      <input type="text" id="assetFind" value="{$search}" />
       <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=find&item='+$('#assetFind').val()">Go</button>
     </span>
   </div>
@@ -39,19 +39,53 @@
             <tr>
               <td width="450" valign="top">
                 <div class="fitting">
-                  <div class="slots">
-                    {foreach from=$ship.contents item=ass name='moo'}
-                    {if (($ass.flag >= 11) && ($ass.flag <= 34))}
-                    <div class="slot{$ass.flag}">
-                      <img src="{$site_url}/{$ass.item.icon.icon64}" class="i64 showInfo" data-typeid="{$ass.item.typeid}" alt="{$ass.item.typename}" align="absmiddle" />
-                    </div>
+                  <div class="high">
+                    <h4>High</h4>
+                    {foreach from=$ship.high item=high}
+                    {if $high}
+                      <img src="{$site_url}/{$high.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$high.item.typeid}" title="{$high.item.typename}" align="absmiddle" />
+                    {else}
+                      <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
-                  <div class="rigSlots">
-                    {foreach from=$ship.contents item=ass name='poo'}
-                    {if (($ass.flag >= 92) && ($ass.flag <= 99))}
-                    <img src="{$site_url}/{$ass.item.icon.icon64}" class="i64 showInfo" data-typeid="{$ass.item.typeid}" alt="{$ass.item.typename}" align="absmiddle" class="rig" />
+                  <div class="mid">
+                    <h4>Mid</h4>
+                    {foreach from=$ship.mid item=mid}
+                    {if $mid}
+                      <img src="{$site_url}/{$mid.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$mid.item.typeid}" title="{$mid.item.typename}" align="absmiddle" />
+                    {else}
+                      <span class="empty"></span>
+                    {/if}
+                    {/foreach}
+                  </div>
+                  <div class="low">
+                    <h4>Low</h4>
+                    {foreach from=$ship.low item=low}
+                    {if $low}
+                      <img src="{$site_url}/{$low.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$low.item.typeid}" title="{$low.item.typename}" align="absmiddle" />
+                    {else}
+                      <span class="empty"></span>
+                    {/if}
+                    {/foreach}
+                  </div>
+                  <div class="rigs">
+                    <h4>Rigs</h4>
+                    {foreach from=$ship.rigs item=rig}
+                    {if $rig}
+                      <img src="{$site_url}/{$rig.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$rig.item.typeid}" title="{$rig.item.typename}" align="absmiddle" />
+                    {else}
+                      <span class="empty"></span>
+                    {/if}
+                    {/foreach}
+                  </div>
+                  <div class="drones">
+                    <h4>Drones</h4>
+                    {foreach from=$ship.drones item=drone}
+                    {if $drone}
+                      <img src="{$site_url}/{$drone.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$drone.item.typeid}" title="{$drone.item.typename} x {$drone.qty}" align="absmiddle" />
+                    {else}
+                      <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
@@ -66,7 +100,7 @@
                   </tr>
                 </table>
                 {foreach from=$ship.contents item=ass name='foo'}
-                {if (!(($ass.flag >= 11) && ($ass.flag <= 34)) && !(($ass.flag >= 92) && ($ass.flag <= 99)))}
+                {if (!($ass.flag >= 11 && $ass.flag <= 34) && !($ass.flag >= 92 && $ass.flag <= 99) && ($ass.flag != 87))}
                 {include file="assetlist.html" asset=$ass last=$smarty.foreach.foo.last}
                 {/if}
                 {/foreach}
@@ -97,6 +131,6 @@
         $('#' + $(this).data('assetid')).toggle('fast');
       });
     });
-    
+
   });
 </script>

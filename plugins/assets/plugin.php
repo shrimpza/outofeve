@@ -64,6 +64,36 @@ class assets extends Plugin {
         for ($i = 0; $i < count($ships); $i++) {
             if ($ships[$i]->contents) {
                 usort($ships[$i]->contents, array('assets', 'assetSlotSort'));
+
+                $ships[$i]->high = array();
+                $ships[$i]->mid = array();
+                $ships[$i]->low = array();
+                $ships[$i]->rigs = array();
+                $ships[$i]->drones = array();
+                foreach ($ships[$i]->contents as $asset) {
+                  if ($asset->flag >= 11 && $asset->flag <= 18) {
+                    $ships[$i]->low[] = $asset;
+                  } else if ($asset->flag >= 19 && $asset->flag <= 26) {
+                    $ships[$i]->mid[] = $asset;
+                  } else if ($asset->flag >= 27 && $asset->flag <= 34) {
+                    $ships[$i]->high[] = $asset;
+                  } else if ($asset->flag >= 92 && $asset->flag <= 99) {
+                    $ships[$i]->rigs[] = $asset;
+                  } else if ($asset->flag == 87) {
+                    if (isset($ships[$i]->drones[$asset->item->typeid])) {
+                      $ships[$i]->drones[$asset->item->typeid]->qty += $asset->qty;
+                    } else {
+                      $ships[$i]->drones[$asset->item->typeid] = $asset;
+                    }
+                  }
+                }
+
+                $attr = eveDB::getInstance()->itemAttributes($ships[$i]->item->typeid);
+                while (count($ships[$i]->low) < $attr['lowSlots']['valuefloat']) $ships[$i]->low[] = false;
+                while (count($ships[$i]->mid) < $attr['medSlots']['valuefloat']) $ships[$i]->mid[] = false;
+                while (count($ships[$i]->high) < $attr['hiSlots']['valuefloat']) $ships[$i]->high[] = false;
+                if (count($ships[$i]->rigs) == 0) $ships[$i]->rigs = array(false, false, false); // 3 place-holder rigs
+                if (count($ships[$i]->drones) == 0) $ships[$i]->drones = array(false); // place-holder drone
             }
         }
 

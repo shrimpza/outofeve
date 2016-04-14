@@ -462,6 +462,28 @@ class eveDB {
         return $this->getCache(__FUNCTION__, $id);
     }
 
+    function itemAttributes($typeID) {
+        $id = (string) $typeID;
+
+        if ($this->getCache(__FUNCTION__, $id) == null) {
+            $attr = $this->db->QueryA('select a.valueInt, a.valueFloat, at.attributeName, at.displayName,
+                                         u.displayName as unitName, i.iconFile as icon, u.unitID
+                                       from invTypes t
+                                         inner join dgmTypeAttributes a on a.typeId = t.typeId
+                                         inner join dgmAttributeTypes at on at.attributeId = a.attributeId
+                                         inner join eveUnits u on u.unitId = at.unitId
+                                         left join eveIcons i on i.iconId = at.iconId
+                                       where t.typeID = ?
+                                         and at.published > 0', array($id));
+            if ($attr) {
+                $res = array();
+                foreach ($attr as $a) $res[$a['attributename']] = $a;
+                $this->putCache(__FUNCTION__, $id, $res);
+            }
+        }
+
+        return $this->getCache(__FUNCTION__, $id);
+    }
 }
 
 ?>
