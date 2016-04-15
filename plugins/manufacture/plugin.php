@@ -51,6 +51,26 @@ class manufacture extends Plugin {
                 $activities[$job->activityID] = $job->activity->activityname;
             }
 
+            switch ($job->activityID) {
+                case 1:
+                    $job->altIcon = 'eveimages/Icons/UI/Industry/manufacturing.png';
+                    break;
+                case 3:
+                    $job->altIcon = 'eveimages/Icons/UI/Industry/researchTime.png';
+                    break;
+                case 4:
+                    $job->altIcon = 'eveimages/Icons/UI/Industry/researchMaterial.png';
+                    break;
+                case 5:
+                    $job->altIcon = 'eveimages/Icons/UI/Industry/copying.png';
+                    break;
+                case 8:
+                    $job->altIcon = 'eveimages/Icons/UI/Industry/invention.png';
+                    break;
+                default:
+                    $job->altIcon = 'eveimages/Icons/UI/Industry/manufacturing.png';
+            }
+
             if (($_GET['activity'] == 0) || ($_GET['activity'] == $job->activityID)) {
                 if (($_GET['complete'] > 0) || (($_GET['complete'] == 0) && ($job->completed == 0))) {
                     $jobs[] = objectToArray($job, array('DBManager', 'eveDB'));
