@@ -20,15 +20,15 @@
 /* basic colours for everything        */
 /* =================================== */
 .shadeLight {
-    background-image: url('images/bg/white_trans_l.png');
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .shadeMid {
-    background-image: url('images/bg/white_trans.png');
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .shadeDark {
-    background-image: url('images/bg/white_trans_d.png');
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .borderLight {
@@ -68,7 +68,7 @@
 /* =================================== */
 
 #header-full {
-    background-image: url('images/bg/navy_blue.png');
+    background: rgba(255, 255, 255, 0.15);
 }
 
 #header {
@@ -94,7 +94,7 @@
 
 #main {
     margin-left: 52px;
-    background-image: url('images/bg/white_trans_l.png');
+    background: rgba(255, 255, 255, 0.1);
     padding: 8px;
     z-index: 5;
 }
@@ -106,14 +106,12 @@ nav {
     width: 42px;
     float: left;
     z-index: 10;
-    /*    background-color: #ffffff;*/
-    /*    padding: 8px;*/
 }
 
 #footer-wrapper {
     clear: both;
     margin-top: 50px;
-    background-image: url('images/bg/navy_blue.png');
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* =================================== */
@@ -155,8 +153,7 @@ infoLink a, .infoLink a:visited {
 
 #header .charSelect {
     float: right;
-    background-image: url('images/bg/white_trans_l.png');
-    /*    border: 1px solid #454545;*/
+    background: rgba(255, 255, 255, 0.1);
     padding: 2px;
     margin: 5px;
     vertical-align: middle;
@@ -203,7 +200,7 @@ infoLink a, .infoLink a:visited {
 /* =================================== */
 
 th {
-    background-image: url('images/bg/white_trans.png');
+    background: rgba(255, 255, 255, 0.15);
     text-align: center;
     font-size: 1.05em;
     padding: 4px 2px 4px 2px;
@@ -212,14 +209,14 @@ th {
 .sub {
     text-align: center;
     font-weight: bold;
-    background-image: url('images/bg/white_trans_d.png');
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .row {
 }
 
 .rowAlt {
-    background-image: url('images/bg/white_trans_l.png');
+    background: rgba(255, 255, 255, 0.05);
 }
 
 /* =================================== */
@@ -254,12 +251,12 @@ nav .header {
     text-align: left;
     font-weight: bold;
     padding: 5px;
-    background-image: url('images/bg/white_trans_d.png');
+    background: rgba(255, 255, 255, 0.15);
     font-size: 1.1em;
 }
 
 nav .body {
-    background-image: url('images/bg/white_trans_l.png');
+    background: rgba(255, 255, 255, 0.1);
     border-top: 0px;
     margin-bottom: 10px;
 }
@@ -292,7 +289,6 @@ nav .menu a {
 }
 
 nav .menu a span {
-  /*display: none;*/
   padding-left: 10px;
   position: relative;
   left: -9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
@@ -303,12 +299,10 @@ nav .menu a:link, nav .menu a:active, nav .menu a:visited {
 }
 
 nav .menu a:hover {
-    /*background-image: url('images/bg/white_trans_l.png');*/
     background-color: black;
 }
 
 nav .menu a:hover span {
-    /*display: inline-block;*/
     left: 0; /* Bring back on-screen when needed */
 }
 
@@ -407,7 +401,7 @@ nav .menu a:hover span {
     vertical-align: middle;
     font-size: 1.1em;
     padding: 10px;
-    background-image: url('images/bg/white_trans_d.png');
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .listOptions a {
