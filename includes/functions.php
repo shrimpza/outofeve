@@ -101,23 +101,9 @@ function yesNo($bool) {
     return $bool ? 'Yes' : 'No';
 }
 
-function getKey() {
-    if (!file_exists($GLOBALS['config']['site']['keypass'])) {
-        die('<h3>API key encryption file not found at "' . $GLOBALS['config']['site']['keypass'] . '"</h3>');
-    }
-
-    $key = trim(file_get_contents($GLOBALS['config']['site']['keypass']));
-
-    if (empty($key)) {
-        die('<h3>API key encryption file at "' . $GLOBALS['config']['site']['keypass'] . '" is empty!</h3>');
-    }
-
-    return $key;
-}
-
 function encryptKey($apiKey) {
     if (!empty($GLOBALS['config']['site']['keypass'])) {
-        $result = enc_encrypt($apiKey, getKey());
+        $result = enc_encrypt($apiKey, $GLOBALS['config']['site']['keypass']);
     } else {
         $result = $apiKey;
     }
@@ -126,7 +112,7 @@ function encryptKey($apiKey) {
 
 function decryptKey($apiKey) {
     if (!empty($GLOBALS['config']['site']['keypass']) && (substr($apiKey, -1) == '=')) {
-        $result = enc_decrypt($apiKey, getKey());
+        $result = enc_decrypt($apiKey, $GLOBALS['config']['site']['keypass']);
     } else {
         $result = $apiKey;
     }

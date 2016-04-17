@@ -11,9 +11,9 @@
     // (useful for personal use)
     $config['site']['registration'] = true;
 
-    // path to API key encryption key file.
+    // Secret key for encrypting API keys before storing.
     // Set to blank to disable APi key encryption
-    $config['site']['keypass'] = '/root/ooekeypass';
+    $config['site']['keypass'] = 'weak secret';
 
     // enable the precache.php script to pre-load API data
     $config['site']['precache'] = false;
