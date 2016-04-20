@@ -5,10 +5,24 @@
     <ul>
       {section name=lnk loop=$mg.links}
         <li>
-          <a href="{$mg.links[lnk].l}">
-            {if $mg.links[lnk].i}<img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_{if $smallicons}16{else}32{/if}.png" align="absmiddle" /> {/if}
-            <span>{$mg.links[lnk].t}</span>
-          </a>
+          <a href="#"><img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_{if $smallicons}16{else}32{/if}.png" align="absmiddle" /></a>
+          <ul>
+            <li class="header">
+              {$mg.links[lnk].t}
+            </li>
+            <li>
+              <a href="{$mg.links[lnk].l}">
+                <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_{if $smallicons}16{else}32{/if}.png" align="absmiddle" />
+                <span>{$mg.links[lnk].t}</span>
+              </a>
+            </li>
+            <li>
+              <a href="{$mg.links[lnk].l}">
+                <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_{if $smallicons}16{else}32{/if}.png" align="absmiddle" />
+                <span>{$mg.links[lnk].t} Again</span>
+              </a>
+            </li>
+          </ul>
         </li>
       {/section}
     </ul>

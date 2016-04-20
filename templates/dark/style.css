@@ -261,25 +261,19 @@ nav .body {
     margin-bottom: 10px;
 }
 
-nav .menu {
-}
-
-nav .menu:hover {
-  width: 200px;
-}
-
-nav .menu ul {
+nav ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
 }
 
-nav .menu li {
+nav ul li {
     cursor: pointer;
     position: relative;
+    float: left;
 }
 
-nav .menu a {
+nav ul a {
     display: block;
     width: 100%;
     padding: 2px 4px 2px 5px;
@@ -288,22 +282,33 @@ nav .menu a {
     white-space: nowrap;
 }
 
-nav .menu a span {
+nav ul ul {
   padding-left: 10px;
-  position: relative;
+  position: absolute;
+  float: none;
+  width: inherit;
+  top: -30px;
   left: -9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
+  background-color: rgba(0,0,0,0.8);
 }
 
-nav .menu a:link, nav .menu a:active, nav .menu a:visited {
+nav ul ul li {
+    float: none;
+    width: 250px;
+}
+
+nav ul ul li.header {
+  text-align: center;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+nav a:link, nav a:active, nav a:visited {
     color: #ffffff;
 }
 
-nav .menu a:hover {
-    background-color: black;
-}
-
-nav .menu a:hover span {
-    left: 0; /* Bring back on-screen when needed */
+nav ul li:hover ul { /* Display the dropdown on hover */
+    left: 35px; /* Bring back on-screen when needed */
 }
 
 
