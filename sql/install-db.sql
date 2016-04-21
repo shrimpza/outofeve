@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `proxy` varchar(256) NOT NULL,
   `level` tinyint(4) NOT NULL,
   `activetime` datetime NOT NULL,
-  `smallicons` tinyint(4) default '0',
   `char_apikey_id` int(11) NOT NULL,
   `corp_apikey_id` int(11) NOT NULL,
   `session_id` varchar(128) NOT NULL,

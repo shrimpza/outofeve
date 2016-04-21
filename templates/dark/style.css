@@ -270,7 +270,6 @@ nav ul {
 nav ul li {
     cursor: pointer;
     position: relative;
-    float: left;
 }
 
 nav ul a {

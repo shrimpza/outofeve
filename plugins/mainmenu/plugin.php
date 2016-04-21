@@ -9,31 +9,32 @@ class mainmenu extends Plugin {
     function mainmenu($db, $site) {
         $this->Plugin($db, $site);
 
-        // add the menu group for character stuff
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-            $this->addGroup('Character', 'main');
-        }
+        if ($this->site->user && $this->site->user->id > 0) {
+            // add menu group for users
+            $this->addGroup('User', 'user');
 
-        // add menu group for corp stuff
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
-            $this->addGroup('Corporation', 'corp');
-        }
+            // add the menu group for character stuff
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                    && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $this->addGroup('Character', 'main');
+            }
 
-        // similar again, since we want utils at the end of the menu, not before corp items
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-            $this->addGroup('Utilities', 'util');
+            // add menu group for corp stuff
+            if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+                    && eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
+                $this->addGroup('Corporation', 'corp');
+            }
+
+            // similar again, since we want utils at the end of the menu, not before corp items
+            if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+                    && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+                $this->addGroup('Utilities', 'util');
+            }
         }
     }
 
     function getSideBox() {
-        $smallicons = 0;
-        if ($this->site->user) {
-            $smallicons = $this->site->user->smallicons;
-        }
-        return $this->render('menu', array('links' => $this->links, 'smallicons' => $smallicons));
+        return $this->render('menu', array('links' => $this->links));
     }
 
     function addGroup($title, $name) {

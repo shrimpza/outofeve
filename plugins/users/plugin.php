@@ -140,11 +140,14 @@ class users extends Plugin {
     }
 
     function getSideBox() {
-        if ($this->site->user->id == 0) {
-            return $this->render('side_login', array('register' => $GLOBALS['config']['site']['registration']));
-        } else {
-            return $this->render('side_logged_in', array('user' => $this->site->user->row, 'noKeys' => count(eveKeyManager::getInstance()->keys) == 0));
-        }
+      // set up user menu (doing it here, rather than in the constructor, since the main menu plugin doesn't exist at that point)
+      if ($this->site->user->id > 0) {
+        $this->site->plugins['mainmenu']->addLink('user', 'API Keys', '?module=users&mode=accounts', 'keys');
+        $this->site->plugins['mainmenu']->addLink('user', 'Preferences', '?module=users&mode=edit', 'prefs');
+        $this->site->plugins['mainmenu']->addLink('user', 'Log out', '?logout=1', 'logout');
+      }
+
+      return null;
     }
 
     function getContent() {
@@ -190,7 +193,6 @@ class users extends Plugin {
                     $user->account_id = 0;
                     $user->proxy = ' ';
                     $user->activetime = date('Y-m-d H:i:s');
-                    $user->smallicons = 0;
                     $user->save();
                     return $this->render('register_ok', array('name' => $_POST['username']));
                 }
@@ -211,7 +213,6 @@ class users extends Plugin {
             $this->site->user->theme = $_POST['theme'];
             $this->site->user->proxy = $_POST['proxy'];
             $this->site->user->timezone = $_POST['timezone'];
-            $this->site->user->smallicons = max(0, $_POST['smallicons']);
             $this->site->user->save();
 
             $myMins = $this->site->user->get_mineralprice_list();
@@ -275,7 +276,6 @@ class users extends Plugin {
         $vars['timezones'] = $timezones;
         $vars['themes'] = $themes;
         $vars['proxy'] = $this->site->user->proxy;
-        $vars['smallicons'] = $this->site->user->smallicons;
         $vars['custommins'] = $mins;
 
         return $this->render('edit', $vars);
@@ -359,13 +359,18 @@ class users extends Plugin {
 
     function welcome() {
       $characters = array();
+      $hasUser = false;
       if ($this->site->user->id > 0) {
+        $hasUser = true;
         $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
         foreach ($key->characters as $char) {
           $characters[] = objectToArray($char);
         }
       }
-      return $this->render('welcome', array('characters' => $characters, 'noKeys' => count(eveKeyManager::getInstance()->keys) == 0));
+      return $this->render('welcome', array('characters' => $characters,
+                                            'hasUser' => $hasUser,
+                                            'noKeys' => count(eveKeyManager::getInstance()->keys) == 0,
+                                            'register' => $GLOBALS['config']['site']['registration']));
     }
 
 }
