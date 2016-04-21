@@ -67,8 +67,8 @@
         additional modules and need to enable them.
     *************************************************************************/
     $config['plugins']['enabled'] = array(
-                                        'mainmenu',
                                         'users',
+                                        'mainmenu',
                                         'showinfo',
                                         'character',
                                         'corporation',
