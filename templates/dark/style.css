@@ -310,6 +310,10 @@ nav ul li:hover ul { /* Display the dropdown on hover */
     left: 35px; /* Bring back on-screen when needed */
 }
 
+nav ul li:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 
 /* =================================== */
 /* error messages and displays         */
