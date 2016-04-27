@@ -32,9 +32,8 @@ class mainmenu extends Plugin {
                 }
             }
 
-            // similar again, since we want utils at the end of the menu, not before corp items
-            if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                    && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+            // add menu group for utility modules
+            if ($this->characterKey && $this->characterKey != null) {
 
                 $this->addGroup('Utilities', 'util', 'menu_utils.png');
             }
@@ -82,6 +81,7 @@ class mainmenu extends Plugin {
         return isset($this->links[$name]);
     }
 
+    // TODO remove this - using a menu lookup to determine if some access is available is a really bad idea (see prodProfit module)
     function hasLink($group, $title) {
         if (isset($this->links[$group])) {
             for ($i = 0; $i < count($this->links[$group]['links']); $i++) {
