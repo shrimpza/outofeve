@@ -6,6 +6,9 @@ class mainmenu extends Plugin {
     var $level = 1;
     var $links = array();
 
+    var $characterKey = null;
+    var $corpKey = null;
+
     function mainmenu($db, $site) {
         $this->Plugin($db, $site);
 
@@ -14,22 +17,25 @@ class mainmenu extends Plugin {
             $this->addGroup('User', 'user', 'menu_user.png');
 
             // add the menu group for character stuff
-            if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                    && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
-                $id = eveKeyManager::getKey($this->site->user->char_apikey_id)->selectedCharacter;
-                $this->addGroup('Character', 'main', 'http://image.eveonline.com/Character/'.$id.'_32.jpg');
+            $this->characterKey = eveKeyManager::getKey($this->site->user->char_apikey_id);
+            if ($this->characterKey && $this->characterKey != null) {
+                foreach ($this->characterKey->characters as $char) {
+                  $this->addGroup($char->characterName, 'main_' . $char->characterID, 'http://image.eveonline.com/Character/' . $char->characterID . '_32.jpg');
+                }
             }
 
             // add menu group for corp stuff
-            if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                    && eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
-                // $this->addGroup('Corporation', 'corp', 'http://image.eveonline.com/Corporation/{$corp.corporationID}_32.png');
-                $this->addGroup('Corporation', 'corp', 'menu_corp.png');
+            $this->corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+            if ($this->corpKey && $this->corpKey != null) {
+                foreach ($this->characterKey->characters as $char) {
+                    $this->addGroup($char->corporationName, 'corp_' . $char->corporationID, 'http://image.eveonline.com/Corporation/' . $char->corporationID . '_32.png');
+                }
             }
 
             // similar again, since we want utils at the end of the menu, not before corp items
             if (eveKeyManager::getKey($this->site->user->char_apikey_id)
                     && eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
+
                 $this->addGroup('Utilities', 'util', 'menu_utils.png');
             }
         }
@@ -48,10 +54,25 @@ class mainmenu extends Plugin {
         $this->links[$name]['icon'] = $icon;
     }
 
-    function addLink($group, $title, $url, $icon = '', $ext = false) {
-        if (!$ext) {
+    function addLink($group, $title, $url, $icon = '', $external = false) {
+        if ($group == 'main' && $this->characterKey) {
+            foreach ($this->characterKey->characters as $char) {
+                $this->addLink('main_' . $char->characterID, $title, $url, $icon, $external);
+            }
+            return;
+        }
+
+        if ($group == 'corp' && $this->corpKey) {
+            foreach ($this->corpKey->characters as $char) {
+                $this->addLink('corp_' . $char->corporationID, $title, $url, $icon, $external);
+            }
+            return;
+        }
+
+        if (!$external) {
             $url = $GLOBALS['config']['site']['url'] . '/' . $url;
         }
+
         if (isset($this->links[$group])) {
             $this->links[$group]['links'][] = array('t' => $title, 'l' => $url, 'i' => $icon);
         }
