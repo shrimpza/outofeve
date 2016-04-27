@@ -67,6 +67,9 @@ class util_prodprofit extends Plugin {
             $_GET['corp'] = 0;
         }
 
+        $corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
+        $hasCorp = $corpKey && $corpKey->hasAccess(CORP_AssetList);
+
         $bps = array();
 
         $group = $_GET['group'];
@@ -76,12 +79,10 @@ class util_prodprofit extends Plugin {
             $this->customPrices = $this->site->user->get_mineralprice_list();
         }
 
-        if ($_GET['corp'] > 0) {
-            if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
-                $bpl = new eveBlueprintList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
-                $bpl->load(true);
-                $allBlueprints = $bpl->blueprints;
-            }
+        if ($_GET['corp'] > 0 && $hasCorp) {
+            $bpl = new eveBlueprintList($corpKey);
+            $bpl->load(true);
+            $allBlueprints = $bpl->blueprints;
         } else {
             if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
                 $bpl = new eveBlueprintList(eveKeyManager::getKey($this->site->user->char_apikey_id));
@@ -122,7 +123,8 @@ class util_prodprofit extends Plugin {
                     'region' => $region,
                     'regions' => $regions,
                     'customprice' => $_GET['customprice'],
-                    'hasCorp' => $this->site->plugins['mainmenu']->hasLink('corp', 'Assets'), 'corp' => $_GET['corp'],
+                    'hasCorp' => $hasCorp,
+                    'corp' => $_GET['corp'],
                     'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum,
                     'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
     }

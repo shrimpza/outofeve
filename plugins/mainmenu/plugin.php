@@ -76,23 +76,6 @@ class mainmenu extends Plugin {
             $this->links[$group]['links'][] = array('t' => $title, 'l' => $url, 'i' => $icon);
         }
     }
-
-    function hasGroup($name) {
-        return isset($this->links[$name]);
-    }
-
-    // TODO remove this - using a menu lookup to determine if some access is available is a really bad idea (see prodProfit module)
-    function hasLink($group, $title) {
-        if (isset($this->links[$group])) {
-            for ($i = 0; $i < count($this->links[$group]['links']); $i++) {
-                if (strtolower($this->links[$group]['links'][$i]['t']) == strtolower($title)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }
 
 ?>
