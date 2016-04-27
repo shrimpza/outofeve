@@ -56,14 +56,14 @@ class mainmenu extends Plugin {
     function addLink($group, $title, $url, $icon = '', $external = false) {
         if ($group == 'main' && $this->characterKey) {
             foreach ($this->characterKey->characters as $char) {
-                $this->addLink('main_' . $char->characterID, $title, $url, $icon, $external);
+                $this->addLink('main_' . $char->characterID, $title, $this->addUrlParam($url, 'setChar=' . $char->characterID), $icon, $external);
             }
             return;
         }
 
         if ($group == 'corp' && $this->corpKey) {
             foreach ($this->corpKey->characters as $char) {
-                $this->addLink('corp_' . $char->corporationID, $title, $url, $icon, $external);
+                $this->addLink('corp_' . $char->corporationID, $title, $this->addUrlParam($url, 'setCorpChar=' . $char->characterID), $icon, $external);
             }
             return;
         }
@@ -75,6 +75,14 @@ class mainmenu extends Plugin {
         if (isset($this->links[$group])) {
             $this->links[$group]['links'][] = array('t' => $title, 'l' => $url, 'i' => $icon);
         }
+    }
+
+    function addUrlParam($url, $param) {
+      if (strstr($url, '?') === false) {
+        return $url . '?' . $param;
+      } else {
+        return $url . '&' . $param;
+      }
     }
 }
 
