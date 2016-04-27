@@ -13,15 +13,18 @@ class eveIndustryJobList {
         $this->key = $key;
     }
 
-    function load() {
+    function load($history = false) {
         if (count($this->industryJobs) == 0) {
 
             $data = null;
+            $historyData = null;
 
             if ($this->key->isCorpKey() && $this->key->hasAccess(CORP_IndustryJobs)) {
                 $data = new apiRequest('corp/IndustryJobs.xml.aspx', $this->key, $this->key->getCharacter());
+                if ($history) $historyData = new apiRequest('corp/IndustryJobsHistory.xml.aspx', $this->key, $this->key->getCharacter());
             } else if ($this->key->hasAccess(CHAR_IndustryJobs)) {
                 $data = new apiRequest('char/IndustryJobs.xml.aspx', $this->key, $this->key->getCharacter());
+                if ($history) $historyData = new apiRequest('char/IndustryJobsHistory.xml.aspx', $this->key, $this->key->getCharacter());
             }
 
             if ($data != null && !$data->error && $data->data) {
@@ -29,6 +32,16 @@ class eveIndustryJobList {
                     $this->industryJobs[] = new eveIndustryJob($job);
                 }
             }
+
+            if ($historyData != null && !$historyData->error && $historyData->data) {
+                foreach ($historyData->data->result->rowset->row as $job) {
+                    if ($this->getJob((int) $job['jobID']) == null) {
+                        // undelivered 'ready' jobs appear in the current and history data
+                        $this->industryJobs[] = new eveIndustryJob($job);
+                    }
+                }
+            }
+
             usort($this->industryJobs, 'jobSort');
         }
     }
@@ -130,19 +143,13 @@ class eveIndustryJob {
         $this->inLocation = eveDB::getInstance()->eveStation($this->stationID);
         $this->outLocation = eveDB::getInstance()->eveStation($this->outputLocationID);
 
-        // if (($this->completed == 0) && ($this->completedStatusID == 0) && ($this->endTime - eveTimeOffset::$offset < eveTimeOffset::$eveTime)) {
-        //     $this->completedStatus = 'Ready';
-        // } else if (($this->completed == 0) && ($this->completedStatusID == 0)) {
-        //     $this->completedStatus = 'In Progress';
-        // }
-
         /*
          * Convenience parameters
          */
         $this->remainingTime = ($this->endDate - eveTimeOffset::$offset) - eveTimeOffset::$eveTime;
         if ($this->remainingTime < 0) {
             $this->percentComplete = 100;
-            $this->statusName = 'Ready';
+            if ($this->statusName == 'Active') $this->statusName = 'Ready'; // fix for status which api does not update
         } else {
             $this->percentComplete = 100 - ($this->remainingTime / (($this->endDate - eveTimeOffset::$offset) - ($this->startDate - eveTimeOffset::$offset)) * 100);
         }

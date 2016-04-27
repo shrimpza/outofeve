@@ -26,19 +26,19 @@ class manufacture extends Plugin {
         if (!isset($_GET['activity'])) {
             $_GET['activity'] = 0;
         }
-        if (!isset($_GET['complete'])) {
-            $_GET['complete'] = 0;
+        if (!isset($_GET['history'])) {
+            $_GET['history'] = 0;
         }
 
         if (isset($_GET['corp'])) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
                 $il = new eveIndustryJobList(eveKeyManager::getKey($this->site->user->corp_apikey_id));
-                $il->load();
+                $il->load($_GET['history'] > 0);
             }
         } else {
             if (eveKeyManager::getKey($this->site->user->char_apikey_id) != null) {
                 $il = new eveIndustryJobList(eveKeyManager::getKey($this->site->user->char_apikey_id));
-                $il->load();
+                $il->load($_GET['history'] > 0);
             }
         }
         $industryList = $il->industryJobs;
@@ -72,16 +72,14 @@ class manufacture extends Plugin {
             }
 
             if (($_GET['activity'] == 0) || ($_GET['activity'] == $job->activityID)) {
-                if (($_GET['complete'] > 0) || (($_GET['complete'] == 0) && ($job->completed == 0))) {
-                    $jobs[] = objectToArray($job, array('DBManager', 'eveDB'));
-                }
+                $jobs[] = objectToArray($job, array('DBManager', 'eveDB'));
             }
         }
         asort($activities);
 
         $p = new Paginator($jobs, 50, $_GET['p']);
 
-        return $this->render('jobs', array('jobs' => $p->pageData, 'activities' => $activities, 'activity' => $_GET['activity'], 'complete' => $_GET['complete'],
+        return $this->render('jobs', array('jobs' => $p->pageData, 'activities' => $activities, 'activity' => $_GET['activity'], 'history' => $_GET['history'],
                     'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage, 'corp' => isset($_GET['corp'])));
     }
 
