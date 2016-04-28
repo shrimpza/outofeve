@@ -1,10 +1,10 @@
 <div id="mail">
   <div class="listOptions">
-    <span><a href="{$site_url}/?module=mail"><img src="{$site_url}/templates/{$theme}/images/mail/mail_all_32.png" alt="All" align="absmiddle"/> All</a></span>
-    <span><a href="{$site_url}/?module=mail&personal=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_personal_32.png" alt="Personal" align="absmiddle" /> Personal</a></span>
-    <span><a href="{$site_url}/?module=mail&corp=1"><img src="templates/{$theme}/images/mail/mail_corp_32.png" alt="Corporation" align="absmiddle" /> Corporation</a></span>
-    <span><a href="{$site_url}/?module=mail&lists=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_list_32.png" alt="Lists" align="absmiddle" /> Mailing Lists</a></span>
-    <span><a href="{$site_url}/?module=mail&notifications=1"><img src="{$site_url}/templates/{$theme}/images/mail/mail_notif_32.png" alt="Notifications" align="absmiddle" /> Notifications</a></span>
+    <span><a href="{$site_url}/?module=mail"><img src="{$site_url}/templates/{$theme}/images/mail/all.png" alt="All" align="absmiddle" class="i32" /> All</a></span>
+    <span><a href="{$site_url}/?module=mail&personal=1"><img src="{$site_url}/templates/{$theme}/images/mail/personal.png" alt="Personal" align="absmiddle" class="i32" /> Personal</a></span>
+    <span><a href="{$site_url}/?module=mail&corp=1"><img src="templates/{$theme}/images/mail/corporation.png" alt="Corporation" align="absmiddle" class="i32" /> Corporation</a></span>
+    <span><a href="{$site_url}/?module=mail&lists=1"><img src="{$site_url}/templates/{$theme}/images/mail/list.png" alt="Lists" align="absmiddle" class="i32" /> Mailing Lists</a></span>
+    <span><a href="{$site_url}/?module=mail&notifications=1"><img src="{$site_url}/templates/{$theme}/images/mail/notifications.png" alt="Notifications" align="absmiddle" class="i32" /> Notifications</a></span>
   </div>
 
   {if !$mail}
@@ -55,7 +55,7 @@
       getMessage($(this).data('messageid'));
     });
   });
-  
+
   function getMessage(msgId) {
     jQuery.getJSON('index.php', { jsonMode: 1, module: 'mail', notificationID: msgId }, function(message) {
       if (message) {
