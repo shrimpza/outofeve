@@ -59,7 +59,7 @@
       <td align="right">{$j.runs|eveNumInt}</td>
       <td align="right">{if ($j.outQty > 0)}{$j.outQty|eveNumInt}{else}-{/if}</td>
       <td align="center">{$j.endDate|date_format:"%d/%m/%Y %H:%M"} {if $j.remainingTime > 0}<br />eta {$j.remainingTime|formatTime}{/if}</td>
-      <td align="center" class="{if ($j.remainingTime < 0)}good{else}bad{/if}">
+      <td align="center" class="{if ($j.remainingTime < 0)}good-bg{else}bad-bg{/if}">
         {$j.statusName}<br />{$j.percentComplete|eveNum}%
       </td>
     </tr>

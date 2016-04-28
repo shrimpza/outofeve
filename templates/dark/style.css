@@ -202,7 +202,19 @@ th {
 }
 
 .maybe {
-    color: #00b;
+    color: #bb0;
+}
+
+td.good-bg {
+  background-color: #060;
+}
+
+td.bad-bg {
+  background-color: #600;
+}
+
+td.maybe-bg {
+  background-color: #660;
 }
 
 /* =================================== */
