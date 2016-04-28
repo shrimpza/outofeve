@@ -99,13 +99,6 @@
             </select>
             {/if}
           </div>
-          {if $currentCharKey}
-          <div class="chars">
-            {foreach from=$currentCharKey.characters item=char}
-            <img src="http://image.eveonline.com/Character/{$char.characterID}_64.jpg" class="charSelectImg" data-charid="{$char.characterID}" title="{$char.characterName}" />
-            {/foreach}
-          </div>
-          {/if}
         </div>
         {/strip}
         {/if}
