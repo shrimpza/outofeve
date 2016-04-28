@@ -38,7 +38,18 @@
     $config['evedatabase']['pass'] = '';
 
     /*************************************************************************
-        Default site theme (clean, eve, maroon)
+        Memcached options for caching static database entities
+        Requires PHP's memcached module
+    *************************************************************************/
+    $config['memcached']['enable'] = false;
+    $config['memcached']['persistent_id'] = 'ooe';
+    $config['memcached']['expiration'] = 60*60*24*5;  // 5 days
+    $config['memcached']['servers'] = array(
+                                        array('localhost', 11211),
+                                      );
+
+    /*************************************************************************
+        Default site theme (clean, dark)
     *************************************************************************/
     $config['templates']['theme'] = 'clean';
 

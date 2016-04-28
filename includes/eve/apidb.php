@@ -1,26 +1,83 @@
 <?php
 
+class EntityCache {
+  static $instance = null;
+
+  var $cache;
+  var $memcache;
+  var $cacheHits = 0;
+
+  function EntityCache() {
+    $this->cache = array();
+
+    $memcacheConfig = $GLOBALS['config']['memcached'];
+    if ($memcacheConfig['enable']) {
+      $this->memcache = new Memcached($memcacheConfig['persistent_id']);
+      if (count($this->memcache->getServerList()) != count($memcacheConfig['servers'])) {
+        $this->memcache->addServers($memcacheConfig['servers']);
+      }
+    }
+  }
+
+  static function getInstance() {
+      if (self::$instance == null) {
+          self::$instance = new EntityCache();
+      }
+      return self::$instance;
+  }
+
+  static function get($key) {
+    $cache = EntityCache::getInstance();
+
+    $res = null;
+
+    // attempt to populate local cache from memcached
+    if ($cache->memcache != null && !isset($cache->cache[$key])) {
+        $cached = $cache->memcache->get($key);
+        if ($cached !== false) {
+          $res = $cached;
+          $cache->cache[$key] = $cached;
+
+          $cache->cacheHits ++;
+        }
+    }
+
+    if ($res == null && isset($cache->cache[$key])) {
+        $res = $cache->cache[$key];
+        $cache->cacheHits ++;
+    }
+
+    return $res;
+  }
+
+  static function put($key, $value) {
+    $cache = EntityCache::getInstance();
+
+    $cache->cache[$key] = $value;
+
+    if ($cache->memcache != null) {
+      $cache->memcache->add($key, $value, $GLOBALS['config']['memcached']['expiration']);
+    }
+  }
+}
+
 class itemGraphic {
-
-    private static $iconCache = null;
-
     var $icon16;
     var $icon32;
     var $icon64;
     var $icon128;
 
     static function getItemGraphic($typeId, $icon) {
-        if (self::$iconCache == null) {
-            self::$iconCache = array();
+        $k = 'icon_' . $typeId . '.' . $icon;
+
+        $res = EntityCache::get($k);
+
+        if ($res == null) {
+            $res = new itemGraphic($typeId, $icon);
+            EntityCache::put($k, $res);
         }
 
-        $k = $typeId . '.' . $icon;
-        if (in_array($k, array_keys(self::$iconCache))) {
-            return self::$iconCache[$k];
-        } else {
-            self::$iconCache[$k] = new itemGraphic($typeId, $icon);
-            return self::$iconCache[$k];
-        }
+        return $res;
     }
 
     function itemGraphic($typeId, $icon) {
@@ -112,9 +169,8 @@ class itemGraphic {
 
 class eveDB {
 
-    var $cache = array();
-    var $cacheHits = 0;
     var $db = null;
+
     static $instance = null;
 
     function eveDB() {
@@ -128,6 +184,25 @@ class eveDB {
             self::$instance = new eveDB();
         }
         return self::$instance;
+    }
+
+    function getCache($cacheSet, $id, $className = '') {
+        $id = (string) $id;
+        $cacheKey = $cacheSet . $id;
+
+        $res = EntityCache::get($cacheKey);
+
+        if ($res == null && !empty($className)) {
+            $res = new $className($id);
+            EntityCache::put($cacheKey, $res);
+        }
+
+        return $res;
+    }
+
+    function putCache($cacheSet, $id, $value) {
+        $cacheKey = $cacheSet . $id;
+        EntityCache::put($cacheKey, $value);
     }
 
     function bloodlineInfo($bloodlineName) {
@@ -145,28 +220,6 @@ class eveDB {
         } else {
             return false;
         }
-    }
-
-    function getCache($cacheSet, $id, $className = '') {
-        $res = null;
-
-        $id = (string) $id;
-
-        if (isset($this->cache[$cacheSet]) && isset($this->cache[$cacheSet][$id])) {
-            $res = $this->cache[$cacheSet][$id];
-            $this->cacheHits ++;
-        }
-
-        if ($res == null && !empty($className)) {
-            $this->putCache($cacheSet, $id, new $className($id));
-            $res = $this->getCache($cacheSet, $id);
-        }
-
-        return $res;
-    }
-
-    function putCache($cacheSet, $id, $value) {
-        $this->cache[$cacheSet][$id] = $value;
     }
 
     function typeName($id) {
