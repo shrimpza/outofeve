@@ -1,13 +1,16 @@
 <div class="listOptions">
-  <span>Faction: 
+  <span>Faction:
     <select id="factionFilter">
     </select>
   </span>
 </div>
 
-<div>
+<div class="standings">
   <div class="standingGroup">
-    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsFaction">Factions</div>
+    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsFaction">
+        <img src="{$site_url}/templates/{$theme}/images/misc/faction.png" align="absmiddle" class="i32" />
+        Factions
+    </div>
     <div id="standingsFaction" style="display:none">
       {include file="standings_factions.html" standingGroup=$standings.factions min=0 max=100 title="Liked By"}
       {include file="standings_factions.html" standingGroup=$standings.factions min=-100 max=0 title="Disliked By"}
@@ -15,7 +18,10 @@
   </div>
 
   <div class="standingGroup">
-    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsCorp">Corporations</div>
+    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsCorp">
+        <img src="{$site_url}/templates/{$theme}/images/misc/corporation.png" align="absmiddle" class="i32" />
+        Corporations
+    </div>
     <div id="standingsCorp" style="display:none">
       {include file="standings_corps.html" standingGroup=$standings.npcCorps min=0 max=100 title="Liked By"}
       {include file="standings_corps.html" standingGroup=$standings.npcCorps min=-100 max=0 title="Disliked By"}
@@ -23,7 +29,10 @@
   </div>
 
   <div class="standingGroup">
-    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsAgents">Agents</div>
+    <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsAgents">
+        <img src="{$site_url}/templates/{$theme}/images/misc/agent.png" align="absmiddle" class="i32" />
+        Agents
+    </div>
     <div id="standingsAgents" style="display:none">
       {include file="standings_agents.html" standingGroup=$standings.agents min=0 max=100 title="Liked By"}
       {include file="standings_agents.html" standingGroup=$standings.agents min=-100 max=0 title="Disliked By"}
