@@ -14,7 +14,7 @@ class mainmenu extends Plugin {
 
         if ($this->site->user && $this->site->user->id > 0) {
             // add menu group for users
-            $this->addGroup('User', 'user', 'menu_user.png');
+            $this->addGroup('User', 'user', 'user');
 
             // add the menu group for character stuff
             $this->characterKey = eveKeyManager::getKey($this->site->user->char_apikey_id);
@@ -35,7 +35,7 @@ class mainmenu extends Plugin {
             // add menu group for utility modules
             if ($this->characterKey && $this->characterKey != null) {
 
-                $this->addGroup('Utilities', 'util', 'menu_utils.png');
+                $this->addGroup('Utilities', 'util', 'utils');
             }
         }
     }

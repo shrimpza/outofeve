@@ -7,7 +7,7 @@
           {if substr($mg.icon, 0, 4) === 'http'}
             <img src="{$mg.icon}" class="i32" />
           {else}
-            <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.icon}" class="i32" />
+            <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.icon}.png" class="i32" />
           {/if}
         </a>
         <ul>
@@ -19,7 +19,7 @@
           <li>
             <a href="{$mg.links[lnk].l}">
               {if $mg.links[lnk].i}
-              <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_32.png" align="absmiddle" class="i32" />
+              <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}.png" align="absmiddle" class="i32" />
               {else}
               <span class="spacer32"></span>
               {/if}
