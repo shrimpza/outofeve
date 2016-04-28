@@ -45,7 +45,7 @@
 
     $('.groupHead').each(function() {
       $(this).click(function() {
-        $('#' + $(this).data('toggle')).toggle('fast');
+        $('#' + $(this).data('toggle')).toggle();
       });
     });
 
@@ -61,29 +61,26 @@
     var factions = new Array();
 
     $('.sFaction').each(function() {
-      if (jQuery.inArray($(this).text(), factions) < 0) {
+      if ($.inArray($(this).text(), factions) < 0) {
         factions.push($(this).text());
       }
     });
 
     factions.sort();
 
-    var factionOptions = new Array();
-    factionOptions.push($('<option/>').val('').text('All'));
+    $('#factionFilter').append($('<option/>').val('').text('All'));
 
     for (var i = 0; i < factions.length; i++) {
-      factionOptions.push($('<option/>').val(factions[i]).text(factions[i]));
+      $('#factionFilter').append($('<option/>').val(factions[i]).text(factions[i]));
     }
-
-    $('#factionFilter').append(factionOptions);
   }
 
   function filterFactions(faction) {
     $('.sFaction').each(function() {
       if (faction == '' || $(this).text() == faction) {
-        $(this).parents('tr').first().removeClass('hideStanding').show('fast');
+        $(this).parents('tr').first().removeClass('hideStanding').show();
       } else {
-        $(this).parents('tr').first().addClass('hideStanding').hide('fast');
+        $(this).parents('tr').first().addClass('hideStanding').hide();
       }
     });
 

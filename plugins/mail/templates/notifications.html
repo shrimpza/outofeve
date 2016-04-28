@@ -57,7 +57,7 @@
   });
 
   function getMessage(msgId) {
-    jQuery.getJSON('index.php', { jsonMode: 1, module: 'mail', notificationID: msgId }, function(message) {
+    $.getJSON('index.php', { jsonMode: 1, module: 'mail', notificationID: msgId }, function(message) {
       if (message) {
         var fromImg = '';
         if (message.headers.senderName != '') {
