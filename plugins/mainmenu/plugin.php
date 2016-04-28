@@ -68,7 +68,7 @@ class mainmenu extends Plugin {
             return;
         }
 
-        if (!$external) {
+        if (!$external && $url) {
             $url = $GLOBALS['config']['site']['url'] . '/' . $url;
         }
 

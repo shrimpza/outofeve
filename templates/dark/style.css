@@ -29,6 +29,13 @@ body {
     width: 128px;
 }
 
+.spacer32 {
+    height: 32px;
+    width: 32px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
 /* =================================== */
 /* basic colours for everything        */
 /* =================================== */
@@ -124,7 +131,7 @@ nav {
 #footer-wrapper {
     clear: both;
     margin-top: 50px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* =================================== */

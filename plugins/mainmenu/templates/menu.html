@@ -15,12 +15,22 @@
             {$mg.title}
           </li>
         {section name=lnk loop=$mg.links}
+          {if $mg.links[lnk].l}
           <li>
             <a href="{$mg.links[lnk].l}">
-              <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_32.png" align="absmiddle" />
+              {if $mg.links[lnk].i}
+              <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}_32.png" align="absmiddle" class="i32" />
+              {else}
+              <span class="spacer32"></span>
+              {/if}
               <span>{$mg.links[lnk].t}</span>
             </a>
           </li>
+          {else}
+          <li class="header">
+            {$mg.links[lnk].t}
+          </li>
+          {/if}
         {/section}
         </ul>
       </li>

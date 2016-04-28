@@ -145,6 +145,26 @@ class users extends Plugin {
         $this->site->plugins['mainmenu']->addLink('user', 'API Keys', '?module=users&mode=accounts', 'keys');
         $this->site->plugins['mainmenu']->addLink('user', 'Preferences', '?module=users&mode=edit', 'prefs');
         $this->site->plugins['mainmenu']->addLink('user', 'Log out', '?logout=1', 'logout');
+
+        // support for switching between multiple character api keys
+        $charKeys = eveKeyManager::getCharacterKeys();
+        if (count($charKeys) > 1) {
+          $this->site->plugins['mainmenu']->addLink('user', 'Active Character Key', false, false);
+          foreach ($charKeys as $key) {
+            $this->site->plugins['mainmenu']->addLink('user', $key->name, '?setCharKey=' . $key->keyID,
+              $this->site->user->char_apikey_id == $key->reference ? 'selected' : false);
+          }
+        }
+
+        // support for switching between multiple corporation api keys
+        $corpKeys = eveKeyManager::getCorporateKeys();
+        if (count($corpKeys) > 1) {
+          $this->site->plugins['mainmenu']->addLink('user', 'Active Corporation Key', false, false);
+          foreach ($corpKeys as $key) {
+            $this->site->plugins['mainmenu']->addLink('user', $key->name, '?setCorpKey=' . $key->keyID,
+              $this->site->user->corp_apikey_id == $key->reference ? 'selected' : false);
+          }
+        }
       }
 
       return null;
