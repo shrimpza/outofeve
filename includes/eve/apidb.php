@@ -113,6 +113,7 @@ class itemGraphic {
 class eveDB {
 
     var $cache = array();
+    var $cacheHits = 0;
     var $db = null;
     static $instance = null;
 
@@ -153,6 +154,7 @@ class eveDB {
 
         if (isset($this->cache[$cacheSet]) && isset($this->cache[$cacheSet][$id])) {
             $res = $this->cache[$cacheSet][$id];
+            $this->cacheHits ++;
         }
 
         if ($res == null && !empty($className)) {

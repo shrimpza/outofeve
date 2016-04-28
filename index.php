@@ -20,12 +20,13 @@
         echo '<script type="text/javascript">$("#footer").html($("#footer").html() + "<br />';
 
         echo '<small><small>Processed in ' . round($time, 4) . ' seconds, ';
-        echo ($site->db->numQueries + eveDB::getInstance()->db->numQueries) . ' DB queries; ';
+        echo ($site->db->numQueries + eveDB::getInstance()->db->numQueries) . ' DB queries, ';
+        echo (eveDB::getInstance()->cacheHits) . ' cache hits; ';
 
         echo apiStats::$liveRequests . ' live API requests, ' . apiStats::$cacheRequests . ' from cache; ';
-        
+
         echo round((memory_get_usage()/1024), 2) . 'kb memory used.<br />';
-        
+
         echo '<b>API Activity:</b><br />';
         foreach (apiStats::$requests as $req) {
             echo $req['cache'] ? '[Cached] ' : '';
