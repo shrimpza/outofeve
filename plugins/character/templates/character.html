@@ -9,7 +9,7 @@
     </td>
     <th colspan="2">
       <img src="{$site_url}/templates/{$theme}/images/menu/character_32.png" align="absmiddle" />
-      <span style="font-size: 1.25em">{$character.name} - {$character.gender} {$character.race} {$character.bloodLine}</span>
+      <span>{$character.name} - {$character.gender} {$character.race} {$character.bloodLine}</span>
     </th>
   </tr>
   <tr>
@@ -29,7 +29,7 @@
     {if $character.training.inTraining}
     <td>{$character.training.skillItem.typename} to level {$character.training.toLevel|eveRoman},
       {if $character.training.remainingTime > 0}
-      <span style="font-size: 0.9em">eta {$character.training.remainingTime|formatTime}</span>
+      <span>eta {$character.training.remainingTime|formatTime}</span>
       {else}
       <span class="good">Complete!</span>
       {/if}
@@ -44,7 +44,7 @@
   <tr>
     <th colspan="2">
       <img src="{$site_url}/templates/{$theme}/images/menu/queue_32.png" align="absmiddle" />
-      <span style="font-size: 1.25em">Skill queue</span>
+      <span>Skill queue</span>
     </th>
   </tr>
   <tr>
@@ -56,7 +56,7 @@
           <td width="75%" align="left">
             <img src="{$site_url}/{$queue[qs].skillItem.icon.icon32}" class="i32 showInfo" data-typeid="{$queue[qs].typeID}" align="left" />
             {$queue[qs].skillItem.typename}
-            <span style="font-size: 0.9em"> <br />
+            <span> <br />
               {if $queue[qs].position > 0}
               <b>Start:</b> {$queue[qs].startTime|date_format:"%d/%m/%Y %H:%M"} -
               {else}
@@ -89,7 +89,7 @@
   <tr>
     <th colspan="2">
       <img src="{$site_url}/templates/{$theme}/images/menu/attributes_32.png" align="absmiddle" />
-      <span style="font-size: 1.25em">Attributes</span>
+      <span>Attributes</span>
     </th>
   </tr>
   <tr>
@@ -99,9 +99,9 @@
       <b>{$attr.name|ucfirst}:</b>
     </td>
     <td>
-      {$attr.value|eveNum}<span style="font-size: 0.9em">
+      {$attr.value|eveNum}<span>
         {if $attr.bonus}
-        &nbsp; (using {$attr.implant}: +{$attr.bonus})
+        &nbsp; (+{$attr.bonus} using {$attr.implant})
         {else}
         &nbsp; (No implant)
         {/if}
@@ -116,7 +116,7 @@
 <tr>
   <th colspan="2">
     <img src="{$site_url}/templates/{$theme}/images/menu/faction_32.png" align="absmiddle" />
-    <span style="font-size: 1.25em">Factional Warfare</span>
+    <span>Factional Warfare</span>
   </th>
 </tr>
 <tr>
@@ -145,7 +145,7 @@
 <tr>
   <th colspan="2" style="cursor:pointer" id="toggleKnownSkillList">
     <img src="{$site_url}/templates/{$theme}/images/menu/skills_32.png" align="absmiddle" />
-    <span style="font-size: 1.25em">Known Skills</span>
+    <span>Known Skills</span>
   </th>
 </tr>
 <tr>
@@ -154,7 +154,7 @@
       {foreach from=$skills item=grp}
       <tr>
         {math equation="(s / t) * 100" s=$grp.skillpoints t=$character.skillPoints assign=grpPercent}
-        <td class="sub" colspan="2">{$grp.name} <span style="font-size: 0.85em">- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
+        <td class="sub" colspan="2">{$grp.name} <span>- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
       </tr>
       {section name=sk loop=$grp.skills}
       <tr class="{cycle values='row,rowAlt'}">

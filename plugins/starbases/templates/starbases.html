@@ -93,7 +93,7 @@
               {$f.resource.typename}
             </td>
             <td align="right">{$f.quantity|eveNumInt}</td>
-            <td align="right">{$f.current.quantity|eveNumInt}{if $f.current.remaining > 0}<br /><span style="font-size: 0.9em">({$f.current.remaining|formatTime})</span>{/if}</td>
+            <td align="right">{$f.current.quantity|eveNumInt}{if $f.current.remaining > 0}<br /><span>({$f.current.remaining|formatTime})</span>{/if}</td>
             <td align="right">{$f.7days.quantity|eveNumInt}</td>
             <td align="right">{$f.30days.quantity|eveNumInt}</td>
           </tr>
@@ -132,6 +132,6 @@
         $('#' + $(this).data('itemid')).toggle('fast');
       });
     });
-    
+
   });
 </script>
