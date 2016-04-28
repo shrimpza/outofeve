@@ -400,3 +400,16 @@ nav ul li:hover {
 .pageNav.next {
     background: url('images/nav_next.png') no-repeat center center;
 }
+
+
+/* =================================== */
+/* inputs                              */
+/* =================================== */
+
+input, select, textarea {
+    border: 1px solid #666;
+    border-radius: 2px;
+    background-color: #444;
+    color: #aaa;
+    padding: 4px;
+}
