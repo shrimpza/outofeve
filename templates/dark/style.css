@@ -83,10 +83,9 @@ body {
     width: 1200px;
     margin-left: auto;
     margin-right: auto;
-    height: 85px;
     margin-bottom: 10px;
-    font-size: large;
     padding: 0px;
+    line-height: 0px;
 }
 
 #container {
