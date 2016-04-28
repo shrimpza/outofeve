@@ -145,41 +145,6 @@ infoLink a, .infoLink a:visited {
 }
 
 /* =================================== */
-/* page header                         */
-/* =================================== */
-
-#header .charSelect {
-    float: right;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px;
-    margin: 5px;
-    vertical-align: middle;
-    height: 72px;
-}
-
-#header .chars {
-    float: left;
-    display: inline;
-}
-
-#header .selects {
-    padding: 2px;
-    float: left;
-    width: 190px;
-    display: inline;
-}
-
-#header .selects select {
-    width: 180px;
-    margin: 5px;
-}
-
-#header .chars img {
-    padding: 4px;
-}
-
-
-/* =================================== */
 /* footer...                           */
 /* =================================== */
 
@@ -365,23 +330,22 @@ nav ul li:hover {
 }
 
 .note {
-    font-size: 1.2em;
-    color: #ff6400;
-    background-color: #ffffc8;
-    border: 1px double #ff7e28;
-    -moz-border-radius: 10px;
+    font-size: 1.1em;
+    color: #fff;
+    background-color: rgba(255, 255, 150, 0.15);
+    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     padding: 15px;
     padding-left: 80px;
-    width: 600px;
+    width: 50%;
     margin-top: 50px;
     margin-bottom: 50px;
     margin-left: auto;
     margin-right: auto;
     text-align: left;
-    background-image: url('images/note.png');
+    background-image: url('images/misc/note.png');
     background-repeat: no-repeat;
-    background-position: left center;
+    background-position: left top;
 }
 
 
