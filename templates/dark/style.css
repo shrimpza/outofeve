@@ -67,20 +67,8 @@ body {
     color: #eee;
 }
 
-/* =================================== */
-/* some plugin specific tweaks         */
-/* =================================== */
-
-#killList .killHead {
-    padding: 3px 3px 7px 3px;
-}
-
 .groupHead td {
-    padding: 2px;
-}
-
-#assetList .contents td {
-    padding: 2px;
+    padding: 6px;
 }
 
 /* =================================== */
