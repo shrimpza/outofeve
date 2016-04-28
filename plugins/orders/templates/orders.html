@@ -1,7 +1,7 @@
 <div id="orderList">
   <div class="listOptions">
     {if $corp}
-    <span>Account: 
+    <span>Account:
       <select id="accountKey" onchange="window.location='{$site_url}/?module=orders&corp=1&accountKey='+this.value">
         <option value="0">All</option>
         {foreach from=$accounts item=acc}
@@ -52,9 +52,9 @@
         <img src="{$site_url}/{$o.item.icon.icon32}" class="i32 showInfo" data-typeid="{$o.item.typeid}" alt="{$o.item.typename}" align="absmiddle" />
         {$o.item.typename}</td>
       <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
-      <td align="right"">{$o.price|eveNum}</td>
-      <td align="right"">{$o.valRemaining|eveNum}</td>
-      <td align="center"">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
+      <td align="right">{$o.price|eveNum}</td>
+      <td align="right">{$o.valRemaining|eveNum}</td>
+      <td align="center">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
       <td align="center">
         {if ($o.orderState == 0) && ($o.remainingTime > 0)}
         {math equation="100 - ((r / t) * 100)" r=$o.volRemaining t=$o.volEntered assign=perRemain}
@@ -115,9 +115,9 @@
         <img src="{$site_url}/{$o.item.icon.icon32}" class="i32 showInfo" data-typeid="{$o.item.typeid}" alt="{$o.item.typename}" align="absmiddle" />
         {$o.item.typename}</td>
       <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
-      <td align="right"">{$o.price|eveNum}</td>
-      <td align="right"">{$o.valRemaining|eveNum}</td>
-      <td align="center"">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
+      <td align="right">{$o.price|eveNum}</td>
+      <td align="right">{$o.valRemaining|eveNum}</td>
+      <td align="center">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
       <td align="center">
         {if ($o.orderState == 0) && ($o.remainingTime > 0)}
         <span class="maybe">Active</span>

@@ -1,14 +1,14 @@
 <div id="killList">
   <div class="listOptions">
-    <span>Death Type: 
+    <span>Death Type:
       <select id="deathType" onchange="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&deathType='+this.value">
         <option value="0" {if $deathType == 0}selected="selected"{/if}>All Deaths</option>
         <option value="1" {if $deathType == 1}selected="selected"{/if}>Player Deaths</option>
         <option value="2" {if $deathType == 2}selected="selected"{/if}>NPC Deaths</option>
       </select>
     </span>
-    <span>Search: 
-      <input type="text" id="killFind" value="{$find}" /> 
+    <span>Search:
+      <input type="text" id="killFind" value="{$find}" />
       <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&find='+$('#killFind').val()">Go</button>
       (Pilots, corporations, alliances, ships and systems)
     </span>
@@ -17,11 +17,11 @@
   {if $pageCount > 0}
   <div align="right">
     {if $prevPage < $pageNum}
-    <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&p={$prevPage}'" class="pageNav"> &lt;&lt; </button>
+    <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&p={$prevPage}'" class="pageNav prev"></button>
     {/if}
     &nbsp; pg {$pageNum+1} / {$pageCount} &nbsp;
     {if $nextPage < $pageCount}
-    <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&p={$nextPage}'" class="pageNav"> &gt;&gt; </button>
+    <button onclick="window.location='{$site_url}/?module=kills{if $corp}&corp=1{/if}&deaths=1&p={$nextPage}'" class="pageNav next"></button>
     {/if}
   </div>
   {/if}
@@ -180,6 +180,6 @@
         $('#' + $(this).data('killid')).toggle('fast');
       });
     });
-    
+
   });
 </script>
