@@ -102,7 +102,7 @@
               {$item.qtyDropped|eveNumInt}
             </td>
             <td align="right">
-              {$item.item.pricing.avgSell*$item.qtyDropped|eveNum}
+              {($item.item.pricing.avgSell*$item.qtyDropped)|eveNum}
             </td>
           </tr>
           {/foreach}
@@ -127,7 +127,7 @@
               {$item.qtyDestroyed|eveNumInt}
             </td>
             <td align="right">
-              {$item.item.pricing.avgSell*$item.qtyDestroyed|eveNum}
+              {($item.item.pricing.avgSell*$item.qtyDestroyed)|eveNum}
             </td>
           </tr>
           {/foreach}
@@ -154,7 +154,7 @@
         </tr>
         <tr class="rowAlt">
           <td><b>Total</b></td>
-          <td align="right"><b>{$kill.shipValue+$kill.dropValue+$kill.destroyValue|eveNum}</b></td>
+          <td align="right"><b>{($kill.shipValue+$kill.dropValue+$kill.destroyValue)|eveNum}</b></td>
         </tr>
       </table>
 
