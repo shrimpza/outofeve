@@ -360,15 +360,20 @@ class users extends Plugin {
     function welcome() {
       $characters = array();
       $hasUser = false;
+      $loginFailed = false;
       if ($this->site->user->id > 0) {
         $hasUser = true;
         $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
         foreach ($key->characters as $char) {
           $characters[] = objectToArray($char);
         }
+      } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
+        $loginFailed = true;
       }
+
       return $this->render('welcome', array('characters' => $characters,
                                             'hasUser' => $hasUser,
+                                            'loginFailed' => $loginFailed,
                                             'noKeys' => count(eveKeyManager::getInstance()->keys) == 0,
                                             'register' => $GLOBALS['config']['site']['registration']));
     }

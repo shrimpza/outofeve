@@ -23,6 +23,13 @@
     {/if}
 
   {else}
+    {if $loginFailed}
+    <div class="note">
+      <p>
+        Login failed.
+      </p>
+    </div>
+    {/if}
     <div class="inputForm">
       <h2>Log In</h2>
       <form method="post" action="{$site_url}/" style="margin-top: 0px;">
