@@ -21,7 +21,7 @@
 
         echo '<small><small>Processed in ' . round($time, 4) . ' seconds, ';
         echo ($site->db->numQueries + eveDB::getInstance()->db->numQueries) . ' DB queries, ';
-        echo (EntityCache::getInstance()->cacheHits) . ' cache hits; ';
+        echo (EntityCache::getInstance()->cacheHits) . '/' . (EntityCache::getInstance()->cacheMiss) . ' cache hits/miss; ';
 
         echo apiStats::$liveRequests . ' live API requests, ' . apiStats::$cacheRequests . ' from cache; ';
 

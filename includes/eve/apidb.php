@@ -5,7 +5,9 @@ class EntityCache {
 
   var $cache;
   var $memcache;
+
   var $cacheHits = 0;
+  var $cacheMiss = 0;
 
   function EntityCache() {
     $this->cache = array();
@@ -45,6 +47,10 @@ class EntityCache {
     if ($res == null && isset($cache->cache[$key])) {
         $res = $cache->cache[$key];
         $cache->cacheHits ++;
+    }
+
+    if ($res == null) {
+        $cache->cacheMiss ++;
     }
 
     return $res;
