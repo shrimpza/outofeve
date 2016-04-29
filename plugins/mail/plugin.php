@@ -61,6 +61,7 @@ class mail extends Plugin {
             $ml = new eveMailList(eveKeyManager::getKey($this->site->user->char_apikey_id));
             $ml->load();
             $message = objectToArray($ml->getMessage($_GET['messageID']), array('DBManager', 'eveDB'));
+            $message['message'] = preg_replace('/size="\d+"/', '', $message['message']);
             $message['headers']['sentDate'] = date('d M Y H:i', $message['headers']['sentDate']);
         } else if (isset($_GET['notificationID'])) {
             $nl = new eveNotificationsList(eveKeyManager::getKey($this->site->user->char_apikey_id));
