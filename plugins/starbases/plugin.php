@@ -9,7 +9,7 @@ class starbases extends Plugin {
         $this->Plugin($db, $site);
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_StarbaseList)) {
+            && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_StarbaseList)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Starbases', '?module=starbases', 'starbases');
         }
     }
@@ -62,8 +62,10 @@ class starbases extends Plugin {
 
             $starbases = objectToArray($starbases, array('DBManager', 'eveDB'));
 
-            return $this->render('starbases', array('starbases' => $p->pageData,
-                        'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
+            return $this->render('starbases', array(
+                'starbases' => $p->pageData,
+                'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage
+            ));
         } else {
             return '<h1>No corporation!</h1>';
         }

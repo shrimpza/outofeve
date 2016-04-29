@@ -52,10 +52,12 @@ class util_prices extends Plugin {
 
         $regions = eveDB::getInstance()->regionList();
 
-        return $this->render('pricing', array('items' => $items,
-                    'region' => $region,
-                    'regions' => $regions,
-                    'totals' => array('base' => $tBase, 'min' => $tMin, 'avg' => $tAvg)));
+        return $this->render('pricing', array(
+            'items' => $items,
+            'region' => $region,
+            'regions' => $regions,
+            'totals' => array('base' => $tBase, 'min' => $tMin, 'avg' => $tAvg)
+        ));
     }
 
 }

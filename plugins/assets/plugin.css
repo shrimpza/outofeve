@@ -2,23 +2,23 @@
 }
 
 #assetList .groupHead td {
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1em;
 }
 
 #assetList .contents {
-    margin: 2px;
-    padding: 0px;
-    padding-left: 16px;
+  margin: 2px;
+  padding: 0px;
+  padding-left: 16px;
 }
 
 .listOptions #group {
-    max-width: 200px;
+  max-width: 200px;
 }
 
 .listOptions #assetFind {
-    max-width: 150px;
+  max-width: 150px;
 }
 
 /* ************************************************************************* */

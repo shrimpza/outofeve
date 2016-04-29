@@ -1,8 +1,8 @@
 <!--
-    VERY basic dynamic content demo, using JSON for data interchange.
-    See the small JavaScript at the end of this page to see how it works.
+VERY basic dynamic content demo, using JSON for data interchange.
+See the small JavaScript at the end of this page to see how it works.
 
-    As of version 2.1, this is managed by jQuery
+As of version 2.1, this is managed by jQuery
 -->
 
 <div>
@@ -43,50 +43,50 @@
 </div>
 
 <script type="text/javascript">
-  function getItem() {
-    var itemName = $('#itemName').val();
+function getItem() {
+  var itemName = $('#itemName').val();
 
-    jQuery.getJSON('index.php', { jsonMode: 1, module: 'ajaxtest', item: itemName }, function(item) {
-      if (item) {
-        if (item.error) {
-          // received an error. hide the item info table and show the error
-          $('#itemStuff').css('display', 'none');
-          $('#itemError').css('display', '');
+  jQuery.getJSON('index.php', { jsonMode: 1, module: 'ajaxtest', item: itemName }, function(item) {
+    if (item) {
+      if (item.error) {
+        // received an error. hide the item info table and show the error
+        $('#itemStuff').css('display', 'none');
+        $('#itemError').css('display', '');
 
-          $('#itemError').html(item.error);
-        } else {
-          $('#itemStuff').css('display', '');
-          $('#itemError').css('display', 'none');
+        $('#itemError').html(item.error);
+      } else {
+        $('#itemStuff').css('display', '');
+        $('#itemError').css('display', 'none');
 
-          // set the name element
-          $('#itemFullName').html(item.typename);
+        // set the name element
+        $('#itemFullName').html(item.typename);
 
-          // clear out the existing description content
-          $('#itemDescription').html('');
+        // clear out the existing description content
+        $('#itemDescription').html('');
 
-          // set up the item's icon graphic
-          $("<img/>")
-          .attr("src", item.icon.icon64)
-          .attr('align', 'left')
-          .css('margin-left', '10px')
-          .appendTo("#itemDescription");
+        // set up the item's icon graphic
+        $("<img/>")
+        .attr("src", item.icon.icon64)
+        .attr('align', 'left')
+        .css('margin-left', '10px')
+        .appendTo("#itemDescription");
 
-          // set up the description
-          $("<span/>")
-          .html(item.description)
-          .appendTo('#itemDescription');
+        // set up the description
+        $("<span/>")
+        .html(item.description)
+        .appendTo('#itemDescription');
 
-          // add unit selling price
-          $('#itemUnitPrice').html(numeral(item.pricing.avgSell).format('0,0.00'));
+        // add unit selling price
+        $('#itemUnitPrice').html(numeral(item.pricing.avgSell).format('0,0.00'));
 
-          // add total selling price
-          $('#itemTotalPrice').html(numeral((item.pricing.avgSell * $('#itemQty').val())).format('0,0.00'));
+        // add total selling price
+        $('#itemTotalPrice').html(numeral((item.pricing.avgSell * $('#itemQty').val())).format('0,0.00'));
 
-          // add total volume
-          $('#itemTotalVolume').html(numeral((item.volume * $('#itemQty').val())).format('0,0.00'));
-        }
-      };
-    });
-  }
+        // add total volume
+        $('#itemTotalVolume').html(numeral((item.volume * $('#itemQty').val())).format('0,0.00'));
+      }
+    };
+  });
+}
 
 </script>

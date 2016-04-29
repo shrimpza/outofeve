@@ -9,12 +9,12 @@ class transactions extends Plugin {
         $this->Plugin($db, $site);
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletTransactions)) {
+            && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_WalletTransactions)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Market Transactions', '?module=transactions', 'transactions');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletTransactions)) {
+            && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_WalletTransactions)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Market Transactions', '?module=transactions&corp=1', 'transactions');
         }
     }
@@ -60,9 +60,11 @@ class transactions extends Plugin {
 
         $p = new Paginator($trans, 50, $_GET['p']);
 
-        $vars = array('trans' => $p->pageData, 'transType' => $_GET['transType'], 
+        $vars = array(
+            'trans' => $p->pageData, 'transType' => $_GET['transType'],
             'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
-            'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']);
+            'corp' => isset($_GET['corp']), 'accountKey' => $_GET['accountKey']
+        );
 
         if (isset($_GET['corp'])) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {

@@ -32,7 +32,7 @@ class util_prodprofit extends Plugin {
                 }
 
                 $item->blueprint->materials[$i]['qty'] = $item->blueprint->materials[$i]['quantity']
-                                                         - floor($item->blueprint->materials[$i]['quantity'] * ($blueprint->materialEfficiency / 100));
+                                                        - floor($item->blueprint->materials[$i]['quantity'] * ($blueprint->materialEfficiency / 100));
                 $item->blueprint->materials[$i]['price'] = $item->blueprint->materials[$i]['qty'] * $prcAvgSell;
 
                 $total += $item->blueprint->materials[$i]['price'];
@@ -110,23 +110,26 @@ class util_prodprofit extends Plugin {
             $cost = $this->productionCost($blueprint, $item, $region);
 
             $bps[] = array(
-                    'bp' => objectToArray($blueprint),
-                    'item' => objectToArray($item, array('DBManager', 'eveDB')),
-                    'cost' => $cost);
+                'bp' => objectToArray($blueprint),
+                'item' => objectToArray($item, array('DBManager', 'eveDB')),
+                'cost' => $cost
+            );
         }
 
         $regions = eveDB::getInstance()->regionList();
 
-        return $this->render('prodprofit', array('items' => $bps,
-                    'groups' => $groups,
-                    'group' => $group,
-                    'region' => $region,
-                    'regions' => $regions,
-                    'customprice' => $_GET['customprice'],
-                    'hasCorp' => $hasCorp,
-                    'corp' => $_GET['corp'],
-                    'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum,
-                    'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
+        return $this->render('prodprofit', array(
+            'items' => $bps,
+            'groups' => $groups,
+            'group' => $group,
+            'region' => $region,
+            'regions' => $regions,
+            'customprice' => $_GET['customprice'],
+            'hasCorp' => $hasCorp,
+            'corp' => $_GET['corp'],
+            'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum,
+            'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage
+        ));
     }
 
 }

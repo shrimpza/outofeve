@@ -2,8 +2,8 @@
   <div class="listOptions">
     <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}">All assets, by location</a></span>
     <span><a href="{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=ships">Ships</a></span>
-    <span>Search: 
-      <input type="text" id="assetFind" value="{$search}" /> 
+    <span>Search:
+      <input type="text" id="assetFind" value="{$search}" />
       <button onclick="window.location='{$site_url}/?module=assets{if $corp}&corp=1{/if}&type=find&item='+$('#assetFind').val()">Go</button>
     </span>
   </div>

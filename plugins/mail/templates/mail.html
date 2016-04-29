@@ -56,39 +56,39 @@
 </div>
 
 <script>
-  $(document).ready(function() {
-    $('.message').click(function() {
-      getMessage($(this).data('messageid'));
-    });
+$(document).ready(function() {
+  $('.message').click(function() {
+    getMessage($(this).data('messageid'));
   });
+});
 
-  function getMessage(msgId) {
-    $.getJSON('index.php', { jsonMode: 1, module: 'mail', messageID: msgId }, function(message) {
-      if (message) {
-        var cRec = '';
-        if (message.headers.toCorpID > 0) {
-          cRec = '<img src="http://image.eveonline.com/Corporation/' + message.headers.toCorpID + '_32.png" align="absmiddle" /> ' + message.headers.toCorpName;
-          if (message.headers.toCharacterIDs != "") {
+function getMessage(msgId) {
+  $.getJSON('index.php', { jsonMode: 1, module: 'mail', messageID: msgId }, function(message) {
+    if (message) {
+      var cRec = '';
+      if (message.headers.toCorpID > 0) {
+        cRec = '<img src="http://image.eveonline.com/Corporation/' + message.headers.toCorpID + '_32.png" align="absmiddle" /> ' + message.headers.toCorpName;
+        if (message.headers.toCharacterIDs != "") {
+          cRec += ', ';
+        }
+      }
+      if (message.headers.toCharacterIDs != "") {
+        for (var i = 0; i < message.headers.toCharacterIDs.length; i++) {
+          cRec += '<img src="http://image.eveonline.com/Character/' + message.headers.toCharacterIDs[i] + '_32.jpg" align="absmiddle" /> ' + message.headers.toCharacterNames[i];
+          if (i < message.headers.toCharacterIDs.length-1) {
             cRec += ', ';
           }
         }
-        if (message.headers.toCharacterIDs != "") {
-          for (var i = 0; i < message.headers.toCharacterIDs.length; i++) {
-            cRec += '<img src="http://image.eveonline.com/Character/' + message.headers.toCharacterIDs[i] + '_32.jpg" align="absmiddle" /> ' + message.headers.toCharacterNames[i];
-            if (i < message.headers.toCharacterIDs.length-1) {
-              cRec += ', ';
-            }
-          }
-        }
-
-        $('#msg_title').html(message.headers.title);
-        $('#msg_date').html(message.headers.sentDate);
-        $('#msg_sender').html('<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
-          + message.headers.senderName);
-        $('#msg_to').html(cRec);
-        $('#msg_message').html(message.message);
-        $('#messageBody').css('display', '');
       }
-    });
-  }
+
+      $('#msg_title').html(message.headers.title);
+      $('#msg_date').html(message.headers.sentDate);
+      $('#msg_sender').html('<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
+      + message.headers.senderName);
+      $('#msg_to').html(cRec);
+      $('#msg_message').html(message.message);
+      $('#messageBody').css('display', '');
+    }
+  });
+}
 </script>

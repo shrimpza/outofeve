@@ -9,12 +9,12 @@ class manufacture extends Plugin {
         $this->Plugin($db, $site);
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_IndustryJobs)) {
+            && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_IndustryJobs)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Industry', '?module=manufacture', 'industry');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_IndustryJobs)) {
+            && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_IndustryJobs)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Industry', '?module=manufacture&corp=1', 'industry');
         }
     }
@@ -79,8 +79,10 @@ class manufacture extends Plugin {
 
         $p = new Paginator($jobs, 50, $_GET['p']);
 
-        return $this->render('jobs', array('jobs' => $p->pageData, 'activities' => $activities, 'activity' => $_GET['activity'], 'history' => $_GET['history'],
-                    'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage, 'corp' => isset($_GET['corp'])));
+        return $this->render('jobs', array(
+            'jobs' => $p->pageData, 'activities' => $activities, 'activity' => $_GET['activity'], 'history' => $_GET['history'],
+            'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage, 'corp' => isset($_GET['corp'])
+        ));
     }
 
 }

@@ -52,8 +52,10 @@ class assets extends Plugin {
         $searchResult = $this->searchAsset($assets, $search);
         usort($searchResult, array('assets', 'assetNameSort'));
 
-        return $this->render('find', array('assets' => objectToArray($searchResult),
-                    'search' => $search, 'corp' => $_GET['corp']));
+        return $this->render('find', array(
+            'assets' => objectToArray($searchResult),
+            'search' => $search, 'corp' => $_GET['corp']
+        ));
     }
 
     function showShips($assets) {
@@ -71,21 +73,21 @@ class assets extends Plugin {
                 $ships[$i]->rigs = array();
                 $ships[$i]->drones = array();
                 foreach ($ships[$i]->contents as $asset) {
-                  if ($asset->flag >= 11 && $asset->flag <= 18) {
-                    $ships[$i]->low[] = $asset;
-                  } else if ($asset->flag >= 19 && $asset->flag <= 26) {
-                    $ships[$i]->mid[] = $asset;
-                  } else if ($asset->flag >= 27 && $asset->flag <= 34) {
-                    $ships[$i]->high[] = $asset;
-                  } else if ($asset->flag >= 92 && $asset->flag <= 99) {
-                    $ships[$i]->rigs[] = $asset;
-                  } else if ($asset->flag == 87) {
-                    if (isset($ships[$i]->drones[$asset->item->typeid])) {
-                      $ships[$i]->drones[$asset->item->typeid]->qty += $asset->qty;
-                    } else {
-                      $ships[$i]->drones[$asset->item->typeid] = $asset;
+                    if ($asset->flag >= 11 && $asset->flag <= 18) {
+                        $ships[$i]->low[] = $asset;
+                    } else if ($asset->flag >= 19 && $asset->flag <= 26) {
+                        $ships[$i]->mid[] = $asset;
+                    } else if ($asset->flag >= 27 && $asset->flag <= 34) {
+                        $ships[$i]->high[] = $asset;
+                    } else if ($asset->flag >= 92 && $asset->flag <= 99) {
+                        $ships[$i]->rigs[] = $asset;
+                    } else if ($asset->flag == 87) {
+                        if (isset($ships[$i]->drones[$asset->item->typeid])) {
+                            $ships[$i]->drones[$asset->item->typeid]->qty += $asset->qty;
+                        } else {
+                            $ships[$i]->drones[$asset->item->typeid] = $asset;
+                        }
                     }
-                  }
                 }
 
                 $attr = eveDB::getInstance()->itemAttributes($ships[$i]->item->typeid);
@@ -99,9 +101,11 @@ class assets extends Plugin {
 
         $p = new Paginator($ships, 10, $_GET['p']);
 
-        return $this->render('ships', array('ships' => objectToArray($p->pageData),
-                    'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
-                    'corp' => $_GET['corp'], 'search' => ''));
+        return $this->render('ships', array(
+            'ships' => objectToArray($p->pageData),
+            'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
+            'corp' => $_GET['corp'], 'search' => ''
+        ));
     }
 
     function assetList($fullAssetList) {
@@ -173,9 +177,11 @@ class assets extends Plugin {
 
         $groups = objectToArray($groups);
 
-        return $this->render('assets', array('assets' => objectToArray($p->pageData), 'groups' => $groups, 'group' => $_GET['group'],
-                    'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
-                    'corp' => $_GET['corp'], 'search' => ''));
+        return $this->render('assets', array(
+            'assets' => objectToArray($p->pageData), 'groups' => $groups, 'group' => $_GET['group'],
+            'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
+            'corp' => $_GET['corp'], 'search' => ''
+        ));
     }
 
     // --- utility, sort and filtering methods follow

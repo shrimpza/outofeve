@@ -14,28 +14,32 @@ class showinfo extends Plugin {
             $this->name .= ': ' . $item->typename;
             $item->getGroup();
             $attr = eveDB::getInstance()->db->QueryA('select a.valueInt, a.valueFloat, at.attributeName, at.displayName,
-                                                                   u.displayName as unitName, i.iconFile as icon, u.unitID
-                                                                 from invTypes t
-                                                                   inner join dgmTypeAttributes a on a.typeId = t.typeId
-                                                                   inner join dgmAttributeTypes at on at.attributeId = a.attributeId
-                                                                   inner join eveUnits u on u.unitId = at.unitId
-                                                                   left join eveIcons i on i.iconId = at.iconId
-                                                                 where t.typeID = ?
-                                                                   and at.published > 0', array($item->typeid));
+                                                        u.displayName as unitName, i.iconFile as icon, u.unitID
+                                                      from invTypes t
+                                                        inner join dgmTypeAttributes a on a.typeId = t.typeId
+                                                        inner join dgmAttributeTypes at on at.attributeId = a.attributeId
+                                                        inner join eveUnits u on u.unitId = at.unitId
+                                                        left join eveIcons i on i.iconId = at.iconId
+                                                      where t.typeID = ?
+                                                        and at.published > 0', array($item->typeid));
             if (!is_array($attr)) {
                 $attr = array();
             }
 
             if ($item->capacity > 0) {
-                array_unshift($attr, array('displayname' => 'Capacity',
+                array_unshift($attr, array(
+                    'displayname' => 'Capacity',
                     'valuefloat' => $item->capacity,
-                    'icon' => itemGraphic::getItemGraphic(0, '03_13')));
+                    'icon' => itemGraphic::getItemGraphic(0, '03_13')
+                ));
             }
 
             if ($item->volume > 0) {
-                array_unshift($attr, array('displayname' => 'Volume',
+                array_unshift($attr, array(
+                    'displayname' => 'Volume',
                     'valuefloat' => $item->volume,
-                    'icon' => itemGraphic::getItemGraphic(0, '02_09')));
+                    'icon' => itemGraphic::getItemGraphic(0, '02_09')
+                ));
             }
 
             for ($i = 0; $i < count($attr); $i++) {

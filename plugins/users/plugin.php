@@ -140,34 +140,34 @@ class users extends Plugin {
     }
 
     function getSideBox() {
-      // set up user menu (doing it here, rather than in the constructor, since the main menu plugin doesn't exist at that point)
-      if ($this->site->user->id > 0) {
-        $this->site->plugins['mainmenu']->addLink('user', 'API Keys', '?module=users&mode=accounts', 'keys');
-        $this->site->plugins['mainmenu']->addLink('user', 'Preferences', '?module=users&mode=edit', 'prefs');
-        $this->site->plugins['mainmenu']->addLink('user', 'Log out', '?logout=1', 'logout');
+        // set up user menu (doing it here, rather than in the constructor, since the main menu plugin doesn't exist at that point)
+        if ($this->site->user->id > 0) {
+            $this->site->plugins['mainmenu']->addLink('user', 'API Keys', '?module=users&mode=accounts', 'keys');
+            $this->site->plugins['mainmenu']->addLink('user', 'Preferences', '?module=users&mode=edit', 'prefs');
+            $this->site->plugins['mainmenu']->addLink('user', 'Log out', '?logout=1', 'logout');
 
-        // support for switching between multiple character api keys
-        $charKeys = eveKeyManager::getCharacterKeys();
-        if (count($charKeys) > 1) {
-          $this->site->plugins['mainmenu']->addLink('user', 'Active Character Key', false, false);
-          foreach ($charKeys as $key) {
-            $this->site->plugins['mainmenu']->addLink('user', $key->name, '?setCharKey=' . $key->keyID,
-              $this->site->user->char_apikey_id == $key->reference ? 'selected' : false);
-          }
+            // support for switching between multiple character api keys
+            $charKeys = eveKeyManager::getCharacterKeys();
+            if (count($charKeys) > 1) {
+                $this->site->plugins['mainmenu']->addLink('user', 'Active Character Key', false, false);
+                foreach ($charKeys as $key) {
+                    $this->site->plugins['mainmenu']->addLink('user', $key->name, '?setCharKey=' . $key->keyID,
+                    $this->site->user->char_apikey_id == $key->reference ? 'selected' : false);
+                }
+            }
+
+            // support for switching between multiple corporation api keys
+            $corpKeys = eveKeyManager::getCorporateKeys();
+            if (count($corpKeys) > 1) {
+                $this->site->plugins['mainmenu']->addLink('user', 'Active Corporation Key', false, false);
+                foreach ($corpKeys as $key) {
+                    $this->site->plugins['mainmenu']->addLink('user', $key->name, '?setCorpKey=' . $key->keyID,
+                    $this->site->user->corp_apikey_id == $key->reference ? 'selected' : false);
+                }
+            }
         }
 
-        // support for switching between multiple corporation api keys
-        $corpKeys = eveKeyManager::getCorporateKeys();
-        if (count($corpKeys) > 1) {
-          $this->site->plugins['mainmenu']->addLink('user', 'Active Corporation Key', false, false);
-          foreach ($corpKeys as $key) {
-            $this->site->plugins['mainmenu']->addLink('user', $key->name, '?setCorpKey=' . $key->keyID,
-              $this->site->user->corp_apikey_id == $key->reference ? 'selected' : false);
-          }
-        }
-      }
-
-      return null;
+        return null;
     }
 
     function getContent() {
@@ -378,24 +378,26 @@ class users extends Plugin {
     }
 
     function welcome() {
-      $characters = array();
-      $hasUser = false;
-      $loginFailed = false;
-      if ($this->site->user->id > 0) {
-        $hasUser = true;
-        $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
-        foreach ($key->characters as $char) {
-          $characters[] = objectToArray($char);
+        $characters = array();
+        $hasUser = false;
+        $loginFailed = false;
+        if ($this->site->user->id > 0) {
+            $hasUser = true;
+            $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
+            foreach ($key->characters as $char) {
+                $characters[] = objectToArray($char);
+            }
+        } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
+            $loginFailed = true;
         }
-      } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
-        $loginFailed = true;
-      }
 
-      return $this->render('welcome', array('characters' => $characters,
-                                            'hasUser' => $hasUser,
-                                            'loginFailed' => $loginFailed,
-                                            'noKeys' => count(eveKeyManager::getInstance()->keys) == 0,
-                                            'register' => $GLOBALS['config']['site']['registration']));
+        return $this->render('welcome', array(
+            'characters' => $characters,
+            'hasUser' => $hasUser,
+            'loginFailed' => $loginFailed,
+            'noKeys' => count(eveKeyManager::getInstance()->keys) == 0,
+            'register' => $GLOBALS['config']['site']['registration']
+        ));
     }
 
 }

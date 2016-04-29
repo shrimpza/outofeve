@@ -9,13 +9,13 @@ class kills extends Plugin {
         $this->Plugin($db, $site);
 
         if (eveKeyManager::getKey($this->site->user->char_apikey_id)
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_KillLog)) {
+            && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_KillLog)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Kills', '?module=kills', 'kills');
             $this->site->plugins['mainmenu']->addLink('main', 'Deaths', '?module=kills&deaths=1', 'deaths');
         }
 
         if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_KillLog)) {
+            && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_KillLog)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Kills', '?module=kills&corp=1', 'kills');
             $this->site->plugins['mainmenu']->addLink('corp', 'Deaths', '?module=kills&deaths=1&corp=1', 'deaths');
         }
@@ -52,7 +52,7 @@ class kills extends Plugin {
             $deaths = array();
             for ($i = 0; $i < count($deathList); $i++) {
                 if ((empty($_GET['find']) || $this->filterKill($deathList[$i], $_GET['find']))
-                        && $this->filterDeath($deathList[$i], $_GET['deathType'])) {
+                && $this->filterDeath($deathList[$i], $_GET['deathType'])) {
                     $deathList[$i]->getDropValues();
                     $deaths[] = objectToArray($deathList[$i], array('DBManager', 'eveDB'));
                 }
@@ -60,8 +60,10 @@ class kills extends Plugin {
 
             $p = new Paginator($deaths, 10, $_GET['p']);
 
-            return $this->render('deaths', array('deaths' => $p->pageData, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp']),
-                        'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
+            return $this->render('deaths', array(
+                'deaths' => $p->pageData, 'find' => $_GET['find'], 'deathType' => $_GET['deathType'], 'corp' => isset($_GET['corp']),
+                'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage
+            ));
         } else {
             $kills = array();
             for ($i = 0; $i < count($killList); $i++) {
@@ -73,8 +75,10 @@ class kills extends Plugin {
 
             $p = new Paginator($kills, 10, $_GET['p']);
 
-            return $this->render('kills', array('kills' => $p->pageData, 'find' => $_GET['find'], 'corp' => isset($_GET['corp']),
-                        'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage));
+            return $this->render('kills', array(
+                'kills' => $p->pageData, 'find' => $_GET['find'], 'corp' => isset($_GET['corp']),
+                'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage
+            ));
         }
     }
 

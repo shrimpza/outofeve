@@ -1,19 +1,17 @@
 #journalList td {
-    font-size: 0.9em;
+  font-size: 0.9em;
 }
 
 #journalList .sub, #journalList .sub td {
-    /*background: #f3f3f3;
-    color: #555;*/
-    text-align: left;
-    font-weight: bold;
-    font-size: 1.1em;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1em;
 }
 
 .listOptions #accountKey {
-    max-width: 140px;
+  max-width: 140px;
 }
 
 .listOptions #filter {
-    max-width: 200px;
+  max-width: 200px;
 }

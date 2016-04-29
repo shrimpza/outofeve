@@ -1,52 +1,52 @@
 <div>
   {if $hasUser}
 
-    <!-- placeholder -->
-    {foreach from=$characters item=char}
-    <img src="http://image.eveonline.com/Character/{$char.characterID}_256.jpg" class="charSelectImg" data-charid="{$char.characterID}" title="{$char.characterName}" />
-    {/foreach}
+  <!-- placeholder -->
+  {foreach from=$characters item=char}
+  <img src="http://image.eveonline.com/Character/{$char.characterID}_256.jpg" class="charSelectImg" data-charid="{$char.characterID}" title="{$char.characterName}" />
+  {/foreach}
 
-    {if $noKeys}
-    <div class="note">
-      <p>
-        Take a minute to set your Preferences, which among other things, will allow
-        you to specify your time zone. This is useful if you'd rather see times displayed
-        in your local time, rather than EVE time (GMT).
-      </p>
-      <p>
-        Before you can view your character or corporation details, you need to add
-        your EVE API Key(s) using "Manage EVE API Keys". If you have multiple EVE
-        accounts, you may associate them all with your current user, allowing you
-        to access all your accounts and characters quickly and easily.
-      </p>
-    </div>
-    {/if}
+  {if $noKeys}
+  <div class="note">
+    <p>
+      Take a minute to set your Preferences, which among other things, will allow
+      you to specify your time zone. This is useful if you'd rather see times displayed
+      in your local time, rather than EVE time (GMT).
+    </p>
+    <p>
+      Before you can view your character or corporation details, you need to add
+      your EVE API Key(s) using "Manage EVE API Keys". If you have multiple EVE
+      accounts, you may associate them all with your current user, allowing you
+      to access all your accounts and characters quickly and easily.
+    </p>
+  </div>
+  {/if}
 
   {else}
-    {if $loginFailed}
-    <div class="note">
-      <p>
-        Login failed.
-      </p>
-    </div>
-    {/if}
-    <div class="inputForm">
-      <h2>Log In</h2>
-      <form method="post" action="{$site_url}/" style="margin-top: 0px;">
-        <input type="hidden" name="login" value="plz" />
-        <label>Username:</label><input type="text" name="username" /><br/>
-        <label>Password:</label><input type="password" name="password" /><br/>
-        <label></label><input type="submit" value="Log in" />
-      </form>
-    </div>
+  {if $loginFailed}
+  <div class="note">
+    <p>
+      Login failed.
+    </p>
+  </div>
+  {/if}
+  <div class="inputForm">
+    <h2>Log In</h2>
+    <form method="post" action="{$site_url}/" style="margin-top: 0px;">
+      <input type="hidden" name="login" value="plz" />
+      <label>Username:</label><input type="text" name="username" /><br/>
+      <label>Password:</label><input type="password" name="password" /><br/>
+      <label></label><input type="submit" value="Log in" />
+    </form>
+  </div>
 
-    {if $register}
-      <div class="menu">
-        <ul>
-          <li style="text-align:center;"><a href="{$site_url}/?module=users&mode=register"><img src="{$site_url}/templates/{$theme}/images/menu/register_32.png" align="absmiddle" /> Register</a></li>
-        </ul>
-      </div>
-    {/if}
+  {if $register}
+  <div class="menu">
+    <ul>
+      <li style="text-align:center;"><a href="{$site_url}/?module=users&mode=register"><img src="{$site_url}/templates/{$theme}/images/menu/register_32.png" align="absmiddle" /> Register</a></li>
+    </ul>
+  </div>
+  {/if}
 
   {/if}
 </div>

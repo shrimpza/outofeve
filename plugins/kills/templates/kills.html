@@ -166,13 +166,13 @@
 </div>
 
 <script>
-  $(document).ready(function() {
-    $('.killHead').each(function() {
-      $(this).css('cursor', 'pointer');
-      $(this).click(function() {
-        $('#' + $(this).data('killid')).toggle();
-      });
+$(document).ready(function() {
+  $('.killHead').each(function() {
+    $(this).css('cursor', 'pointer');
+    $(this).click(function() {
+      $('#' + $(this).data('killid')).toggle();
     });
-
   });
+
+});
 </script>

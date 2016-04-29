@@ -8,8 +8,8 @@
 <div class="standings">
   <div class="standingGroup">
     <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsFaction">
-        <img src="{$site_url}/templates/{$theme}/images/misc/faction.png" align="absmiddle" class="i32" />
-        Factions
+      <img src="{$site_url}/templates/{$theme}/images/misc/faction.png" align="absmiddle" class="i32" />
+      Factions
     </div>
     <div id="standingsFaction" style="display:none">
       {include file="standings_factions.html" standingGroup=$standings.factions min=0 max=100 title="Liked By"}
@@ -19,8 +19,8 @@
 
   <div class="standingGroup">
     <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsCorp">
-        <img src="{$site_url}/templates/{$theme}/images/misc/corporation.png" align="absmiddle" class="i32" />
-        Corporations
+      <img src="{$site_url}/templates/{$theme}/images/misc/corporation.png" align="absmiddle" class="i32" />
+      Corporations
     </div>
     <div id="standingsCorp" style="display:none">
       {include file="standings_corps.html" standingGroup=$standings.npcCorps min=0 max=100 title="Liked By"}
@@ -30,8 +30,8 @@
 
   <div class="standingGroup">
     <div class="groupHead shadeDark borderDark textLight" data-toggle="standingsAgents">
-        <img src="{$site_url}/templates/{$theme}/images/misc/agent.png" align="absmiddle" class="i32" />
-        Agents
+      <img src="{$site_url}/templates/{$theme}/images/misc/agent.png" align="absmiddle" class="i32" />
+      Agents
     </div>
     <div id="standingsAgents" style="display:none">
       {include file="standings_agents.html" standingGroup=$standings.agents min=0 max=100 title="Liked By"}
@@ -41,59 +41,59 @@
 </div>
 
 <script>
-  $(document).ready(function() {
+$(document).ready(function() {
 
-    $('.groupHead').each(function() {
-      $(this).click(function() {
-        $('#' + $(this).data('toggle')).toggle();
-      });
+  $('.groupHead').each(function() {
+    $(this).click(function() {
+      $('#' + $(this).data('toggle')).toggle();
     });
-
-    $('#factionFilter').change(function() {
-      filterFactions($(this).val());
-    });
-
-    buildFactionList();
-    hideEmptyGroups();
   });
 
-  function buildFactionList() {
-    var factions = new Array();
+  $('#factionFilter').change(function() {
+    filterFactions($(this).val());
+  });
 
-    $('.sFaction').each(function() {
-      if ($.inArray($(this).text(), factions) < 0) {
-        factions.push($(this).text());
-      }
-    });
+  buildFactionList();
+  hideEmptyGroups();
+});
 
-    factions.sort();
+function buildFactionList() {
+  var factions = new Array();
 
-    $('#factionFilter').append($('<option/>').val('').text('All'));
-
-    for (var i = 0; i < factions.length; i++) {
-      $('#factionFilter').append($('<option/>').val(factions[i]).text(factions[i]));
+  $('.sFaction').each(function() {
+    if ($.inArray($(this).text(), factions) < 0) {
+      factions.push($(this).text());
     }
-  }
+  });
 
-  function filterFactions(faction) {
-    $('.sFaction').each(function() {
-      if (faction == '' || $(this).text() == faction) {
-        $(this).parents('tr').first().removeClass('hideStanding').show();
-      } else {
-        $(this).parents('tr').first().addClass('hideStanding').hide();
-      }
-    });
+  factions.sort();
 
-    hideEmptyGroups();
-  }
+  $('#factionFilter').append($('<option/>').val('').text('All'));
 
-  function hideEmptyGroups() {
-    $('.standingGroup').each(function() {
-      if ($(this).find('tbody tr:not(.hideStanding)').length === 0) {
-        $(this).hide();
-      } else {
-        $(this).show();
-      }
-    });
+  for (var i = 0; i < factions.length; i++) {
+    $('#factionFilter').append($('<option/>').val(factions[i]).text(factions[i]));
   }
+}
+
+function filterFactions(faction) {
+  $('.sFaction').each(function() {
+    if (faction == '' || $(this).text() == faction) {
+      $(this).parents('tr').first().removeClass('hideStanding').show();
+    } else {
+      $(this).parents('tr').first().addClass('hideStanding').hide();
+    }
+  });
+
+  hideEmptyGroups();
+}
+
+function hideEmptyGroups() {
+  $('.standingGroup').each(function() {
+    if ($(this).find('tbody tr:not(.hideStanding)').length === 0) {
+      $(this).hide();
+    } else {
+      $(this).show();
+    }
+  });
+}
 </script>

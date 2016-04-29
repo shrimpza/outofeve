@@ -43,9 +43,9 @@
                     <h4>High</h4>
                     {foreach from=$ship.high item=high}
                     {if $high}
-                      <img src="{$site_url}/{$high.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$high.item.typeid}" title="{$high.item.typename}" align="absmiddle" />
+                    <img src="{$site_url}/{$high.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$high.item.typeid}" title="{$high.item.typename}" align="absmiddle" />
                     {else}
-                      <span class="empty"></span>
+                    <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
@@ -53,9 +53,9 @@
                     <h4>Mid</h4>
                     {foreach from=$ship.mid item=mid}
                     {if $mid}
-                      <img src="{$site_url}/{$mid.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$mid.item.typeid}" title="{$mid.item.typename}" align="absmiddle" />
+                    <img src="{$site_url}/{$mid.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$mid.item.typeid}" title="{$mid.item.typename}" align="absmiddle" />
                     {else}
-                      <span class="empty"></span>
+                    <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
@@ -63,9 +63,9 @@
                     <h4>Low</h4>
                     {foreach from=$ship.low item=low}
                     {if $low}
-                      <img src="{$site_url}/{$low.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$low.item.typeid}" title="{$low.item.typename}" align="absmiddle" />
+                    <img src="{$site_url}/{$low.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$low.item.typeid}" title="{$low.item.typename}" align="absmiddle" />
                     {else}
-                      <span class="empty"></span>
+                    <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
@@ -73,9 +73,9 @@
                     <h4>Rigs</h4>
                     {foreach from=$ship.rigs item=rig}
                     {if $rig}
-                      <img src="{$site_url}/{$rig.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$rig.item.typeid}" title="{$rig.item.typename}" align="absmiddle" />
+                    <img src="{$site_url}/{$rig.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$rig.item.typeid}" title="{$rig.item.typename}" align="absmiddle" />
                     {else}
-                      <span class="empty"></span>
+                    <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
@@ -83,9 +83,9 @@
                     <h4>Drones</h4>
                     {foreach from=$ship.drones item=drone}
                     {if $drone}
-                      <img src="{$site_url}/{$drone.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$drone.item.typeid}" title="{$drone.item.typename} x {$drone.qty}" align="absmiddle" />
+                    <img src="{$site_url}/{$drone.item.icon.icon32}" class="i32 showInfo slot" data-typeid="{$drone.item.typeid}" title="{$drone.item.typename} x {$drone.qty}" align="absmiddle" />
                     {else}
-                      <span class="empty"></span>
+                    <span class="empty"></span>
                     {/if}
                     {/foreach}
                   </div>
@@ -124,13 +124,13 @@
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('.assetGroup').each(function() {
-      $(this).css('cursor', 'pointer');
-      $(this).click(function() {
-        $('#' + $(this).data('assetid')).toggle();
-      });
+$(document).ready(function() {
+  $('.assetGroup').each(function() {
+    $(this).css('cursor', 'pointer');
+    $(this).click(function() {
+      $('#' + $(this).data('assetid')).toggle();
     });
-
   });
+
+});
 </script>

@@ -93,93 +93,93 @@
   </tr>
   <tr>
     {foreach from=$character.attributes item=attr}
+    <tr>
+      <td align="right">
+        <b>{$attr.name|ucfirst}:</b>
+      </td>
+      <td>
+        {$attr.value|eveNum}<span>
+          {if $attr.bonus}
+          &nbsp; (+{$attr.bonus} using {$attr.implant})
+          {else}
+          &nbsp; (No implant)
+          {/if}
+        </span>
+      </td>
+    </tr>
+    {/foreach}
+  </tr>
+
+  {if $character.faction}
+  <tr><td colspan="2">&nbsp;</td></tr>
   <tr>
-    <td align="right">
-      <b>{$attr.name|ucfirst}:</b>
-    </td>
-    <td>
-      {$attr.value|eveNum}<span>
-        {if $attr.bonus}
-        &nbsp; (+{$attr.bonus} using {$attr.implant})
-        {else}
-        &nbsp; (No implant)
-        {/if}
-      </span>
+    <th colspan="2">
+      <img src="{$site_url}/templates/{$theme}/images/misc/faction.png" class="i32" align="absmiddle" />
+      <span>Factional Warfare</span>
+    </th>
+  </tr>
+  <tr>
+    <td align="right"><b>Faction:</b></td>
+    <td>{$character.faction.factionName}</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Enlisted:</b></td>
+    <td>{$character.faction.enlisted|date_format:"%d/%m/%Y"}</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Current Rank:</b></td>
+    <td>{$character.faction.currentRank+1}/10</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Total Kills:</b></td>
+    <td>{$character.faction.killsTotal|eveNumInt}</td>
+  </tr>
+  <tr>
+    <td align="right"><b>Total Victory Points</b></td>
+    <td>{$character.faction.killsTotal|eveNumInt}</td>
+  </tr>
+  {/if}
+
+  <tr><td colspan="2">&nbsp;</td></tr>
+  <tr>
+    <th colspan="2" style="cursor:pointer" id="toggleKnownSkillList">
+      <img src="{$site_url}/templates/{$theme}/images/misc/skills.png" class="i32" align="absmiddle" />
+      <span>Known Skills</span>
+    </th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table width="100%" border="0" style="display:none;" id="knownSkillList">
+        {foreach from=$skills item=grp}
+        <tr>
+          {math equation="(s / t) * 100" s=$grp.skillpoints t=$character.skillPoints assign=grpPercent}
+          <td class="sub" colspan="2">{$grp.name} <span>- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
+        </tr>
+        {section name=sk loop=$grp.skills}
+        <tr class="{cycle values='row,rowAlt'}">
+          <td width="75%" align="left">
+            <img src="{$site_url}/{$grp.skills[sk].skillItem.icon.icon32}" class="i32 showInfo" data-typeid="{$grp.skills[sk].typeID}" align="absmiddle" /> {$grp.skills[sk].name}
+          </td>
+          <td width="25%" align="right">
+            {if $grp.skills[sk].training}
+            <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$grp.skills[sk].toLevel}.png" alt="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" title="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" />
+            {else}
+            <img src="{$site_url}/templates/{$theme}/images/skills/level{$grp.skills[sk].level}.png" alt="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" title="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" />
+            {/if}
+          </td>
+        </tr>
+        {/section}
+        {/foreach}
+      </table>
     </td>
   </tr>
-  {/foreach}
-</tr>
-
-{if $character.faction}
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-  <th colspan="2">
-    <img src="{$site_url}/templates/{$theme}/images/misc/faction.png" class="i32" align="absmiddle" />
-    <span>Factional Warfare</span>
-  </th>
-</tr>
-<tr>
-  <td align="right"><b>Faction:</b></td>
-  <td>{$character.faction.factionName}</td>
-</tr>
-<tr>
-  <td align="right"><b>Enlisted:</b></td>
-  <td>{$character.faction.enlisted|date_format:"%d/%m/%Y"}</td>
-</tr>
-<tr>
-  <td align="right"><b>Current Rank:</b></td>
-  <td>{$character.faction.currentRank+1}/10</td>
-</tr>
-<tr>
-  <td align="right"><b>Total Kills:</b></td>
-  <td>{$character.faction.killsTotal|eveNumInt}</td>
-</tr>
-<tr>
-  <td align="right"><b>Total Victory Points</b></td>
-  <td>{$character.faction.killsTotal|eveNumInt}</td>
-</tr>
-{/if}
-
-<tr><td colspan="2">&nbsp;</td></tr>
-<tr>
-  <th colspan="2" style="cursor:pointer" id="toggleKnownSkillList">
-    <img src="{$site_url}/templates/{$theme}/images/misc/skills.png" class="i32" align="absmiddle" />
-    <span>Known Skills</span>
-  </th>
-</tr>
-<tr>
-  <td colspan="2">
-    <table width="100%" border="0" style="display:none;" id="knownSkillList">
-      {foreach from=$skills item=grp}
-      <tr>
-        {math equation="(s / t) * 100" s=$grp.skillpoints t=$character.skillPoints assign=grpPercent}
-        <td class="sub" colspan="2">{$grp.name} <span>- {$grp.skillpoints|eveNumInt} skillpoints ({$grpPercent|eveNum}%)</span></td>
-      </tr>
-      {section name=sk loop=$grp.skills}
-      <tr class="{cycle values='row,rowAlt'}">
-        <td width="75%" align="left">
-          <img src="{$site_url}/{$grp.skills[sk].skillItem.icon.icon32}" class="i32 showInfo" data-typeid="{$grp.skills[sk].typeID}" align="absmiddle" /> {$grp.skills[sk].name}
-        </td>
-        <td width="25%" align="right">
-          {if $grp.skills[sk].training}
-          <img src="{$site_url}/templates/{$theme}/images/skills/leveltrain{$grp.skills[sk].toLevel}.png" alt="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" title="{$grp.skills[sk].name} - Training to level {$grp.skills[sk].toLevel|eveRoman}" />
-          {else}
-          <img src="{$site_url}/templates/{$theme}/images/skills/level{$grp.skills[sk].level}.png" alt="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" title="{$grp.skills[sk].name} - Level {$grp.skills[sk].level|eveRoman}" />
-          {/if}
-        </td>
-      </tr>
-      {/section}
-      {/foreach}
-    </table>
-  </td>
-</tr>
 
 </table>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $("#toggleKnownSkillList").click(function() {
-      $('#knownSkillList').toggle();
-    });
+$(document).ready(function() {
+  $("#toggleKnownSkillList").click(function() {
+    $('#knownSkillList').toggle();
   });
+});
 </script>

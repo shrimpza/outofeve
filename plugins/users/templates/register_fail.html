@@ -1,13 +1,13 @@
 {if $error}
-  <div class="error">{if $error.code}Eve API Error: {/if}{$error.message}</div>
+<div class="error">{if $error.code}Eve API Error: {/if}{$error.message}</div>
 {/if}
 <div class="inputForm">
-<form method="post" action="{$site_url}/?module=users&mode=register" style="float:left">
-<h2>New user registration</h2>
-  <label>Username:</label>
+  <form method="post" action="{$site_url}/?module=users&mode=register" style="float:left">
+    <h2>New user registration</h2>
+    <label>Username:</label>
     <input type="text" name="username" value="{$username}" /><br />
-  <label>Password:</label>
+    <label>Password:</label>
     <input type="password" name="password" /><br />
-  <label></label><input type="submit" value="Register" />
-</form>
+    <label></label><input type="submit" value="Register" />
+  </form>
 </div>

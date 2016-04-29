@@ -96,32 +96,32 @@
 
   <tr>
     <th>{if $proditem.portionsize > 1}<div align="right">1 run, {$proditem.portionsize} units:{/if}</div></th>
-<th>&nbsp;</th>
-<th><div align="right">{$totals.perfect|eveNum}</div></th>
-<th>&nbsp;</th>
-<th><div align="right">{$totals.you|eveNum}</div></th>
-</tr>
-{if $proditem.portionsize > 1}
-<tr>
-  <th><div align="right">Unit cost:</div></th>
-<th>&nbsp;</th>
-<th><div align="right">{$totals.perfect/$proditem.portionsize|eveNum}</div></th>
-<th>&nbsp;</th>
-<th><div align="right">{$totals.you/$proditem.portionsize|eveNum}</div></th>
-</tr>
-{/if}
+    <th>&nbsp;</th>
+    <th><div align="right">{$totals.perfect|eveNum}</div></th>
+    <th>&nbsp;</th>
+    <th><div align="right">{$totals.you|eveNum}</div></th>
+  </tr>
+  {if $proditem.portionsize > 1}
+  <tr>
+    <th><div align="right">Unit cost:</div></th>
+    <th>&nbsp;</th>
+    <th><div align="right">{$totals.perfect/$proditem.portionsize|eveNum}</div></th>
+    <th>&nbsp;</th>
+    <th><div align="right">{$totals.you/$proditem.portionsize|eveNum}</div></th>
+  </tr>
+  {/if}
 
-<tr>
-  <th>
-<div align="right">
-  Runs: <input type="text" id="runsInput" value="1" style="width:40px;"/>:
-</div>
-</th>
-<th>&nbsp;</th>
-<th><div align="right" id="runsPerfect">{$totals.perfect|eveNum}</div></th>
-<th>&nbsp;</th>
-<th><div align="right" id="runsYou">{$totals.you|eveNum}</div></th>
-</tr>
+  <tr>
+    <th>
+      <div align="right">
+        Runs: <input type="text" id="runsInput" value="1" style="width:40px;"/>:
+      </div>
+    </th>
+    <th>&nbsp;</th>
+    <th><div align="right" id="runsPerfect">{$totals.perfect|eveNum}</div></th>
+    <th>&nbsp;</th>
+    <th><div align="right" id="runsYou">{$totals.you|eveNum}</div></th>
+  </tr>
 </table>
 
 <h2>
@@ -160,20 +160,20 @@
 <div class="note">* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
 
 <script type="text/javascript">
-  var runPerfect = {$totals.perfect};
-  var runYou     = {$totals.you};
+var runPerfect = {$totals.perfect};
+var runYou     = {$totals.you};
 
-  $(document).ready(function() {
-    $("#runsInput").on('keyup', function() {
-      calcRuns($("#runsInput").val());
-    });
+$(document).ready(function() {
+  $("#runsInput").on('keyup', function() {
+    calcRuns($("#runsInput").val());
   });
+});
 
-  function calcRuns(runCount) {
-    var p = runPerfect * runCount;
-    var y = runYou * runCount;
-    $('#runsPerfect').html(numeral(p).format('0,0.00'));
-    $('#runsYou').html(numeral(y).format('0,0.00'));
-  }
+function calcRuns(runCount) {
+  var p = runPerfect * runCount;
+  var y = runYou * runCount;
+  $('#runsPerfect').html(numeral(p).format('0,0.00'));
+  $('#runsYou').html(numeral(y).format('0,0.00'));
+}
 </script>
 {/if}

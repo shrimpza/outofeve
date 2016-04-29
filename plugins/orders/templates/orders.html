@@ -51,86 +51,86 @@
       <td>
         <img src="{$site_url}/{$o.item.icon.icon32}" class="i32 showInfo" data-typeid="{$o.item.typeid}" alt="{$o.item.typename}" align="absmiddle" />
         {$o.item.typename}</td>
-      <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
-      <td align="right">{$o.price|eveNum}</td>
-      <td align="right">{$o.valRemaining|eveNum}</td>
-      <td align="center">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
-      {if ($o.orderState == 0) && ($o.remainingTime > 0)}
+        <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
+        <td align="right">{$o.price|eveNum}</td>
+        <td align="right">{$o.valRemaining|eveNum}</td>
+        <td align="center">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
+        {if ($o.orderState == 0) && ($o.remainingTime > 0)}
         {math equation="100 - ((r / t) * 100)" r=$o.volRemaining t=$o.volEntered assign=perRemain}
         <td align="center" class="maybe-bg">Active<br />{$perRemain|eveNumInt}% done</td>
-      {elseif ($o.orderState != 3) && ($o.remainingTime < 0) && ($o.valRemaining > 0)}
+        {elseif ($o.orderState != 3) && ($o.remainingTime < 0) && ($o.valRemaining > 0)}
         <td align="center" class="bade-bg">Expired</td>
-      {elseif $o.orderState == 2}
+        {elseif $o.orderState == 2}
         <td align="center" class="good-bg">Complete</td>
-      {elseif $o.orderState == 3}
+        {elseif $o.orderState == 3}
         <td align="center" class="bad-bg">Cancelled</td>
-      {elseif $o.orderState == 4}
+        {elseif $o.orderState == 4}
         <td align="center" class="maybe-bg">Pending</td>
-      {elseif $o.orderState == 5}
+        {elseif $o.orderState == 5}
         <td align="center" class="bad-bg">Deleted</td>
-      {/if}
-    </tr>
-    {/foreach}
-  </table>
-  {/if}
-
-  <br />
-
-  <h2 class="sub">Buying</h2>
-  {if !$buying}
-  <h3>No active buy orders!</h3>
-  {else}
-  <table width="100%" border="0">
-    {if $corp}
-    <tr>
-      <th width="7%">Placed By</th>
-      <th width="25%">Station</th>
-      <th width="22%">Item</th>
-      <th width="10%">Quantity</th>
-      <th width="10%">Unit Price</th>
-      <th width="10%">Remaining Value</th>
-      <th width="10%">Remaining Time</th>
-      <th width="6%">Status</th>
-    </tr>
-    {else}
-    <tr>
-      <th width="25%">Station</th>
-      <th width="25%">Item</th>
-      <th width="10%">Quantity</th>
-      <th width="10%">Unit Price</th>
-      <th width="10%">Remaining Value</th>
-      <th width="10%">Remaining Time</th>
-      <th width="10%">Status</th>
-    </tr>
+        {/if}
+      </tr>
+      {/foreach}
+    </table>
     {/if}
-    {foreach from=$buying item=o}
-    <tr class="{cycle values='row,rowAlt'}">
+
+    <br />
+
+    <h2 class="sub">Buying</h2>
+    {if !$buying}
+    <h3>No active buy orders!</h3>
+    {else}
+    <table width="100%" border="0">
       {if $corp}
-      <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" class="i32" align="absmiddle" alt="{$o.charName}" title="{$o.charName}" /></td>
+      <tr>
+        <th width="7%">Placed By</th>
+        <th width="25%">Station</th>
+        <th width="22%">Item</th>
+        <th width="10%">Quantity</th>
+        <th width="10%">Unit Price</th>
+        <th width="10%">Remaining Value</th>
+        <th width="10%">Remaining Time</th>
+        <th width="6%">Status</th>
+      </tr>
+      {else}
+      <tr>
+        <th width="25%">Station</th>
+        <th width="25%">Item</th>
+        <th width="10%">Quantity</th>
+        <th width="10%">Unit Price</th>
+        <th width="10%">Remaining Value</th>
+        <th width="10%">Remaining Time</th>
+        <th width="10%">Status</th>
+      </tr>
       {/if}
-      <td>{$o.station.stationname}</td>
-      <td>
-        <img src="{$site_url}/{$o.item.icon.icon32}" class="i32 showInfo" data-typeid="{$o.item.typeid}" alt="{$o.item.typename}" align="absmiddle" />
-        {$o.item.typename}</td>
-      <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
-      <td align="right">{$o.price|eveNum}</td>
-      <td align="right">{$o.valRemaining|eveNum}</td>
-      <td align="center">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
-      {if ($o.orderState == 0) && ($o.remainingTime > 0)}
-        <td align="center" class="maybe-bg">Active</td>
-      {elseif ($o.orderState != 3) && ($o.remainingTime < 0) && ($o.valRemaining > 0)}
-        <td align="center" class="bad-bg">Expired</td>
-      {elseif $o.orderState == 2}
-        <td align="center" class="good-bg">Complete</td>
-      {elseif $o.orderState == 3}
-        <td align="center" class="bad-bg">Cancelled</td>
-      {elseif $o.orderState == 4}
-        <td align="center" class="maybe-bg">Pending</td>
-      {elseif $o.orderState == 5}
-        <td align="center" class="bad-bg">Deleted</td>
+      {foreach from=$buying item=o}
+      <tr class="{cycle values='row,rowAlt'}">
+        {if $corp}
+        <td align="center"><img src="http://image.eveonline.com/Character/{$o.charID}_32.png" class="i32" align="absmiddle" alt="{$o.charName}" title="{$o.charName}" /></td>
+        {/if}
+        <td>{$o.station.stationname}</td>
+        <td>
+          <img src="{$site_url}/{$o.item.icon.icon32}" class="i32 showInfo" data-typeid="{$o.item.typeid}" alt="{$o.item.typename}" align="absmiddle" />
+          {$o.item.typename}</td>
+          <td align="right">{$o.volRemaining|eveNumInt}/{$o.volEntered|eveNumInt}</td>
+          <td align="right">{$o.price|eveNum}</td>
+          <td align="right">{$o.valRemaining|eveNum}</td>
+          <td align="center">{if $o.remainingTime > 0}{$o.remainingTime|formatTime}{else}-{/if}</td>
+          {if ($o.orderState == 0) && ($o.remainingTime > 0)}
+          <td align="center" class="maybe-bg">Active</td>
+          {elseif ($o.orderState != 3) && ($o.remainingTime < 0) && ($o.valRemaining > 0)}
+          <td align="center" class="bad-bg">Expired</td>
+          {elseif $o.orderState == 2}
+          <td align="center" class="good-bg">Complete</td>
+          {elseif $o.orderState == 3}
+          <td align="center" class="bad-bg">Cancelled</td>
+          {elseif $o.orderState == 4}
+          <td align="center" class="maybe-bg">Pending</td>
+          {elseif $o.orderState == 5}
+          <td align="center" class="bad-bg">Deleted</td>
+          {/if}
+        </tr>
+        {/foreach}
+      </table>
       {/if}
-    </tr>
-    {/foreach}
-  </table>
-  {/if}
-</div>
+    </div>

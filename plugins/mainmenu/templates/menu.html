@@ -1,40 +1,40 @@
 <div class="body">
   <ul>
     {foreach from=$links item=mg}
-      {if $mg.links}
-      <li>
-        <a href="#">
-          {if substr($mg.icon, 0, 4) === 'http'}
-            <img src="{$mg.icon}" class="i32" />
-          {else}
-            <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.icon}.png" class="i32" />
-          {/if}
-        </a>
-        <ul>
-          <li class="header">
-            {$mg.title}
-          </li>
+    {if $mg.links}
+    <li>
+      <a href="#">
+        {if substr($mg.icon, 0, 4) === 'http'}
+        <img src="{$mg.icon}" class="i32" />
+        {else}
+        <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.icon}.png" class="i32" />
+        {/if}
+      </a>
+      <ul>
+        <li class="header">
+          {$mg.title}
+        </li>
         {section name=lnk loop=$mg.links}
-          {if $mg.links[lnk].l}
-          <li>
-            <a href="{$mg.links[lnk].l}">
-              {if $mg.links[lnk].i}
-              <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}.png" align="absmiddle" class="i32" />
-              {else}
-              <span class="spacer32"></span>
-              {/if}
-              <span>{$mg.links[lnk].t}</span>
-            </a>
-          </li>
-          {else}
-          <li class="header">
-            {$mg.links[lnk].t}
-          </li>
-          {/if}
+        {if $mg.links[lnk].l}
+        <li>
+          <a href="{$mg.links[lnk].l}">
+            {if $mg.links[lnk].i}
+            <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i}.png" align="absmiddle" class="i32" />
+            {else}
+            <span class="spacer32"></span>
+            {/if}
+            <span>{$mg.links[lnk].t}</span>
+          </a>
+        </li>
+        {else}
+        <li class="header">
+          {$mg.links[lnk].t}
+        </li>
+        {/if}
         {/section}
-        </ul>
-      </li>
-      {/if}
+      </ul>
+    </li>
+    {/if}
     {/foreach}
   </ul>
 </div>

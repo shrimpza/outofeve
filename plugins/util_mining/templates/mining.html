@@ -160,8 +160,8 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <th><div align="right">{$valuetotals.totalBuyValue|eveNum}</div></th>
-<th><div align="right">{$valuetotals.totalSellValue|eveNum}</div></th>
-</tr>
+    <th><div align="right">{$valuetotals.totalSellValue|eveNum}</div></th>
+  </tr>
 </table>
 
 <h2>
@@ -171,36 +171,36 @@
 <table width="500" border="0">
   <tr>
     <th width="40%"><div style="text-align:right">Total quantity mined:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.totalAmount|eveNumInt}</td>
-</tr>
-<tr>
-  <th width="40%"><div style="text-align:right">Drone quantity mined:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.droneTotalAmount|eveNumInt}</td>
-</tr>
-<tr>
-  <th  width="40%"><div style="text-align:right">Cargo space required:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.volume*$minetotals.totalAmount|eveNumInt}</td>
-</tr>
-<tr>
-  <th width="40%"><div style="text-align:right">Batch size:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$batchsize}</td>
-</tr>
-<tr>
-  <th width="40%"><div style="text-align:right">Reprocessing batches:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.totalBatches|eveNumInt}</td>
-</tr>
-<tr>
-  <th width="40%"><div style="text-align:right">Refining yield:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$wastefactor|eveNum}%</td>
-</tr>
-<tr>
-  <th width="40%"><div style="text-align:right">Ore buying value:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.pricing.avgBuy*$minetotals.totalAmount|eveNum}</td>
-</tr>
-<tr>
-  <th width="40%"><div style="text-align:right">Ore selling value:</div></th>
-<td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.pricing.avgSell*$minetotals.totalAmount|eveNum}</td>
-</tr>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.totalAmount|eveNumInt}</td>
+  </tr>
+  <tr>
+    <th width="40%"><div style="text-align:right">Drone quantity mined:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.droneTotalAmount|eveNumInt}</td>
+  </tr>
+  <tr>
+    <th  width="40%"><div style="text-align:right">Cargo space required:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.volume*$minetotals.totalAmount|eveNumInt}</td>
+  </tr>
+  <tr>
+    <th width="40%"><div style="text-align:right">Batch size:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$batchsize}</td>
+  </tr>
+  <tr>
+    <th width="40%"><div style="text-align:right">Reprocessing batches:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$minetotals.totalBatches|eveNumInt}</td>
+  </tr>
+  <tr>
+    <th width="40%"><div style="text-align:right">Refining yield:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$wastefactor|eveNum}%</td>
+  </tr>
+  <tr>
+    <th width="40%"><div style="text-align:right">Ore buying value:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.pricing.avgBuy*$minetotals.totalAmount|eveNum}</td>
+  </tr>
+  <tr>
+    <th width="40%"><div style="text-align:right">Ore selling value:</div></th>
+    <td align="right" class="{cycle values='row,rowAlt'}">{$asteroid.pricing.avgSell*$minetotals.totalAmount|eveNum}</td>
+  </tr>
 </table>
 {/if}
 
@@ -208,7 +208,7 @@
 <div class="note">Note: Factors in current character's Mining, Astrogeology, Mining Drone Operation, Refining and Refinery Efficiency skill levels. <br />Assumes 30 second (15 seconds in each direction) flight time for each mining drone cycle.<br /><br />
   * Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
 
-<script type="text/javascript">
+  <script type="text/javascript">
   $(document).ready(function() {
     $(".showInfoDroplist").each(function() {
       $(this).css("cursor", "pointer");
@@ -217,4 +217,4 @@
       });
     });
   });
-</script>
+  </script>

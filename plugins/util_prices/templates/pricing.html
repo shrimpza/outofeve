@@ -21,23 +21,23 @@
   <tr>
     <th></th>
     <th><div align="right">{$totals.base|eveNum}</div></th>
-<th><div align="right">{$totals.min|eveNum}</div></th>
-<th><div align="right">{$totals.avg|eveNum}</div></th>
-<th></th>
-</tr>
+    <th><div align="right">{$totals.min|eveNum}</div></th>
+    <th><div align="right">{$totals.avg|eveNum}</div></th>
+    <th></th>
+  </tr>
 </table>
 
 <br />
 <form method="post" action="{$site_url}/?module=util_prices">
   <b>Paste a fitting from EFT, or enter a list of item names (one per line):</b><br />
   <textarea name="items" style="width: 90%; height: 200px;">{foreach from=$items item=i}{$i.typename}
-{/foreach}</textarea><br /><br />
-  <b>Limit to region:</b><br />
-  <select name="region">
-    <option value="0">All</option>
-    {section name=r loop=$regions}
-    <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
-    {/section}
-  </select>
-  &nbsp; <input type="submit" value="Get Prices" />
-</form>
+    {/foreach}</textarea><br /><br />
+    <b>Limit to region:</b><br />
+    <select name="region">
+      <option value="0">All</option>
+      {section name=r loop=$regions}
+      <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
+      {/section}
+    </select>
+    &nbsp; <input type="submit" value="Get Prices" />
+  </form>

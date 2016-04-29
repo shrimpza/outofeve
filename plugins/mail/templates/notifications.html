@@ -50,28 +50,28 @@
 </div>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('.message').click(function() {
-      getMessage($(this).data('messageid'));
-    });
+$(document).ready(function() {
+  $('.message').click(function() {
+    getMessage($(this).data('messageid'));
   });
+});
 
-  function getMessage(msgId) {
-    $.getJSON('index.php', { jsonMode: 1, module: 'mail', notificationID: msgId }, function(message) {
-      if (message) {
-        var fromImg = '';
-        if (message.headers.senderName != '') {
-          fromImg = '<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
-          $('#msg_sender').html(fromImg + message.headers.senderName);
-        } else {
-          $('#msg_sender').html(fromImg + message.headers.sender.itemname);
-        }
-
-        $('#msg_title').html(message.headers.title);
-        $('#msg_date').html(message.headers.sentDate);
-        $('#msg_message').html(message.text);
-        $('#messageBody').css('display', '');
+function getMessage(msgId) {
+  $.getJSON('index.php', { jsonMode: 1, module: 'mail', notificationID: msgId }, function(message) {
+    if (message) {
+      var fromImg = '';
+      if (message.headers.senderName != '') {
+        fromImg = '<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
+        $('#msg_sender').html(fromImg + message.headers.senderName);
+      } else {
+        $('#msg_sender').html(fromImg + message.headers.sender.itemname);
       }
-    });
-  }
+
+      $('#msg_title').html(message.headers.title);
+      $('#msg_date').html(message.headers.sentDate);
+      $('#msg_message').html(message.text);
+      $('#messageBody').css('display', '');
+    }
+  });
+}
 </script>

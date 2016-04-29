@@ -20,7 +20,7 @@ class mainmenu extends Plugin {
             $this->characterKey = eveKeyManager::getKey($this->site->user->char_apikey_id);
             if ($this->characterKey && $this->characterKey != null) {
                 foreach ($this->characterKey->characters as $char) {
-                  $this->addGroup($char->characterName, 'main_' . $char->characterID, 'http://image.eveonline.com/Character/' . $char->characterID . '_32.jpg');
+                    $this->addGroup($char->characterName, 'main_' . $char->characterID, 'http://image.eveonline.com/Character/' . $char->characterID . '_32.jpg');
                 }
             }
 
@@ -78,11 +78,11 @@ class mainmenu extends Plugin {
     }
 
     function addUrlParam($url, $param) {
-      if (strstr($url, '?') === false) {
-        return $url . '?' . $param;
-      } else {
-        return $url . '&' . $param;
-      }
+        if (strstr($url, '?') === false) {
+            return $url . '?' . $param;
+        } else {
+            return $url . '&' . $param;
+        }
     }
 }
 

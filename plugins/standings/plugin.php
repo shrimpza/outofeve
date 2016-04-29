@@ -8,13 +8,13 @@ class standings extends Plugin {
     function standings($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->char_apikey_id) 
-                && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_Standings)) {
+        if (eveKeyManager::getKey($this->site->user->char_apikey_id)
+            && eveKeyManager::getKey($this->site->user->char_apikey_id)->hasAccess(CHAR_Standings)) {
             $this->site->plugins['mainmenu']->addLink('main', 'Standings', '?module=standings', 'standings');
         }
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) 
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_Standings)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+            && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_Standings)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Standings', '?module=standings&corp=1', 'standings');
         }
     }
@@ -44,7 +44,7 @@ class standings extends Plugin {
         $standings = objectToArray($standingList);
 
         return $this->render('standings', array(
-                    'standings' => $standings,
+            'standings' => $standings,
         ));
     }
 

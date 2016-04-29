@@ -62,9 +62,9 @@ class util_production extends Plugin {
 
 
                         $item->blueprint->materials[$i]['qty_perfect'] = $item->blueprint->materials[$i]['quantity']
-                                                                 - floor($item->blueprint->materials[$i]['quantity'] * (10 / 100));
+                        - floor($item->blueprint->materials[$i]['quantity'] * (10 / 100));
                         $item->blueprint->materials[$i]['qty_you'] = $item->blueprint->materials[$i]['quantity']
-                                                                 - floor($item->blueprint->materials[$i]['quantity'] * ($meLevel / 100));
+                        - floor($item->blueprint->materials[$i]['quantity'] * ($meLevel / 100));
 
                         $item->blueprint->materials[$i]['price_perfect'] = $item->blueprint->materials[$i]['qty_perfect'] * $prcAvgSell;
                         $item->blueprint->materials[$i]['price_you'] = $item->blueprint->materials[$i]['qty_you'] * $prcAvgSell;
@@ -81,13 +81,15 @@ class util_production extends Plugin {
 
         $regions = eveDB::getInstance()->regionList();
 
-        return $this->render('production', array('item' => $_POST['item'],
-                    'region' => $region,
-                    'regions' => $regions,
-                    'proditem' => $item,
-                    'customprice' => $_POST['customprice'],
-                    'meLevel' => $meLevel,
-                    'totals' => array('perfect' => $tPerfect, 'you' => $tYou)));
+        return $this->render('production', array(
+            'item' => $_POST['item'],
+            'region' => $region,
+            'regions' => $regions,
+            'proditem' => $item,
+            'customprice' => $_POST['customprice'],
+            'meLevel' => $meLevel,
+            'totals' => array('perfect' => $tPerfect, 'you' => $tYou)
+        ));
     }
 
 }

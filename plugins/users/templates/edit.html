@@ -1,43 +1,43 @@
 <div class="inputForm">
-<form method="post" action="{$site_url}/?module=users&mode=edit" style="float:left">
-<input type="hidden" name="save" value="1" />
-<h2>User preferences</h2>
-  <label>&nbsp;</label>Leave password blank if you do not want to change it.<br/>
-  <label>Change password:</label>
+  <form method="post" action="{$site_url}/?module=users&mode=edit" style="float:left">
+    <input type="hidden" name="save" value="1" />
+    <h2>User preferences</h2>
+    <label>&nbsp;</label>Leave password blank if you do not want to change it.<br/>
+    <label>Change password:</label>
     <input type="password" name="password" autocomplete="off"/><br />
-  <label>Email address:</label>
+    <label>Email address:</label>
     <input type="text" name="email" value="{$email}" /><br />
-  <label>API Proxy *:</label>
+    <label>API Proxy *:</label>
     <input type="text" name="proxy" value="{$proxy}" /><br />
-  <label>Time zone:</label>
+    <label>Time zone:</label>
     <select name="timezone">
       <option value="GMT">GMT / EVE Time</option>
       {section name=t loop=$timezones}
-        <option value="{$timezones[t].zone}" {if $timezone == $timezones[t].zone}selected="selected"{/if}>{$timezones[t].desc}</option>
+      <option value="{$timezones[t].zone}" {if $timezone == $timezones[t].zone}selected="selected"{/if}>{$timezones[t].desc}</option>
       {/section}
     </select><br />
-  <label>Theme:</label>
+    <label>Theme:</label>
     <select name="theme">
       <option value="{$theme}">Site default</option>
       {section name=t loop=$themes}
-        <option value="{$themes[t].name}" {if $usertheme == $themes[t].name}selected="selected"{/if}>{$themes[t].desc}</option>
+      <option value="{$themes[t].name}" {if $usertheme == $themes[t].name}selected="selected"{/if}>{$themes[t].desc}</option>
       {/section}
     </select><br />
 
-  {if $custommins}
+    {if $custommins}
     <hr />
     <label>&nbsp;</label><b>Custom mineral prices:</b><br />
     {section name=m loop=$custommins}
-      <label>{$custommins[m].typename}</label>
-      <img src="{$site_url}/{$custommins[m].icon.icon32}" align="left" height="22" />
-      <input type="text" name="min_{$custommins[m].typeid}" value="{$custommins[m].customPrice|eveNum}" style="width:60px;" /><br />
+    <label>{$custommins[m].typename}</label>
+    <img src="{$site_url}/{$custommins[m].icon.icon32}" align="left" height="22" />
+    <input type="text" name="min_{$custommins[m].typeid}" value="{$custommins[m].customPrice|eveNum}" style="width:60px;" /><br />
     {/section}
-  {/if}
+    {/if}
 
-  <label></label><input type="submit" value="Save" />
+    <label></label><input type="submit" value="Save" />
 
-  <div class="note" style="clear:both">* If you access your API data from multiple sources, and wish to avoid caching conflicts, use the Proxy option to specify a caching proxy to use rather than accessing the EVE API directly. <br /><br />
-  If you do not use other full-access API-enabled applications, or are unsure, leave the API Proxy blank.</div>
+    <div class="note" style="clear:both">* If you access your API data from multiple sources, and wish to avoid caching conflicts, use the Proxy option to specify a caching proxy to use rather than accessing the EVE API directly. <br /><br />
+      If you do not use other full-access API-enabled applications, or are unsure, leave the API Proxy blank.</div>
 
-</form>
-</div>
+    </form>
+  </div>

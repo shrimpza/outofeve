@@ -8,8 +8,8 @@ class corporation extends Plugin {
     function corporation($db, $site) {
         $this->Plugin($db, $site);
 
-        if (eveKeyManager::getKey($this->site->user->corp_apikey_id) 
-                && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_CorporationSheet)) {
+        if (eveKeyManager::getKey($this->site->user->corp_apikey_id)
+            && eveKeyManager::getKey($this->site->user->corp_apikey_id)->hasAccess(CORP_CorporationSheet)) {
             $this->site->plugins['mainmenu']->addLink('corp', 'Corporation', '?module=corporation', 'corp');
         }
     }
@@ -49,10 +49,12 @@ class corporation extends Plugin {
         $activeMonth = $activeWeek * 4;
         $active3Months = $activeMonth * 3;
 
-        $active = array(array('min' => 0, 'max' => $activeWeek, 'count' => 0, 'name' => 'Last 7 days'),
+        $active = array(
+            array('min' => 0, 'max' => $activeWeek, 'count' => 0, 'name' => 'Last 7 days'),
             array('min' => $activeWeek, 'max' => $activeMonth, 'count' => 0, 'name' => 'Last month'),
             array('min' => $activeMonth, 'max' => $active3Months, 'count' => 0, 'name' => 'Last 3 months'),
-            array('min' => $active3Months, 'max' => $active3Months * 1000 /* lol */, 'count' => 0, 'name' => 'Longer than 3 months'));
+            array('min' => $active3Months, 'max' => $active3Months * 1000 /* lol */, 'count' => 0, 'name' => 'Longer than 3 months')
+        );
         $systems = array();
         $titles = array();
 
@@ -107,13 +109,14 @@ class corporation extends Plugin {
         }
 
         return $this->render('corporation', array(
-                    'corp' => objectToArray($corporation),
-                    'balances' => $bals,
-                    'members' => $members,
-                    'systems' => $systems,
-                    'titles' => $titles,
-                    'active' => $active,
-                    'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']));
+            'corp' => objectToArray($corporation),
+            'balances' => $bals,
+            'members' => $members,
+            'systems' => $systems,
+            'titles' => $titles,
+            'active' => $active,
+            'selSystem' => $_POST['system'], 'selTitle' => $_POST['title'], 'selActive' => $_POST['active']
+        ));
     }
 
 }

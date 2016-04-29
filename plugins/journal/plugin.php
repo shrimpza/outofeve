@@ -6,9 +6,9 @@ class journal extends Plugin {
     var $level = 1;
 
     /*
-     * Taxable refTypeIDs - to be used when a member list is not available. 
-     * Likely less accurate but will work for API keys which don't have access to corp member lists.
-     */
+    * Taxable refTypeIDs - to be used when a member list is not available.
+    * Likely less accurate but will work for API keys which don't have access to corp member lists.
+    */
     var $taxableRefs = array(33, 34, 85);
 
     function journal($db, $site) {
@@ -118,12 +118,14 @@ class journal extends Plugin {
             $days[$jDate]['journal'][$j->refTypeID]['tax'] += $j->taxAmount;
             $days[$jDate]['tax'] += $j->taxAmount;
         }
-        
+
         $p = new Paginator($days, 10, $_GET['p']);
 
-        $vars = array('days' => $p->pageData, 'refTypes' => $refs, 'filter' => $_GET['filter'],
+        $vars = array(
+            'days' => $p->pageData, 'refTypes' => $refs, 'filter' => $_GET['filter'],
             'pageCount' => $p->pageCount, 'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
-            'corp' => $_GET['corp'], 'accountKey' => $_GET['accountKey']);
+            'corp' => $_GET['corp'], 'accountKey' => $_GET['accountKey']
+        );
 
         if ($_GET['corp']) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
@@ -155,10 +157,12 @@ class journal extends Plugin {
             $j->reason = $this->getJornalReason($j);
         }
 
-        $vars = array('journal' => objectToArray($p->pageData), 'pageCount' => $p->pageCount,
+        $vars = array(
+            'journal' => objectToArray($p->pageData), 'pageCount' => $p->pageCount,
             'pageNum' => $p->pageNum, 'nextPage' => $p->nextPage, 'prevPage' => $p->prevPage,
             'filter' => $_GET['filter'], 'refTypes' => $refs,
-            'corp' => $_GET['corp'], 'accountKey' => $_GET['accountKey']);
+            'corp' => $_GET['corp'], 'accountKey' => $_GET['accountKey']
+        );
 
         if ($_GET['corp']) {
             if (eveKeyManager::getKey($this->site->user->corp_apikey_id) != null) {
@@ -210,7 +214,7 @@ class journal extends Plugin {
                 $reason = '';
                 foreach ($kills as $k) {
                     if (empty($k)) {
-                        
+
                     } else if ($k == '...') {
                         $reason .= '...';
                     } else {

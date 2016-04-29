@@ -1,10 +1,10 @@
 <div id="accountsList">
-<table width="100%" border="0">
-  <tr>
-    <th>Key Name</th>
-    <th>Status</th>
-  </tr>
-  {foreach from=$keys item=k}
+  <table width="100%" border="0">
+    <tr>
+      <th>Key Name</th>
+      <th>Status</th>
+    </tr>
+    {foreach from=$keys item=k}
     <tr class="{cycle values='row,rowAlt'}">
       <td>
         <a href="{$site_url}/?module=users&mode=accounts&delete={$k.row.id}" title="Delete"><img src="{$site_url}/templates/{$theme}/images/edit-delete.png" align="absmiddle"></a>
@@ -12,19 +12,19 @@
         {$k.row.name}
       </td>
       <td>
-          {if $k.account.error}
-            {$k.account.error}
-          {else}
-            Account created {$k.account.createDate|date_format:"%e %B %Y"}, expires <b>{$k.account.paidUntil|date_format:"%e %B %Y"}</b>.
-          {/if}
+        {if $k.account.error}
+        {$k.account.error}
+        {else}
+        Account created {$k.account.createDate|date_format:"%e %B %Y"}, expires <b>{$k.account.paidUntil|date_format:"%e %B %Y"}</b>.
+        {/if}
       </td>
     </tr>
-  {/foreach}
-  <tr class="{cycle values='row,rowAlt'}">
-    <th colspan="2">
-      <a href="{$site_url}/?module=users&mode=accounts&edit=0"><img src="{$site_url}/templates/{$theme}/images/edit-new.png" align="absmiddle">
-      Add Key</a>
-    </th>
-  </tr>
-</table>
-</div>
+    {/foreach}
+    <tr class="{cycle values='row,rowAlt'}">
+      <th colspan="2">
+        <a href="{$site_url}/?module=users&mode=accounts&edit=0"><img src="{$site_url}/templates/{$theme}/images/edit-new.png" align="absmiddle">
+          Add Key</a>
+        </th>
+      </tr>
+    </table>
+  </div>

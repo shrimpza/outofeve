@@ -101,11 +101,11 @@ class util_mining extends Plugin {
                 $roid->getPricing($region);
                 if ($roid) {
                     $miningAmount = eveDB::getInstance()->db->QueryA('SELECT i.typeName, a.valueInt, a.valueFloat, t.attributeName'
-                            . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
-                            . ' WHERE i.typeID = ? '
-                            . ' AND i.typeId = a.typeId '
-                            . ' AND a.attributeId = t.attributeId'
-                            . ' AND t.attributeName = "miningAmount"', array($miner->typeid));
+                                                                    . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
+                                                                    . ' WHERE i.typeID = ? '
+                                                                    . ' AND i.typeId = a.typeId '
+                                                                    . ' AND a.attributeId = t.attributeId'
+                                                                    . ' AND t.attributeName = "miningAmount"', array($miner->typeid));
                     if ($miningAmount) {
                         $miningAmount = $miningAmount[0]['valueint'];
                     }
@@ -114,12 +114,12 @@ class util_mining extends Plugin {
                     $miningUpgradeBonus = 0;
                     if ($_POST['upgradeqty'] > 0) {
                         $upgradeBonus = eveDB::getInstance()->db->QueryA('SELECT i.typeName, a.valueInt, a.valueFloat, t.attributeName'
-                                . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
-                                . ' WHERE i.typeID = ?'
-                                . ' AND i.typeId = a.typeId '
-                                . ' AND a.attributeId = t.attributeId'
-                                . ' AND (t.attributeName = "miningAmountBonus" '
-                                . '   or t.attributeName = "iceHarvestCycleBonus")', array($upgrade->typeid));
+                                                                        . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
+                                                                        . ' WHERE i.typeID = ?'
+                                                                        . ' AND i.typeId = a.typeId '
+                                                                        . ' AND a.attributeId = t.attributeId'
+                                                                        . ' AND (t.attributeName = "miningAmountBonus" '
+                                                                        . '   or t.attributeName = "iceHarvestCycleBonus")', array($upgrade->typeid));
                         if ($upgradeBonus) {
                             if ($upgradeBonus[0]['attributename'] == 'miningAmountBonus') {
                                 $miningUpgradeBonus = 1 + ($upgradeBonus[0]['valueint'] / 100);
@@ -139,11 +139,11 @@ class util_mining extends Plugin {
                     $miningAmount = $miningAmount / $roid->volume;
 
                     $duration = eveDB::getInstance()->db->QueryA('SELECT i.typeName, a.valueInt, a.valueFloat, t.attributeName'
-                            . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
-                            . ' WHERE i.typeID = ? '
-                            . ' AND i.typeId = a.typeId '
-                            . ' AND a.attributeId = t.attributeId'
-                            . ' AND t.attributeName = "duration"', array($miner->typeid));
+                                                                . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
+                                                                . ' WHERE i.typeID = ? '
+                                                                . ' AND i.typeId = a.typeId '
+                                                                . ' AND a.attributeId = t.attributeId'
+                                                                . ' AND t.attributeName = "duration"', array($miner->typeid));
                     if ($duration) {
                         $duration = $duration[0]['valuefloat'] / 1000;
                     }
@@ -160,11 +160,11 @@ class util_mining extends Plugin {
                         $drone = eveDB::getInstance()->eveItem($_POST['drone']);
                         if ($drone) {
                             $droneMiningAmount = eveDB::getInstance()->db->QueryA('SELECT i.typeName, a.valueInt, a.valueFloat, t.attributeName'
-                                    . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
-                                    . ' WHERE i.typeID = ? '
-                                    . ' AND i.typeId = a.typeId '
-                                    . ' AND a.attributeId = t.attributeId'
-                                    . ' AND t.attributeName = "miningAmount"', array($drone->typeid));
+                                                                                . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
+                                                                                . ' WHERE i.typeID = ? '
+                                                                                . ' AND i.typeId = a.typeId '
+                                                                                . ' AND a.attributeId = t.attributeId'
+                                                                                . ' AND t.attributeName = "miningAmount"', array($drone->typeid));
                             if ($droneMiningAmount) {
                                 $droneMiningAmount = $droneMiningAmount[0]['valueint'];
                             }
@@ -173,11 +173,11 @@ class util_mining extends Plugin {
                             $droneMiningAmount = $droneMiningAmount / $roid->volume;
 
                             $droneDuration = eveDB::getInstance()->db->QueryA('SELECT i.typeName, a.valueInt, a.valueFloat, t.attributeName'
-                                    . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
-                                    . ' WHERE i.typeID = ? '
-                                    . ' AND i.typeId = a.typeId '
-                                    . ' AND a.attributeId = t.attributeId'
-                                    . ' AND t.attributeName = "duration"', array($drone->typeid));
+                                                                            . ' FROM invTypes i, dgmTypeAttributes a, dgmAttributeTypes t '
+                                                                            . ' WHERE i.typeID = ? '
+                                                                            . ' AND i.typeId = a.typeId '
+                                                                            . ' AND a.attributeId = t.attributeId'
+                                                                            . ' AND t.attributeName = "duration"', array($drone->typeid));
                             if ($droneDuration) {
                                 $droneDuration = ($droneDuration[0]['valuefloat'] / 1000) + 30;
                             }
@@ -222,10 +222,12 @@ class util_mining extends Plugin {
                         }
 
 
-                        $minerals[] = array('item' => objectToArray($newMin, array('DBManager', 'eveDB')),
+                        $minerals[] = array(
+                            'item' => objectToArray($newMin, array('DBManager', 'eveDB')),
                             'qty' => $mins[$i]['quantity'] * $wasteFactor * $totalBatches,
                             'buyvalue' => ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgBuy,
-                            'sellvalue' => ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgSell);
+                            'sellvalue' => ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgSell
+                        );
                         $totalBuyValue += ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgBuy;
                         $totalSellValue += ($mins[$i]['quantity'] * $wasteFactor * $totalBatches) * $prcAvgSell;
                     }
@@ -240,35 +242,36 @@ class util_mining extends Plugin {
         $upgrades = eveDB::getInstance()->db->QueryA('select typeID, typeName from invTypes where groupID = 546 and published > 0 order by typeName', array());
         $drones = eveDB::getInstance()->db->QueryA('select typeID, typeName from invTypes where groupID in (101) and published > 0 order by typeName', array());
         $roids = eveDB::getInstance()->db->QueryA("select i.typeId, i.typeName
-                                      from invTypes i
-                                        inner join invGroups g on g.groupId = i.groupId
-                                        inner join invCategories c on c.categoryId = g.categoryId
-                                      where i.published > 0 and c.categoryId = 25 and i.typeName not like 'Compressed%'
-                                      order by i.groupId, i.typeId", array());
+                                                    from invTypes i
+                                                    inner join invGroups g on g.groupId = i.groupId
+                                                    inner join invCategories c on c.categoryId = g.categoryId
+                                                    where i.published > 0 and c.categoryId = 25 and i.typeName not like 'Compressed%'
+                                                    order by i.groupId, i.typeId", array());
 
-        return $this->render('mining', array('miner' => $_POST['miner'],
-                    'miners' => $miners,
-                    'qty' => $_POST['qty'],
-                    'upgrade' => $_POST['upgrade'],
-                    'upgrades' => $upgrades,
-                    'upgradeqty' => $_POST['upgradeqty'],
-                    'drone' => $_POST['drone'],
-                    'drones' => $drones,
-                    'droneqty' => $_POST['droneqty'],
-                    'minetime' => $_POST['minetime'],
-                    'station' => $_POST['station'],
-                    'shipbonus' => $_POST['shipbonus'],
-                    'roid' => $_POST['roid'],
-                    'roids' => $roids,
-                    'region' => $region,
-                    'regions' => $regions,
-                    'asteroid' => $asteroid,
-                    'minerals' => $minerals,
-                    'minetotals' => array('totalCycle' => $totalCycle, 'totalAmount' => $totalAmount, 'totalBatches' => $totalBatches, 'droneTotalAmount' => $droneTotalAmount),
-                    'valuetotals' => array('totalBuyValue' => $totalBuyValue, 'totalSellValue' => $totalSellValue),
-                    'wastefactor' => $wasteFactor * 100,
-                    'batchsize' => $_POST['roid'] > 0 ? $roid->portionsize : 0,
-                ));
+        return $this->render('mining', array(
+            'miner' => $_POST['miner'],
+            'miners' => $miners,
+            'qty' => $_POST['qty'],
+            'upgrade' => $_POST['upgrade'],
+            'upgrades' => $upgrades,
+            'upgradeqty' => $_POST['upgradeqty'],
+            'drone' => $_POST['drone'],
+            'drones' => $drones,
+            'droneqty' => $_POST['droneqty'],
+            'minetime' => $_POST['minetime'],
+            'station' => $_POST['station'],
+            'shipbonus' => $_POST['shipbonus'],
+            'roid' => $_POST['roid'],
+            'roids' => $roids,
+            'region' => $region,
+            'regions' => $regions,
+            'asteroid' => $asteroid,
+            'minerals' => $minerals,
+            'minetotals' => array('totalCycle' => $totalCycle, 'totalAmount' => $totalAmount, 'totalBatches' => $totalBatches, 'droneTotalAmount' => $droneTotalAmount),
+            'valuetotals' => array('totalBuyValue' => $totalBuyValue, 'totalSellValue' => $totalSellValue),
+            'wastefactor' => $wasteFactor * 100,
+            'batchsize' => $_POST['roid'] > 0 ? $roid->portionsize : 0,
+        ));
     }
 
 }
