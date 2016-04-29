@@ -59,8 +59,10 @@ class Site {
 
             if (($this->user->id > 0) && ($plugin->level <= $this->user->level) || ($plugin->level <= 0)) {
                 if (method_exists($plugin, 'getSideBox')) {
-                    $newBlock = array('title' => $plugin->name,
-                        'content' => $plugin->getSideBox());
+                    $newBlock = array(
+                        'title' => $plugin->name,
+                        'content' => $plugin->getSideBox()
+                    );
                     $sideBlocks[] = $newBlock;
                 }
             }

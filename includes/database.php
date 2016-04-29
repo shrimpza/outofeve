@@ -152,8 +152,10 @@ class DBObject {
             $subst[] = '?';
         }
 
-        return array('q' => 'INSERT INTO ' . $this->table . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $subst) . ')',
-            'values' => $values);
+        return array(
+            'q' => 'INSERT INTO ' . $this->table . ' (' . implode(',', $fields) . ') VALUES (' . implode(',', $subst) . ')',
+            'values' => $values
+        );
     }
 
     function updateRow() {
@@ -166,8 +168,10 @@ class DBObject {
             }
         }
         $values[] = $this->row['id'];
-        return array('q' => 'UPDATE ' . $this->table . ' SET ' . implode(',', $fields) . ' WHERE id = ?',
-            'values' => $values);
+        return array(
+            'q' => 'UPDATE ' . $this->table . ' SET ' . implode(',', $fields) . ' WHERE id = ?',
+            'values' => $values
+        );
     }
 
     function delete() {

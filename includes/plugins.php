@@ -35,14 +35,14 @@ class Plugin {
         return $smarty->fetch($template . '.html');
     }
 
-//      function getContent() {
-//      }
-//
-//      function getContentJson() {
-//      }
-//
-//      function getSideBox() {
-//      } 
+    // function getContent() {
+    // }
+    //
+    // function getContentJson() {
+    // }
+    //
+    // function getSideBox() {
+    // }
 }
 
 class Paginator {

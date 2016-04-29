@@ -57,13 +57,13 @@
    | that may be beneficial to the general public and/or other users.        |
    | For commercial applications, this is required.                            |
    +------------------------------------------------------------------------+ */
- 
+
 /** a simple GET request:
  * include('eac_curl.class.php');
  * $http = new cURL();
  * $result = $http->get('http://www.kevinburkholder.com/PostTest.php');
  */
- 
+
 /**
  * // set some fields
  * $fields = array();
@@ -71,31 +71,31 @@
  * $fields['LastName']     = "Burkholder";
  * $fields['FullName']     = "Kevin J. Burkholder";
  * $fields['Email']        = "kburkholder@earthasylum.com";
- * 
+ *
  * // set some options - see http://us3.php.net/manual/en/function.curl-setopt.php
  * $options = array();
  * $options['CURLOPT_AUTOREFERER']    = 1;
  * $options['CURLOPT_CRLF']         = 1;
  * $options['CURLOPT_NOPROGRESS']     = 1;
- * 
+ *
  * include('eac_curl.class.php');
  * // instantiate and load options
  * $http = new cURL($options);
  * // another way to load options
  * $http->setOptions($options);
- * 
+ *
  * // add a new (single) option
  * $http->setOption('CURLOPT_BUFFERSIZE', 32768);
- * 
+ *
  * // copy the http request headers to the curl request
  * $http->copyHeaders();
- * 
+ *
  * // add a header
  * $http->header('X-EAC-CURL-Test: cURL test header');
- * 
+ *
  * // post to PostTest.php with fields
  * echo $http->post('http://www.kevinburkholder.com/PostTest.php',$fields);
- * 
+ *
  * // display the response headers, the cURL stats, and our options
  * echo "<pre>";
  * print_r($http->getHeaders());
@@ -106,7 +106,7 @@
  * // $http->success = false on error, else true
  * // $http->error = error message (on error)
  */
- 
+
 class cURL {
 
     var $Version        = "v0.7.1, (Feb 10, 2008)";
@@ -206,7 +206,7 @@ class cURL {
             foreach($options as $opt => $val) $this->setOption($opt,$val);
         }
     }
-    
+
 
     /**
      * set a single option
@@ -218,8 +218,8 @@ class cURL {
     {
         $this->options[str_replace('STREAMS','CURLOPT',$option)] = $value;
     }
-    
-    
+
+
     /**
      * set a callback function
      * myfunction(curl_result, curl_handle=null) {}
@@ -228,7 +228,7 @@ class cURL {
      * @param string $function    'function_name'
      * @param array $function    array('class_name', 'function_name')
      */
-    public function setCallback($function) 
+    public function setCallback($function)
     {
         $this->callback = $function;
     }
@@ -239,7 +239,7 @@ class cURL {
      *
      * @access public
      */
-    public function copyHeaders() 
+    public function copyHeaders()
     {
         foreach($_SERVER as $key => $value) {
             if (substr($key,0,5) == "HTTP_") {
@@ -252,7 +252,7 @@ class cURL {
             }
         }
     }
-    
+
 
     /**
      * add a request header
@@ -260,12 +260,12 @@ class cURL {
      * @access public
      * @param string $header    header (header-name: header-value)
      */
-    public function header($header) 
+    public function header($header)
     {
         if (!in_array($header,$this->reqHeaders))
             $this->reqHeaders[] = $header;
     }
-    
+
 
     /**
      * http GET request
@@ -274,15 +274,15 @@ class cURL {
      * @param string $url         the request url
      * @param array $options     additional options
      */
-    public function get($url, $options = null) 
+    public function get($url, $options = null)
     {
         $this->_resetOpt();
-        if (is_array($options)) 
+        if (is_array($options))
             foreach($options as $opt => $val) $this->setOption($opt,$val);
         $this->options['CURLOPT_HTTPGET'] = 1;
         return $this->httpRequest($url);
     }
-    
+
 
     /**
      * http POST request
@@ -292,11 +292,11 @@ class cURL {
      * @param mixed $fields     POST variables
      * @param array $options     additional options
      */
-    public function post($url, $fields = null, $options = null) 
+    public function post($url, $fields = null, $options = null)
     {
         $vars = '';
         $this->_resetOpt();
-        if (is_array($options)) 
+        if (is_array($options))
             foreach($options as $opt => $val) $this->setOption($opt,$val);
         if (is_array($fields)) {
             foreach($fields as $k => $v) $vars .= $k.'='.utf8_encode($v)."&";
@@ -306,7 +306,7 @@ class cURL {
         $this->options['CURLOPT_POSTFIELDS'] = $fields;
         return $this->httpRequest($url);
     }
-    
+
 
     /**
      * http PUT request
@@ -316,10 +316,10 @@ class cURL {
      * @param string $fn_or_data '@filename' or data string
      * @param array $options     additional options
      */
-    public function put($url, $fn_or_data, $options = null) 
+    public function put($url, $fn_or_data, $options = null)
     {
         $this->_resetOpt();
-        if (is_array($options)) 
+        if (is_array($options))
             foreach($options as $opt => $val) $this->setOption($opt,$val);
         $fp = fopen('php://temp', 'rw');
         if (substr($fn_or_data,0,1) == '@') {
@@ -348,7 +348,7 @@ class cURL {
      * @access public
      * @param string $url         the request url
      */
-    public function httpRequest($url) 
+    public function httpRequest($url)
     {
         $this->header('X-EAC-Request: '.$this->Signature);
         $url = str_replace('&amp;','&',$url);
@@ -385,7 +385,7 @@ class cURL {
         curl_close($ch);
         return $this->lastResult;
     }
-    
+
 
     /**
      * send (email) last result
@@ -397,7 +397,7 @@ class cURL {
      * @param string $xheaders     extra headers
      * @param string $EOL         end-of-line character (\n or \r\n)
      */
-    public function sendLastResult($to, $from = false, $subject = false, $xheaders = array(), $EOL = "\n") 
+    public function sendLastResult($to, $from = false, $subject = false, $xheaders = array(), $EOL = "\n")
     {
         if (!$from && isset($_SERVER['SERVER_ADMIN'])) {
             $from = $_SERVER['SERVER_ADMIN'];
@@ -418,47 +418,47 @@ class cURL {
         }
         return mail($to, $subject, $this->lastResult, $headers);
     }
-    
+
 
     /**
      * get last result
      *
      * @access public
      */
-    public function getLastResult() 
+    public function getLastResult()
     {
         return $this->lastResult;
     }
-    
+
 
     /**
      * get response info
      *
      * @access public
      */
-    public function getInfo() 
+    public function getInfo()
     {
         return $this->info;
     }
-    
+
 
     /**
      * get response headers
      *
      * @access public
      */
-    public function getHeaders() 
+    public function getHeaders()
     {
         return $this->resHeaders;
     }
-    
+
 
     /**
      * get options array
      *
      * @access public
      */
-    public function getOptions() 
+    public function getOptions()
     {
         return $this->options;
     }
@@ -466,12 +466,12 @@ class cURL {
 
     /**
      * callback function for reading and processing headers
-     * 
+     *
      * @param object $ch
      * @param string $header
      * @return integer        size of headers
      */
-    private function _parseHeaders($ch, $header) 
+    private function _parseHeaders($ch, $header)
     {
         if (strlen($header) > 2) {
             list($key,$value) = explode(" ",rtrim($header,"\r\n"),2);
@@ -485,9 +485,9 @@ class cURL {
 
     /**
      * unset function parameters
-     * 
+     *
      */
-    private function _resetOpt() 
+    private function _resetOpt()
     {
         unset($this->options['CURLOPT_HTTPGET']);
         unset($this->options['CURLOPT_POST']);
@@ -501,7 +501,7 @@ class cURL {
 
     /**
      * gzdecode function (missing from PHP)
-     * 
+     *
      * @param string $data         gzencoded data
      * @return string decoded data
      */

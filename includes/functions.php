@@ -3,8 +3,9 @@
 function rsToArray($rs) {
     $arr = $rs->fetchAll(PDO::FETCH_ASSOC);
     $res = array();
-    for ($i = 0; $i < count($arr); $i++)
+    for ($i = 0; $i < count($arr); $i++) {
         $res[] = array_change_key_case($arr[$i], CASE_LOWER);
+    }
     return $res;
 }
 
@@ -17,15 +18,16 @@ function _objectToArray($obj, $ignoreClasses = array()) {
     if (is_array($_arr)) {
         $arr = array();
         foreach ($_arr as $key => $val) {
-            if (is_object($val) && in_array(get_class($val), $ignoreClasses))
+            if (is_object($val) && in_array(get_class($val), $ignoreClasses)) {
                 continue;
-            else {
+            } else {
                 $val = (is_array($val) || is_object($val)) ? _objectToArray($val, $ignoreClasses) : $val;
                 $arr[$key] = $val;
             }
         }
-    } else
+    } else {
         $arr = null;
+    }
     return $arr;
 }
 
@@ -46,8 +48,8 @@ function eveRoman($num) {
 
     // Declare a lookup array that we will use to traverse the number:
     $lookup = array('M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
-        'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
-        'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
+    'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+    'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1);
 
     foreach ($lookup as $roman => $value) {
         // Determine the number of matches
@@ -60,8 +62,9 @@ function eveRoman($num) {
         $n = $n % $value;
     }
 
-    if (empty($result))
+    if (empty($result)) {
         $result = '0';
+    }
 
     // The Roman numeral should be built, return it
     return $result;
@@ -86,12 +89,9 @@ function formatTime($time) {
 
     $res = '';
 
-    if ($d > 0)
-        $res = $res . $d . 'd ';
-    if ($h > 0)
-        $res = $res . $h . 'h ';
-    if ($m > 0)
-        $res = $res . $m . 'm ';
+    if ($d > 0) $res = $res . $d . 'd ';
+    if ($h > 0) $res = $res . $h . 'h ';
+    if ($m > 0) $res = $res . $m . 'm ';
     //$res = $res . $s . 's';
 
     return trim($res);
