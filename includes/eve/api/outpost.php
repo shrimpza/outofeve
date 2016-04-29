@@ -35,9 +35,9 @@ class eveOutpostList {
 }
 
 /**
- * This outpost class contains exactly the same structure as a regular station
- * so they are interchangable with no changes required elsewhere.
- */
+* This outpost class contains exactly the same structure as a regular station
+* so they are interchangable with no changes required elsewhere.
+*/
 class eveOutpost {
 
     var $stationid = 0;

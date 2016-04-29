@@ -119,7 +119,7 @@ class eveStarbase {
         $tmpFuel = eveDB::getInstance()->eveFuelRequirements($this->typeID);
         for ($i = 0; $i < count($tmpFuel); $i++) {
             if (((int) $tmpFuel[$i]['factionid'] == 0)
-                    || (((int) $tmpFuel[$i]['factionid'] > 0)
+                || (((int) $tmpFuel[$i]['factionid'] > 0)
                     && ((int) $tmpFuel[$i]['factionid'] == (int) $this->solarSystem->factionid))) {
                 $this->fuelRequired[] = $tmpFuel[$i];
             }

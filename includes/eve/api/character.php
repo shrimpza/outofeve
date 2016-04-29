@@ -142,7 +142,8 @@ class eveCharacterDetail {
                         'skillpoints' => (int) $knownSkill->skillPoints,
                         'training' => (int) $knownSkill->inTraining,
                         'toLevel' => (int) $knownSkill->toLevel,
-                        'skillItem' => $knownSkill->skillItem);
+                        'skillItem' => $knownSkill->skillItem
+                    );
                 }
             }
         }

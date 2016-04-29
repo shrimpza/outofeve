@@ -19,11 +19,11 @@ class eveItem {
 
     function eveItem($typeId) {
         $res = eveDB::getInstance()->db->QueryA('select t.groupid, t.typeid, t.typename, t.marketgroupid, t.volume,
-                                               t.capacity, t.portionsize, t.baseprice, m.metagroupid,
-                                               \'\' as icon
-                                             from invTypes t
-                                               left outer join invMetaTypes m on m.typeid = t.typeid
-                                             where t.typeID = ?', array($typeId));
+                                                    t.capacity, t.portionsize, t.baseprice, m.metagroupid,
+                                                    \'\' as icon
+                                                from invTypes t
+                                                    left outer join invMetaTypes m on m.typeid = t.typeid
+                                                where t.typeID = ?', array($typeId));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -103,9 +103,9 @@ class eveItemGroup {
 
     function eveItemGroup($groupId) {
         $res = eveDB::getInstance()->db->QueryA('select t.groupid, t.categoryid, t.groupname, i.iconFile as icon
-                                       from invGroups t
-                                         left outer join eveIcons i on i.iconId = t.iconId
-                                       where t.groupid = ?', array($groupId));
+                                                 from invGroups t
+                                                     left outer join eveIcons i on i.iconId = t.iconId
+                                                 where t.groupid = ?', array($groupId));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -157,8 +157,8 @@ class eveItemBlueprint {
             $this->blueprintItem = eveDB::getInstance()->eveItem($this->typeid);
 
             /*
-             * First, get raw materials required - for manufacture only, maybe support other activityIDs later.
-             */
+            * First, get raw materials required - for manufacture only, maybe support other activityIDs later.
+            */
             $this->materials = eveDB::getInstance()->db->QueryA('select materialTypeID, quantity
                                                                  from industryActivityMaterials
                                                                  where typeID = ? and activityID = 1', array($this->typeid));
@@ -167,13 +167,13 @@ class eveItemBlueprint {
             }
 
             /*
-             * Load skills required
-             */
+            * Load skills required
+            */
             $skillz = eveDB::getInstance()->db->QueryA('select skillID, level
                                                         from industryActivitySkills
                                                         where typeID = ? and activityID = 1', array($this->typeid));
             foreach ($skillz as $skill) {
-              $this->skills[] = array('item' => eveDB::getInstance()->eveItem($skill['skillid']), 'level' => $skill['level']);
+                $this->skills[] = array('item' => eveDB::getInstance()->eveItem($skill['skillid']), 'level' => $skill['level']);
             }
         }
     }
@@ -228,8 +228,8 @@ class eveStation {
 
     function eveStation($stationId) {
         $res = eveDB::getInstance()->db->QueryA('select stationid, solarsystemid, regionid, stationname, stationtypeid
-                                       from staStations
-                                       where stationID = ?', array($stationId));
+                                                 from staStations
+                                                 where stationID = ?', array($stationId));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -262,9 +262,9 @@ class eveSolarSystem {
             $res = array($systemId);
         } else {
             $res = eveDB::getInstance()->db->QueryA('select s.solarsystemid, s.regionid, s.solarsystemname, s.security, s.x, s.z,
-                                                 coalesce(s.factionid, r.factionid) as factionid
-                                                 from mapSolarSystems s, mapRegions r
-                                                 where solarSystemID = ? and r.regionID = s.regionID', array($systemId));
+                                                         coalesce(s.factionid, r.factionid) as factionid
+                                                     from mapSolarSystems s, mapRegions r
+                                                     where solarSystemID = ? and r.regionID = s.regionID', array($systemId));
         }
 
         if ($res) {
@@ -325,8 +325,8 @@ class eveCelestial {
 
     function eveCelestial($itemId) {
         $res = eveDB::getInstance()->db->QueryA('select itemid, typeid, solarsystemid, regionid, x, z, itemname, security
-                                       from mapDenormalize
-                                       where itemID = ?', array($itemId));
+                                                 from mapDenormalize
+                                                 where itemID = ?', array($itemId));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -359,8 +359,8 @@ class eveNpcCorp {
 
     function eveNpcCorp($id) {
         $res = eveDB::getInstance()->db->QueryA('select corporationid, solarsystemid, factionid, description, iconid as icon
-                                             from crpNPCCorporations
-                                             where corporationID = ?', array($id));
+                                                 from crpNPCCorporations
+                                                 where corporationID = ?', array($id));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -389,8 +389,8 @@ class eveFaction {
 
     function eveFaction($id) {
         $res = eveDB::getInstance()->db->QueryA('select factionid, factionname, description, solarsystemid, corporationid, iconid as icon
-                                             from chrFactions
-                                             where factionID = ?', array($id));
+                                                 from chrFactions
+                                                 where factionID = ?', array($id));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -420,8 +420,8 @@ class eveAgent {
 
     function eveAgent($id) {
         $res = eveDB::getInstance()->db->QueryA('select agentid, divisionid, corporationid, locationid, level, agenttypeid, islocator
-                                             from agtAgents
-                                             where agentid = ?', array($id));
+                                                 from agtAgents
+                                                 where agentid = ?', array($id));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;
@@ -449,8 +449,8 @@ class eveNpcDivision {
 
     function eveNpcDivision($id) {
         $res = eveDB::getInstance()->db->QueryA('select divisionid, divisionname, description, leadertype
-                                             from crpNPCDivisions
-                                             where divisionID = ?', array($id));
+                                                 from crpNPCDivisions
+                                                 where divisionID = ?', array($id));
         if ($res) {
             foreach ($res[0] as $var => $val) {
                 $this->$var = $val;

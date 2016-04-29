@@ -21,7 +21,8 @@ class eveMailingList {
                     foreach ($data->data->result->rowset->row as $list) {
                         $this->lists[] = array(
                             'listID' => (int) $list['listID'],
-                            'displayName' => (string) $list['displayName']);
+                            'displayName' => (string) $list['displayName']
+                        );
                     }
                 }
             }
@@ -71,10 +72,10 @@ class eveMailList {
                 $ids = array();
                 foreach ($this->mail as $mail) {
                     if (!empty($mail->senderID) && $mail->senderID > 0) {
-                        
+
                         // check if the mail is a mailing list message
                         $mail->senderName = $this->mailingList->getListName($mail->senderID);
-                        
+
                         if (empty($mail->senderName)) {
                             $ids[] = $mail->senderID;
                         }

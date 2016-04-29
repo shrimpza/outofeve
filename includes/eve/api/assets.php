@@ -16,7 +16,7 @@ class eveAssetList {
             } else if ($this->key->hasAccess(CHAR_AssetList)) {
                 $data = new apiRequest('char/AssetList.xml.aspx', $this->key, $this->key->getCharacter());
             }
-            
+
             if ((!$data->error) && ($data->data)) {
                 foreach ($data->data->result->rowset->row as $asset) {
                     $this->assets[] = new eveAsset($asset, null, $loadGroups);
@@ -66,7 +66,7 @@ class eveAsset {
         $this->qty = (int) $asset['quantity'];
 
         $this->flagText = eveDB::getInstance()->flagText($this->flag);
-        
+
         if ($this->item && $loadGroup) {
             $this->item->getGroup();
         }

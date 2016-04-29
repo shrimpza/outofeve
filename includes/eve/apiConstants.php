@@ -1,8 +1,8 @@
 <?php
 
 /**
- *  API access masks
- */
+*  API access masks
+*/
 define('CHAR_AccountBalance', 1); // Current balance of characters wallet.
 define('CHAR_AssetList', 2); // Entire asset list of character.
 define('CHAR_CalendarEventAttendees', 4); // Event attendee responses. Requires UpcomingCalendarEvents to function.
@@ -60,8 +60,8 @@ define('CORP_Locations', 16777216); // Allows the fetching of coordinate and nam
 define('CORP_MemberTrackingExtended', 33554432); // Extensive Member information. Time of last logoff, last known location and ship.
 
 /**
- * Industry job completion status text
- */
+* Industry job completion status text
+*/
 $industryStatuses = array(
     1 => 'Active',
     2 => 'Paused',
@@ -72,8 +72,8 @@ $industryStatuses = array(
 );
 
 /**
- * Notification titles
- */
+* Notification titles
+*/
 $notificationTitles = array(
     1 => "Legacy",
     2 => "Character deleted",
@@ -208,8 +208,8 @@ $notificationTitles = array(
 );
 
 /**
- * Corporation roles
- */
+* Corporation roles
+*/
 $corpRoles = array(
     'corpRoleDirector' => 1,
     'corpRolePersonnelManager' => 128,
@@ -266,4 +266,5 @@ $corpRoles = array(
     'corpRoleStarbaseCaretaker' => 288230376151711744,
     'corpRoleFittingManager' => 576460752303423488
 );
+
 ?>

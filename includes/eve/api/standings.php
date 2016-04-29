@@ -39,7 +39,7 @@ class eveStandingsList {
                     }
                 }
             }
-            
+
             usort($this->agents, 'standingSort');
             usort($this->npcCorps, 'standingSort');
             usort($this->factions, 'standingSort');

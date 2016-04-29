@@ -15,7 +15,7 @@ class eveKeyManager {
     static function addKey($reference, $name, $keyID, $vCode, $selectedCharacter = 0) {
         self::getInstance()->keys[$reference] = new eveApiKey($reference, $name, $keyID, $vCode, $selectedCharacter, $keyID && $vCode);
     }
-    
+
     static function getKey($reference) {
         $result = null;
         if (array_key_exists($reference, self::getInstance()->keys)) {

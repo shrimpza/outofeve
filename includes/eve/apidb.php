@@ -1,70 +1,70 @@
 <?php
 
 class EntityCache {
-  static $instance = null;
+    static $instance = null;
 
-  var $cache;
-  var $memcache;
+    var $cache;
+    var $memcache;
 
-  var $cacheHits = 0;
-  var $cacheMiss = 0;
+    var $cacheHits = 0;
+    var $cacheMiss = 0;
 
-  function EntityCache() {
-    $this->cache = array();
+    function EntityCache() {
+        $this->cache = array();
 
-    $memcacheConfig = $GLOBALS['config']['memcached'];
-    if ($memcacheConfig['enable']) {
-      $this->memcache = new Memcached($memcacheConfig['persistent_id']);
-      if (count($this->memcache->getServerList()) != count($memcacheConfig['servers'])) {
-        $this->memcache->addServers($memcacheConfig['servers']);
-      }
-    }
-  }
-
-  static function getInstance() {
-      if (self::$instance == null) {
-          self::$instance = new EntityCache();
-      }
-      return self::$instance;
-  }
-
-  static function get($key) {
-    $cache = EntityCache::getInstance();
-
-    $res = null;
-
-    // attempt to populate local cache from memcached
-    if ($cache->memcache != null && !isset($cache->cache[$key])) {
-        $cached = $cache->memcache->get($key);
-        if ($cached !== false) {
-          $res = $cached;
-          $cache->cache[$key] = $cached;
-
-          $cache->cacheHits ++;
+        $memcacheConfig = $GLOBALS['config']['memcached'];
+        if ($memcacheConfig['enable']) {
+            $this->memcache = new Memcached($memcacheConfig['persistent_id']);
+            if (count($this->memcache->getServerList()) != count($memcacheConfig['servers'])) {
+                $this->memcache->addServers($memcacheConfig['servers']);
+            }
         }
     }
 
-    if ($res == null && isset($cache->cache[$key])) {
-        $res = $cache->cache[$key];
-        $cache->cacheHits ++;
+    static function getInstance() {
+        if (self::$instance == null) {
+            self::$instance = new EntityCache();
+        }
+        return self::$instance;
     }
 
-    if ($res == null) {
-        $cache->cacheMiss ++;
+    static function get($key) {
+        $cache = EntityCache::getInstance();
+
+        $res = null;
+
+        // attempt to populate local cache from memcached
+        if ($cache->memcache != null && !isset($cache->cache[$key])) {
+            $cached = $cache->memcache->get($key);
+            if ($cached !== false) {
+                $res = $cached;
+                $cache->cache[$key] = $cached;
+
+                $cache->cacheHits ++;
+            }
+        }
+
+        if ($res == null && isset($cache->cache[$key])) {
+            $res = $cache->cache[$key];
+            $cache->cacheHits ++;
+        }
+
+        if ($res == null) {
+            $cache->cacheMiss ++;
+        }
+
+        return $res;
     }
 
-    return $res;
-  }
+    static function put($key, $value) {
+        $cache = EntityCache::getInstance();
 
-  static function put($key, $value) {
-    $cache = EntityCache::getInstance();
+        $cache->cache[$key] = $value;
 
-    $cache->cache[$key] = $value;
-
-    if ($cache->memcache != null) {
-      $cache->memcache->add($key, $value, $GLOBALS['config']['memcached']['expiration']);
+        if ($cache->memcache != null) {
+            $cache->memcache->add($key, $value, $GLOBALS['config']['memcached']['expiration']);
+        }
     }
-  }
 }
 
 class itemGraphic {
@@ -213,11 +213,11 @@ class eveDB {
 
     function bloodlineInfo($bloodlineName) {
         $res = $this->db->QueryA("select b.bloodlineName, r.raceName, ib.iconFile as bicon, ir.iconFile as ricon
-                                        from chrBloodlines b
-                                        inner join chrRaces r on r.raceId = b.raceId
-                                        inner join eveIcons ib on ib.iconId = b.iconId
-                                        inner join eveIcons ir on ir.iconId = r.iconId
-                                        where b.bloodlineName = ?", array($bloodlineName));
+                                  from chrBloodlines b
+                                  inner join chrRaces r on r.raceId = b.raceId
+                                  inner join eveIcons ib on ib.iconId = b.iconId
+                                  inner join eveIcons ir on ir.iconId = r.iconId
+                                  where b.bloodlineName = ?", array($bloodlineName));
         if ($res) {
             $res = $res[0];
             $res['ricon'] = itemGraphic::getItemGraphic(0, $res['ricon']);
@@ -377,8 +377,8 @@ class eveDB {
         }
 
         $sysList = $this->db->QueryA('select solarsystemid, regionid, solarsystemname, security, x, z, factionid
-                                          from mapSolarSystems ' . $regionLimit . '
-                                          order by solarSystemName', array());
+                                      from mapSolarSystems ' . $regionLimit . '
+                                      order by solarSystemName', array());
         for ($i = 0; $i < count($sysList); $i++) {
             $sys = $this->getCache('eveSolarSystem', $sysList[$i], 'eveSolarSystem');
             $res[] = $sys;
@@ -433,8 +433,8 @@ class eveDB {
                     break;
                 } else {
                     $jumps = $this->db->QueryA('select toSolarSystemID, security
-                                                    from mapSolarSystemJumps, mapSolarSystems
-                                                    where solarSystemID = toSolarSystemID and fromSolarSystemID = ?', array($sid));
+                                                from mapSolarSystemJumps, mapSolarSystems
+                                                where solarSystemID = toSolarSystemID and fromSolarSystemID = ?', array($sid));
                     for ($i = 0; $i < count($jumps); $i++) {
                         $nsid = $jumps[$i]['tosolarsystemid'];
                         $nweight = $weight + 1;
@@ -463,9 +463,9 @@ class eveDB {
 
         if ($this->getCache(__FUNCTION__, $towerId) == null) {
             $towerFuel = $this->db->QueryA('select r.resourcetypeid, r.purpose, r.quantity, p.purposeText, r.factionid
-                                                                     from invControlTowerResources r, invControlTowerResourcePurposes p
-                                                                     where r.controltowertypeid = ? and p.purpose = r.purpose
-                                                                     order by r.purpose, r.resourcetypeid', array($towerId));
+                                            from invControlTowerResources r, invControlTowerResourcePurposes p
+                                            where r.controltowertypeid = ? and p.purpose = r.purpose
+                                            order by r.purpose, r.resourcetypeid', array($towerId));
             for ($i = 0; $i < count($towerFuel); $i++) {
                 $towerFuel[$i]['resource'] = $this->getCache('eveItem', $towerFuel[$i]['resourcetypeid'], 'eveItem');
             }
@@ -512,8 +512,8 @@ class eveDB {
             // the 'like' query here seems potentially flakey
             $bonus = $this->db->QueryA('select i.typeId, i.typeName, t.attributeName, coalesce(a.valueInt, a.valueFloat) as value
                                         from dgmTypeAttributes a
-                                          inner join dgmAttributeTypes t on t.attributeId = a.attributeId and attributeName like \'%Bonus\'
-                                          inner join invTypes i on i.typeid = a.typeid
+                                            inner join dgmAttributeTypes t on t.attributeId = a.attributeId and attributeName like \'%Bonus\'
+                                            inner join invTypes i on i.typeid = a.typeid
                                         where a.typeid = ? and coalesce(a.valueInt, a.valueFloat) > 0', array($id));
             if ($bonus) {
                 $this->putCache(__FUNCTION__, $id, $bonus[0]);
@@ -528,14 +528,13 @@ class eveDB {
 
         if ($this->getCache(__FUNCTION__, $id) == null) {
             $attr = $this->db->QueryA('select a.valueInt, a.valueFloat, at.attributeName, at.displayName,
-                                         u.displayName as unitName, i.iconFile as icon, u.unitID
+                                           u.displayName as unitName, i.iconFile as icon, u.unitID
                                        from invTypes t
-                                         inner join dgmTypeAttributes a on a.typeId = t.typeId
-                                         inner join dgmAttributeTypes at on at.attributeId = a.attributeId
-                                         inner join eveUnits u on u.unitId = at.unitId
-                                         left join eveIcons i on i.iconId = at.iconId
-                                       where t.typeID = ?
-                                         and at.published > 0', array($id));
+                                           inner join dgmTypeAttributes a on a.typeId = t.typeId
+                                           inner join dgmAttributeTypes at on at.attributeId = a.attributeId
+                                           inner join eveUnits u on u.unitId = at.unitId
+                                           left join eveIcons i on i.iconId = at.iconId
+                                       where t.typeID = ? and at.published > 0', array($id));
             if ($attr) {
                 $res = array();
                 foreach ($attr as $a) $res[$a['attributename']] = $a;

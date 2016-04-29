@@ -56,7 +56,7 @@ class eveCorporation {
                 if ($rowset['name'] == 'divisions') {
                     foreach ($rowset->row as $division) {
                         $this->divisions[] = array('key' => (int) $division['accountKey'],
-                            'description' => (string) $division['description']);
+                        'description' => (string) $division['description']);
                     }
                 } else if ($rowset['name'] == 'walletDivisions') {
                     foreach ($rowset->row as $division) {

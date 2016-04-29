@@ -126,8 +126,8 @@ class apiRequest {
             $httpResponse = $http->getInfo();
 
             /**
-             * Ensure we received no HTTP errors, and we received actual data
-             */
+            * Ensure we received no HTTP errors, and we received actual data
+            */
             if (($httpResponse['http_code'] >= 200) && ($httpResponse['http_code'] <= 300) && (!empty($apiResponse))) {
                 try {
                     $result = new SimpleXMLElement($apiResponse);
@@ -137,12 +137,12 @@ class apiRequest {
                 }
 
                 /**
-                 * Loading of results from the API was successful
-                 */
+                * Loading of results from the API was successful
+                */
                 if ($result) {
                     /**
-                     * Received an error from the API, try to fall back to cached data which may work...
-                     */
+                    * Received an error from the API, try to fall back to cached data which may work...
+                    */
                     if (isset($result->error) && !isset($cacheResult->error)) {
                         $this->error = new apiError((int) $result->error['code'], 'API Error: ' . (string) $result->error, $method);
                         $cacheResult = $this->checkCache($cacheFile, true);
@@ -155,8 +155,8 @@ class apiRequest {
                         }
                     } else {
                         /**
-                         * Everything went well, save the result to cache if needed.
-                         */
+                        * Everything went well, save the result to cache if needed.
+                        */
                         if (isset($result->cachedUntil)) {
                             $this->saveCache($cacheFile, $apiResponse, strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd);
                         }
@@ -170,7 +170,7 @@ class apiRequest {
         }
 
         apiStats::addRequest($method, microtime(time()) - $start, $result == $cacheResult,
-                isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0);
+        isset($result->cachedUntil) ? strtotime($result->cachedUntil) + date('Z') + $cacheTimeAdd : 0);
 
         if ($this->error) {
             apiStats::addError($this->error);

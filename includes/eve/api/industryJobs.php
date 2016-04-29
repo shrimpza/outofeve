@@ -100,9 +100,9 @@ class eveIndustryJob {
     function eveIndustryJob($job) {
         global $industryStatuses;
 
-      /*
-       * main attributes from the api
-       */
+        /*
+        * main attributes from the api
+        */
         $this->jobID = (int) $job['jobID'];
         $this->installerID = (int) $job['installerID'];
         $this->installerName = (string) $job['installerName'];
@@ -136,16 +136,16 @@ class eveIndustryJob {
         $this->statusName = $industryStatuses[$this->status];
 
         /*
-         * Load up the various linked entities
-         */
+        * Load up the various linked entities
+        */
         $this->inItem = eveDB::getInstance()->eveItem($this->blueprintTypeID);
         $this->outItem = eveDB::getInstance()->eveItem($this->productTypeID);
         $this->inLocation = eveDB::getInstance()->eveStation($this->stationID);
         $this->outLocation = eveDB::getInstance()->eveStation($this->outputLocationID);
 
         /*
-         * Convenience parameters
-         */
+        * Convenience parameters
+        */
         $this->remainingTime = ($this->endDate - eveTimeOffset::$offset) - eveTimeOffset::$eveTime;
         if ($this->remainingTime < 0) {
             $this->percentComplete = 100;

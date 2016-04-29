@@ -6,7 +6,6 @@ class eveSkillList {
     var $skillPoints = 0;
 
     function eveSkillList() {
-        
     }
 
     function load($skills) {
