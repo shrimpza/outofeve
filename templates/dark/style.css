@@ -1,74 +1,74 @@
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web);
 
 body {
-    margin: 0;
-    padding: 0;
-    background: #000000;
-    background-image: url("images/bg/twinkle_twinkle.png");
-    font-family: "Titillium Web", Helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 1.6em;
-    color: #ffffff;
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  background-image: url("images/bg/twinkle_twinkle.png");
+  font-family: "Titillium Web", Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.6em;
+  color: #ffffff;
 }
 
 /* icon styles to force icon scaling in cases where icons are only available in
-  the wrong sizes */
+the wrong sizes */
 .i16 {
-    width: 16px;
+  width: 16px;
 }
 
 .i32 {
-    width: 32px;
+  width: 32px;
 }
 
 .i64 {
-    width: 64px;
+  width: 64px;
 }
 
 .i128 {
-    width: 128px;
+  width: 128px;
 }
 
 .spacer32 {
-    height: 32px;
-    width: 32px;
-    vertical-align: middle;
-    display: inline-block;
+  height: 32px;
+  width: 32px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 /* =================================== */
 /* basic colours for everything        */
 /* =================================== */
 .shadeLight {
-    background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .shadeMid {
-    background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .shadeDark {
-    background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .borderLight {
-    border: 0px;
+  border: 0px;
 }
 
 .borderMid {
-    border: 0px;
+  border: 0px;
 }
 
 .borderDark {
-    border: 0px;
+  border: 0px;
 }
 
 .textLight {
-    color: #eee;
+  color: #eee;
 }
 
 .groupHead td {
-    padding: 6px;
+  padding: 6px;
 }
 
 /* =================================== */
@@ -76,49 +76,49 @@ body {
 /* =================================== */
 
 #header-full {
-    background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 #header {
-    width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-    padding: 0px;
-    line-height: 0px;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  padding: 0px;
+  line-height: 0px;
 }
 
 #container {
-    width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #containerPopup {
-    left: 10px;
-    right: 10px;
+  left: 10px;
+  right: 10px;
 }
 
 #main {
-    margin-left: 52px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 8px;
-    z-index: 5;
+  margin-left: 52px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  z-index: 5;
 }
 
 #mainPopup {
 }
 
 nav {
-    width: 42px;
-    float: left;
-    z-index: 10;
+  width: 42px;
+  float: left;
+  z-index: 10;
 }
 
 #footer-wrapper {
-    clear: both;
-    margin-top: 50px;
-    background: rgba(255, 255, 255, 0.1);
+  clear: both;
+  margin-top: 50px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* =================================== */
@@ -126,22 +126,22 @@ nav {
 /* =================================== */
 
 .a, a {
-    text-decoration: none;
-    color: orange;
+  text-decoration: none;
+  color: orange;
 }
 
 a:visited {
-    text-decoration: none;
-    color: darkorange;
+  text-decoration: none;
+  color: darkorange;
 }
 
 img {
-    border: 0px;
+  border: 0px;
 }
 
 infoLink a, .infoLink a:visited {
-    text-decoration: none;
-    color: #ffffff;
+  text-decoration: none;
+  color: #ffffff;
 }
 
 /* =================================== */
@@ -149,12 +149,12 @@ infoLink a, .infoLink a:visited {
 /* =================================== */
 
 #footer {
-    font-size: 1.3em;
-    padding: 3px;
-    padding-right: 15px;
-    width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+  font-size: 1.3em;
+  padding: 3px;
+  padding-right: 15px;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* =================================== */
@@ -162,23 +162,23 @@ infoLink a, .infoLink a:visited {
 /* =================================== */
 
 th {
-    background: rgba(255, 255, 255, 0.15);
-    text-align: center;
-    font-size: 1em;
-    padding: 4px 2px 4px 2px;
+  background: rgba(255, 255, 255, 0.15);
+  text-align: center;
+  font-size: 1em;
+  padding: 4px 2px 4px 2px;
 }
 
 .sub {
-    text-align: center;
-    font-weight: bold;
-    background: rgba(255, 255, 255, 0.05);
+  text-align: center;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .row {
 }
 
 .rowAlt {
-    background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* =================================== */
@@ -186,23 +186,23 @@ th {
 /* =================================== */
 
 .moneyOut {
-    color: #d00;
+  color: #d00;
 }
 
 .moneyIn {
-    color: #0b0;
+  color: #0b0;
 }
 
 .bad {
-    color: #d00;
+  color: #d00;
 }
 
 .good {
-    color: #0b0;
+  color: #0b0;
 }
 
 .maybe {
-    color: #bb0;
+  color: #bb0;
 }
 
 td.good-bg {
@@ -287,77 +287,77 @@ nav ul li:hover {
 /* =================================== */
 
 #errorPopup {
-    position: absolute;
-    top: 0px;
-    left: 20%;
-    right: 20%;
-    z-index: 1000;
-    color: #000;
-    background-color: #fb9;
-    border: 4px outset #d41;
-    border-top: none;
-    padding: 5px;
-    text-align: left;
-    font-weight: bold;
+  position: absolute;
+  top: 0px;
+  left: 20%;
+  right: 20%;
+  z-index: 1000;
+  color: #000;
+  background-color: #fb9;
+  border: 4px outset #d41;
+  border-top: none;
+  padding: 5px;
+  text-align: left;
+  font-weight: bold;
 }
 
 #errorPopup h3 {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid #d41;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #d41;
 }
 
 .error {
-    font-size: 1.3em;
-    color: #000;
-    background-color: #f96;
-    border: 4px double #d41;
-    padding: 15px;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+  font-size: 1.3em;
+  color: #000;
+  background-color: #f96;
+  border: 4px double #d41;
+  padding: 15px;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 #errorPopup a {
-    color: #000;
+  color: #000;
 }
 
 .apierror {
-    border-bottom: 1px dotted #d41;
-    padding: 3px 0px 3px 10px;
-    font-weight: normal;
+  border-bottom: 1px dotted #d41;
+  padding: 3px 0px 3px 10px;
+  font-weight: normal;
 }
 
 .ok {
-    font-size: 1.3em;
-    color: #000;
-    background-color: #9f6;
-    border: 4px double #4d1;
-    padding: 15px;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+  font-size: 1.3em;
+  color: #000;
+  background-color: #9f6;
+  border: 4px double #4d1;
+  padding: 15px;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 .note {
-    font-size: 1.1em;
-    color: #fff;
-    background-color: rgba(255, 255, 150, 0.15);
-    box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    padding: 15px;
-    padding-left: 80px;
-    width: 50%;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
-    background-image: url('images/misc/note.png');
-    background-repeat: no-repeat;
-    background-position: left top;
+  font-size: 1.1em;
+  color: #fff;
+  background-color: rgba(255, 255, 150, 0.15);
+  box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  padding-left: 80px;
+  width: 50%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  background-image: url('images/misc/note.png');
+  background-repeat: no-repeat;
+  background-position: left top;
 }
 
 
@@ -367,19 +367,19 @@ nav ul li:hover {
 /* =================================== */
 
 .listOptions {
-    margin: 10px;
-    margin-left: 2px;
+  margin: 10px;
+  margin-left: 2px;
 }
 
 .listOptions span {
-    vertical-align: middle;
-    font-size: 1.1em;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.15);
+  vertical-align: middle;
+  font-size: 1.1em;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .listOptions a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /* =================================== */
@@ -387,18 +387,18 @@ nav ul li:hover {
 /* =================================== */
 
 .pageNav {
-    border: 0;
-    height: 20px;
-    width: 20px;
-    vertical-align: middle;
+  border: 0;
+  height: 20px;
+  width: 20px;
+  vertical-align: middle;
 }
 
 .pageNav.prev {
-    background: url('images/nav_prev.png') no-repeat center center;
+  background: url('images/nav_prev.png') no-repeat center center;
 }
 
 .pageNav.next {
-    background: url('images/nav_next.png') no-repeat center center;
+  background: url('images/nav_next.png') no-repeat center center;
 }
 
 
@@ -407,9 +407,9 @@ nav ul li:hover {
 /* =================================== */
 
 input, select, textarea {
-    border: 1px solid #666;
-    border-radius: 2px;
-    background-color: #444;
-    color: #aaa;
-    padding: 4px;
+  border: 1px solid #666;
+  border-radius: 2px;
+  background-color: #444;
+  color: #aaa;
+  padding: 4px;
 }

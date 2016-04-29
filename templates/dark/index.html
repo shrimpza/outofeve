@@ -1,96 +1,96 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>{$title}{if $pluginTitle} - {$pluginTitle}{/if}</title>
-    {if $pluginCSS}<link href="{$site_url}/plugins/{$pluginCSS}" rel="stylesheet" type="text/css" />{/if}
-    <link href="{$site_url}/templates/{$theme}/style.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="{$site_url}/includes/javascript/numeral.min.js"></script>
-    <script type="text/javascript" src="{$site_url}/includes/javascript/zepto.min.js"></script>
-    <script type="text/javascript" src="{$site_url}/includes/javascript/parseuri.js"></script>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>{$title}{if $pluginTitle} - {$pluginTitle}{/if}</title>
+  {if $pluginCSS}<link href="{$site_url}/plugins/{$pluginCSS}" rel="stylesheet" type="text/css" />{/if}
+  <link href="{$site_url}/templates/{$theme}/style.css" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="{$site_url}/includes/javascript/numeral.min.js"></script>
+  <script type="text/javascript" src="{$site_url}/includes/javascript/zepto.min.js"></script>
+  <script type="text/javascript" src="{$site_url}/includes/javascript/parseuri.js"></script>
 
-    <script type="text/javascript">
-      var baseUrl = '{$site_url}';
+  <script type="text/javascript">
+  var baseUrl = '{$site_url}';
 
-      $(document).ready(function() {
-        $(".showInfo").each(function() {
-          $(this).css("cursor", "pointer");
-          $(this).click(function() {
-            showInfo($(this).data('typeid'));
-          });
-        });
-
-        $("#errorPopup").find("a").click(function() {
-          $("#errorPopup").hide();
-          return false;
-        });
-
+  $(document).ready(function() {
+    $(".showInfo").each(function() {
+      $(this).css("cursor", "pointer");
+      $(this).click(function() {
+        showInfo($(this).data('typeid'));
       });
+    });
 
-      function setCurrent(type, id) {
-        var url = parseUri(window.location);
-        if (url.port && (url.port != 80)) {
-          url.host += ':' + url.port;
-        }
-        var newUrl = url.protocol + '://' + url.host + url.path + '?';
+    $("#errorPopup").find("a").click(function() {
+      $("#errorPopup").hide();
+      return false;
+    });
 
-        for (i in url.queryKey) {
-          if ((i != 'setCharKey') && (i != 'setChar') && (i != 'setCorpKey') && (i != 'setCorpChar')) {
-            newUrl += i + '=' + url.queryKey[i] + '&';
-          }
-        }
+  });
 
-        newUrl += type + '=' + id;
+  function setCurrent(type, id) {
+    var url = parseUri(window.location);
+    if (url.port && (url.port != 80)) {
+      url.host += ':' + url.port;
+    }
+    var newUrl = url.protocol + '://' + url.host + url.path + '?';
 
-        window.location = newUrl;
+    for (i in url.queryKey) {
+      if ((i != 'setCharKey') && (i != 'setChar') && (i != 'setCorpKey') && (i != 'setCorpChar')) {
+        newUrl += i + '=' + url.queryKey[i] + '&';
       }
+    }
 
-      function showInfo(typeId) {
-        window.open(baseUrl+"/?module=showinfo&popup=1&typeId="+typeId, "type"+typeId, "location=0,status=0,scrollbars=1,width=450,height=550");
-      }
-    </script>
+    newUrl += type + '=' + id;
 
-  </head>
+    window.location = newUrl;
+  }
 
-  <body>
+  function showInfo(typeId) {
+    window.open(baseUrl+"/?module=showinfo&popup=1&typeId="+typeId, "type"+typeId, "location=0,status=0,scrollbars=1,width=450,height=550");
+  }
+  </script>
 
-    <div id="header-full">
-      <div id="header">
-        <a href="{$site_url}/"><img src="{$site_url}/templates/{$theme}/images/title.png" border="0" /></a>
-      </div>
+</head>
+
+<body>
+
+  <div id="header-full">
+    <div id="header">
+      <a href="{$site_url}/"><img src="{$site_url}/templates/{$theme}/images/title.png" border="0" /></a>
     </div>
+  </div>
 
-    <div id="container">
+  <div id="container">
 
-      <nav>
-        {foreach item=block from=$sideBlocks}
-        {include file="sideblock_left.html" title=$block.title content=$block.content}
-        {/foreach}
-      </nav>
-
-      <div id="main">
-        {$content}
-        <div style="clear: both"><!-- pull stuff down --></div>
-      </div>
-
-    </div>
-
-    <div id="footer-wrapper">
-      <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a>
-        <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a>
-      </div>
-    </div>
-
-    {if $errors}
-    <div id="errorPopup" style="display: block;">
-      <h3><img src="{$site_url}/templates/{$theme}/images/error.png" border="0" align="absmiddle" /> Encountered the following API error(s):</h3>
-      {foreach item=error from=$errors}
-      <div class="apierror">{$error.method}: [{$error.errorCode}] {$error.errorText}</div>
+    <nav>
+      {foreach item=block from=$sideBlocks}
+      {include file="sideblock_left.html" title=$block.title content=$block.content}
       {/foreach}
-      <div align="right"><a href="#">[ Close ]</a></div>
-    </div>
-    {/if}
+    </nav>
 
-  </body>
+    <div id="main">
+      {$content}
+      <div style="clear: both"><!-- pull stuff down --></div>
+    </div>
+
+  </div>
+
+  <div id="footer-wrapper">
+    <div id="footer" align="right"><a href="http://outofeve.com/">Out of Eve</a>
+      <a href="http://shrimpworks.za.net/"><img src="{$site_url}/templates/{$theme}/images/shrimpworks.png" border="0" style="position:relative; top: 3px;" /> ShrimpWorks</a>
+    </div>
+  </div>
+
+  {if $errors}
+  <div id="errorPopup" style="display: block;">
+    <h3><img src="{$site_url}/templates/{$theme}/images/error.png" border="0" align="absmiddle" /> Encountered the following API error(s):</h3>
+    {foreach item=error from=$errors}
+    <div class="apierror">{$error.method}: [{$error.errorCode}] {$error.errorText}</div>
+    {/foreach}
+    <div align="right"><a href="#">[ Close ]</a></div>
+  </div>
+  {/if}
+
+</body>
 
 </html>
