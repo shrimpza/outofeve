@@ -8,9 +8,9 @@
 <div>
   <h3>AJAX/JSON Demo</h3>
   <div class="listOptions">
-    <span>Item lookup: 
+    <span>Item lookup:
       <input type="text" id="itemName" /> &nbsp;
-      Qty: <input type="text" id="itemQty" value="1" style="width: 30px" /> 
+      Qty: <input type="text" id="itemQty" value="1" style="width: 30px" />
       <button onclick="getItem()">Go</button>
     </span>
   </div>
@@ -45,7 +45,7 @@
 <script type="text/javascript">
   function getItem() {
     var itemName = $('#itemName').val();
-    
+
     jQuery.getJSON('index.php', { jsonMode: 1, module: 'ajaxtest', item: itemName }, function(item) {
       if (item) {
         if (item.error) {
@@ -64,26 +64,26 @@
           // clear out the existing description content
           $('#itemDescription').html('');
 
-          // set up the item's icon graphic          
+          // set up the item's icon graphic
           $("<img/>")
           .attr("src", item.icon.icon64)
           .attr('align', 'left')
           .css('margin-left', '10px')
           .appendTo("#itemDescription");
-      
+
           // set up the description
           $("<span/>")
           .html(item.description)
           .appendTo('#itemDescription');
 
           // add unit selling price
-          $('#itemUnitPrice').html(item.pricing.avgSell.numberFormat('0,0.00'));
+          $('#itemUnitPrice').html(numeral(item.pricing.avgSell).format('0,0.00'));
 
           // add total selling price
-          $('#itemTotalPrice').html((item.pricing.avgSell * $('#itemQty').val()).numberFormat('0,0.00'));
+          $('#itemTotalPrice').html(numeral((item.pricing.avgSell * $('#itemQty').val())).format('0,0.00'));
 
           // add total volume
-          $('#itemTotalVolume').html((item.volume * $('#itemQty').val()).numberFormat('0,0.00'));
+          $('#itemTotalVolume').html(numeral((item.volume * $('#itemQty').val())).format('0,0.00'));
         }
       };
     });

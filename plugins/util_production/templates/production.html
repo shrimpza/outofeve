@@ -172,8 +172,8 @@
   function calcRuns(runCount) {
     var p = runPerfect * runCount;
     var y = runYou * runCount;
-    $('#runsPerfect').html(p.numberFormat('0,0.00'));
-    $('#runsYou').html(y.numberFormat('0,0.00'));
+    $('#runsPerfect').html(numeral(p).format('0,0.00'));
+    $('#runsYou').html(numeral(y).format('0,0.00'));
   }
 </script>
 {/if}
