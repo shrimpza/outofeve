@@ -1,13 +1,19 @@
 {if $error}
-<div class="error">{$error.message}</div>
+<div class="note error">{$error.message}</div>
 {/if}
-<div class="inputForm">
-  <form method="post" action="{$site_url}/?module=users&mode=register" style="float:left">
-    <h2>New user registration</h2>
-    <label>Username:</label>
-    <input type="text" name="username" value="{$username}" /><br />
-    <label>Password:</label>
-    <input type="password" name="password" /><br />
-    <label></label><input type="submit" value="Register" />
-  </form>
-</div>
+
+<form method="post" action="{$site_url}/?module=users&mode=register">
+  <h2>New user registration</h2>
+  <div class="input">
+    <label for="username">Username:</label>
+    <input type="text" name="username" value="{$username}" />
+  </div>
+  <div class="input">
+    <label for="password">Password:</label>
+    <input type="password" name="password" />
+  </div>
+  <div class="input">
+    <label></label>
+    <input type="submit" value="Register" />
+  </div>
+</form>

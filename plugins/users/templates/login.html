@@ -1,0 +1,22 @@
+<form method="post" action="{$site_url}/">
+  <h2>Log In</h2>
+  <div class="input">
+    <label for="username">Username:</label>
+    <input type="text" name="username" />
+  </div>
+  <div class="input">
+    <label for="password">Password:</label>
+    <input type="password" name="password" />
+  </div>
+  <div class="input">
+    <label></label>
+    <input type="submit" value="Log in" />
+  </div>
+
+  {if $register}
+  <div class="input">
+    <label></label>
+    <a href="{$site_url}/?module=users&mode=register">Register</a>
+  </div>
+  {/if}
+</form>

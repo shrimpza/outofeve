@@ -30,23 +30,8 @@
     </p>
   </div>
   {/if}
-  <div class="inputForm">
-    <h2>Log In</h2>
-    <form method="post" action="{$site_url}/" style="margin-top: 0px;">
-      <input type="hidden" name="login" value="plz" />
-      <label>Username:</label><input type="text" name="username" /><br/>
-      <label>Password:</label><input type="password" name="password" /><br/>
-      <label></label><input type="submit" value="Log in" />
-    </form>
-  </div>
 
-  {if $register}
-  <div class="menu">
-    <ul>
-      <li style="text-align:center;"><a href="{$site_url}/?module=users&mode=register"><img src="{$site_url}/templates/{$theme}/images/menu/register_32.png" align="absmiddle" /> Register</a></li>
-    </ul>
-  </div>
-  {/if}
+  {include file="login.html"}
 
   {/if}
 </div>

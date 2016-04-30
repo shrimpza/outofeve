@@ -144,6 +144,11 @@ infoLink a, .infoLink a:visited {
   color: #ffffff;
 }
 
+.float-half {
+  float: left;
+  width: 49%;
+}
+
 /* =================================== */
 /* footer...                           */
 /* =================================== */
@@ -307,18 +312,6 @@ nav ul li:hover {
   border-bottom: 1px solid #d41;
 }
 
-.error {
-  font-size: 1.3em;
-  color: #000;
-  background-color: #f96;
-  border: 4px double #d41;
-  padding: 15px;
-  width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
 #errorPopup a {
   color: #000;
 }
@@ -349,6 +342,7 @@ nav ul li:hover {
   border-radius: 10px;
   padding: 15px;
   padding-left: 80px;
+  min-height: 32px;
   width: 50%;
   margin-top: 50px;
   margin-bottom: 50px;
@@ -358,6 +352,11 @@ nav ul li:hover {
   background-image: url('images/misc/note.png');
   background-repeat: no-repeat;
   background-position: left top;
+}
+
+.error {
+    background-color: rgba(255, 100, 50, 0.15);
+    background-image: url('images/misc/warning.png');
 }
 
 
@@ -412,4 +411,25 @@ input, select, textarea {
   background-color: #444;
   color: #aaa;
   padding: 4px;
+}
+
+form .input {
+  margin: 10px;
+}
+
+form label {
+  display: inline-block;
+  width: 200px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+form input, form select, form button {
+  width: 200px;
+}
+
+form h1, form h2, form h3, form h4, form h5, form h6 {
+  margin: 10px;
+  position: relative;
+  left: 210px;
 }

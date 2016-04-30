@@ -1,19 +1,36 @@
-<div class="inputForm">
-  <form method="post" action="{$site_url}/?module=users&mode=accounts" style="float:left">
-    <input type="hidden" name="id" value="{$k.row.id}" /><br />
-    <h2>{if $k.row.id}Edit{else}Add{/if} API Key</h2>
-    <label>Key Name:</label>
-    <input type="text" name="name" value="{$k.row.name}" /><br />
-    <label id="_uid">EVE API Key ID:</label>
-    <input type="text" name="keyid" value="{$k.row.keyid}" /><br />
-    <label id="_api">EVE API Verification Code:</label>
-    <input type="text" name="vcode" value="{$k.row.vcode}" /><br />
-    <label></label><span>Your API Key ID and API Verification Code (vCode) can be found (or created if you don't yet have any) <a href="https://community.eveonline.com/support/api-key/">here</a>.</span><br /><br />
+<form method="post" action="{$site_url}/?module=users&mode=accounts">
+  <input type="hidden" name="id" value="{$k.row.id}" />
 
-    <br /><br />
-    <label></label><input type="submit" value="Save" />
+  <h2>{if $k.row.id}Edit{else}Add{/if} API Key</h2>
 
-    <div class="note">Note: "Key Name" is for your reference only, and can be anything you'd like. It is NOT related to your Eve-Online account at all. You should in fact NOT use your Eve account name.</div>
+  <div class="input">
+    <label for="name">Key Name:</label>
+    <input type="text" name="name" value="{$k.row.name}" />
+  </div>
+  <div class="input">
+    <label id="_uid" for="keyid">EVE API Key ID:</label>
+    <input type="text" name="keyid" value="{$k.row.keyid}" />
+  </div>
+  <div class="input">
+    <label id="_api" for="vcode">EVE API Verification Code:</label>
+    <input type="text" name="vcode" value="{$k.row.vcode}" />
+  </div>
+  <div class="input">
+    <label></label>
+    <span>
+      Your API Key ID and API Verification Code (vCode) can be found or created
+      on the <a href="http://community.eveonline.com/support/api-key/">EVE Online website</a>.
+    </span>
+  </div>
+  <div class="input">
+    <label></label>
+    <input type="submit" value="Save" />
+  </div>
 
-  </form>
-</div>
+  <div class="note">
+    Note: "Key Name" is for your reference only, and can be anything you'd like.
+    It is NOT related to your Eve-Online account at all. You should in fact NOT
+    use your Eve account name.
+  </div>
+
+</form>

@@ -383,9 +383,11 @@ class users extends Plugin {
         $loginFailed = false;
         if ($this->site->user->id > 0) {
             $hasUser = true;
-            $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
-            foreach ($key->characters as $char) {
-                $characters[] = objectToArray($char);
+            if (count(eveKeyManager::getInstance()->keys) > 0) {
+                $key = eveKeyManager::getKey($this->site->user->char_apikey_id);
+                foreach ($key->characters as $char) {
+                    $characters[] = objectToArray($char);
+                }
             }
         } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
             $loginFailed = true;

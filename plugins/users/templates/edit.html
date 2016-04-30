@@ -1,43 +1,70 @@
-<div class="inputForm">
-  <form method="post" action="{$site_url}/?module=users&mode=edit" style="float:left">
-    <input type="hidden" name="save" value="1" />
-    <h2>User preferences</h2>
-    <label>&nbsp;</label>Leave password blank if you do not want to change it.<br/>
-    <label>Change password:</label>
-    <input type="password" name="password" autocomplete="off"/><br />
-    <label>Email address:</label>
-    <input type="text" name="email" value="{$email}" /><br />
-    <label>API Proxy *:</label>
-    <input type="text" name="proxy" value="{$proxy}" /><br />
-    <label>Time zone:</label>
+
+<form method="post" action="{$site_url}/?module=users&mode=edit" style="float:left">
+  <input type="hidden" name="save" value="1" />
+
+  <h2>User preferences</h2>
+
+  <div class="input">
+    <label></label>
+    <span>Leave password blank if you do not want to change it.</span>
+  </div>
+  <div class="input">
+    <label for="password">Change password:</label>
+    <input type="password" name="password" autocomplete="off"/>
+  </div>
+  <div class="input">
+    <label for="email">Email address:</label>
+    <input type="text" name="email" value="{$email}" />
+  </div>
+  <div class="input">
+    <label for="proxy">API Proxy *:</label>
+    <input type="text" name="proxy" value="{$proxy}" />
+  </div>
+  <div class="input">
+    <label for="timezone">Time zone:</label>
     <select name="timezone">
       <option value="GMT">GMT / EVE Time</option>
       {section name=t loop=$timezones}
       <option value="{$timezones[t].zone}" {if $timezone == $timezones[t].zone}selected="selected"{/if}>{$timezones[t].desc}</option>
       {/section}
-    </select><br />
-    <label>Theme:</label>
+    </select>
+  </div>
+  <div class="input">
+    <label for="theme">Theme:</label>
     <select name="theme">
       <option value="{$theme}">Site default</option>
       {section name=t loop=$themes}
       <option value="{$themes[t].name}" {if $usertheme == $themes[t].name}selected="selected"{/if}>{$themes[t].desc}</option>
       {/section}
-    </select><br />
-
-    {if $custommins}
-    <hr />
-    <label>&nbsp;</label><b>Custom mineral prices:</b><br />
-    {section name=m loop=$custommins}
-    <label>{$custommins[m].typename}</label>
-    <img src="{$site_url}/{$custommins[m].icon.icon32}" align="left" height="22" />
-    <input type="text" name="min_{$custommins[m].typeid}" value="{$custommins[m].customPrice|eveNum}" style="width:60px;" /><br />
-    {/section}
-    {/if}
-
-    <label></label><input type="submit" value="Save" />
-
-    <div class="note" style="clear:both">* If you access your API data from multiple sources, and wish to avoid caching conflicts, use the Proxy option to specify a caching proxy to use rather than accessing the EVE API directly. <br /><br />
-      If you do not use other full-access API-enabled applications, or are unsure, leave the API Proxy blank.</div>
-
-    </form>
+    </select>
   </div>
+
+  {if $custommins}
+  <h3>Custom mineral prices</h3>
+
+  {section name=m loop=$custommins}
+  <div class="input">
+    <label>{$custommins[m].typename}
+    <img src="{$site_url}/{$custommins[m].icon.icon32}" style="vertical-align: middle" height="26" /></label>
+    <input type="text" name="min_{$custommins[m].typeid}" value="{$custommins[m].customPrice|eveNum}" style="width:60px;" />
+  </div>
+  {/section}
+  {/if}
+
+  <div class="input">
+    <label></label><input type="submit" value="Save" />
+  </div>
+
+  <div class="note">
+    <p>
+      * If you access your API data from multiple sources, and wish to avoid
+      caching conflicts, use the Proxy option to specify a caching proxy to use
+      rather than accessing the EVE API directly.
+    </p>
+    <p>
+      If you do not use other full-access API-enabled applications, or are
+      unsure, leave the API Proxy blank.
+    </p>
+  </div>
+
+</form>
