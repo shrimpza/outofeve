@@ -16,9 +16,12 @@ class users extends Plugin {
             setcookie('ooe_session', '', time() - (60 * 60 * 24 * 30), '/');
             unset($_COOKIE['ooe_session']);
         } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
+            require_once('PasswordStorage.php');
+
             // user is logging in
-            $checkUser = $db->QueryA('select id from user where username = ? and password = ?', array($_POST['username'], md5($_POST['password'])));
-            if (is_array($checkUser) && $checkUser[0]['id'] > 0) {
+            $checkUser = $db->QueryA('select id, password from user where username = ?', array($_POST['username']));
+            if (is_array($checkUser) && $checkUser[0]['id'] > 0
+                && PasswordStorage::verify_password($_POST['password'], $checkUser[0]['password'])) {
                 // generate session and set cookie
                 $sessionId = md5(uniqid(time(), true));
                 setcookie('ooe_session', $sessionId, time() + (60 * 60 * 24 * 30), '/');
@@ -26,6 +29,8 @@ class users extends Plugin {
                 // set session in user
                 $this->site->user = $db->getObject('user', $checkUser[0]['id']);
                 $this->site->user->session_id = $sessionId;
+            } else {
+                // login failed!
             }
         } else if (isset($_COOKIE['ooe_session'])) {
             // session set, check if it exists
@@ -204,8 +209,10 @@ class users extends Plugin {
                 if ($user->id > 0) {
                     return $this->render('register', array('error' => array('message' => 'User name ' . $_POST['username'] . ' already in use.')));
                 } else {
+                    require_once('PasswordStorage.php');
+
                     $user->username = $_POST['username'];
-                    $user->password = md5($_POST['password']);
+                    $user->password = PasswordStorage::create_hash($_POST['password']);
                     $user->email = $_POST['email'] . ' ';
                     $user->level = 1;
                     $user->theme = $GLOBALS['config']['templates']['theme'];
@@ -227,7 +234,8 @@ class users extends Plugin {
 
         if (isset($_POST['save'])) {
             if (!empty($_POST['password'])) {
-                $this->site->user->password = md5($_POST['password']);
+                require_once('PasswordStorage.php');
+                $this->site->user->password = PasswordStorage::create_hash($_POST['password']);
             }
             $this->site->user->email = $_POST['email'];
             $this->site->user->theme = $_POST['theme'];

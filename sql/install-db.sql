@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS `mineralprice` (
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL auto_increment,
   `username` varchar(32) NOT NULL,
-  `password` varchar(64) NOT NULL,
-  `email` varchar(32) NOT NULL,
+  `password` varchar(128) NOT NULL,
+  `email` varchar(64) NOT NULL,
   `timezone` varchar(128) NOT NULL default 'GMT',
-  `theme` varchar(64) NOT NULL,
+  `theme` varchar(32) NOT NULL,
   `proxy` varchar(256) NOT NULL,
   `level` tinyint(4) NOT NULL,
   `activetime` datetime NOT NULL,
@@ -32,6 +32,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `corp_apikey_id` int(11) NOT NULL,
   `session_id` varchar(128) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `username` (`username`,`password`),
+  KEY `username` (`username`),
   KEY `session_id` (`session_id`)
 );
