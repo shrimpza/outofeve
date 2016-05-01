@@ -1,66 +1,47 @@
 <form method="get" action="{$site_url}/">
-  <table width="500" border="0">
 
-    {if $hasCorp}
-    <tr>
-      <td align="right">
-        <b>Blueprint Source:</b>
-      </td>
-      <td width="330">
-        <select name="corp" style="width: 280px">
-          <option value="0">My Blueprints</option>
-          <option value="1" {if $corp}selected="selected"{/if}>My Corporation's Blueprints</option>
-        </select>
-      </td>
-    </tr>
-    {/if}
+  {if $hasCorp}
+  <div class="input">
+    <label>Blueprint Source:</label>
+    <select name="corp">
+      <option value="0">My Blueprints</option>
+      <option value="1" {if $corp}selected="selected"{/if}>My Corporation's Blueprints</option>
+    </select>
+  </div>
+  {/if}
 
-    <tr>
-      <td align="right">
-        <b>Blueprint Type:</b>
-      </td>
-      <td width="330">
-        <select name="group" style="width: 280px">
-          <option value="0">All</option>
-          {foreach from=$groups key=gid item=groupname}
-          <option value="{$gid}" {if $gid == $group}selected="selected"{/if}>{$groupname}</option>
-          {/foreach}
-        </select>
-      </td>
-    </tr>
+  <div class="input">
+    <label>Blueprint Type:</label>
+    <select name="group">
+      <option value="0">All</option>
+      {foreach from=$groups key=gid item=groupname}
+      <option value="{$gid}" {if $gid == $group}selected="selected"{/if}>{$groupname}</option>
+      {/foreach}
+    </select>
+  </div>
 
-    <tr>
-      <td align="right">
-        <b>Region:</b>
-      </td>
-      <td width="330">
-        <select name="region" style="width: 280px">
-          <option value="0">All</option>
-          {section name=r loop=$regions}
-          <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="selected"{/if}>{$regions[r].regionname}</option>
-          {/section}
-        </select>
-      </td>
-    </tr>
+  <div class="input">
+    <label>Region:</label>
+    <select name="region">
+      <option value="0">All</option>
+      {section name=r loop=$regions}
+      <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="selected"{/if}>{$regions[r].regionname}</option>
+      {/section}
+    </select>
+  </div>
 
-    <tr>
-      <td align="right">
-        &nbsp;
-      </td>
-      <td width="330">
-        <label><input type="checkbox" name="customprice" value="1" {if $customprice}checked="checked"{/if}> Use custom mineral pricing *</label>
-      </td>
-    </tr>
+  <div class="input">
+    <label>Use custom mineral pricing*:</label>
+    <input type="checkbox" name="customprice" value="1" {if $customprice}checked="checked"{/if}>
+  </div>
 
-    <tr>
-      <td>&nbsp;</td>
-      <td>
-        <input type="hidden" name="p" value="{$pageNum}" />
-        <input type="hidden" name="module" value="util_prodprofit" />
-        <input type="submit" value="Get Prices" />
-      </td>
-    </tr>
-  </table>
+  <input type="hidden" name="p" value="{$pageNum}" />
+  <input type="hidden" name="module" value="util_prodprofit" />
+
+  <div class="input">
+    <label></label>
+    <input type="submit" value="Get Prices" />
+  </div>
 </form>
 
 {if $pageCount > 0}

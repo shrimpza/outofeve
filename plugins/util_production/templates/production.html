@@ -1,57 +1,38 @@
 <form method="post" action="{$site_url}/?module=util_production">
-  <table width="500" border="0">
-    <tr>
-      <td align="right">
-        <b>Item to manufacture:</b>
-      </td>
-      <td width="330">
-        <input type="text" name="item" value="{$item}" style="width: 280px" />
-      </td>
-    </tr>
 
-    <tr>
-      <td align="right">
-        <b>Material Efficiency:</b>
-      </td>
-      <td width="330">
-        <select name="meLevel" style="width: 280px">
-          {for $me=0 to 10}
-          <option value="{$me}" {if $meLevel == $me}selected="selected"{/if}>{$me}</option>
-          {/for}
-        </select>
-      </td>
-    </tr>
+  <div class="input">
+    <label>Item to manufacture:</label>
+    <input type="text" name="item" value="{$item}" />
+  </div>
 
-    <tr>
-      <td align="right">
-        <b>Region:</b>
-      </td>
-      <td width="330">
-        <select name="region" style="width: 280px">
-          <option value="0">All</option>
-          {section name=r loop=$regions}
-          <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
-          {/section}
-        </select>
-      </td>
-    </tr>
+  <div class="input">
+    <label>Material Efficiency:</label>
+    <select name="meLevel">
+      {for $me=0 to 10}
+      <option value="{$me}" {if $meLevel == $me}selected="selected"{/if}>{$me}</option>
+      {/for}
+    </select>
+  </div>
 
-    <tr>
-      <td align="right">
-        &nbsp;
-      </td>
-      <td width="330">
-        <label><input type="checkbox" name="customprice" value="1" {if $customprice}checked="checked"{/if}> Use custom mineral pricing *</label>
-      </td>
-    </tr>
+  <div class="input">
+    <label>Region:</label>
+    <select name="region">
+      <option value="0">All</option>
+      {section name=r loop=$regions}
+      <option value="{$regions[r].regionid}" {if $regions[r].regionid == $region}selected="true"{/if}>{$regions[r].regionname}</option>
+      {/section}
+    </select>
+  </div>
 
-    <tr>
-      <td>&nbsp;</td>
-      <td>
-        <input type="submit" value="Get Prices" />
-      </td>
-    </tr>
-  </table>
+  <div class="input">
+    <label for="customprice">Use custom mineral pricing*:</label>
+    <input type="checkbox" name="customprice" value="1" {if $customprice}checked="checked"{/if}>
+  </div>
+
+  <div class="input">
+    <label></label>
+    <input type="submit" value="Get Prices" />
+  </div>
 </form>
 
 {if $proditem}
@@ -157,8 +138,6 @@
   </tr>
 </table>
 
-<div class="note">* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>
-
 <script type="text/javascript">
 var runPerfect = {$totals.perfect};
 var runYou     = {$totals.you};
@@ -177,3 +156,5 @@ function calcRuns(runCount) {
 }
 </script>
 {/if}
+
+<div class="note">* Custom mineral pricing can be defined in your user preferences. Any undefined custom prices will use current market averages.</div>

@@ -1,5 +1,6 @@
 <div>
   {if $hasUser}
+  <!-- user is logged in -->
 
   <!-- placeholder -->
   {foreach from=$characters item=char}
@@ -7,6 +8,7 @@
   {/foreach}
 
   {if $noKeys}
+  <!-- no API keys added yet -->
   <div class="note">
     <p>
       Take a minute to set your Preferences, which among other things, will allow
@@ -23,15 +25,21 @@
   {/if}
 
   {else}
+  <!-- the login/landing page -->
+
   {if $loginFailed}
-  <div class="note">
-    <p>
-      Login failed.
-    </p>
+  <div class="note error">
+    Login failed.
   </div>
   {/if}
 
-  {include file="login.html"}
+  <div class="float-half">
+    {include file="login.html"}
+  </div>
+
+  <div class="float-half">
+    TODO some sort of about information.
+  </div>
 
   {/if}
 </div>

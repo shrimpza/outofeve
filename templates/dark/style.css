@@ -428,6 +428,10 @@ form input, form select, form button {
   width: 200px;
 }
 
+form input[type="checkbox"] {
+  width: inherit;
+}
+
 form h1, form h2, form h3, form h4, form h5, form h6 {
   margin: 10px;
   position: relative;
