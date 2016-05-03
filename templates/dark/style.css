@@ -271,7 +271,8 @@ nav ul ul li.header {
   font-size: 1.1em;
   text-align: center;
   font-weight: bold;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: #37b;
+  color: #fff;
 }
 
 nav a:link, nav a:active, nav a:visited {
@@ -355,8 +356,8 @@ nav ul li:hover {
 }
 
 .error {
-    background-color: rgba(255, 100, 50, 0.15);
-    background-image: url('images/misc/warning.png');
+  background-color: rgba(255, 100, 50, 0.15);
+  background-image: url('images/misc/warning.png');
 }
 
 
@@ -393,11 +394,15 @@ nav ul li:hover {
 }
 
 .pageNav.prev {
-  background: url('images/nav_prev.png') no-repeat center center;
+  background-image: url('images/nav_prev.png');
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .pageNav.next {
-  background: url('images/nav_next.png') no-repeat center center;
+  background-image: url('images/nav_next.png');
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 
@@ -405,7 +410,7 @@ nav ul li:hover {
 /* inputs                              */
 /* =================================== */
 
-input, select, textarea {
+input, select, textarea, button {
   border: 1px solid #666;
   border-radius: 2px;
   background-color: #444;
@@ -426,6 +431,13 @@ form label {
 
 form input, form select, form button {
   width: 200px;
+}
+
+input[type="submit"], button {
+  background-color: #37b;
+  border: none;
+  color: #fff;
+  font-weight: bold;
 }
 
 form input[type="checkbox"] {
