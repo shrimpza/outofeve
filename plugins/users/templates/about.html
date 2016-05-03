@@ -1,0 +1,250 @@
+<div class="intro">
+
+  <!-- intro -->
+  <div class="slide" id="slide-1">
+    <div class="sub">
+      About
+    </div>
+    <div class="content">
+      <p>
+        Welcome to Out of Eve, a web application which aims to grant you as much
+        access to what your EVE Online characters and corporations are up to as
+        possible, when you're not in the game.
+      </p>
+      <p>
+        Out of Eve is free and open source software, available on
+        <a href="https://github.com/shrimpza/outofeve/">GitHub</a>, and you're
+        free to host your own instance and modify it to suit your needs.
+      </p>
+      <p>
+        To learn a bit more about some of Out of Eve's features, click the
+        button below for a brief tour.
+      </p>
+    </div>
+  </div>
+
+  <!-- api keys for chars and corps -->
+  <div class="slide" id="slide-2">
+    <div class="sub">
+      Multiple Accounts, Characters and Corporations
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/01-keys.png" align="left" />
+      <p>
+        Out of Eve allows you to add multiple EVE API keys, with varying
+        access profiles, enabling you to monitor many characters and
+        corporations using a single logon.
+      </p>
+      <p>
+        Switching between characters and API keys is as simple as selecting
+        a menu item.
+      </p>
+    </div>
+  </div>
+
+  <!-- character -->
+  <div class="slide" id="slide-3">
+    <div class="sub">
+      Character Sheet
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/02-character.png" align="left" />
+      <p>
+        Access your character's full character sheet, including current ISK
+        balance, attributes and augmentations, training queue and all known
+        skills.
+      </p>
+    </div>
+  </div>
+
+  <!-- mail -->
+  <div class="slide" id="slide-4">
+    <div class="sub">
+      EVE Mail
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/03-mail.png" align="left" />
+      <p>
+        Read your personal EVE mails, courporation-wide mails, mailing lists
+        and game notification mails.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- assets -->
+  <div class="slide" id="slide-5">
+    <div class="sub">
+      Ships and Assets
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/04-assets.png" align="left" />
+      <p>
+        View all character and corporation assets, grouped by location,
+        filterable and fully searchable.
+      </p>
+      <p>
+        You can filter the assets view to show only your ships, which includes
+        their current fittings and cargo.
+      </p>
+    </div>
+  </div>
+
+  <!-- market activity -->
+  <div class="slide" id="slide-6">
+    <div class="sub">
+      Market Transactions and Orders
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/09-orders.png" align="left" />
+      <p>
+        Character and corporation market sales and purchases are available,
+        as well as currently outstanding market orders and their progress.
+      </p>
+    </div>
+  </div>
+
+  <!-- journal -->
+  <div class="slide" id="slide-7">
+    <div class="sub">
+      Transaction Journal
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/07-journal.png" align="left" />
+      <p>
+        The full transaction journal for characters and corporations may be
+        used to see all income and expenses.
+      </p>
+      <p>
+        Filters by transaction type, as well as a dedicated corporation taxes
+        view, allow quick analysis of transactions, while the daily summary
+        view provides handy daily totals.
+      </p>
+    </div>
+  </div>
+
+  <!-- industry -->
+  <div class="slide" id="slide-8">
+    <div class="sub">
+      Industry
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/10-industry.png" align="left" />
+      <p>
+        Keep track of the progress of industry jobs - manufacture,
+        research and more. For incomplete jobs, current progress and
+        ETA are shown.
+      </p>
+    </div>
+  </div>
+
+  <!-- kills and deaths -->
+  <div class="slide" id="slide-9">
+    <div class="sub">
+      Kills and Deaths
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/11-deaths.png" align="left" />
+      <p>
+        Character and Corporation member kills and deaths are shown in a
+        simple killboard style, including involved parties, item drops, and
+        estemated values lost and looted.
+      </p>
+    </div>
+  </div>
+
+  <!-- tools -->
+  <div class="slide" id="slide-10">
+    <div class="sub">
+      Tools and More
+    </div>
+    <div class="content">
+      <img src="templates/{$theme}/about/12-tools.png" align="left" />
+      <p>
+        Several useful tools and calculators are available, including
+        mining calculators, production cost and profitability, and more.
+      </p>
+      <hr/>
+      <p>
+        These are just a few of the features available in Out of Eve, to
+        keep you in EVE, even when you're not!
+      </p>
+    </div>
+  </div>
+
+  <div class="sub footer">
+    <button id="nav-back">Back</button>
+    <button id="nav-next">Learn More</button>
+  </div>
+</div>
+
+<script>
+</script>
+
+<style>
+.intro {
+  font-size: 1.15em;
+}
+
+.intro .slide {
+  display: none;
+}
+
+.intro .sub {
+  padding: 5px;
+}
+
+.intro .slide .content {
+  height: 200px;
+}
+
+.intro .footer {
+  text-align: right;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+  var current = null;
+  var slide = 0;
+
+  var navNext = function() {
+    if (current != null) current.hide();
+
+    slide ++;
+    current = $("#slide-" + slide);
+    if (current == null || current.length == 0) {
+      slide = 1;
+      current = $("#slide-" + slide);
+    }
+
+    if (slide > 1) {
+      $("#nav-back").show();
+    } else {
+      $("#nav-back").hide();
+    }
+
+    current.show();
+  }
+
+  var navBack = function() {
+    if (current != null) current.hide();
+
+    slide --;
+    current = $("#slide-" + slide);
+
+    if (slide > 1) {
+      $("#nav-back").show();
+    } else {
+      $("#nav-back").hide();
+    }
+
+    current.show();
+  }
+
+  navNext();
+
+  $("#nav-back").click(navBack);
+  $("#nav-next").click(navNext);
+});
+</script>

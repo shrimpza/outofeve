@@ -2,18 +2,24 @@
 <div class="note error">{$error.message}</div>
 {/if}
 
-<form method="post" action="{$site_url}/?module=users&mode=register">
-  <h2>New user registration</h2>
-  <div class="input">
-    <label for="username">Username:</label>
-    <input type="text" name="username" value="{$username}" />
-  </div>
-  <div class="input">
-    <label for="password">Password:</label>
-    <input type="password" name="password" />
-  </div>
-  <div class="input">
-    <label></label>
-    <input type="submit" value="Register" />
-  </div>
-</form>
+<div class="float-half">
+  <form method="post" action="{$site_url}/?module=users&mode=register">
+    <h2>New user registration</h2>
+    <div class="input">
+      <label for="username">Username:</label>
+      <input type="text" name="username" value="{$username}" />
+    </div>
+    <div class="input">
+      <label for="password">Password:</label>
+      <input type="password" name="password" />
+    </div>
+    <div class="input">
+      <label></label>
+      <input type="submit" value="Register" />
+    </div>
+  </form>
+</div>
+
+<div class="float-half">
+  {include file="about.html"}
+</div>

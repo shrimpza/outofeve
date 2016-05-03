@@ -440,6 +440,10 @@ input[type="submit"], button {
   font-weight: bold;
 }
 
+input[type="submit"]:hover, button:hover {
+  background-color: #48c;
+}
+
 form input[type="checkbox"] {
   width: inherit;
 }
