@@ -59,7 +59,7 @@
         {math equation="100 - ((r / t) * 100)" r=$o.volRemaining t=$o.volEntered assign=perRemain}
         <td align="center" class="maybe-bg">Active<br />{$perRemain|eveNumInt}% done</td>
         {elseif ($o.orderState != 3) && ($o.remainingTime < 0) && ($o.valRemaining > 0)}
-        <td align="center" class="bade-bg">Expired</td>
+        <td align="center" class="bad-bg">Expired</td>
         {elseif $o.orderState == 2}
         <td align="center" class="good-bg">Complete</td>
         {elseif $o.orderState == 3}

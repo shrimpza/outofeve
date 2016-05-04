@@ -49,9 +49,9 @@ $config['memcached']['servers'] = array(
 );
 
 /*************************************************************************
-Default site theme (clean, dark)
+Default site theme (dark, light)
 *************************************************************************/
-$config['templates']['theme'] = 'clean';
+$config['templates']['theme'] = 'dark';
 
 /*************************************************************************
 EVE API and paths, for caching, themes, etc.

@@ -1,0 +1,502 @@
+@import url(https://fonts.googleapis.com/css?family=Lato);
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  background-image: url("images/bg/furley_bg.png");
+  font-family: "Lato", Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.6em;
+  color: #222;
+}
+
+/* icon styles to force icon scaling in cases where icons are only available in
+the wrong sizes */
+.i16 {
+  width: 16px;
+}
+
+.i32 {
+  width: 32px;
+}
+
+.i64 {
+  width: 64px;
+}
+
+.i128 {
+  width: 128px;
+}
+
+.spacer32 {
+  height: 32px;
+  width: 32px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.spacer64 {
+  height: 64px;
+  width: 64px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+/* =================================== */
+/* basic colours for everything        */
+/* =================================== */
+.shadeLight {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.shadeMid {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.shadeDark {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.borderLight {
+  border: 0px;
+}
+
+.borderMid {
+  border: 0px;
+}
+
+.borderDark {
+  border: 0px;
+}
+
+.textLight {
+  color: #444;
+}
+
+.groupHead td {
+  padding: 6px;
+}
+
+/* =================================== */
+/* page layout/conatainers             */
+/* =================================== */
+
+#header-full {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+#header {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  padding: 0px;
+  line-height: 0px;
+}
+
+#container {
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#containerPopup {
+  left: 10px;
+  right: 10px;
+}
+
+#main {
+  margin-left: 52px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 8px;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+#mainPopup {
+}
+
+nav {
+  width: 42px;
+  float: left;
+  z-index: 10;
+}
+
+#footer-wrapper {
+  clear: both;
+  margin-top: 50px;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* =================================== */
+/* base type things                   */
+/* =================================== */
+
+.a, a {
+  text-decoration: none;
+  color: blue;
+}
+
+a:visited {
+  text-decoration: none;
+  color: darkblue;
+}
+
+img {
+  border: 0px;
+}
+
+.infoLink a, .infoLink a:visited {
+  text-decoration: none;
+  color: #000;
+}
+
+.float-half {
+  float: left;
+  width: 49%;
+}
+
+/* =================================== */
+/* footer...                           */
+/* =================================== */
+
+#footer {
+  font-size: 1.3em;
+  padding: 3px;
+  padding-right: 15px;
+  width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =================================== */
+/* table bits                          */
+/* =================================== */
+
+th {
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.15);
+  text-align: center;
+  font-size: 1em;
+  padding: 4px 2px 4px 2px;
+}
+
+.sub {
+  border-radius: 3px;
+  text-align: center;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.row {
+}
+
+.rowAlt {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* =================================== */
+/* various colours and things          */
+/* =================================== */
+
+.moneyOut {
+  color: #b00;
+}
+
+.moneyIn {
+  color: #090;
+}
+
+.bad {
+  color: #b00;
+}
+
+.good {
+  color: #090;
+}
+
+.maybe {
+  color: #990;
+}
+
+td.good-bg {
+  background-color: #4f4;
+}
+
+td.bad-bg {
+  background-color: #f44;
+}
+
+td.maybe-bg {
+  background-color: #ff4;
+}
+
+/* =================================== */
+/* menus                               */
+/* =================================== */
+
+nav .body {
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.7);
+  border-top: 0px;
+  margin-bottom: 10px;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+nav ul li {
+  cursor: pointer;
+  position: relative;
+}
+
+nav ul a {
+  display: block;
+  width: 100%;
+  padding: 4px 4px 2px 5px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+nav ul ul {
+  position: absolute;
+  float: none;
+  width: inherit;
+  top: -30px;
+  left: -9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+nav ul ul li {
+  float: none;
+  width: 250px;
+}
+
+nav ul ul li.header {
+  padding: 5px;
+  font-size: 1.1em;
+  text-align: center;
+  font-weight: bold;
+  background-color: #37b;
+  color: #fff;
+}
+
+nav a:link, nav a:active, nav a:visited {
+  color: #000;
+}
+
+nav ul li:hover ul { /* Display the dropdown on hover */
+  left: 42px; /* Bring back on-screen when needed */
+}
+
+nav ul li:hover, nav ul li:hover a {
+  background-color: rgba(51, 119, 187, 0.9);
+  color: #fff;
+}
+
+
+/* =================================== */
+/* error messages and displays         */
+/* =================================== */
+
+#errorPopup {
+  position: absolute;
+  top: 0px;
+  left: 20%;
+  right: 20%;
+  z-index: 1000;
+  color: #000;
+  background-color: #fb9;
+  border: 4px outset #d41;
+  border-top: none;
+  padding: 5px;
+  text-align: left;
+  font-weight: bold;
+}
+
+#errorPopup h3 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid #d41;
+}
+
+#errorPopup a {
+  color: #000;
+}
+
+.apierror {
+  border-bottom: 1px dotted #d41;
+  padding: 3px 0px 3px 10px;
+  font-weight: normal;
+}
+
+.ok {
+  font-size: 1.3em;
+  color: #000;
+  background-color: #9f6;
+  border: 4px double #4d1;
+  padding: 15px;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.note {
+  font-size: 1.1em;
+  color: #000;
+  background-color: rgba(255, 255, 150, 0.4);
+  box-shadow: 4px 4px 7px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+  padding-left: 80px;
+  min-height: 32px;
+  width: 50%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  background-image: url('images/misc/note.png');
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+
+.error {
+  background-color: rgba(255, 100, 50, 0.4);
+  background-image: url('images/misc/warning.png');
+}
+
+
+/* =================================== */
+/* style for filters and things on     */
+/* the tops of pages with data lists   */
+/* =================================== */
+
+.listOptions {
+  margin: 10px;
+  margin-left: 2px;
+}
+
+.listOptions span {
+  vertical-align: middle;
+  font-size: 1.1em;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.listOptions a {
+  text-decoration: none;
+}
+
+/* =================================== */
+/* pagination buttons...               */
+/* =================================== */
+
+.pageNav {
+  border: 0;
+  height: 20px;
+  width: 20px;
+  vertical-align: middle;
+}
+
+.pageNav.prev {
+  background-image: url('images/nav_prev.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.pageNav.next {
+  background-image: url('images/nav_next.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+
+/* =================================== */
+/* inputs                              */
+/* =================================== */
+
+input, select, textarea, button {
+  border: 1px solid #666;
+  border-radius: 2px;
+  background-color: #eee;
+  color: #000;
+  padding: 4px;
+}
+
+form .input {
+  margin: 10px;
+}
+
+form label {
+  display: inline-block;
+  width: 200px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+form input, form select, form button {
+  width: 200px;
+}
+
+input[type="submit"], button {
+  background-color: #37b;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+}
+
+input[type="submit"]:hover, button:hover {
+  background-color: #48c;
+}
+
+form input[type="checkbox"] {
+  width: inherit;
+}
+
+form h1, form h2, form h3, form h4, form h5, form h6 {
+  margin: 10px;
+  position: relative;
+  left: 210px;
+}
+
+
+
+/* =================================== */
+/* landing page links                  */
+/* =================================== */
+
+.landing.group {
+  margin: 30px 0;
+}
+
+.landing.title {
+  font-size: 1.3em;
+  padding: 10px;
+  text-align: left;
+}
+
+.landing.links a, .landing.links.title {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.landing.links img, .landing.links .spacer64 {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.landing.links a:hover {
+  background-color: #37b;
+  color: #fff;
+}
