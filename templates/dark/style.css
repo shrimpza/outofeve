@@ -36,6 +36,13 @@ the wrong sizes */
   display: inline-block;
 }
 
+.spacer64 {
+  height: 64px;
+  width: 64px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
 /* =================================== */
 /* basic colours for everything        */
 /* =================================== */
@@ -452,4 +459,38 @@ form h1, form h2, form h3, form h4, form h5, form h6 {
   margin: 10px;
   position: relative;
   left: 210px;
+}
+
+
+
+/* =================================== */
+/* landing page links                  */
+/* =================================== */
+
+.landing.group {
+  margin: 30px 0;
+}
+
+.landing.title {
+  font-size: 1.3em;
+  padding: 10px;
+  text-align: left;
+}
+
+.landing.links a, .landing.links.title {
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.landing.links img, .landing.links .spacer64 {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.landing.links a:hover {
+  background-color: #37b;
+  color: #fff;
 }

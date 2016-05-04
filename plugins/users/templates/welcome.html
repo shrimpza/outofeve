@@ -2,10 +2,7 @@
   {if $hasUser}
   <!-- user is logged in -->
 
-  <!-- placeholder -->
-  {foreach from=$characters item=char}
-  <img src="http://image.eveonline.com/Character/{$char.characterID}_256.jpg" class="charSelectImg" data-charid="{$char.characterID}" title="{$char.characterName}" />
-  {/foreach}
+  {include file="landing.html" user=$user menu=$menu}
 
   {if $noKeys}
   <!-- no API keys added yet -->

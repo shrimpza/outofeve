@@ -406,6 +406,8 @@ class users extends Plugin {
             'hasUser' => $hasUser,
             'loginFailed' => $loginFailed,
             'noKeys' => count(eveKeyManager::getInstance()->keys) == 0,
+            'menu' => $hasUser ? $this->site->plugins['mainmenu']->links : array(),
+            'user' => $hasUser ? $this->site->user->username : '',
             'register' => $GLOBALS['config']['site']['registration']
         ));
     }

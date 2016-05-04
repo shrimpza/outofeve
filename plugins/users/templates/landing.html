@@ -1,0 +1,43 @@
+<h2>Welcome, {$user}</h2>
+
+<!--
+one day, maybe this can have an awesome complete overview of a
+character's stuff. for now, it's just the menu duplicated with
+bigger icons :D
+-->
+
+{foreach from=$menu item=mg}
+{if $mg.links}
+<div class="landing group">
+  <div class="landing title sub">
+    <span>{$mg.title}</span>
+  </div>
+  <div class="landing links">
+    <div class="landing links title">
+      {if substr($mg.icon, 0, 4) === 'http'}
+      <img src="{$mg.icon|replace:'_32':'_64'}" class="i64" />
+      {else}
+      <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.icon|replace:'_32':'_64'}.png" class="i64" />
+      {/if}
+    </div>
+
+    {section name=lnk loop=$mg.links}
+    {if $mg.links[lnk].l}
+    <a href="{$mg.links[lnk].l}">
+      {if $mg.links[lnk].i}
+      <img src="{$site_url}/templates/{$theme}/images/menu/{$mg.links[lnk].i|replace:'_32':'_64'}.png" class="i64" />
+      {else}
+      <span class="spacer64"></span>
+      {/if}
+      <div>{$mg.links[lnk].t}</div>
+    </a>
+    {else}
+    <div class="landing break">
+      {$mg.links[lnk].t}
+    </div>
+    {/if}
+    {/section}
+  </div>
+</div>
+{/if}
+{/foreach}
