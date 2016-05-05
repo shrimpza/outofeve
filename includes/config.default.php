@@ -12,11 +12,10 @@ $config['site']['title'] = 'Out of Eve';
 $config['site']['registration'] = true;
 
 // Secret key for encrypting API keys before storing.
-// Set to blank to disable APi key encryption
+// This can just be a random string of characters, and assuming nobody
+// gains access to this config file, API keys stored in the database
+// should remain reasonably secure.
 $config['site']['keypass'] = 'weak secret';
-
-// enable the precache.php script to pre-load API data
-$config['site']['precache'] = false;
 
 // if enabled, load times, DB usage and API access info will be printed
 // in the footer of each page
@@ -31,7 +30,7 @@ $config['database']['user'] = 'ooe';
 $config['database']['pass'] = '';
 
 /*************************************************************************
-Database generated from Eve database dump
+Database generated from EVE SDE database dump
 *************************************************************************/
 $config['evedatabase']['dsn'] = 'mysql:host=localhost;dbname=evedump';
 $config['evedatabase']['user'] = 'ooe';
@@ -49,12 +48,17 @@ $config['memcached']['servers'] = array(
 );
 
 /*************************************************************************
-Default site theme (dark, light)
+Templates and themes
+The compile_dir should be writable
 *************************************************************************/
-$config['templates']['theme'] = 'dark';
+$config['templates']['theme'] = 'dark'; // (dark || light)
+
+$config['templates']['compile_dir'] = dirname(__FILE__).'/../templates/compiled';
+$config['templates']['theme_dir'] = dirname(__FILE__).'/../templates';
 
 /*************************************************************************
-EVE API and paths, for caching, themes, etc.
+EVE API and paths
+The cache_dir should be writable
 *************************************************************************/
 $config['eve']['cache_dir'] = dirname(__FILE__).'/../cache/';
 $config['eve']['api_url'] = 'https://api.eveonline.com';
@@ -69,9 +73,6 @@ $config['eve']['transaction_records'] = 2560;
 
 $config['images']['types'] = 'eveimages/Types/%1$d_%2$d.png';
 $config['images']['icons'] = 'eveimages/Icons/items/%1$d_%3$d_%2$d.png';
-
-$config['templates']['compile_dir'] = dirname(__FILE__).'/../templates/compiled';
-$config['templates']['theme_dir'] = dirname(__FILE__).'/../templates';
 
 /*************************************************************************
 No need to modify anything beyond this point, unless you've writing
