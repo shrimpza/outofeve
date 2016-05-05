@@ -1,11 +1,11 @@
 Out of Eve
 ==========
 
-**Out of Eve** is a web application which allows you to keep complete track of your Eve characters and corporations, when you're not in Eve. Because it's web-based, all you need is a browser and internet access to keep tabs on your market orders, transactions, assets, manufacturing jobs, training, starbases, etc.
+**Out of Eve** is a web application which allows you to keep complete track of your EVE characters and corporations, when you're not in EVE. Because it's web-based, all you need is a browser and internet access to keep tabs on your market orders, transactions, assets, manufacturing jobs, training, starbases, etc.
 
-Out of Eve supports multiple characters across as many Eve accounts as you'd like, supports a full range of Eve personal and corporate API data, full item and ship reference, as well as a number of useful out-of-game utilities.
+Out of Eve supports multiple characters across as many EVE accounts as you'd like, supports a full range of EVE personal and corporate API data, full item and ship reference, as well as a number of useful out-of-game utilities.
 
-Last updated for: *Rubicon*
+Last updated for: *Citadel* (May 2016)
 
 
 Installation
@@ -17,8 +17,8 @@ Installation
 
 
 ### Prerequesits
-* [MySQL Eve static data dump](https://forums.eveonline.com/default.aspx?g=posts&m=4329249#post4329249)
-* [Icons and Types images from the Eve Community Toolkit](http://community.eveonline.com/community/fansites/toolkit/)
+* [MySQL EVE static data dump](https://www.fuzzwork.co.uk/dump/)
+* [Icons and Types images from EVE Developer Resources Toolkit](https://developers.eveonline.com/resource/resources)
 
 
 ### Files
@@ -30,14 +30,14 @@ Extract the `ExpansionName_x.x_Types` and `ExpansionName_x.x_Icons` packages fro
 
 ### Database
 
-In addition to importing CCP's database dump, you will need to create an additional database for Out of Eve's users and Eve account details. Once you have a database created and ready, execute the contents of `sql/install-db.sql` on that database to create the required tables.
+In addition to importing CCP's database dump, you will need to create an additional database for Out of Eve's users and EVE account details. Once you have a database created and ready, execute the contents of `sql/install-db.sql` on that database to create the required tables.
 
 
 ### Initial Configuration
 
 Before you can begin configuring settings, create a copy of `includes/config.default.php` named `includes/config.php`.
 
-Whip open your new `includes/config.php`, and make sure the settings are all suitable and match your environment. Most things should not need changing. Just make sure the `$config['site']['url']` option is correct; it should be the relative path to your Out of Eve site. For example, if you're running it from:
+Whip open your new `includes/config.php` file, and make sure the settings are all suitable and match your environment. Most things should not need changing. Make sure the `$config['site']['url']` option is correct; it should be the relative path to your Out of Eve site. For example, if you're running it from:
 
 > http://mywebsite.com/outofeve/
 
@@ -46,38 +46,36 @@ Then `$config['site']['url']` should be set to `/outofeve`.
 
 ### API Key Security
 
-If you want to encrypt your Eve API keys (**highly recommended!**), you will need to create an encryption key file. This is a simple plain text file containing nothing but a keyword which will be used to encrypt API keys stored in the Out of Eve accounts database. This file should be kept well away from any www-published paths. An example for creating a key file on *nix:
+Before writing to the database, OOE encrypts API keys for an added layer of security - should your database be compromised, your API keys should remain secure, as long as the attackers do not have access to the key used to encrypt the keys -- the encryption is reversible by necessity since we still need to attach them to API requests.
 
-    $ echo "mykey9876" > /root/ooekeypass
+The `$config['site']['keypass']` option may be a random string of any length, which is used as the encryption key.
 
-You can then configure `$config['site']['keypass']` as follows:
 
-```php
-$config['site']['keypass'] = '/root/ooekeypass';
-```
+### Cache Paths
 
-If you do not want to encrypt API keys (**not recommended!**), leave the keypass option empty:
-
-```php
-$config['site']['keypass'] = '';
-```
-
-###  Cache Paths
-
-Another option you may wish to change would be `$config['eve']['cache_dir']`. This option controls where cached API XML files are stored. I'd recommend you store these outside of any www-available paths, for example:
+Another option you may wish to change would be `$config['eve']['cache_dir']`. This option controls where cached API XML files are stored. It is recommended that you store these outside of any www-available paths, for example:
 
 ```php
 $config['eve']['cache_dir'] = '/var/cache/outofeve/'
 ```
 
-Just make sure the path is writable by the web server (either `chmod` or `chown` the directory with relevant options). By default this directory is just `cache/` where you uploaded Out of Eve.
+Make sure the path is writable by the web server (either `chmod` or `chown` the directory with relevant options). By default this directory is just `cache/` where you uploaded Out of Eve.
 
-Storing these cache files outside of the website path improves security and reduces the chances of someone getting hold of your character data (no passwords, API keys, user IDs etc are stored here, though).
+Storing these cache files outside of the website path improves security and reduces the chances of someone getting hold of your character data (no passwords, API keys, user IDs etc are stored in the cache, though).
+
+
+### Memcached
+
+To reduce load on your database, Out of Eve may optionally make use of one or more `memcached` instances to cache entities retrieved from the SDE database - significantly reducing the number of queries per page load (which can be hundreds or thousands on some pages).
+
+All `memcached` related options are available in the `$config['memcached']` option set.
+
+Configuration of a `memcached` instance and related PHP modules is beyond the scope of this document.
 
 
 ### Conclusion
 
-Once you are happy with `config.php`, the Eve data has been imported, your Out of Eve database has been created, and the `eveimages` directory has been filled, you should be ready to go!
+Review the other available options, and once you are happy with `config.php`, the EVE SDE data has been imported, your Out of Eve database has been created, and the `eveimages` directory has been filled, you should be ready to go!
 
 
 --
