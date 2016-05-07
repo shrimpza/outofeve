@@ -7,7 +7,7 @@ function transactionsSort($a, $b) {
 function lowestTransactionRef($transItems) {
     $res = 0;
     for ($i = 0; $i < count($transItems); $i++) {
-        if (($res == 0) || ($transItems[$i]->transactionID < $ref)) {
+        if (($res == 0) || ($transItems[$i]->transactionID < $res)) {
             $res = $transItems[$i]->transactionID;
         }
     }
