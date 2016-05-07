@@ -20,7 +20,7 @@ class mainmenu extends Plugin {
             $this->characterKey = eveKeyManager::getKey($this->site->user->char_apikey_id);
             if ($this->characterKey && $this->characterKey != null) {
                 foreach ($this->characterKey->characters as $char) {
-                    $this->addGroup($char->characterName, 'main_' . $char->characterID, 'http://image.eveonline.com/Character/' . $char->characterID . '_32.jpg');
+                    $this->addGroup($char->characterName, 'main_' . $char->characterID, 'https://image.eveonline.com/Character/' . $char->characterID . '_32.jpg');
                 }
             }
 
@@ -28,7 +28,7 @@ class mainmenu extends Plugin {
             $this->corpKey = eveKeyManager::getKey($this->site->user->corp_apikey_id);
             if ($this->corpKey && $this->corpKey != null) {
                 foreach ($this->characterKey->characters as $char) {
-                    $this->addGroup($char->corporationName, 'corp_' . $char->corporationID, 'http://image.eveonline.com/Corporation/' . $char->corporationID . '_32.png');
+                    $this->addGroup($char->corporationName, 'corp_' . $char->corporationID, 'https://image.eveonline.com/Corporation/' . $char->corporationID . '_32.png');
                 }
             }
 

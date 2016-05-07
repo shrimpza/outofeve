@@ -16,10 +16,10 @@
       {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
       <tr class="{$rowClass} message {if !$m.read}unread{/if}" data-messageid="{$m.messageID}">
         <td>
-          <img src="http://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />
+          <img src="https://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />
           {if $m.toListID > 0}<img src="{$site_url}/eveimages/icons/32/icon09_02.png" title="Mailing List" align="left"/>{/if}
           {if $m.toCorpID > 0}
-          <img src="http://image.eveonline.com/Corporation/{$m.toCorpID}_32.png" alt="{$m.toCorpName}" align="left" />
+          <img src="https://image.eveonline.com/Corporation/{$m.toCorpID}_32.png" alt="{$m.toCorpName}" align="left" />
           {/if}
           <span class="sender">{$m.senderName}</span><br />
           <span class="date">{$m.sentDate|date_format:"%d/%m/%Y %H:%M"}</span><br />
@@ -67,14 +67,14 @@ function getMessage(msgId) {
     if (message) {
       var cRec = '';
       if (message.headers.toCorpID > 0) {
-        cRec = '<img src="http://image.eveonline.com/Corporation/' + message.headers.toCorpID + '_32.png" align="absmiddle" /> ' + message.headers.toCorpName;
+        cRec = '<img src="https://image.eveonline.com/Corporation/' + message.headers.toCorpID + '_32.png" align="absmiddle" /> ' + message.headers.toCorpName;
         if (message.headers.toCharacterIDs != "") {
           cRec += ', ';
         }
       }
       if (message.headers.toCharacterIDs != "") {
         for (var i = 0; i < message.headers.toCharacterIDs.length; i++) {
-          cRec += '<img src="http://image.eveonline.com/Character/' + message.headers.toCharacterIDs[i] + '_32.jpg" align="absmiddle" /> ' + message.headers.toCharacterNames[i];
+          cRec += '<img src="https://image.eveonline.com/Character/' + message.headers.toCharacterIDs[i] + '_32.jpg" align="absmiddle" /> ' + message.headers.toCharacterNames[i];
           if (i < message.headers.toCharacterIDs.length-1) {
             cRec += ', ';
           }
@@ -83,7 +83,7 @@ function getMessage(msgId) {
 
       $('#msg_title').html(message.headers.title);
       $('#msg_date').html(message.headers.sentDate);
-      $('#msg_sender').html('<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
+      $('#msg_sender').html('<img src="https://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
       + message.headers.senderName);
       $('#msg_to').html(cRec);
       $('#msg_message').html(message.message);

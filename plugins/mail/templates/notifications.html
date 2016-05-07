@@ -16,7 +16,7 @@
       {if $rowClass == 'rowAlt'}{assign var='rowClass' value='row'}{else}{assign var='rowClass' value='rowAlt'}{/if}
       <tr class="{$rowClass} message {if $m.read}unread{/if}" data-messageid="{$m.notificationID}">
         <td>
-          {if $m.senderName}<img src="http://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />{/if}
+          {if $m.senderName}<img src="https://image.eveonline.com/Character/{$m.senderID}_64.jpg" alt="{$m.senderName}" align="left" />{/if}
           <span class="sender">{if $m.senderName}{$m.senderName}{else}{$m.sender.itemname}{/if}</span><br />
           <span class="date">{$m.sentDate|date_format:"%d/%m/%Y %H:%M"}</span><br />
           <span class="title">{$m.title}</span>
@@ -61,7 +61,7 @@ function getMessage(msgId) {
     if (message) {
       var fromImg = '';
       if (message.headers.senderName != '') {
-        fromImg = '<img src="http://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
+        fromImg = '<img src="https://image.eveonline.com/Character/' + message.headers.senderID + '_32.jpg" align="absmiddle" /> '
         $('#msg_sender').html(fromImg + message.headers.senderName);
       } else {
         $('#msg_sender').html(fromImg + message.headers.sender.itemname);
