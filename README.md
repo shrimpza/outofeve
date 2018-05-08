@@ -1,6 +1,16 @@
 Out of Eve
 ==========
 
+---
+
+## NOTICE - EVE XML API Deprecated
+
+As of 08 May 2018, the EVE XML API has been deprecated and shut down. Out of Eve relies upon this API for accessing player data, and without it, will no longer remain functional. The only solution is to rewrite the API client implementation within OOE to make use of the new CREST API, but that's not work that's planned.
+
+As of now, Out of Eve has reached it's end-of-life.
+
+---
+
 **Out of Eve** is a web application which allows you to keep complete track of your EVE characters and corporations, when you're not in EVE. Because it's web-based, all you need is a browser and internet access to keep tabs on your market orders, transactions, assets, manufacturing jobs, training, starbases, etc.
 
 Out of Eve supports multiple characters across as many EVE accounts as you'd like, supports a full range of EVE personal and corporate API data, full item and ship reference, as well as a number of useful out-of-game utilities.
